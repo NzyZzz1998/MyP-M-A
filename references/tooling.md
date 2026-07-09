@@ -21,6 +21,8 @@
 | 浏览器 / Playwright / webapp-testing | 验证 Web 页面、交互、控制台、网络、响应式截图 | `/review`、`/acceptance`，必要时 `/prd` |
 | Web 搜索 | 查竞品、市场信号、公开文档、同类产品做法 | `/idea`、必要时 `/prd` |
 | 文档/PDF/图片/表格工具 | 读取 PRD、截图反馈、用户访谈、数据表、验收记录 | `/idea`、`/review`、`/prd`、`/acceptance` |
+| 数据库/数据分析工具 | 读取 schema、样本数据、字段分布、指标口径、漏斗和错误率 | `/idea`、`/prd`、必要时 `/acceptance` |
+| UI/UX / frontend-design 类 skill | 组件规范、高保真原型、视觉精修、页面结构和交互状态 | `/prd`、`/review` |
 | Lark/飞书工具 | 读取或写入协作文档、需求池、任务、会议纪要、表格、发布说明 | 四个入口均可按用户环境使用 |
 | Vercel/Netlify/部署工具 | 检查部署、Preview、环境变量、发布状态、回滚 | `/acceptance`，必要时 `/review` |
 | OpenAI/API 相关工具 | 检查 AI 功能配置、API key 环境、模型调用失败、评估样例 | AI 产品的 `/prd`、`/acceptance` |
@@ -111,6 +113,8 @@
 | Web 页面、localhost、部署预览 | 浏览器 / Playwright | `/review`、`/acceptance` |
 | 截图、UI 反馈 | 图片分析，必要时 Computer Use/浏览器 | `/review`、`/prd` |
 | PRD、会议纪要、表格 | 文档/表格工具 | `/idea`、`/prd` |
+| 数据库、schema、SQL、指标表、日志表 | 数据库/数据分析工具 + 本地 shell | `/idea`、`/prd` |
+| UI polish、高保真原型、组件系统 | UI/UX / frontend-design skill，必要时浏览器验证 | `/prd`、`/review` |
 | 竞品、市场、公开资料 | Web 搜索 | `/idea` |
 | 发布、灰度、回滚 | GitHub/Vercel/Netlify/部署工具 + 日志 | `/acceptance` |
 

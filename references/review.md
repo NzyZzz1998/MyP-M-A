@@ -18,6 +18,7 @@ Project review 尤其不能只做工程结构审查。一个项目能否被用�
 | 截图、页面、原型、UI 描述、交互反馈 | page | 信息层级、流程、控件、状态、可用性、视觉密度、产品气质 | 生成 UI/UX 问题池，进入 `/idea` 或 `/prd` |
 | PRD、需求文档、用户故事、验收标准、路线图 | prd | 目标、范围、影响范围、原型、验收、数据、开放问题、可开发性 | 修 PRD 或补问题 |
 | 代码、diff、实现说明、日志、测试结果、bug 复现 | implementation | 是否符合需求、边界、测试、日志、风险、可维护性、兼容性 | 生成 bug、风险或技术债 |
+| release notes、tag、manifest、checksum、发布包、status/current、verification | release readiness | 版本事实、发布门禁、文档一致性、剩余验收项、回滚与发布说明 | 进入 `/acceptance` 或直接修文档 |
 
 如果一个输入同时匹配多种通路，选择最能回答用户当前问题的主通路，并在“Review 范围”里说明副通路只做辅助观察。
 
@@ -168,6 +169,30 @@ PRD review 应输出 PRD 结构图或需求链路图。
 
 Implementation review 应输出实现依赖图、数据流图或关键流程图。
 
+### Release Readiness Review
+
+当 review 范围包含 release notes、tag、发布包、manifest、checksums、verification、status/current 或 README 发布状态时，自动加入 release readiness 检查。它不是重新做发布验收，而是判断项目是否已经具备进入 `/acceptance` 或发布收尾的条件。
+
+重点检查：
+
+- Git 当前分支、远端状态、tag 是否与文档一致。
+- `current/status` 是否仍停留在旧分支、未合并、未 tag、待发布等旧口径。
+- 发布包是否存在，manifest/checksums 是否存在且文档可追踪。
+- release notes 是否反映最新状态、已知限制和后续优化。
+- verification/progress/status 是否对同一事项给出一致结论。
+- checklist 是否仍有未关闭项；未关闭项是真阻塞，还是文档未同步。
+- 哪些事项需要进入 `/acceptance` 实际验收，哪些只是事实性文档修正。
+
+Release readiness review 的结论要优先分为：
+
+- 进入 `/acceptance`：需要运行 exe、日志、截图、发布包、配置、CI 或人工验收支撑的事项。
+- 直接修文档：分支、tag、发布状态、README、release notes、checklist 等事实不一致。
+- 进入 `/idea`：已转为后续候选需求，需要判断价值、范围和阶段。
+- bugfix/dev-log：开发过程、bug 修复过程、技术排查记录，不应留在 PM progress 主体。
+- 暂不处理：不影响当前发布闭环，重写成本高于收益。
+
+如果 review 判断“可进入验收”，结尾应给出一段用户可直接发送的 `/acceptance` 提示词，列明验收对象、构建产物、日志、配置和剩余手动项。
+
 ## 默认输出结构
 
 ```markdown
@@ -239,6 +264,10 @@ Implementation review 应输出实现依赖图、数据流图或关键流程图�
 
 ## 暂不处理
 
+## 建议下一条提示词
+
+如果下一步应进入 `/acceptance`、`/idea`、`/prd` 或直接修文档，在这里给出一段可直接发送给下一窗口的提示词。
+
 ## 给下一次模型接手的摘要
 ```
 
@@ -267,6 +296,8 @@ Review 结束时要帮助用户知道下一步怎么走。不要把所有发现�
 - 暂不做：与当前阶段不匹配、破坏产品边界、成本明显过高或缺少基本证据的想法。
 
 如果项目处于 Beta、测试分支或发布前阶段，主动列出最小 `/acceptance` 承接证据：构建产物、配置、日志、手动验证项、截图/录屏、CI 或发布包。
+
+如果项目已经发布、打 tag 或生成发布包，但文档仍写旧分支、未合并、未 tag 或待发布，应把它标为“直接修文档”，不要进入 `/idea`。事实冲突不是需求发现。
 
 ## 写作要求
 

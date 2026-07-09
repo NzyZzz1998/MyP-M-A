@@ -96,3 +96,42 @@
   - 结论限制。
 - 关键发现表建议保留 Positive，但输出时应让 Positive 不干扰问题候选点提取；可在表中继续标类型，也可独立放入“值得保留”。
 - 当 review 发现项目处于测试/发布前阶段时，应主动建议 `/acceptance` 承接，并列出最小验收证据。
+
+## LetsMakeMoney v0.4 收尾型 Review
+
+时间：2026-07-09
+
+输入概况：
+
+- 项目：`E:\codex\LetsMakeMoney`
+- 场景：v0.4 Beta 已基本完成后，使用 `/review` 做 project + PRD + implementation + release readiness 收尾评审。
+- 范围：v0.4 PRD、implementation-plan、progress、verification、release notes、README、Git/tag 状态、发布包 manifest。
+- 明确不覆盖：不运行 exe、不做 Computer Use 实测、不重新验收 UI/托盘/日志。
+
+### 做得好的地方
+
+- Review 类型识别更准确：不只是 project review，而是 project + prd + implementation + release readiness 的混合收尾评审。
+- 阶段判断正确：明确 v0.4 已形成“可进入验收”的 Beta 闭环，但不是“文档完全一致、发布门禁完全关闭”。
+- 没有继续扩新功能：明确当前最该进入 `/acceptance`，而不是继续开发新需求。
+- 证据边界清楚：说明依据来自本地文档与 Git 状态，并明确没有运行 exe、没有 Computer Use 实测。
+- 版本脉络图有效：用 Mermaid 把 v0.3 -> v0.4，以及橘猫、桌宠窗口、Panel、Settings、发布包、验证体系和待验收项串起来。
+- 文档一致性检查很有价值：识别 `current/status` 仍写 test、未合并、未 tag，但真实 Git 已在 main 且 tag 为 `v0.4-beta`。
+- 下一步分流清晰：把事项分到 `/acceptance`、直接修文档、bugfix/dev-log、`/idea` 和暂不处理。
+- 对 progress 边界判断准确：指出 progress 混入技术排查、bugfix 过程和资源探索流水，应迁到 `dev-log`、`bugfix-log` 或 `spike-log`。
+
+### 暴露的问题
+
+- 作为 review 输出，它已经很好地指出应进入 `/acceptance`，但还可以直接给出可复制的 `/acceptance` 输入提示词，降低用户下一步操作成本。
+- Release readiness review 需要固定检查 Git/tag/发布包/manifest/checksum/current/status/release notes 的事实一致性，否则容易只停留在文档阅读。
+- 当发现“文档事实冲突”时，应更明确区分：
+  - 不需要进入 `/idea` 的事实修正。
+  - 需要 `/acceptance` 的真实验收。
+  - 需要 `/idea` 的后续候选需求。
+- 对 `progress` 的治理建议应沉淀到 PRD 后开发承接规则中：PM progress 只保留状态看板，过程日志迁出。
+
+### 拟改进方向
+
+- 在 `references/review.md` 中考虑增加 release readiness 场景：当 review 范围包含发布包、tag、release notes、manifest 或 verification 时，必须检查事实一致性和发布门禁。
+- 收尾型 review 的默认结尾应提供“下一条可直接发送的 `/acceptance` 提示词”。
+- 对文档冲突类问题，默认分流为“直接修文档”，不要进入 `/idea`。
+- 对已经发布或打 tag 的项目，review 必须显式检查文档是否仍停留在旧分支、未合并、未 tag、待发布等口径。
