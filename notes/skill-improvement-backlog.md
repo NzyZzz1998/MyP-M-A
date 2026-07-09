@@ -249,3 +249,43 @@ MyP-M-A 已经跑通了两条真实项目链路：
 - 真实使用一次 `memory-capture` 和 `memory-continue` 验证恢复效果。
 - 观察是否需要为 `Project`、`Decision`、`Release` 建立 Basic Memory schema。
 - 后续 eval 可增加“阶段结束时是否正确建议记忆、是否避免记录临时过程和敏感信息”的检查项。
+
+## 2026-07-09 v0.17 Validation Foundation 记录
+
+来源：
+
+- 用户确认下一阶段重点应转向验证基础设施和稳定泛化。
+
+判断：
+
+- MyP-M-A 已经跑通 QuickRec 和 LetsMakeMoney，但样例仍偏桌面工具。
+- 下一阶段不能只继续写规则，需要开始建立防回退能力。
+- 先做轻量验证基础设施，比直接大规模跑 eval 更稳。
+
+已完成：
+
+- `SKILL.md` 版本更新到 `0.17.0`。
+- `notes/acceptance-real-run-notes.md` 增加 LetsMakeMoney v0.5 acceptance 与 bugfix 收口案例。
+- 新增 `templates/memory-validation-template.md`，用于记录 Basic Memory 写入/恢复质量。
+- 更新 `evals/evals.json` 到 `0.17.0`，新增 7 个 eval：
+  - 数据驱动 `/idea`。
+  - 版本型需求池。
+  - 方案收敛版 PRD 不能直接进入开发承接。
+  - UI/体验类 PRD 必须同步高保真原型。
+  - 部分通过 acceptance 不能发布。
+  - 工具覆盖不足时必须输出手动验证文档。
+  - Memory 建议必须克制且不保存临时过程。
+- 新增 `notes/v0.17-validation-foundation.md` 记录本轮范围、完成项和未完成项。
+
+仍未完成：
+
+- 未真实运行 eval。
+- 未生成 eval viewer。
+- 未跑后端 + 数据库项目验证。
+- 未真实执行 `memory-capture` / `memory-continue` 恢复测试。
+
+下一步：
+
+1. 先用 Basic Memory 记录并恢复一次 MyP-M-A 当前状态。
+2. 找一个后端 + 数据库项目跑 `/review -> /idea -> /prd`。
+3. 正式运行 eval，并基于结果修正 skill。

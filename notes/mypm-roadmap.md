@@ -56,6 +56,21 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 在下一阶段提示词中加入长期记忆建议规则：只记录长期有用的决策、偏好、项目状态、发布状态和下次继续点。
 - 在开发承接中加入跨线程任务跟踪建议，但不替代 `dev_plan`、`progress` 和 `dev_log`。
 
+### R2.7. 验证基础设施补强
+
+状态：已完成第一版
+
+- 新增 `notes/v0.17-validation-foundation.md`。
+- 补强 `notes/acceptance-real-run-notes.md`，加入 LetsMakeMoney v0.5 acceptance 与 bugfix 收口案例。
+- 更新 `evals/evals.json` 到 `0.17.0`，新增数据驱动 `/idea`、版本型需求池、PRD 完整度门禁、UI 高保真原型、部分通过验收、手动验证文档、Memory 边界等防回退用例。
+- 新增 `templates/memory-validation-template.md`，用于测试 `memory-capture` / `memory-continue` 的写入与恢复质量。
+
+尚未完成：
+
+- 尚未真实运行 eval。
+- 尚未生成 eval viewer。
+- 尚未完成一次真实 Memory 写入与恢复测试。
+
 ## 下一阶段
 
 ### R3. 稳定性验证
@@ -93,6 +108,8 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 优先级：P0
 
 目标：让 skill 的关键能力可回归检查。
+
+当前状态：已有第一版 `evals/evals.json`，但尚未正式运行 benchmark 或人工 review。
 
 建议 eval：
 
@@ -226,12 +243,11 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 
 当前最值得推进：
 
-1. 先提交当前非验证优化。
+1. 真实执行一次 Memory 测试：用 `memory-capture` 保存本轮 MyP-M-A 状态，再新线程用 `memory-continue` 恢复。
 2. 选择一个新项目或构造一个后端 + 数据库样例，跑 R3 稳定性验证。
-3. 根据验证结果补第一批 eval。
+3. 正式运行 `evals/evals.json`，生成可人工 review 的结果。
 
 如果用户暂时不想跑验证，则可以先做：
 
 - 清理 notes 体积。
-- 建立 `evals` 草案。
 - 准备 GitHub 发布说明。

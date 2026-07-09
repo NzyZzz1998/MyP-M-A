@@ -6,7 +6,7 @@ argument-hint: "[/idea|/review|/prd|/acceptance|简报|路线图] [上下文]"
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.16.0"
+  version: "0.17.0"
   language: zh-CN
 ---
 
