@@ -46,6 +46,16 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 新增 `templates/manual-verification-template.md`。
 - 增强 `idea-pool`、`prd`、`review-report`、`acceptance` 等模板。
 
+### R2.5. 长期记忆接入
+
+状态：已完成
+
+- 新增 `references/memory-integration.md`。
+- 将 Basic Memory 定义为可选长期产品知识库，不作为自动聊天归档。
+- 明确 `memory-continue`、`memory-notes`、`memory-tasks`、`memory-capture`、`memory-reflect`、`memory-defrag`、`memory-schema` 在 PM 流程中的使用边界。
+- 在下一阶段提示词中加入长期记忆建议规则：只记录长期有用的决策、偏好、项目状态、发布状态和下次继续点。
+- 在开发承接中加入跨线程任务跟踪建议，但不替代 `dev_plan`、`progress` 和 `dev_log`。
+
 ## 下一阶段
 
 ### R3. 稳定性验证
@@ -148,6 +158,7 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 每个入口固定输出下一阶段建议。
 - 根据当前结论自动选择 `/idea`、`/prd`、开发承接、`/acceptance`、手动验证、发布收口提示词。
 - 研究是否新增独立提示词入口。
+- 将 Basic Memory 建议纳入下一阶段提示词，但只在有长期复用价值时出现。
 
 候选入口：
 

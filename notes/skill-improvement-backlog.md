@@ -222,3 +222,30 @@ MyP-M-A 已经跑通了两条真实项目链路：
 - 未增加 eval。
 - 未做 skill 触发描述优化。
 - 未清理 notes 体积和归档策略。
+
+## 2026-07-09 Basic Memory 集成记录
+
+来源：
+
+- 用户安装 Basic Memory 后，希望长期记忆融入 MyP-M-A。
+
+判断：
+
+- 长期记忆对 PM 工作流有价值，但不能变成“自动保存全部聊天”。
+- MyP-M-A 应把 Basic Memory 作为可选的项目上下文层，用于跨线程恢复、长期偏好、产品决策、版本状态、发布状态和下次继续点。
+- 正式交付物仍然属于项目仓库；Memory 只保存摘要、路径、决策和任务状态。
+
+已完成：
+
+- 新增 `references/memory-integration.md`。
+- 更新 `SKILL.md`：增加 Basic Memory 触发条件、长期记忆原则、质量检查项。
+- 更新 `references/tooling.md`：把 Basic Memory / `memory-*` skills 纳入外部工具审计。
+- 更新 `references/next-step-prompts.md`：在 `/review`、`/idea`、`/prd`、开发承接、`/acceptance` 后加入可选长期记忆提示词。
+- 更新 `references/development-handoff.md`：跨线程实现建议使用 `memory-tasks`，但不复制正式文档正文。
+- 更新 `notes/mypm-roadmap.md`：新增 R2.5 长期记忆接入。
+
+后续：
+
+- 真实使用一次 `memory-capture` 和 `memory-continue` 验证恢复效果。
+- 观察是否需要为 `Project`、`Decision`、`Release` 建立 Basic Memory schema。
+- 后续 eval 可增加“阶段结束时是否正确建议记忆、是否避免记录临时过程和敏感信息”的检查项。

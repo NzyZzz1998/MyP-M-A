@@ -26,6 +26,7 @@
 | Lark/飞书工具 | 读取或写入协作文档、需求池、任务、会议纪要、表格、发布说明 | 四个入口均可按用户环境使用 |
 | Vercel/Netlify/部署工具 | 检查部署、Preview、环境变量、发布状态、回滚 | `/acceptance`，必要时 `/review` |
 | OpenAI/API 相关工具 | 检查 AI 功能配置、API key 环境、模型调用失败、评估样例 | AI 产品的 `/prd`、`/acceptance` |
+| Basic Memory / `memory-*` skills | 保存长期产品决策、项目上下文、用户偏好、任务状态和下次继续点 | 四个入口、开发承接、线程结束 |
 
 ## 四个入口的工具策略
 
@@ -117,6 +118,25 @@
 | UI polish、高保真原型、组件系统 | UI/UX / frontend-design skill，必要时浏览器验证 | `/prd`、`/review` |
 | 竞品、市场、公开资料 | Web 搜索 | `/idea` |
 | 发布、灰度、回滚 | GitHub/Vercel/Netlify/部署工具 + 日志 | `/acceptance` |
+| 长期记忆、跨线程、下次继续、记住偏好/决策/项目状态 | Basic Memory / `memory-*` skills | 四个入口、开发承接 |
+
+## 长期记忆工具策略
+
+Basic Memory 是可选的长期知识库能力，不是默认记录器。只有当信息未来会复用，或任务可能跨线程继续时，才建议使用。
+
+常见用法：
+
+- `memory-continue`：新线程恢复旧项目上下文。
+- `memory-notes`：记录稳定偏好、项目约定、产品决策、版本状态。
+- `memory-tasks`：跟踪跨线程、跨版本的开发承接或发布收口任务。
+- `memory-capture`：阶段结束时沉淀最终结论和下次继续点。
+- `memory-reflect` / `memory-defrag` / `memory-schema`：周期性整理、去重和结构化。
+
+使用边界：
+
+- 不把完整聊天、临时过程、长日志或敏感信息写入记忆。
+- 正式交付物仍保存在项目仓库；记忆只保存摘要、路径、决策和下次继续点。
+- 如果当前线程没有可用的 Basic Memory 工具，只输出可直接发送的 `memory-*` 提示词，不声称已经写入。
 
 ## 证据写法
 
