@@ -1,5 +1,14 @@
 # Acceptance：[版本 / 功能名称]
 
+## 追踪信息
+
+- 当前状态：
+- 目标版本：
+- 上游来源：PRD / dev plan / progress
+- 下游承接：bugfix / 手动验证 / release / 下一版本 IDEA
+- 当前事实源：
+- 最后更新：
+
 ## 阶段判断
 
 - 当前阶段：

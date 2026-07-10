@@ -1,5 +1,14 @@
 # Review：[对象名称]
 
+## 追踪信息
+
+- Review ID：
+- 当前状态：
+- 目标版本：
+- 下游承接：IDEA / PRD / acceptance / 直接修
+- 当前事实源：
+- 最后更新：
+
 ## Review 判断
 
 - 自动识别类型：project / page / prd / implementation / release readiness

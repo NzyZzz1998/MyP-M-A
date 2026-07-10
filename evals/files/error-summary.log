@@ -1,0 +1,6 @@
+2026-07-01 export_job_created job_id=J101 tenant_id=T01 count=120
+2026-07-01 export_job_failed job_id=J101 reason=timeout elapsed_ms=600000
+2026-07-02 export_job_created job_id=J102 tenant_id=T02 count=85
+2026-07-02 export_job_failed job_id=J102 reason=worker_restart
+2026-07-02 export_job_created job_id=J103 tenant_id=T01 count=1
+2026-07-02 export_job_completed job_id=J103 elapsed_ms=2200

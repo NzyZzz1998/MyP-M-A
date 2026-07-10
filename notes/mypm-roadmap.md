@@ -58,18 +58,42 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 
 ### R2.7. 验证基础设施补强
 
-状态：已完成第一版
+状态：已完成第一版并完成真实运行
 
 - 新增 `notes/v0.17-validation-foundation.md`。
 - 补强 `notes/acceptance-real-run-notes.md`，加入 LetsMakeMoney v0.5 acceptance 与 bugfix 收口案例。
 - 更新 `evals/evals.json` 到 `0.17.0`，新增数据驱动 `/idea`、版本型需求池、PRD 完整度门禁、UI 高保真原型、部分通过验收、手动验证文档、Memory 边界等防回退用例。
 - 新增 `templates/memory-validation-template.md`，用于测试 `memory-capture` / `memory-continue` 的写入与恢复质量。
 
-尚未完成：
+已完成行为验证：
 
-- 尚未真实运行 eval。
-- 尚未生成 eval viewer。
-- 尚未完成一次真实 Memory 写入与恢复测试。
+- 完成 10 条第一轮行为冒烟。
+- 完成 5 个高价值用例的第二轮对照。
+- 完成 3 个修复项的新旧版本对称 A/B 回归。
+- 生成 benchmark、静态 eval viewer 和 `notes/v0.18-validation-summary.md`。
+- 34 条正式 eval 已通过静态结构校验；统一全量行为 A/B 延后执行。
+
+已补证：
+
+- 已完成一次真实 `memory-capture -> memory-continue` 写入与恢复测试，正式笔记位于 Basic Memory 的 `mypm/MyP-M-A v0.17 validation foundation.md`。
+
+### R2.8. v0.18 结构优化
+
+状态：已完成静态优化与代表性模型行为验证
+
+- `SKILL.md` 收敛为渐进加载调度层，减少默认 reference 消耗。
+- PRD 表达物按 UI、API、数据库、状态流和工程治理分类，不再要求所有需求生成 UI 原型。
+- 新增 `references/traceability.md`，并把追踪字段接入正式模板。
+- 工具策略补充能力探测、降级顺序和外部写操作授权边界。
+- 数据分析补充多租户、事务、幂等、迁移、隐私和指标口径。
+- eval schema 从 `assertions` 统一为 `expectations`，新增文件型后端、数据、Web SaaS 和工程治理用例。
+- 新增触发正反例与静态校验入口。
+
+验证结论：
+
+- 未发现明显整体能力回退。
+- 定向 A/B 中 v0.18 为 98.6%，v0.17 为 87.5%；该差值只代表 3 个定向用例。
+- 34 条用例未执行统一全量行为 A/B，因此不声称所有场景全面优于 v0.17。
 
 ## 下一阶段
 
@@ -109,7 +133,7 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 
 目标：让 skill 的关键能力可回归检查。
 
-当前状态：已有第一版 `evals/evals.json`，但尚未正式运行 benchmark 或人工 review。
+当前状态：已有 34 条正式 eval、20 条触发 eval，并已完成代表性 benchmark、viewer 与人工抽查；全量统一行为回归延后。
 
 建议 eval：
 
@@ -243,9 +267,10 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 
 当前最值得推进：
 
-1. 真实执行一次 Memory 测试：用 `memory-capture` 保存本轮 MyP-M-A 状态，再新线程用 `memory-continue` 恢复。
-2. 选择一个新项目或构造一个后端 + 数据库样例，跑 R3 稳定性验证。
-3. 正式运行 `evals/evals.json`，生成可人工 review 的结果。
+1. 将 v0.18 作为稳定基线发布，保留行为覆盖边界说明。
+2. 在 v0.19 增加按风险分层的用户验证门禁和 Agent 原型预检模板。
+3. 补 AI/Agent、移动端或公开 SaaS 项目的真实验证。
+4. 评测基础设施成熟后再执行 34 条用例的统一全量行为 A/B。
 
 如果用户暂时不想跑验证，则可以先做：
 

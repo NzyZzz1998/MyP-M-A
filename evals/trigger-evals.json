@@ -1,0 +1,82 @@
+[
+  {
+    "query": "我有三个版本候选需求，想判断哪些值得放进 v0.6，哪些只是我自己觉得酷。请结合现有用户反馈和开发成本帮我排一下。",
+    "should_trigger": true
+  },
+  {
+    "query": "/idea 我想给这个桌面工具加插件市场，但现在只有我自己在用。帮我判断是不是真需求。",
+    "should_trigger": true
+  },
+  {
+    "query": "请 review E:\\codex\\TeamBoard，先梳理产品定位、核心用户路径和系统模块，再找下一版候选问题。",
+    "should_trigger": true
+  },
+  {
+    "query": "这个 PRD 已经写了功能说明，但我担心影响范围、数据库字段和失败流程不完整，帮我做产品评审。",
+    "should_trigger": true
+  },
+  {
+    "query": "我们确认采用方案 B，请把它收敛成 Full v1.5 的完整 PRD，并在成文前继续问我会改变范围的问题。",
+    "should_trigger": true
+  },
+  {
+    "query": "功能开发完了，exe、debug.log 和验收标准都在附件里。请实际验收并判断是否可以发布。",
+    "should_trigger": true
+  },
+  {
+    "query": "帮我把 PRD 承接成 dev_plan_v0.8.md 和 progress_v0.8.md，开发日志单独放，不要混进 progress。",
+    "should_trigger": true
+  },
+  {
+    "query": "设置页能用但还是显得粗糙，我不想只听‘更统一’，请像产品经理一样判断根因和本轮取舍。",
+    "should_trigger": true
+  },
+  {
+    "query": "新开线程后帮我恢复上次产品决策、当前版本状态和下一步，不要恢复临时 debug 流水。",
+    "should_trigger": true
+  },
+  {
+    "query": "我们要做一个 AI 摘要能力，帮我定义用户场景、失败模式、人工确认点、评估样例和验收标准。",
+    "should_trigger": true
+  },
+  {
+    "query": "这个 TypeScript PR 有空指针和竞态问题，直接做 code review，按严重程度列出文件和行号。",
+    "should_trigger": false
+  },
+  {
+    "query": "把 settings_dialog.gd 里的保存失败 bug 修掉，先跑测试，不需要讨论产品范围。",
+    "should_trigger": false
+  },
+  {
+    "query": "执行这条只读 SQL，统计 orders 表昨天每小时的订单数，然后画折线图。",
+    "should_trigger": false
+  },
+  {
+    "query": "请把这张截图复刻成 React 页面，视觉和交互需求已经定稿，不需要重新评审。",
+    "should_trigger": false
+  },
+  {
+    "query": "帮我分析 debug.log 为什么启动崩溃，找到堆栈根因后修代码。",
+    "should_trigger": false
+  },
+  {
+    "query": "给 GitHub Actions 增加 Python 3.13 测试矩阵并提交代码，需求和验收已经明确。",
+    "should_trigger": false
+  },
+  {
+    "query": "把这份英文 API 文档翻译成中文，保持 Markdown 结构。",
+    "should_trigger": false
+  },
+  {
+    "query": "检查 PostgreSQL migration 是否会锁表，并给出技术修复方案；产品范围不用调整。",
+    "should_trigger": false
+  },
+  {
+    "query": "用 Computer Use 打开 exe，重复点击按钮复现崩溃并读取日志，目标只是定位 bug。",
+    "should_trigger": false
+  },
+  {
+    "query": "为现有 Figma 设计补齐 Tailwind token 和组件代码，设计方案已签字，不做产品判断。",
+    "should_trigger": false
+  }
+]
