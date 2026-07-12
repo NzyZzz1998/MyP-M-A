@@ -22,7 +22,18 @@ MyP-M-A（My Product Manager Assistant）是中文优先的个人产品经理 Sk
 
 ## 使用
 
-在支持本地 Skill 的 Codex 环境中安装本目录后，可直接使用：
+在支持本地 Skill 的 Codex 环境中选择 `MyP-M-A` 即可。用户不必记住命令，可以直接提供项目路径、产品想法、PRD、截图、日志或验收结果，Skill 会自动判断入口。
+
+显式入口：
+
+| 入口 | 用途 |
+| --- | --- |
+| `/review` | 梳理项目/页面/PRD/实现并发现问题 |
+| `/idea` | 判断需求真假、价值和当前优先级 |
+| `/prd` | 收敛方案并形成可开发需求 |
+| `/acceptance` | 基于真实实现做验收与发布判断 |
+
+示例：
 
 ```text
 /review 请评审当前项目，先建立产品与工程地图。
@@ -52,6 +63,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.18.0`。
+当前版本：`v0.19.0`。
 
-静态结构优化、代表性模型对照、benchmark 和 eval viewer 已完成；三项定向 A/B 回归显示 v0.18 在验收入口与数据证据边界上有稳定提升。34 条正式 eval 已全部通过静态结构校验，但尚未执行统一的全量行为 A/B。详细证据见 `notes/v0.18-validation-summary.md`。
+v0.19 聚焦真实使用流程：正式环境只保留一个 MyP-M-A 入口，并自动分流 `/review`、`/idea`、`/prd`、`/acceptance`；同时增加实施子阶段、统一门禁状态、风险分层验证、验收证据继承和精简提示词档位。五项流程定向回归的最新有效样本已全部通过；入口自动分流 eval 40/41 已加入后续轻量回归。

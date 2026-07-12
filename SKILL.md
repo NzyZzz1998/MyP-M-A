@@ -1,12 +1,12 @@
 ---
 name: mypm
 display_name: MyP-M-A
-description: "Use when：用户需要判断产品想法或需求是否值得做、评审项目/页面/PRD、收敛版本范围并撰写可开发 PRD、规划开发承接，或基于真实实现做验收与发布判断；也适用于整理需求池、评估功能取舍、定义产品指标，以及恢复跨会话产品上下文。纯代码审查、单纯修 bug、直接执行数据库或日志分析、仅做视觉实现时不单独触发，除非任务同时需要产品判断。"
-argument-hint: "[/idea|/review|/prd|/acceptance|简报|路线图] [上下文]"
+description: "Use when：用户需要做产品评审、判断需求价值、撰写或完善 PRD、规划开发承接、验收真实实现，或决定项目/版本能否发布；用户不必记命令，提供项目路径、想法、文档、截图、日志或验收结果即可自动分流到 /review、/idea、/prd、/acceptance。纯代码审查、单纯修 bug、直接执行 SQL/日志分析、按既定设计实现 UI 时不单独触发，除非同时需要产品范围或发布判断。"
+argument-hint: "[/review|/idea|/prd|/acceptance] 描述、路径或附件"
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.18.0"
+  version: "0.19.0"
   language: zh-CN
 ---
 
@@ -32,6 +32,7 @@ MyP-M-A 是中文优先的个人产品经理工作流。它先帮助用户形成
 | `/review`、项目/页面/PRD/实现评审 | `references/review.md` | 有仓库、exe、网页、日志、截图或发布物时读 `references/tooling.md` | 需要落盘时读 `templates/review-report-template.md` |
 | `/prd`、版本范围、需求文档 | `references/prd.md` | 涉及数据/后端时读 `references/data-analysis.md`；影响范围不清时读 `references/tooling.md` | 完整成文时读 `templates/prd-template.md` |
 | PRD 后开发承接 | `references/development-handoff.md` | 跨线程时读 `references/memory-integration.md` | 读 `templates/dev-plan-template.md`、`templates/progress-template.md`；需要过程记录时再读 `templates/dev-log-template.md` |
+| 实施、Bugfix、分批推进 | `references/workflow-control.md` | 需要开发承接事实时读 `references/development-handoff.md` | 沿用项目已有 progress/dev log/bugfix log |
 | `/acceptance`、发布检查 | `references/acceptance.md`、`references/tooling.md` | 有长期发布状态时读 `references/memory-integration.md` | 读 `templates/acceptance-template.md`；有人工补证项时读 `templates/manual-verification-template.md` |
 | 产品简报 | `references/product-brief.md` | 无 | 需要落盘时读 `templates/product-brief-template.md` |
 | 问题尚未成形 | `references/problem-framing.md` | 需要判断价值时再进入 `/idea` | 无固定模板 |
@@ -42,7 +43,20 @@ MyP-M-A 是中文优先的个人产品经理工作流。它先帮助用户形成
 
 正式多阶段项目还要读取 `references/traceability.md`，保持 Review、IDEA、PRD、开发承接、Acceptance 和 Release 的来源与状态可追踪。一次性轻量咨询不强制建立编号。
 
+有现成 PRD、dev plan、progress、verification 或候选产物时，还要读取 `references/workflow-control.md`，先识别真实子阶段、门禁影响面和可继承证据，再决定本轮工作。
+
 ## 四个主入口
+
+MyP-M-A 在 Codex 中只保留一个 Skill 入口。用户可以显式输入四个命令，也可以直接描述任务，由 Skill 自动分流：
+
+| 用户材料或意图 | 自动入口 |
+| --- | --- |
+| 项目路径、页面、PRD、代码实现、版本现状，希望先梳理或找问题 | `/review` |
+| 想法、反馈、候选需求、是否值得做、下一版做什么 | `/idea` |
+| 已确认方向，需要收敛方案、写需求、补影响范围或原型 | `/prd` |
+| 已有实现、exe/网页/包、测试、日志或验收结果，需要判断是否通过/发布 | `/acceptance` |
+
+显式命令优先。没有命令时，根据用户目标和已有产物判断；先用一行输出 `入口判断：/review|/idea|/prd|/acceptance` 及真实子阶段，再开展工作。实施、Bugfix、开发承接和发布收口是内部子阶段，不新增对外 Skill 入口。材料同时命中多条通路时，选择最接近用户当前决策的问题；只有选择不同入口会显著改变结果时才追问。
 
 ### `/review`：建立地图，再发现问题
 
@@ -83,6 +97,12 @@ MyP-M-A 是中文优先的个人产品经理工作流。它先帮助用户形成
 - `dev_log_vx.x.md`：需要时记录开发过程；bugfix 和技术 spike 可继续独立记录。
 
 Progress 不保存开发流水、bug 修复过程或大量排查细节。开发承接发现 PRD 缺少链路、数据、表达物或验收标准时，返回 `/prd`，不靠实施计划补产品缺口。
+
+开发承接完成后进入“实施”子阶段。此后按里程碑或强关联任务分批执行，不因用户继续写 `/prd` 就重复生成需求文档。阶段、门禁状态、验证层级和证据继承以 `references/workflow-control.md` 为准。
+
+实施阶段的输出开头必须列“事实源：PRD、dev plan、progress”及实际文件名，并明确本轮是否改写 PRD。验证层级允许提前推进 MVP 时，必须列“进入开发授权：已获得 / 未获得”；未获得用户明确授权时只能建议，不能擅自进入实施。
+
+实施请求缺少项目路径、正式文件或可访问工作区时，先报告输入阻塞并索取最小信息，绝不编造分支、HEAD、哈希、测试结果或完成状态。用户只问“能否降低某个验证门禁”时，先回答门禁决策，不自动扩写整份 PRD。
 
 ## 工具与证据
 

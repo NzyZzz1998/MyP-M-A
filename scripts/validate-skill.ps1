@@ -11,7 +11,7 @@ function Add-Error([string]$message) { $errors.Add($message) }
 function Add-Warning([string]$message) { $warnings.Add($message) }
 
 $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
-$textFiles = Get-ChildItem -LiteralPath $root -Recurse -File | Where-Object { $_.Extension -in '.md', '.json', '.ps1', '.csv', '.sql', '.log' }
+$textFiles = Get-ChildItem -LiteralPath $root -Recurse -File | Where-Object { $_.Extension -in '.md', '.json', '.yaml', '.ps1', '.csv', '.sql', '.log' }
 $mojibakeMarkers = @([char]0xFFFD, [char]0x951B, [char]0x9286, [char]0x9235, [char]0x99A3, [char]0x95C1)
 
 foreach ($file in $textFiles) {
@@ -42,6 +42,39 @@ if (-not $versionMatch.Success) {
 $descriptionMatch = [regex]::Match($skill, '(?m)^description:\s+"?(.+?)"?\s*$')
 if (-not $descriptionMatch.Success -or -not $descriptionMatch.Groups[1].Value.StartsWith('Use when')) {
     Add-Error 'SKILL.md description must start with Use when'
+}
+
+$interfacePath = Join-Path $root 'agents\openai.yaml'
+if (-not (Test-Path -LiteralPath $interfacePath)) {
+    Add-Error 'agents/openai.yaml is required for the single MyP-M-A UI entry'
+} else {
+    $interfaceText = [System.IO.File]::ReadAllText($interfacePath, $strictUtf8)
+    if (-not $interfaceText.Contains('display_name: "MyP-M-A"')) {
+        Add-Error 'agents/openai.yaml must display MyP-M-A'
+    }
+    if (-not $interfaceText.Contains('short_description:')) {
+        Add-Error 'agents/openai.yaml is missing short_description'
+    }
+    if (-not $interfaceText.Contains('$mypm')) {
+        Add-Error 'agents/openai.yaml default_prompt must reference $mypm'
+    }
+}
+
+# Multiple mypm manifests below the skill scan root create ambiguous duplicate entries.
+$scanRoot = Split-Path -Parent $root
+$mypmManifests = @()
+foreach ($manifest in Get-ChildItem -LiteralPath $scanRoot -Recurse -File -Filter 'SKILL.md') {
+    try {
+        $manifestText = [System.IO.File]::ReadAllText($manifest.FullName, $strictUtf8)
+        if ([regex]::IsMatch($manifestText, '(?m)^name:\s*mypm\s*$')) {
+            $mypmManifests += $manifest.FullName
+        }
+    } catch {
+        continue
+    }
+}
+if ($mypmManifests.Count -ne 1 -or $mypmManifests[0] -ne $skillPath) {
+    Add-Error "Expected exactly one mypm SKILL.md under $scanRoot; found: $($mypmManifests -join ', ')"
 }
 
 $evalPath = Join-Path $root 'evals\evals.json'
