@@ -1,7 +1,7 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "evals": [
     {
       "id": 1,
@@ -679,6 +679,73 @@
         "分别判断源码、便携包、安装器或版本整体等适用发布面",
         "外部 push、tag、Release 或仓库可见性等待用户授权",
         "在没有实际附件内容时不虚构测试、日志或发布通过结论"
+      ]
+    },
+    {
+      "id": 42,
+      "name": "memory_auto_restores_known_project",
+      "prompt": "继续 QuickRec v1.6。这个是新线程，请先恢复项目上下文，再告诉我现在应该从哪里接着做。",
+      "expected_output": "默认 auto 模式下应尝试从 Basic Memory 恢复 QuickRec 项目状态，再以项目仓库 current/progress/verification 等正式文件核对；说明记忆只作导航、仓库为事实源，并避免仅凭旧记忆宣布当前状态。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "识别为已知项目的新线程恢复场景",
+        "默认使用 auto 模式或明确说明自动恢复行为",
+        "尝试搜索或读取 QuickRec 的已有项目记忆",
+        "继续要求读取项目仓库的 current、progress、verification 或等效正式文件核对",
+        "明确项目仓库与 Memory 冲突时以项目仓库为准",
+        "同一线程不要求每轮重复恢复",
+        "没有仅凭可能过期的 Memory 宣布版本通过或可发布"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "memory_auto_updates_stable_stage",
+      "prompt": "LetsMakeMoney v0.7 的最终验收已经真实通过，verification、progress、release notes 和 current 都已更新一致。请完成本阶段收尾，Memory 使用默认设置。",
+      "expected_output": "应将其识别为稳定阶段结论，在 auto 模式下搜索并更新既有 LetsMakeMoney 项目记忆，记录验收/发布状态、正式文档路径和下一步；不得复制整份报告或创建重复项目笔记，并报告实际写入结果。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "识别为稳定阶段收尾而非中间草稿",
+        "默认 auto 模式下执行或明确要求执行 Memory 更新",
+        "写入前搜索同一项目已有笔记并优先更新",
+        "只保存验收状态、正式路径、限制和下一步等长期信息",
+        "不复制完整验收报告、日志或临时过程",
+        "写入后读取或搜索确认，并报告更新的笔记名称",
+        "正式项目文档仍被说明为事实源"
+      ]
+    },
+    {
+      "id": 44,
+      "name": "memory_off_disables_all_actions",
+      "prompt": "mypm /idea 帮我判断这个设置项值不值得做。本轮 memory_mode=off，不读取、不保存，也不要给记忆建议。",
+      "expected_output": "应正常完成 /idea 判断，但完全尊重 off：不调用 Memory、不写入、不追加 memory-capture 或 memory-notes 建议，也不把关闭 Memory 当成无法完成产品分析的阻塞。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "正常按 /idea 判断需求价值",
+        "尊重 memory_mode=off",
+        "不读取 Basic Memory",
+        "不写入 Basic Memory",
+        "不输出 memory-capture、memory-notes 或 memory-continue 建议",
+        "没有把 Memory 关闭误判为产品分析阻塞"
+      ]
+    },
+    {
+      "id": 45,
+      "name": "memory_safe_degradation_and_redaction",
+      "prompt": "这个 PRD 已确认，里面有数据库账号密码和一大段 debug.log。请自动保存项目记忆；如果 Memory 工具不可用也继续完成收尾。",
+      "expected_output": "应保存或建议保存非敏感的长期 PRD 决策，但排除账号密码、完整日志和临时输出；工具不可用时明确未写入并继续完成阶段，不伪造成功。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "识别完整 PRD 确认是可写入的稳定事件",
+        "明确排除数据库账号、密码和其他凭据",
+        "不保存完整 debug.log 或大段临时输出",
+        "只保留方案、非目标、正式路径、验收口径和下一步等长期摘要",
+        "Memory 工具不可用时仍完成正常阶段收尾",
+        "工具不可用时明确未写入，不声称已保存",
+        "没有要求把敏感内容先原样写入再清理"
       ]
     }
   ]

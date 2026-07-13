@@ -6,7 +6,7 @@ argument-hint: "[/review|/idea|/prd|/acceptance] 描述、路径或附件"
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.19.0"
+  version: "0.20.0"
   language: zh-CN
 ---
 
@@ -39,7 +39,7 @@ MyP-M-A 是中文优先的个人产品经理工作流。它先帮助用户形成
 | 路线图 | `references/roadmap.md` | 无 | 需要落盘时读 `templates/roadmap-template.md` |
 | 红队、用户故事 | 对应的 `references/red-team.md`、`references/user-stories.md` | 无 | 无固定模板 |
 | 深度判断 | `references/judgment-framework.md` | 用户说“更深入/不要只是能用”时再读 `references/deep-review.md`；个人项目或 UI 取舍时读 `references/personal-preferences.md` | 无固定模板 |
-| 阶段收尾 | `references/next-step-prompts.md` | 只有形成稳定决策或跨线程继续时才读 `references/memory-integration.md` | 无固定模板 |
+| 项目进入、阶段收尾 | `references/memory-integration.md` | 阶段真正结束时再读 `references/next-step-prompts.md` | 无固定模板 |
 
 正式多阶段项目还要读取 `references/traceability.md`，保持 Review、IDEA、PRD、开发承接、Acceptance 和 Release 的来源与状态可追踪。一次性轻量咨询不强制建立编号。
 
@@ -115,7 +115,13 @@ Progress 不保存开发流水、bug 修复过程或大量排查细节。开发�
 
 ## 长期记忆
 
-Basic Memory 是可选续接层，不是自动聊天归档。只保存未来会复用的决策、偏好、项目约定、稳定路径、版本/发布状态和下次继续点；正式 PRD、需求池和验收文档仍留在项目仓库。详细规则见 `references/memory-integration.md`。
+Basic Memory 是跨线程续接层，不是聊天归档。每次进入明确项目时先确定 `memory_mode`：`auto`（默认）、`suggest` 或 `off`。
+
+- `auto`：已知项目的新线程或上下文不足时，先恢复记忆，再读取项目正式文档核对；形成稳定阶段结论后，搜索并更新已有项目笔记，不重复创建。
+- `suggest`：不直接读写，只在适合时给出 Memory 建议。
+- `off`：本轮完全不调用，也不输出 Memory 建议。
+
+只保存未来会复用的决策、偏好、项目约定、稳定路径、版本/发布状态、阻塞和下次继续点。正式 PRD、需求池、进度与验收文档仍留在项目仓库；两者冲突时以仓库事实源为准并修正记忆。工具不可用、信息仍是草稿或内容包含敏感信息时不得假装写入。详细规则见 `references/memory-integration.md`。
 
 ## 阶段完成标准
 
@@ -127,7 +133,7 @@ Basic Memory 是可选续接层，不是自动聊天归档。只保存未来会�
 - 正式文档是否引用上游 ID、版本和来源文件。
 - 输出是否全中文、UTF-8、无乱码。
 - 下一步是否明确；只有阶段真正结束时才加载 `references/next-step-prompts.md` 生成可直接发送的提示词。
-- 只有存在长期复用价值时才建议 Memory，不保存完整聊天、临时过程、大段日志或敏感信息。
+- 按 `memory_mode` 完成必要的恢复或阶段收尾写入；不保存完整聊天、临时过程、大段日志或敏感信息，并在实际读写后简短报告结果。
 
 ## UI 与 AI 补充
 

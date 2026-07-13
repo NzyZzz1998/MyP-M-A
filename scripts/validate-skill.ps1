@@ -128,6 +128,12 @@ try {
 
 $runtimeFiles = @(Get-Item -LiteralPath $skillPath) + @(Get-ChildItem (Join-Path $root 'references') -File -Filter '*.md')
 $runtimeText = ($runtimeFiles | ForEach-Object { [System.IO.File]::ReadAllText($_.FullName, $strictUtf8) }) -join "`n"
+
+foreach ($requiredMemoryRule in @('memory_mode', 'auto', 'suggest', 'off', 'memory-continue', 'memory-notes', 'memory-capture')) {
+    if (-not $runtimeText.Contains($requiredMemoryRule)) {
+        Add-Error "Missing v0.20 Memory rule: $requiredMemoryRule"
+    }
+}
 $referenceRegex = [regex]'`((?:references|templates)/[^`]+\.md)`'
 foreach ($file in $runtimeFiles) {
     $content = [System.IO.File]::ReadAllText($file.FullName, $strictUtf8)

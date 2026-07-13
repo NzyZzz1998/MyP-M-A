@@ -9,7 +9,7 @@ MyP-M-A（My Product Manager Assistant）是中文优先的个人产品经理 Sk
 - `/prd`：收敛方案并形成可开发、可测试、可验收的需求定义。
 - `/acceptance`：基于真实实现做验收、发布检查和上线后观察。
 
-完整 PRD 确认后，可继续生成 `dev_plan_vx.x.md`、`progress_vx.x.md` 和按需使用的 `dev_log_vx.x.md`。Basic Memory 只承担跨线程续接，不替代项目仓库中的正式文档。
+完整 PRD 确认后，可继续生成 `dev_plan_vx.x.md`、`progress_vx.x.md` 和按需使用的 `dev_log_vx.x.md`。Basic Memory 默认在已知项目的新线程恢复上下文，并在稳定阶段收尾时去重更新；它不替代项目仓库中的正式文档。用户可切换 `auto / suggest / off`。
 
 ## 目录
 
@@ -63,6 +63,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.19.0`。
+当前版本：`v0.20.0`。
 
-v0.19 聚焦真实使用流程：正式环境只保留一个 MyP-M-A 入口，并自动分流 `/review`、`/idea`、`/prd`、`/acceptance`；同时增加实施子阶段、统一门禁状态、风险分层验证、验收证据继承和精简提示词档位。五项流程定向回归的最新有效样本已全部通过；入口自动分流 eval 40/41 已加入后续轻量回归。
+v0.20 将 Basic Memory 从阶段末提示升级为事件驱动续接层：默认 `auto`，只在已知项目的新线程恢复和稳定阶段收尾写入；支持 `suggest / off`，并新增去重、事实源核对、敏感信息排除和写入结果确认。
