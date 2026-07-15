@@ -1,7 +1,7 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "version": "0.20.0",
+  "version": "0.22.0",
   "evals": [
     {
       "id": 1,
@@ -692,6 +692,7 @@
         "识别为已知项目的新线程恢复场景",
         "默认使用 auto 模式或明确说明自动恢复行为",
         "尝试搜索或读取 QuickRec 的已有项目记忆",
+        "未实际获得 Memory 或仓库工具结果时，只说明已尝试、不可用或待核对，不声称已读取具体文件",
         "继续要求读取项目仓库的 current、progress、verification 或等效正式文件核对",
         "明确项目仓库与 Memory 冲突时以项目仓库为准",
         "同一线程不要求每轮重复恢复",
@@ -746,6 +747,193 @@
         "Memory 工具不可用时仍完成正常阶段收尾",
         "工具不可用时明确未写入，不声称已保存",
         "没有要求把敏感内容先原样写入再清理"
+      ]
+    },
+    {
+      "id": 46,
+      "name": "prompt_explicit_next_stage_entry",
+      "prompt": "/prompt QuickRec v1.6 的 bugfix 已完成，帮我生成下一步验收提示词。项目路径和 verification、progress、bugfix-log 都已经有了。",
+      "expected_output": "应识别为显式 /prompt 辅助入口，目标是 /acceptance；主要输出一段可直接发送的精简提示词，首行明确 mypm /acceptance，引用正式文件，要求锁定候选产物并只复验受修复影响的证据。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "明确当前是 /prompt 辅助入口而不是新的产品阶段",
+        "可直接发送的提示词首行包含 mypm /acceptance",
+        "引用 verification、progress 和 bugfix-log 等正式文件",
+        "要求锁定分支、HEAD、产物或哈希等验收身份",
+        "只复验受 bugfix 影响的证据和剩余待补证项",
+        "明确未经授权不 commit、push、tag 或 Release",
+        "没有重新生成 PRD 或展开全部历史背景"
+      ]
+    },
+    {
+      "id": 47,
+      "name": "prompt_auto_route_from_plain_request",
+      "prompt": "LMM v0.7 的 A2 已通过，帮我写 A3 的提示词，直接给我能发到项目窗口里的版本。",
+      "expected_output": "即使用户没有写 /prompt，也应根据‘写提示词、发到项目窗口’自动进入提示词生成；判断 A3 是继续当前实施子阶段，引用 dev plan/progress，只输出目标、边界、验证、停止点和汇报要求。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "自动识别为提示词生成请求",
+        "说明目标是继续当前实施子阶段而不是重新进入 /prd",
+        "主要输出一段可直接发送的提示词",
+        "要求读取 dev plan、progress 或 A3 对应正式文件",
+        "不复制 A3 的全部 checklist 或通用背景",
+        "包含本轮验证、停止边界和最终汇报",
+        "没有要求用户重复提供上下文中已经存在的信息"
+      ]
+    },
+    {
+      "id": 48,
+      "name": "prompt_compact_by_reference",
+      "prompt": "/prompt PCbuild 已有完整 PRD、dev_plan_v0.1.md 和 progress_v0.1.md。只让另一个任务执行 M8，不要超过 800 个中文字。",
+      "expected_output": "应生成不超过约 800 个中文字的精简执行提示词，用文件路径和 M8 任务 ID承载上下文，不复述数据库设计或完整计划；包含授权状态、验证、停止条件和汇报。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "提示词正文控制在用户要求的约 800 个中文字以内",
+        "引用 PRD、dev plan、progress 和 M8 任务 ID",
+        "没有复述完整数据库表结构、项目背景或全部里程碑",
+        "明确本轮只执行 M8",
+        "明确开发授权和禁止越界事项",
+        "包含关键验证要求",
+        "要求汇报完成项、证据、阻塞和下一步"
+      ]
+    },
+    {
+      "id": 49,
+      "name": "prompt_acceptance_inherits_evidence",
+      "prompt": "/prompt 生成 QuickRec 第二批验收提示词。第一批录制与基础素材库入口已经通过且代码未再变化；只剩迁移恢复、失败降级、200 条边界和 DPI。",
+      "expected_output": "应生成 acceptance 续测提示词，明确继承第一批仍有效证据，不重复全屏录制和基础入口；只验证剩余项，并规定证据失效条件、隔离环境、恢复步骤和发布停止点。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "可直接发送的提示词首行包含 mypm /acceptance",
+        "明确继承第一批仍有效证据",
+        "没有重复要求已通过且未受影响的基础录制与入口验证",
+        "只展开迁移恢复、失败降级、200 条边界和 DPI",
+        "包含隔离环境、证据路径或恢复要求",
+        "说明何种代码、配置、依赖或产物变化会使旧证据失效",
+        "未通过前禁止发布收口、tag 和 Release"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "prompt_new_thread_handoff",
+      "prompt": "/prompt handoff 把当前这个尚未进入 /idea 的本地优先 AI 项目方向交给一个新对话，已有交接文件 E:\\codex\\new-project-handoff.md 和 Basic Memory 笔记 Local-first-AI-project-knowledge-workspace。",
+      "expected_output": "应生成新线程交接提示词，要求先读交接文件并恢复指定 Memory，再以文件为事实输入进入 /idea；说明当前未有仓库、PRD 或代码，不得直接开发，也不复制整段聊天。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "识别为 /prompt handoff 场景",
+        "提示词要求读取 E:\\codex\\new-project-handoff.md",
+        "提示词要求恢复指定 Basic Memory 笔记",
+        "目标入口明确为 mypm /idea",
+        "说明项目仍在概念阶段且尚无仓库、PRD、数据库或代码",
+        "要求先做价值、证据、目标用户和 v0.1 范围判断",
+        "没有复制完整聊天或把候选技术设计写成已确认事实"
+      ]
+    },
+    {
+      "id": 51,
+      "name": "prompt_l1_progressive_disclosure",
+      "prompt": "/prompt LMM v0.7 已有 dev_plan_v0.7.md 和 progress_v0.7.md，只让项目窗口继续执行可逆的 A3 文档审计，不提交不推送，尽量短。",
+      "expected_output": "应选择 L1 精简提示词，用文件和 A3 任务 ID承载上下文；只保留目标、事实源、本轮任务、授权/停止点、验证与汇报，不机械输出对象身份、证据继承、恢复或人工验证等不适用模块。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "识别为 L1 或等效的低风险精简任务",
+        "可直接发送的正文约 600 个中文字以内",
+        "引用 dev_plan_v0.7.md、progress_v0.7.md 和 A3",
+        "明确只执行 A3 且不提交不推送",
+        "包含与 A3 匹配的验证和最终汇报",
+        "没有展开对象哈希、回滚、人工补证等不适用模块",
+        "没有复述完整计划、项目背景或 A3 全部 checklist"
+      ]
+    },
+    {
+      "id": 52,
+      "name": "prompt_user_hard_length_budget",
+      "prompt": "/prompt PCbuild 只执行 progress_v0.1.md 的 M8，已有 PRD 和 dev plan。提示词正文不超过 400 个中文字；允许改代码和测试，不允许建生产库、提交或推送。",
+      "expected_output": "应把 400 个中文字视为正文硬上限并生成短提示词；通过引用正式文件压缩背景，同时保留 M8 范围、代码/测试授权、生产库与 Git 停止点、关键验证和汇报。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "可直接发送的提示词正文不超过约 400 个中文字",
+        "引用 PRD、dev plan、progress_v0.1.md 和 M8",
+        "明确本轮只执行 M8",
+        "允许修改代码和测试",
+        "禁止创建或写入生产数据库、commit 和 push",
+        "保留关键验证以及完成项、证据、阻塞等汇报要求",
+        "没有通过机械截断留下残句或丢失停止边界"
+      ]
+    },
+    {
+      "id": 53,
+      "name": "prompt_l3_high_risk_escalation",
+      "prompt": "/prompt 为 LetsMakeMoney v0.7 生成公开发布收口提示词：涉及 MIT 与受限素材许可、完整 Git 历史审计、未签名安装器、仓库从私有改公开、tag 和 GitHub Release。",
+      "expected_output": "应因许可、历史、签名、仓库公开和正式发布进入 L3 审计级，而不是为了简短省略关键风险；提示词分别判断源码、便携包、安装器和版本整体，要求审计、回滚与明确外部授权。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "识别为 L3 或等效的高风险完整审计任务",
+        "覆盖代码许可、受限素材许可和完整 Git 历史审计",
+        "明确未签名安装器不得作为公开 Release 附件",
+        "分别判断源码仓库、便携包、安装器和版本整体",
+        "仓库公开、push、tag 和 GitHub Release 等待明确授权",
+        "包含失败停止、回滚或恢复要求",
+        "没有为了追求短文本省略许可、历史、签名或公开风险"
+      ]
+    },
+    {
+      "id": 54,
+      "name": "prompt_long_context_does_not_escalate",
+      "prompt": "/prompt QuickRec 文档很多，已有 PRD、三份技术设计、dev plan、progress、verification、manual verification 和 bugfix log。现在只让另一个任务更新 progress 中一个已完成的可逆文档状态，不改代码、不提交。",
+      "expected_output": "不应因为文件多和历史长升级为完整审计；应选择 L1，引用真正需要的 progress 与证据文件，只描述单一状态更新、核对、停止点和汇报。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "识别为 L1 或等效的低风险单任务",
+        "提示词正文约 600 个中文字以内",
+        "只要求读取 progress 和核对该状态所需的最小证据",
+        "明确只更新一个文档状态且不改代码不提交",
+        "没有列出或复述所有 PRD、技术设计和历史验收内容",
+        "没有因文件数量多而加入完整审计、回滚或发布流程",
+        "包含状态一致性检查和简短汇报要求"
+      ]
+    },
+    {
+      "id": 55,
+      "name": "prompt_compact_missing_facts_fallback",
+      "prompt": "帮我写一段很短的下一步提示词：继续当前项目的 B2，但我这条消息里没写项目路径和正式文件名；先不要提交。",
+      "expected_output": "应自动进入提示词生成并保持精简；对未知路径和事实源使用占位符或要求执行前核对，不编造，也不因缺少不改变任务方向的信息先展开长篇追问；保留 B2、禁止提交、验证和汇报。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "自动识别为提示词生成请求",
+        "正文约 600 个中文字以内",
+        "明确只继续 B2",
+        "对未知项目路径和正式文件使用占位符或执行前核对",
+        "没有编造具体路径、版本、分支、任务内容或测试结果",
+        "明确不提交并包含最小验证与汇报要求",
+        "没有先提出大量问题或加入与 B2 无关的完整工作流"
+      ]
+    },
+    {
+      "id": 56,
+      "name": "prompt_acceptance_checks_evidence_quality",
+      "prompt": "/prompt 生成第二批验收提示词。自动脚本会输出 PASS，但它引用的截图或日志可能只是 placeholder、synthetic 或 mock；提示词仍要尽量精简。",
+      "expected_output": "应生成精简验收提示词，但把证据质量作为不可压缩规则：脚本或 CI 的 PASS 不能独立证明通过，必须读取引用证据；缺失、空白、不可读或标为 placeholder/synthetic/mock/示例的证据只能判待验证或不通过。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "目标入口明确为 mypm /acceptance",
+        "提示词保持精简而没有展开完整通用验收清单",
+        "明确脚本、CI 或状态文件的 PASS 只是结果声明",
+        "要求实际读取或核对 PASS 所引用的日志、截图、产物或数据",
+        "明确 placeholder、synthetic、mock 或示例证据不能支撑通过",
+        "证据缺失、为空、不可读或为占位内容时只能待验证或不通过",
+        "保留禁止虚构证据和发布停止点"
       ]
     }
   ]

@@ -40,6 +40,14 @@
     "should_trigger": true
   },
   {
+    "query": "/prompt 根据当前 progress 和 bugfix log，帮我生成可以发给另一个项目窗口的定向复验提示词。",
+    "should_trigger": true
+  },
+  {
+    "query": "这个版本做到一半了，下一步该怎么跟项目里的 agent 说？请直接给可执行提示词。",
+    "should_trigger": true
+  },
+  {
     "query": "这个 TypeScript PR 有空指针和竞态问题，直接做 code review，按严重程度列出文件和行号。",
     "should_trigger": false
   },
@@ -77,6 +85,10 @@
   },
   {
     "query": "为现有 Figma 设计补齐 Tailwind token 和组件代码，设计方案已签字，不做产品判断。",
+    "should_trigger": false
+  },
+  {
+    "query": "帮我写一段 Midjourney 提示词，画一只穿宇航服的橘猫。",
     "should_trigger": false
   }
 ]

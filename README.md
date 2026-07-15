@@ -9,6 +9,8 @@ MyP-M-A（My Product Manager Assistant）是中文优先的个人产品经理 Sk
 - `/prd`：收敛方案并形成可开发、可测试、可验收的需求定义。
 - `/acceptance`：基于真实实现做验收、发布检查和上线后观察。
 
+另有一个辅助入口 `/prompt`：把当前阶段、正式文件、剩余任务和授权边界压缩成可直接交给同一项目窗口或新线程的执行提示词。它不改变四个产品阶段。
+
 完整 PRD 确认后，可继续生成 `dev_plan_vx.x.md`、`progress_vx.x.md` 和按需使用的 `dev_log_vx.x.md`。Basic Memory 默认在已知项目的新线程恢复上下文，并在稳定阶段收尾时去重更新；它不替代项目仓库中的正式文档。用户可切换 `auto / suggest / off`。
 
 ## 目录
@@ -32,6 +34,7 @@ MyP-M-A（My Product Manager Assistant）是中文优先的个人产品经理 Sk
 | `/idea` | 判断需求真假、价值和当前优先级 |
 | `/prd` | 收敛方案并形成可开发需求 |
 | `/acceptance` | 基于真实实现做验收与发布判断 |
+| `/prompt` | 生成下一阶段、续做、Bugfix、验收、发布或交接提示词 |
 
 示例：
 
@@ -51,6 +54,10 @@ MyP-M-A（My Product Manager Assistant）是中文优先的个人产品经理 Sk
 /acceptance 基于构建产物、日志和验收标准实际检查是否可发布。
 ```
 
+```text
+/prompt 根据当前 progress 和 verification 生成下一轮定向验收提示词。
+```
+
 ## 校验
 
 在仓库根目录运行：
@@ -63,6 +70,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.20.0`。
+当前版本：`v0.22.0`。
 
-v0.20 将 Basic Memory 从阶段末提示升级为事件驱动续接层：默认 `auto`，只在已知项目的新线程恢复和稳定阶段收尾写入；支持 `suggest / off`，并新增去重、事实源核对、敏感信息排除和写入结果确认。
+v0.22 将 `/prompt` 改为 L1/L2/L3 渐进式装配：按任务风险决定内容和长度，用户字符上限作为硬约束；已有正式文件时只传路径、任务 ID 和本轮增量，并在输出前执行超限压缩检查。Basic Memory 继续作为跨线程续接层；恢复工具或仓库证据不可用时，使用证据状态闸门和精简降级契约，禁止把待核对事项写成已读取、已验收或已发布。

@@ -1,12 +1,12 @@
 ---
 name: mypm
 display_name: MyP-M-A
-description: "Use when：用户需要做产品评审、判断需求价值、撰写或完善 PRD、规划开发承接、验收真实实现，或决定项目/版本能否发布；用户不必记命令，提供项目路径、想法、文档、截图、日志或验收结果即可自动分流到 /review、/idea、/prd、/acceptance。纯代码审查、单纯修 bug、直接执行 SQL/日志分析、按既定设计实现 UI 时不单独触发，除非同时需要产品范围或发布判断。"
-argument-hint: "[/review|/idea|/prd|/acceptance] 描述、路径或附件"
+description: "Use when：用户需要做产品评审、判断需求价值、撰写或完善 PRD、规划开发承接、验收真实实现、决定项目/版本能否发布，或把当前状态生成可交给另一任务执行的提示词；用户不必记命令，可自动分流到 /review、/idea、/prd、/acceptance 或辅助入口 /prompt。纯代码审查、单纯修 bug、直接执行 SQL/日志分析、按既定设计实现 UI 时不单独触发，除非同时需要产品范围或发布判断。"
+argument-hint: "[/review|/idea|/prd|/acceptance|/prompt] 描述、路径或附件"
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.20.0"
+  version: "0.22.0"
   language: zh-CN
 ---
 
@@ -34,6 +34,7 @@ MyP-M-A 是中文优先的个人产品经理工作流。它先帮助用户形成
 | PRD 后开发承接 | `references/development-handoff.md` | 跨线程时读 `references/memory-integration.md` | 读 `templates/dev-plan-template.md`、`templates/progress-template.md`；需要过程记录时再读 `templates/dev-log-template.md` |
 | 实施、Bugfix、分批推进 | `references/workflow-control.md` | 需要开发承接事实时读 `references/development-handoff.md` | 沿用项目已有 progress/dev log/bugfix log |
 | `/acceptance`、发布检查 | `references/acceptance.md`、`references/tooling.md` | 有长期发布状态时读 `references/memory-integration.md` | 读 `templates/acceptance-template.md`；有人工补证项时读 `templates/manual-verification-template.md` |
+| `/prompt`、下一步提示词、新线程交接 | `references/prompt.md`、`references/workflow-control.md` | 判断阶段去向时读 `references/next-step-prompts.md`；跨线程时读 `references/memory-integration.md` | 无固定模板 |
 | 产品简报 | `references/product-brief.md` | 无 | 需要落盘时读 `templates/product-brief-template.md` |
 | 问题尚未成形 | `references/problem-framing.md` | 需要判断价值时再进入 `/idea` | 无固定模板 |
 | 路线图 | `references/roadmap.md` | 无 | 需要落盘时读 `templates/roadmap-template.md` |
@@ -45,9 +46,9 @@ MyP-M-A 是中文优先的个人产品经理工作流。它先帮助用户形成
 
 有现成 PRD、dev plan、progress、verification 或候选产物时，还要读取 `references/workflow-control.md`，先识别真实子阶段、门禁影响面和可继承证据，再决定本轮工作。
 
-## 四个主入口
+## 四个主阶段与提示词辅助入口
 
-MyP-M-A 在 Codex 中只保留一个 Skill 入口。用户可以显式输入四个命令，也可以直接描述任务，由 Skill 自动分流：
+MyP-M-A 在 Codex 中只保留一个 Skill。用户可以显式输入四个产品阶段命令，也可以直接描述任务，由 Skill 自动分流：
 
 | 用户材料或意图 | 自动入口 |
 | --- | --- |
@@ -56,7 +57,9 @@ MyP-M-A 在 Codex 中只保留一个 Skill 入口。用户可以显式输入四�
 | 已确认方向，需要收敛方案、写需求、补影响范围或原型 | `/prd` |
 | 已有实现、exe/网页/包、测试、日志或验收结果，需要判断是否通过/发布 | `/acceptance` |
 
-显式命令优先。没有命令时，根据用户目标和已有产物判断；先用一行输出 `入口判断：/review|/idea|/prd|/acceptance` 及真实子阶段，再开展工作。实施、Bugfix、开发承接和发布收口是内部子阶段，不新增对外 Skill 入口。材料同时命中多条通路时，选择最接近用户当前决策的问题；只有选择不同入口会显著改变结果时才追问。
+`/prompt` 是辅助入口：用户要求“写提示词、下一步怎么跟他说、交给另一个窗口或新线程”时加载 `references/prompt.md`，把当前事实压缩成可执行指令；它不改变产品阶段，也不代替目标入口的工作。
+
+显式命令优先。没有命令时，根据用户目标和已有产物判断；先用一行输出 `入口判断：/review|/idea|/prd|/acceptance` 及真实子阶段，或 `入口判断：/prompt → [目标入口/子阶段]`。实施、Bugfix、开发承接和发布收口是内部子阶段。材料同时命中多条通路时，选择最接近用户当前决策的问题；只有选择不同入口会显著改变结果时才追问。
 
 ### `/review`：建立地图，再发现问题
 
@@ -123,6 +126,12 @@ Basic Memory 是跨线程续接层，不是聊天归档。每次进入明确项�
 
 只保存未来会复用的决策、偏好、项目约定、稳定路径、版本/发布状态、阻塞和下次继续点。正式 PRD、需求池、进度与验收文档仍留在项目仓库；两者冲突时以仓库事实源为准并修正记忆。工具不可用、信息仍是草稿或内容包含敏感信息时不得假装写入。详细规则见 `references/memory-integration.md`。
 
+Memory 与仓库恢复必须遵守证据状态：只有实际工具结果支持时才能写“已读取”“已恢复”或“已核对”。工具不可用、路径未知、文件未返回或读取失败时，只能写“已尝试”“不可用”“待核对”，并索取路径或继续只读定位；不得补写具体分支、版本、测试、验收或发布状态。没有仓库正式证据时，任何“已通过”“已发布”“无阻塞”结论都必须降级为“待验证”。
+
+已知项目的新线程恢复发生降级时，至少保留这份最小契约，可压缩措辞但不能漏掉含义：`场景：已知项目的新线程恢复。Memory（auto）：已尝试恢复，但当前不可用或未命中；仓库状态待核对。请提供或定位项目路径并读取正式文件，冲突时以仓库为准；本线程核对后沿用，不重复恢复；证据到位前不判断通过、发布或无阻塞。`
+
+该契约只用于“读取/恢复失败”，不能套用到稳定阶段的 Memory 写入失败。阶段事实已由用户材料或仓库证据确认、仅 Memory 写工具不可用时，保留原阶段结论，只报告 `Memory：未写入（工具不可用）`；不得把已经成立的验收或发布判断重新降级。需要留下稍后动作时，写清“搜索既有笔记 → 更新 → 回读确认并报告笔记名”，不得省略成泛泛的“以后再写”。
+
 ## 阶段完成标准
 
 完成前检查：
@@ -132,7 +141,7 @@ Basic Memory 是跨线程续接层，不是聊天归档。每次进入明确项�
 - 交付物是否匹配当前阶段，没有过早升级。
 - 正式文档是否引用上游 ID、版本和来源文件。
 - 输出是否全中文、UTF-8、无乱码。
-- 下一步是否明确；只有阶段真正结束时才加载 `references/next-step-prompts.md` 生成可直接发送的提示词。
+- 下一步是否明确；阶段真正结束时加载 `references/next-step-prompts.md`，用户随时要求生成提示词时加载 `references/prompt.md`。
 - 按 `memory_mode` 完成必要的恢复或阶段收尾写入；不保存完整聊天、临时过程、大段日志或敏感信息，并在实际读写后简短报告结果。
 
 ## UI 与 AI 补充

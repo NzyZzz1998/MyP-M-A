@@ -134,6 +134,37 @@ foreach ($requiredMemoryRule in @('memory_mode', 'auto', 'suggest', 'off', 'memo
         Add-Error "Missing v0.20 Memory rule: $requiredMemoryRule"
     }
 }
+
+foreach ($requiredMemoryEvidenceRule in @('unavailable', 'not-found', 'memory-only', 'verified-source')) {
+    if (-not $runtimeText.Contains($requiredMemoryEvidenceRule)) {
+        Add-Error "Missing Memory evidence-state rule: $requiredMemoryEvidenceRule"
+    }
+}
+
+foreach ($requiredPromptRule in @('/prompt', 'next', 'continue', 'bugfix', 'acceptance', 'release', 'handoff', 'commit', 'push', 'tag', 'Release')) {
+    if (-not $runtimeText.Contains($requiredPromptRule)) {
+        Add-Error "Missing prompt rule: $requiredPromptRule"
+    }
+}
+
+foreach ($requiredCompressionRule in @('L1', 'L2', 'L3', '300-600', '500-900', '800-1500')) {
+    if (-not $runtimeText.Contains($requiredCompressionRule)) {
+        Add-Error "Missing v0.22 prompt compression rule: $requiredCompressionRule"
+    }
+}
+
+if ($null -ne $evalData) {
+    foreach ($requiredPromptEval in 46..50) {
+        if (-not (@($evalData.evals.id) -contains $requiredPromptEval)) {
+            Add-Error "Missing v0.21 prompt eval: $requiredPromptEval"
+        }
+    }
+    foreach ($requiredCompressionEval in 51..56) {
+        if (-not (@($evalData.evals.id) -contains $requiredCompressionEval)) {
+            Add-Error "Missing v0.22 prompt compression eval: $requiredCompressionEval"
+        }
+    }
+}
 $referenceRegex = [regex]'`((?:references|templates)/[^`]+\.md)`'
 foreach ($file in $runtimeFiles) {
     $content = [System.IO.File]::ReadAllText($file.FullName, $strictUtf8)
