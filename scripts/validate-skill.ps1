@@ -90,6 +90,9 @@ if ($null -ne $evalData) {
     if ($skillVersion -and $evalData.version -ne $skillVersion) {
         Add-Error "Version mismatch: SKILL=$skillVersion evals=$($evalData.version)"
     }
+    if (@($evalData.evals).Count -lt 56) {
+        Add-Error "Stable eval coverage regressed: $(@($evalData.evals).Count)"
+    }
 
     $ids = @{}
     foreach ($eval in $evalData.evals) {
@@ -114,6 +117,62 @@ if ($null -ne $evalData) {
     }
 }
 
+$challengePath = Join-Path $root 'evals\challenge-evals.json'
+try {
+    $challengeData = [System.IO.File]::ReadAllText($challengePath, $strictUtf8) | ConvertFrom-Json
+} catch {
+    Add-Error "Cannot parse evals/challenge-evals.json: $($_.Exception.Message)"
+    $challengeData = $null
+}
+
+if ($null -ne $challengeData) {
+    if ($challengeData.skill_name -ne 'mypm') { Add-Error 'challenge evals skill_name must be mypm' }
+    if ($skillVersion -and $challengeData.target_version -ne $skillVersion) {
+        Add-Error "Challenge target mismatch: SKILL=$skillVersion challenge=$($challengeData.target_version)"
+    }
+    if (@($challengeData.evals).Count -lt 10) {
+        Add-Error "Challenge coverage too small: $(@($challengeData.evals).Count)"
+    }
+
+    $challengeIds = @{}
+    $challengeNames = @{}
+    foreach ($eval in $challengeData.evals) {
+        $id = [string]$eval.id
+        $name = [string]$eval.name
+        if ($challengeIds.ContainsKey($id)) {
+            Add-Error "Duplicate challenge eval id: $id"
+        } else {
+            $challengeIds[$id] = $true
+        }
+        if ($challengeNames.ContainsKey($name)) {
+            Add-Error "Duplicate challenge eval name: $name"
+        } else {
+            $challengeNames[$name] = $true
+        }
+        if (-not $id.StartsWith('CH-')) {
+            Add-Error "Challenge eval id must start with CH-: $id"
+        }
+        foreach ($requiredProperty in @('name', 'prompt', 'expected_output', 'files', 'expectations')) {
+            if (-not (@($eval.PSObject.Properties.Name) -contains $requiredProperty)) {
+                Add-Error "Challenge eval $id is missing $requiredProperty"
+            }
+        }
+        if (@($eval.expectations).Count -lt 7) {
+            Add-Error "Challenge eval $id needs at least 7 discriminating expectations"
+        }
+        foreach ($expectation in @($eval.expectations)) {
+            if ([string]::IsNullOrWhiteSpace([string]$expectation)) {
+                Add-Error "Challenge eval $id has an empty expectation"
+            }
+        }
+        foreach ($relativeFile in @($eval.files)) {
+            if (-not (Test-Path -LiteralPath (Join-Path $root $relativeFile))) {
+                Add-Error "Challenge eval $id file not found: $relativeFile"
+            }
+        }
+    }
+}
+
 $triggerPath = Join-Path $root 'evals\trigger-evals.json'
 try {
     $triggerData = [System.IO.File]::ReadAllText($triggerPath, $strictUtf8) | ConvertFrom-Json
@@ -122,8 +181,38 @@ try {
     if ($positive -lt 8 -or $negative -lt 8) {
         Add-Error "Trigger coverage too small: positive=$positive negative=$negative"
     }
+    $triggerQueries = @{}
+    foreach ($trigger in $triggerData) {
+        $query = [string]$trigger.query
+        if ([string]::IsNullOrWhiteSpace($query)) {
+            Add-Error 'Trigger eval has an empty query'
+        } elseif ($triggerQueries.ContainsKey($query)) {
+            Add-Error "Duplicate trigger query: $query"
+        } else {
+            $triggerQueries[$query] = $true
+        }
+        if ($trigger.should_trigger -isnot [bool]) {
+            Add-Error "Trigger should_trigger must be boolean: $query"
+        }
+    }
 } catch {
     Add-Error "Cannot parse trigger-evals.json: $($_.Exception.Message)"
+}
+
+foreach ($qualityFile in @('evals\README.md', 'scripts\regression-workspace.ps1')) {
+    if (-not (Test-Path -LiteralPath (Join-Path $root $qualityFile) -PathType Leaf)) {
+        Add-Error "Missing v0.23 quality file: $qualityFile"
+    }
+}
+
+$regressionScriptPath = Join-Path $root 'scripts\regression-workspace.ps1'
+if (Test-Path -LiteralPath $regressionScriptPath -PathType Leaf) {
+    $tokens = $null
+    $parseErrors = $null
+    [void][System.Management.Automation.Language.Parser]::ParseFile($regressionScriptPath, [ref]$tokens, [ref]$parseErrors)
+    foreach ($parseError in @($parseErrors)) {
+        Add-Error "regression-workspace.ps1 parse error: $($parseError.Message)"
+    }
 }
 
 $runtimeFiles = @(Get-Item -LiteralPath $skillPath) + @(Get-ChildItem (Join-Path $root 'references') -File -Filter '*.md')
@@ -198,5 +287,5 @@ if ($errors.Count -gt 0) {
     exit 1
 }
 
-Write-Host "MyP-M-A static validation passed: version=$skillVersion evals=$(@($evalData.evals).Count) triggers=$(@($triggerData).Count) files=$($textFiles.Count)"
+Write-Host "MyP-M-A static validation passed: version=$skillVersion evals=$(@($evalData.evals).Count) challenges=$(@($challengeData.evals).Count) triggers=$(@($triggerData).Count) files=$($textFiles.Count)"
 exit 0

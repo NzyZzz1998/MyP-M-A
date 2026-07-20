@@ -48,6 +48,14 @@
     "should_trigger": true
   },
   {
+    "query": "附件里只有失败事件和重试记录，团队却说用户失败率是 50%。请先校准分母，再判断这个需求值不值得进入下一版。",
+    "should_trigger": true
+  },
+  {
+    "query": "我们准备公开发布这个桌面工具，请从验收证据、许可证、产物身份和未签名安装器风险判断能否发布。",
+    "should_trigger": true
+  },
+  {
     "query": "这个 TypeScript PR 有空指针和竞态问题，直接做 code review，按严重程度列出文件和行号。",
     "should_trigger": false
   },
@@ -89,6 +97,22 @@
   },
   {
     "query": "帮我写一段 Midjourney 提示词，画一只穿宇航服的橘猫。",
+    "should_trigger": false
+  },
+  {
+    "query": "优化这段 system prompt 的 few-shot、XML 分隔符和 token 长度，只讨论提示词工程，不做产品需求判断。",
+    "should_trigger": false
+  },
+  {
+    "query": "直接查询 PostgreSQL 的 export_jobs，按 tenant_id 统计最终失败任务数；指标定义已经确认。",
+    "should_trigger": false
+  },
+  {
+    "query": "PRD、设计稿和验收标准都已批准，请按 dev plan 实现异步导出，不要重新讨论产品方案。",
+    "should_trigger": false
+  },
+  {
+    "query": "按照已签字的设计系统缩小输入框和按钮间距，只做 CSS 视觉修复，不改变交互或需求。",
     "should_trigger": false
   }
 ]

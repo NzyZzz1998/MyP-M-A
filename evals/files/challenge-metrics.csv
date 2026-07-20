@@ -1,0 +1,7 @@
+event_id,task_id,user_id,tenant_id,version,event_type,result,duration_ms
+E001,J101,U01,T01,2.3.0,attempt,failed,600000
+E002,J101,U01,T01,2.3.0,retry,failed,600000
+E003,J102,U02,T01,2.3.0,attempt,failed,42000
+E004,J103,U02,T01,2.3.0,attempt,succeeded,18000
+E005,J104,U03,T02,2.2.4,attempt,succeeded,21000
+E006,J105,U03,T02,2.3.0,attempt,succeeded,23000
