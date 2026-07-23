@@ -6,7 +6,7 @@ argument-hint: "[/review|/idea|/prd|/acceptance|/prompt] 描述、路径或附�
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.23.0"
+  version: "0.24.0"
   language: zh-CN
 ---
 
@@ -58,6 +58,8 @@ MyP-M-A 在 Codex 中只保留一个 Skill。用户可以显式输入四个产�
 | 已有实现、exe/网页/包、测试、日志或验收结果，需要判断是否通过/发布 | `/acceptance` |
 
 `/prompt` 是辅助入口：用户要求“写提示词、下一步怎么跟他说、交给另一个窗口或新线程”时加载 `references/prompt.md`，把当前事实压缩成可执行指令；它不改变产品阶段，也不代替目标入口的工作。
+
+`/prompt` 的正文第一行必须是实际接收任务的 `mypm /review|/idea|/prd|/acceptance`，或明确的“继续实施 / Bugfix / 发布收口”，不能写 `/prompt` 或自造命令。只使用用户本轮明确指向的事实源；未提供的项目、版本、路径、哈希和任务内容使用占位符或写“执行前核对”，不得从 Memory、其他项目或无关历史静默补全。已有 PRD、dev plan、progress、verification 或 bugfix log 时，只引用路径、任务 ID 和本轮增量，不复述其中的完整 checklist、历史结论或测试清单。默认 zero-shot 和最短充分结构；授权、停止条件、成功标准、关键证据及下一步不可为缩短而删除。
 
 显式命令优先。没有命令时，根据用户目标和已有产物判断；先用一行输出 `入口判断：/review|/idea|/prd|/acceptance` 及真实子阶段，或 `入口判断：/prompt → [目标入口/子阶段]`。实施、Bugfix、开发承接和发布收口是内部子阶段。材料同时命中多条通路时，选择最接近用户当前决策的问题；只有选择不同入口会显著改变结果时才追问。
 

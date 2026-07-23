@@ -242,6 +242,12 @@ foreach ($requiredCompressionRule in @('L1', 'L2', 'L3', '300-600', '500-900', '
     }
 }
 
+foreach ($requiredOfficialPromptRule in @('zero-shot', 'preserve-first', 'trim-first', 'tool-orchestration', 'retry-limit', 'stop-condition')) {
+    if (-not $runtimeText.Contains($requiredOfficialPromptRule)) {
+        Add-Error "Missing official prompt-guidance rule: $requiredOfficialPromptRule"
+    }
+}
+
 if ($null -ne $evalData) {
     foreach ($requiredPromptEval in 46..50) {
         if (-not (@($evalData.evals.id) -contains $requiredPromptEval)) {
@@ -251,6 +257,11 @@ if ($null -ne $evalData) {
     foreach ($requiredCompressionEval in 51..56) {
         if (-not (@($evalData.evals.id) -contains $requiredCompressionEval)) {
             Add-Error "Missing v0.22 prompt compression eval: $requiredCompressionEval"
+        }
+    }
+    foreach ($requiredOfficialPromptEval in 57..59) {
+        if (-not (@($evalData.evals.id) -contains $requiredOfficialPromptEval)) {
+            Add-Error "Missing official prompt-guidance eval: $requiredOfficialPromptEval"
         }
     }
 }
