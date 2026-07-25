@@ -19,9 +19,45 @@ $baselineSummary = @($benchmark.summary | Where-Object { $_.configuration -eq 'b
 $candidateSummary = @($benchmark.summary | Where-Object { $_.configuration -eq 'candidate' })[0]
 Write-Host 'Viewer: loading evaluation files'
 
+function Get-CaseDisplayName {
+    param(
+        [Parameter(Mandatory = $true)]$Metadata,
+        [Parameter(Mandatory = $true)][string]$Fallback
+    )
+
+    $title = [string]$Metadata.display_name
+    if ([string]::IsNullOrWhiteSpace($title)) {
+        $title = [string]$Metadata.expected_output
+    }
+    if ([string]::IsNullOrWhiteSpace($title)) {
+        return $Fallback
+    }
+
+    $title = $title.Trim()
+    $title = $title -replace '^应(?:当|该)?', ''
+    $title = $title -replace 'project\s+review', '项目评审'
+    $title = $title -replace 'page\s+review', '页面评审'
+    $title = $title -replace 'PRD\s+review', 'PRD 评审'
+    $title = $title -replace 'Basic\s+Memory', 'Basic Memory 长期记忆库'
+    $title = $title -replace 'Memory-only', '仅作长期记忆候选'
+    $title = $title -replace 'stale\s+candidate', '过期候选'
+    $title = $title -replace '\bMemory\b', '长期记忆'
+    $title = $title -replace '\bbackend\b', '后端'
+    $title = $title -replace '\bfrontend\b', '前端'
+    $title = $title -replace '\bscorecard\b', '评分卡'
+    $title = $title -replace '\bzero-shot\b', '零样本'
+    $title = $title -replace 'tag/Release', '标签与发布页'
+    $title = @($title -split '[，；。\r\n]')[0].Trim()
+    if ($title.Length -gt 36) {
+        $title = $title.Substring(0, 36) + '…'
+    }
+    return $title
+}
+
 $cases = foreach ($directoryName in @($iteration.eval_directories)) {
     $evalDirectory = Join-Path $workspacePath $directoryName
     $task = Get-Content -LiteralPath (Join-Path $evalDirectory 'task.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $metadata = Get-Content -LiteralPath (Join-Path $workspacePath "$($iteration.grader_directory)\$directoryName.json") -Raw -Encoding UTF8 | ConvertFrom-Json
     $baselineDirectory = Join-Path $evalDirectory 'baseline\run-1'
     $candidateDirectory = Join-Path $evalDirectory 'candidate\run-1'
     $baselineResponse = [System.IO.File]::ReadAllText(
@@ -55,7 +91,8 @@ $cases = foreach ($directoryName in @($iteration.eval_directories)) {
 
     [ordered]@{
         id = [string]$task.id
-        name = [string]$task.name
+        name = Get-CaseDisplayName -Metadata $metadata -Fallback ([string]$task.name)
+        machine_name = [string]$task.name
         prompt = [string]$task.prompt
         baseline = [ordered]@{
             response = $baselineResponse

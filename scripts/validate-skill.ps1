@@ -248,6 +248,31 @@ foreach ($requiredOfficialPromptRule in @('zero-shot', 'preserve-first', 'trim-f
     }
 }
 
+$contractAnchors = @{
+    'SKILL.md' = @('contract:entry-isolation')
+    'references\prd.md' = @('contract:prd-known-facts')
+    'references\prompt.md' = @('contract:prompt-identity')
+    'references\data-analysis.md' = @('contract:kpi-data-contract')
+    'references\memory-integration.md' = @('contract:memory-conflict-inventory')
+    'references\acceptance.md' = @('contract:acceptance-evidence-impact')
+}
+foreach ($entry in $contractAnchors.GetEnumerator()) {
+    $path = Join-Path $root $entry.Key
+    $content = [System.IO.File]::ReadAllText($path, $strictUtf8)
+    foreach ($anchor in $entry.Value) {
+        if (-not $content.Contains($anchor)) {
+            Add-Error "Missing contract anchor in $($entry.Key): $anchor"
+        }
+    }
+}
+
+$prdCoreMatch = [regex]::Match($skill, '(?s)### `/prd`.*?(?=### `/acceptance`)')
+if (-not $prdCoreMatch.Success) {
+    Add-Error 'Cannot locate the core /prd section in SKILL.md'
+} elseif ($prdCoreMatch.Value.Length -gt 1200) {
+    Add-Error "SKILL.md /prd core is too dense ($($prdCoreMatch.Value.Length) chars); move details to references/prd.md"
+}
+
 if ($null -ne $evalData) {
     foreach ($requiredPromptEval in 46..50) {
         if (-not (@($evalData.evals.id) -contains $requiredPromptEval)) {
@@ -262,6 +287,11 @@ if ($null -ne $evalData) {
     foreach ($requiredOfficialPromptEval in 57..59) {
         if (-not (@($evalData.evals.id) -contains $requiredOfficialPromptEval)) {
             Add-Error "Missing official prompt-guidance eval: $requiredOfficialPromptEval"
+        }
+    }
+    foreach ($requiredPrdQuestionEval in 60..63) {
+        if (-not (@($evalData.evals.id) -contains $requiredPrdQuestionEval)) {
+            Add-Error "Missing PRD question-quality eval: $requiredPrdQuestionEval"
         }
     }
 }
