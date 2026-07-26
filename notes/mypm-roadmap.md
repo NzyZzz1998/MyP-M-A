@@ -12,8 +12,8 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.25 已在本地 `main` 提交，尚未推送远端。Skill 已从“能用”进入“质量工程与稳定泛化”阶段，后续不新增入口，优先依靠真实失败案例和差量回归改进。
-<!-- project-status: version=0.25.0; state=local-committed -->
+当前阶段判断：v0.25 已提交并同步至远端 `main`。Skill 已从“能用”进入“质量工程与稳定泛化”阶段，后续不新增入口，优先依靠真实失败案例和差量回归改进。
+<!-- project-status: version=0.25.0; state=remote-synced -->
 
 ## 已完成
 
@@ -337,7 +337,7 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 
 ## R2.15 v0.25 PRD 提问质量与瘦身
 
-状态：已完成并在本地 `main` 提交，尚未推送远端
+状态：已完成并同步至远端 `main`
 
 - 删除 PRD 与 development handoff 重复规则，保持单一事实源。
 - 第一轮问题限制为 3-7 个高影响决策，并强制处理约束冲突。

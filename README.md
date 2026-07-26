@@ -70,8 +70,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.25.0`，已在本地 `main` 提交，尚未推送远端。
-<!-- project-status: version=0.25.0; state=local-committed -->
+当前版本：`v0.25.0`，已提交并同步至远端 `main`。
+<!-- project-status: version=0.25.0; state=remote-synced -->
 
 v0.25 把“问对问题”提升为 PRD 硬门禁：首轮只问 3-7 个高影响问题，先解决约束冲突，高风险需求不能被“少问、直接写”绕过；同时将重复的开发承接规则从 PRD 运行规则移交给 `development-handoff.md`。本轮还补强了混合评审、附件型 `/idea`、数据库增量迁移、异步状态、指标（KPI）数据截止时间、AI 安全、验收证据失效、长期记忆冲突和精简交接提示词。
 
