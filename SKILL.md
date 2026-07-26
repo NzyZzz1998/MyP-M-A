@@ -1,8 +1,6 @@
 ---
 name: mypm
-display_name: MyP-M-A
 description: "Use when：用户需要做产品评审、判断需求价值、撰写或完善 PRD、规划开发承接、验收真实实现、决定项目/版本能否发布，或把当前状态生成可交给另一任务执行的提示词；用户不必记命令，可自动分流到 /review、/idea、/prd、/acceptance 或辅助入口 /prompt。纯代码审查、单纯修 bug、直接执行 SQL/日志分析、按既定设计实现 UI 时不单独触发，除非同时需要产品范围或发布判断。"
-argument-hint: "[/review|/idea|/prd|/acceptance|/prompt] 描述、路径或附件"
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant

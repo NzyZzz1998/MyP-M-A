@@ -1,6 +1,7 @@
 # MyP-M-A 评测说明
 
 MyP-M-A 使用两套互补评测，不混合计算总分。
+<!-- contract:separate-eval-scores -->
 
 ## 稳定集
 

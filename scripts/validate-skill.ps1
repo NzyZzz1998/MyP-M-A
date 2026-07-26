@@ -31,6 +31,25 @@ foreach ($file in $textFiles) {
 
 $skillPath = Join-Path $root 'SKILL.md'
 $skill = [System.IO.File]::ReadAllText($skillPath, $strictUtf8)
+$frontmatterMatch = [regex]::Match($skill, '(?s)\A---\r?\n(?<yaml>.*?)\r?\n---(?:\r?\n|$)')
+if (-not $frontmatterMatch.Success) {
+    Add-Error 'SKILL.md is missing valid YAML frontmatter'
+} else {
+    $allowedFrontmatterKeys = @('name', 'description', 'license', 'allowed-tools', 'metadata')
+    $frontmatterKeys = @(
+        [regex]::Matches($frontmatterMatch.Groups['yaml'].Value, '(?m)^(?<key>[A-Za-z0-9_-]+):') |
+            ForEach-Object { $_.Groups['key'].Value }
+    )
+    foreach ($key in @($frontmatterKeys | Select-Object -Unique)) {
+        if ($key -notin $allowedFrontmatterKeys) {
+            Add-Error "Unexpected SKILL.md frontmatter key under official quick validator: $key"
+        }
+    }
+    foreach ($duplicateKey in @($frontmatterKeys | Group-Object | Where-Object Count -gt 1)) {
+        Add-Error "Duplicate SKILL.md frontmatter key: $($duplicateKey.Name)"
+    }
+}
+
 $versionMatch = [regex]::Match($skill, '(?m)^\s+version:\s+"([^"]+)"\s*$')
 if (-not $versionMatch.Success) {
     Add-Error 'SKILL.md is missing metadata.version'
@@ -173,6 +192,58 @@ if ($null -ne $challengeData) {
     }
 }
 
+$statusDocuments = @('README.md', 'notes\mypm-roadmap.md')
+$statusRecords = @{}
+$statusPattern = '<!-- project-status: version=([^;]+); state=([a-z-]+) -->'
+$allowedProjectStates = @('candidate', 'local-committed', 'remote-synced')
+foreach ($relativePath in $statusDocuments) {
+    $statusPath = Join-Path $root $relativePath
+    $statusText = [System.IO.File]::ReadAllText($statusPath, $strictUtf8)
+    $statusMatch = [regex]::Match($statusText, $statusPattern)
+    if (-not $statusMatch.Success) {
+        Add-Error "Missing project-status marker in $relativePath"
+        continue
+    }
+
+    $statusVersion = $statusMatch.Groups[1].Value
+    $statusState = $statusMatch.Groups[2].Value
+    if ($skillVersion -and $statusVersion -ne $skillVersion) {
+        Add-Error "Project-status version mismatch in $relativePath`: SKILL=$skillVersion document=$statusVersion"
+    }
+    if ($statusState -notin $allowedProjectStates) {
+        Add-Error "Unsupported project-status state in $relativePath`: $statusState"
+    }
+    $statusRecords[$relativePath] = "$statusVersion|$statusState"
+}
+if ($statusRecords.Count -eq $statusDocuments.Count) {
+    $uniqueStatusRecords = @($statusRecords.Values | Select-Object -Unique)
+    if ($uniqueStatusRecords.Count -ne 1) {
+        Add-Error 'README.md and notes/mypm-roadmap.md project-status markers must match'
+    }
+}
+
+if ($null -ne $evalData -and $null -ne $challengeData) {
+    $stableExpectationTotal = [int](($evalData.evals | ForEach-Object { @($_.expectations).Count } | Measure-Object -Sum).Sum)
+    $challengeExpectationTotal = [int](($challengeData.evals | ForEach-Object { @($_.expectations).Count } | Measure-Object -Sum).Sum)
+    $combinedExpectationTotal = $stableExpectationTotal + $challengeExpectationTotal
+    $combinedScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$combinedExpectationTotal))\b"
+    $stableScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$stableExpectationTotal))\b"
+    $challengeScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$challengeExpectationTotal))\b"
+
+    foreach ($relativePath in @('README.md', 'CHANGELOG.md', 'notes\mypm-roadmap.md')) {
+        $reportText = [System.IO.File]::ReadAllText((Join-Path $root $relativePath), $strictUtf8)
+        if ([regex]::IsMatch($reportText, $combinedScorePattern)) {
+            Add-Error "Stable and challenge eval scores must not be reported as a combined total in $relativePath"
+        }
+        if (-not [regex]::IsMatch($reportText, $stableScorePattern)) {
+            Add-Error "Missing separate stable eval score in $relativePath"
+        }
+        if (-not [regex]::IsMatch($reportText, $challengeScorePattern)) {
+            Add-Error "Missing separate challenge eval score in $relativePath"
+        }
+    }
+}
+
 $triggerPath = Join-Path $root 'evals\trigger-evals.json'
 try {
     $triggerData = [System.IO.File]::ReadAllText($triggerPath, $strictUtf8) | ConvertFrom-Json
@@ -250,6 +321,7 @@ foreach ($requiredOfficialPromptRule in @('zero-shot', 'preserve-first', 'trim-f
 
 $contractAnchors = @{
     'SKILL.md' = @('contract:entry-isolation')
+    'evals\README.md' = @('contract:separate-eval-scores')
     'references\prd.md' = @('contract:prd-known-facts')
     'references\prompt.md' = @('contract:prompt-identity')
     'references\data-analysis.md' = @('contract:kpi-data-contract')
