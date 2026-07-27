@@ -70,8 +70,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.26.0`，候选规则与增量回归已完成，尚未提交。
-<!-- project-status: version=0.26.0; state=candidate -->
+当前版本：`v0.26.0`，已提交并同步至远端 `main`。
+<!-- project-status: version=0.26.0; state=remote-synced -->
 
 v0.26 依据 OpenAI/Anthropic 官方提示工程建议和公开架构样本，补充接收环境校准、单次直接证据验证、子 Agent 预算与生命周期，以及 Memory 来源与新鲜度合同。能力未知时保持 generic；无证据推断不得进入任何 Memory 候选清单；多轨工作由主任务逐轨汇报并在完成后关闭子 Agent。
 

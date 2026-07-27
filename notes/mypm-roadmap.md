@@ -12,8 +12,8 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.26 候选规则与增量回归已完成，尚未提交。Skill 已进入“质量工程与稳定泛化”阶段，后续不新增入口，优先依靠真实失败案例和差量回归改进。
-<!-- project-status: version=0.26.0; state=candidate -->
+当前阶段判断：v0.26 已提交并同步至远端 `main`。Skill 已进入“质量工程与稳定泛化”阶段，后续不新增入口，优先依靠真实失败案例和差量回归改进。
+<!-- project-status: version=0.26.0; state=remote-synced -->
 
 ## 已完成
 
