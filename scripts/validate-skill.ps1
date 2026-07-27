@@ -323,9 +323,17 @@ $contractAnchors = @{
     'SKILL.md' = @('contract:entry-isolation')
     'evals\README.md' = @('contract:separate-eval-scores')
     'references\prd.md' = @('contract:prd-known-facts')
-    'references\prompt.md' = @('contract:prompt-identity')
+    'references\prompt.md' = @(
+        'contract:prompt-identity',
+        'contract:recipient-profile',
+        'contract:single-verification',
+        'contract:subagent-budget'
+    )
     'references\data-analysis.md' = @('contract:kpi-data-contract')
-    'references\memory-integration.md' = @('contract:memory-conflict-inventory')
+    'references\memory-integration.md' = @(
+        'contract:memory-conflict-inventory',
+        'contract:memory-provenance'
+    )
     'references\acceptance.md' = @('contract:acceptance-evidence-impact')
 }
 foreach ($entry in $contractAnchors.GetEnumerator()) {
@@ -364,6 +372,11 @@ if ($null -ne $evalData) {
     foreach ($requiredPrdQuestionEval in 60..63) {
         if (-not (@($evalData.evals.id) -contains $requiredPrdQuestionEval)) {
             Add-Error "Missing PRD question-quality eval: $requiredPrdQuestionEval"
+        }
+    }
+    foreach ($requiredV026Eval in 64..69) {
+        if (-not (@($evalData.evals.id) -contains $requiredV026Eval)) {
+            Add-Error "Missing v0.26 stable eval: $requiredV026Eval"
         }
     }
 }

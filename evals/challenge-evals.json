@@ -2,7 +2,7 @@
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
   "baseline_version": "0.22.0",
-  "target_version": "0.25.0",
+  "target_version": "0.26.0",
   "purpose": "高区分度挑战集，用于识别格式正确但证据、数据、边界或发布判断错误的输出。",
   "evals": [
     {
