@@ -17,6 +17,18 @@ D:\Work\Software\codex_home\basic-memory
 - 记忆内容默认中文；必要的 observation 标签可以使用 `[decision]`、`[preference]`、`[risk]`、`[next]` 等英文标签。
 - 如果当前线程没有可用的 Basic Memory MCP 工具，不要假装已经写入；可以输出可直接发送的 `memory-*` 提示词，或说明需要在新线程/重启后执行。
 
+## 稳定阶段写入合同
+<!-- contract:memory-stable-write -->
+
+稳定阶段收尾时，Memory 写入必须遵守以下顺序：
+
+1. 给事实标注来源：用户明确决定记为 `[user-decision]`；仓库当前状态记为 `[repo-fact]` 并引用 `current.md`、`verification.md` 或等价正式文件；真实验收结果记为 `[verified-result]` 并带适用版本。
+2. 无证据怀疑、临时排查和未关闭假设不写入稳定事实。
+3. 先搜索同一项目已有笔记，更新原笔记而不是重复创建；写后回读或再次搜索确认。
+4. 工具不可用或写入失败时，如实报告 `Memory：未写入`，不得使用“已更新”“已保存”等完成措辞。
+5. 旧 Memory 与仓库冲突时，实际读取 `verification.md`、HEAD 和候选产物身份；将旧状态标为过期/被替代并记录新来源，不静默沿用。
+6. 状态被替代时，仓库事实源中仍未关闭的权限、迁移、GUI、候选包身份等证据类别要原样保留为下一步；不能只更新版本结论而遗漏未决验证面。
+
 ## 运行模式
 
 每次进入明确项目时确定本轮 `memory_mode`。用户明确指定时优先；未指定时默认 `auto`。

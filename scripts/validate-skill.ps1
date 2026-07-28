@@ -229,16 +229,20 @@ if ($null -ne $evalData -and $null -ne $challengeData) {
     $combinedScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$combinedExpectationTotal))\b"
     $stableScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$stableExpectationTotal))\b"
     $challengeScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$challengeExpectationTotal))\b"
+    $stablePendingPattern = "(?m)待评测\s*/\s*$([regex]::Escape([string]$stableExpectationTotal))\b"
+    $challengePendingPattern = "(?m)待评测\s*/\s*$([regex]::Escape([string]$challengeExpectationTotal))\b"
+    $projectState = if ($statusRecords.ContainsKey('README.md')) { ($statusRecords['README.md'] -split '\|')[1] } else { $null }
+    $allowPendingScores = $projectState -eq 'candidate'
 
     foreach ($relativePath in @('README.md', 'CHANGELOG.md', 'notes\mypm-roadmap.md')) {
         $reportText = [System.IO.File]::ReadAllText((Join-Path $root $relativePath), $strictUtf8)
         if ([regex]::IsMatch($reportText, $combinedScorePattern)) {
             Add-Error "Stable and challenge eval scores must not be reported as a combined total in $relativePath"
         }
-        if (-not [regex]::IsMatch($reportText, $stableScorePattern)) {
+        if ((-not [regex]::IsMatch($reportText, $stableScorePattern)) -and (-not ($allowPendingScores -and [regex]::IsMatch($reportText, $stablePendingPattern)))) {
             Add-Error "Missing separate stable eval score in $relativePath"
         }
-        if (-not [regex]::IsMatch($reportText, $challengeScorePattern)) {
+        if ((-not [regex]::IsMatch($reportText, $challengeScorePattern)) -and (-not ($allowPendingScores -and [regex]::IsMatch($reportText, $challengePendingPattern)))) {
             Add-Error "Missing separate challenge eval score in $relativePath"
         }
     }
@@ -322,19 +326,34 @@ foreach ($requiredOfficialPromptRule in @('zero-shot', 'preserve-first', 'trim-f
 $contractAnchors = @{
     'SKILL.md' = @('contract:entry-isolation')
     'evals\README.md' = @('contract:separate-eval-scores')
-    'references\prd.md' = @('contract:prd-known-facts')
+    'references\idea.md' = @('contract:idea-core-output')
+    'references\review.md' = @('contract:review-core-output')
+    'references\prd.md' = @(
+        'contract:prd-known-facts',
+        'contract:prd-core-output'
+    )
     'references\prompt.md' = @(
         'contract:prompt-identity',
         'contract:recipient-profile',
         'contract:single-verification',
-        'contract:subagent-budget'
+        'contract:subagent-budget',
+        'contract:prompt-preserve-core'
     )
     'references\data-analysis.md' = @('contract:kpi-data-contract')
+    'references\capability-routing.md' = @(
+        'contract:capability-minimal-route',
+        'contract:capability-evidence-package',
+        'contract:capability-acceptance-tracks'
+    )
     'references\memory-integration.md' = @(
         'contract:memory-conflict-inventory',
-        'contract:memory-provenance'
+        'contract:memory-provenance',
+        'contract:memory-stable-write'
     )
-    'references\acceptance.md' = @('contract:acceptance-evidence-impact')
+    'references\acceptance.md' = @(
+        'contract:acceptance-evidence-impact',
+        'contract:acceptance-core-output'
+    )
 }
 foreach ($entry in $contractAnchors.GetEnumerator()) {
     $path = Join-Path $root $entry.Key
@@ -377,6 +396,16 @@ if ($null -ne $evalData) {
     foreach ($requiredV026Eval in 64..69) {
         if (-not (@($evalData.evals.id) -contains $requiredV026Eval)) {
             Add-Error "Missing v0.26 stable eval: $requiredV026Eval"
+        }
+    }
+    foreach ($requiredV027Eval in 70..77) {
+        if (-not (@($evalData.evals.id) -contains $requiredV027Eval)) {
+            Add-Error "Missing v0.27 stable eval: $requiredV027Eval"
+        }
+    }
+    foreach ($requiredV027Challenge in @('CH-13', 'CH-14', 'CH-15', 'CH-16')) {
+        if (-not (@($challengeData.evals.id) -contains $requiredV027Challenge)) {
+            Add-Error "Missing v0.27 challenge eval: $requiredV027Challenge"
         }
     }
 }
