@@ -70,8 +70,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.28.0 candidate`。v0.27 已提交并推送；v0.28 的承重假设与意图—实现—验证审计已完成全量 Terra A/B，尚未提交或推送。
-<!-- project-status: version=0.28.0; state=candidate -->
+当前版本：`v0.28.0`。承重假设与意图—实现—验证审计已完成全量 Terra A/B，并已提交、推送至远端 `main`。
+<!-- project-status: version=0.28.0; state=remote-synced -->
 
 v0.28 仍不新增入口。它把高分但证据不足的需求进一步拆成 3～5 条承重假设，为关键假设定义可证伪条件、最小实验与继续/停止阈值；同时在项目、PRD 和实现评审中建立“需求意图—实际实现—验证证据”对照，避免把当前代码、测试或旧文档自动当成正确口径。方法选择性参考 [phuryn/pm-skills](https://github.com/phuryn/pm-skills)，没有引入其命令体系。
 
