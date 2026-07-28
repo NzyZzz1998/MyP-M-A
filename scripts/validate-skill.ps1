@@ -229,8 +229,10 @@ if ($null -ne $evalData -and $null -ne $challengeData) {
     $combinedScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$combinedExpectationTotal))\b"
     $stableScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$stableExpectationTotal))\b"
     $challengeScorePattern = "(?m)\b\d+\s*/\s*$([regex]::Escape([string]$challengeExpectationTotal))\b"
-    $stablePendingPattern = "(?m)待评测\s*/\s*$([regex]::Escape([string]$stableExpectationTotal))\b"
-    $challengePendingPattern = "(?m)待评测\s*/\s*$([regex]::Escape([string]$challengeExpectationTotal))\b"
+    # Keep the Chinese marker escaped so Windows PowerShell 5.1 does not
+    # misdecode this script when the UTF-8 file has no BOM.
+    $stablePendingPattern = "(?m)\u5F85\u8BC4\u6D4B\s*/\s*$([regex]::Escape([string]$stableExpectationTotal))\b"
+    $challengePendingPattern = "(?m)\u5F85\u8BC4\u6D4B\s*/\s*$([regex]::Escape([string]$challengeExpectationTotal))\b"
     $projectState = if ($statusRecords.ContainsKey('README.md')) { ($statusRecords['README.md'] -split '\|')[1] } else { $null }
     $allowPendingScores = $projectState -eq 'candidate'
 
@@ -350,6 +352,11 @@ $contractAnchors = @{
         'contract:memory-provenance',
         'contract:memory-stable-write'
     )
+    'references\red-team.md' = @('contract:load-bearing-assumptions')
+    'references\intent-implementation-audit.md' = @(
+        'contract:intent-implementation-audit',
+        'contract:conditional-shipping-surfaces'
+    )
     'references\acceptance.md' = @(
         'contract:acceptance-evidence-impact',
         'contract:acceptance-core-output'
@@ -406,6 +413,16 @@ if ($null -ne $evalData) {
     foreach ($requiredV027Challenge in @('CH-13', 'CH-14', 'CH-15', 'CH-16')) {
         if (-not (@($challengeData.evals.id) -contains $requiredV027Challenge)) {
             Add-Error "Missing v0.27 challenge eval: $requiredV027Challenge"
+        }
+    }
+    foreach ($requiredV028Eval in 78..81) {
+        if (-not (@($evalData.evals.id) -contains $requiredV028Eval)) {
+            Add-Error "Missing v0.28 stable eval: $requiredV028Eval"
+        }
+    }
+    foreach ($requiredV028Challenge in @('CH-17', 'CH-18')) {
+        if (-not (@($challengeData.evals.id) -contains $requiredV028Challenge)) {
+            Add-Error "Missing v0.28 challenge eval: $requiredV028Challenge"
         }
     }
 }
