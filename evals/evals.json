@@ -1,7 +1,7 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "version": "0.29.0",
+  "version": "0.30.0",
   "evals": [
     {
       "id": 1,
@@ -251,7 +251,7 @@
       "id": 17,
       "name": "review_single_entry_auto_route_page_prd_implementation",
       "prompt": "/review 我给你一张设置页截图、一段 PRD 摘要和一段 debug.log。请你自己判断应该按哪种 review 通路走，并说明为什么，不要让我选择 /review page 或 /review prd。",
-      "expected_output": "应坚持单一 /review 入口，自动判断主通路和辅助通路；输出 review 范围、不覆盖范围、对象脉络、可视化图、关键发现、值得保留、进入 /idea 的候选点和暂不处理项。",
+      "expected_output": "应坚持单一 /review 入口，自动判断主通路和辅助通路；输出 review 范围、不覆盖范围、对象脉络和可视化图。已有具体现象时把发现列为候选点而非确定需求；未附实际材料时明确候选点为空并给出最小补证，不把材料缺口伪装为需求。",
       "files": [],
       "expectations": [
         "输出为中文",
@@ -260,7 +260,7 @@
         "包含 review 范围和不覆盖范围",
         "包含对象脉络",
         "包含可视化图",
-        "把发现问题作为候选点而不是直接确定需求"
+        "已有具体现象时作为候选点；未附材料时明确当前未形成可证候选点"
       ]
     },
     {

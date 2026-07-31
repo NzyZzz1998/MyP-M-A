@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory = $true)]
     [ValidateSet('Prepare', 'Validate')]
     [string]$Action,
@@ -11,6 +11,20 @@ param(
     [string]$EvalFile = 'evals\evals.json',
     [ValidateRange(1, 10)]
     [int]$Runs = 1,
+
+    [string]$SuiteLabel = '未命名评测集',
+    [ValidateSet('coverage', 'targeted-max')]
+    [string]$EvaluationTier = 'coverage',
+    [ValidateRange(30, 1800)]
+    [int]$SlaSeconds = 300,
+    [ValidateRange(1, 3)]
+    [int]$MaxConcurrency = 3,
+    [ValidateSet('unspecified', 'low', 'medium', 'high', 'xhigh', 'max', 'ultra')]
+    [string]$ReasoningEffort = 'unspecified',
+    [string]$BaselineLabel = '基线版本',
+    [string]$CandidateLabel = '候选版本',
+    [string]$BaselineModel = '',
+    [string]$CandidateModel = '',
     [switch]$AllowIncomplete
 )
 
@@ -162,15 +176,24 @@ function Invoke-Prepare {
     }
 
     $manifest = [ordered]@{
-        schema_version = 1
+        schema_version = 2
         prepared_at_utc = [DateTime]::UtcNow.ToString('o')
         eval_source = $evalPath
+        suite_label = $SuiteLabel
+        evaluation_tier = $EvaluationTier
         eval_count = @($evalData.evals).Count
         runs_per_configuration = $Runs
         configurations = @(
-            [ordered]@{ name = 'baseline'; source = $baseline; snapshot = '_snapshots/baseline' },
-            [ordered]@{ name = 'candidate'; source = $candidate; snapshot = '_snapshots/candidate' }
+            [ordered]@{ name = 'baseline'; label = $BaselineLabel; model = $BaselineModel; source = $baseline; snapshot = '_snapshots/baseline' },
+            [ordered]@{ name = 'candidate'; label = $CandidateLabel; model = $CandidateModel; source = $candidate; snapshot = '_snapshots/candidate' }
         )
+        execution_protocol = [ordered]@{
+            reasoning_effort = $ReasoningEffort
+            sla_seconds = $SlaSeconds
+            max_concurrency = $MaxConcurrency
+            missing_result_policy = 'runtime-incomplete-not-capability-failure'
+            comparison_policy = 'paired-complete-runs-only'
+        }
         eval_directories = @($evalDirectories)
         grader_directory = '_grader'
         execution = 'external'
@@ -191,6 +214,7 @@ function Invoke-Validate {
 
     $manifest = [System.IO.File]::ReadAllText($manifestPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
     $records = [System.Collections.Generic.List[object]]::new()
+    $recordIndex = @{}
     $configurationTotals = @{}
     foreach ($configuration in @($manifest.configurations)) {
         $configurationTotals[$configuration.name] = [ordered]@{
@@ -282,7 +306,7 @@ function Invoke-Validate {
                     $totals.invalid_runs++
                 }
 
-                $records.Add([ordered]@{
+                $record = [ordered]@{
                     eval_id = [string]$metadata.id
                     eval_name = [string]$metadata.name
                     configuration = [string]$configuration.name
@@ -292,7 +316,9 @@ function Invoke-Validate {
                     total = $total
                     response_chars = $responseChars
                     issues = @($issues)
-                })
+                }
+                $records.Add($record)
+                $recordIndex["$($record.eval_id)|$($record.configuration)|$runNumber"] = $record
             }
         }
     }
@@ -315,29 +341,88 @@ function Invoke-Validate {
         })
     }
 
+    $paired = [ordered]@{
+        expected_pairs = [int]$manifest.eval_count * [int]$manifest.runs_per_configuration
+        complete_pairs = 0
+        incomplete_pairs = 0
+        baseline_passed = 0
+        candidate_passed = 0
+        total = 0
+        baseline_wins = 0
+        candidate_wins = 0
+        ties = 0
+        baseline_response_chars = 0
+        candidate_response_chars = 0
+        baseline_pass_rate = $null
+        candidate_pass_rate = $null
+        baseline_average_response_chars = $null
+        candidate_average_response_chars = $null
+    }
+    foreach ($directoryName in @($manifest.eval_directories)) {
+        $metadataPath = Join-Path $workspacePath "$($manifest.grader_directory)\$directoryName.json"
+        $metadata = [System.IO.File]::ReadAllText($metadataPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+        foreach ($runNumber in 1..([int]$manifest.runs_per_configuration)) {
+            $baselineRecord = $recordIndex["$($metadata.id)|baseline|$runNumber"]
+            $candidateRecord = $recordIndex["$($metadata.id)|candidate|$runNumber"]
+            if ($null -eq $baselineRecord -or $null -eq $candidateRecord -or
+                $baselineRecord.state -ne 'complete' -or $candidateRecord.state -ne 'complete') {
+                $paired.incomplete_pairs++
+                continue
+            }
+
+            $paired.complete_pairs++
+            $paired.baseline_passed += [int]$baselineRecord.passed
+            $paired.candidate_passed += [int]$candidateRecord.passed
+            $paired.total += [int]$baselineRecord.total
+            $paired.baseline_response_chars += [int]$baselineRecord.response_chars
+            $paired.candidate_response_chars += [int]$candidateRecord.response_chars
+            if ([int]$baselineRecord.passed -gt [int]$candidateRecord.passed) {
+                $paired.baseline_wins++
+            } elseif ([int]$candidateRecord.passed -gt [int]$baselineRecord.passed) {
+                $paired.candidate_wins++
+            } else {
+                $paired.ties++
+            }
+        }
+    }
+    $paired.baseline_pass_rate = if ($paired.total -gt 0) { [Math]::Round($paired.baseline_passed / $paired.total, 4) } else { $null }
+    $paired.candidate_pass_rate = if ($paired.total -gt 0) { [Math]::Round($paired.candidate_passed / $paired.total, 4) } else { $null }
+    $paired.baseline_average_response_chars = if ($paired.complete_pairs -gt 0) { [Math]::Round($paired.baseline_response_chars / $paired.complete_pairs, 1) } else { $null }
+    $paired.candidate_average_response_chars = if ($paired.complete_pairs -gt 0) { [Math]::Round($paired.candidate_response_chars / $paired.complete_pairs, 1) } else { $null }
+
     $report = [ordered]@{
-        schema_version = 1
+        schema_version = 2
         validated_at_utc = [DateTime]::UtcNow.ToString('o')
         workspace = $workspacePath
         allow_incomplete = [bool]$AllowIncomplete
         summary = @($summaryRows)
+        paired_summary = $paired
         runs = @($records)
     }
     Write-JsonFile -Value $report -Path (Join-Path $workspacePath 'validation-report.json')
-    Write-JsonFile -Value ([ordered]@{ summary = @($summaryRows) }) -Path (Join-Path $workspacePath 'benchmark-lite.json')
+    Write-JsonFile -Value ([ordered]@{ summary = @($summaryRows); paired_summary = $paired }) -Path (Join-Path $workspacePath 'benchmark-lite.json')
 
     $lines = [System.Collections.Generic.List[string]]::new()
-    $lines.Add('# Lightweight regression summary')
+    $lines.Add('# 轻量回归汇总')
     $lines.Add('')
-    $lines.Add('This file reports structure and aggregate scores only. It does not replace the official eval viewer or manual review.')
+    $lines.Add('本文只报告结构、运行完整性与聚合分数，不能替代正式评测页面和人工复核。')
     $lines.Add('')
-    $lines.Add('| Configuration | Complete | Missing | Invalid | Passed | Total | Pass rate | Avg chars |')
+    $lines.Add('| 配置 | 有效返回 | 缺失 | 无效 | 通过 | 总计 | 通过率 | 平均字符 |')
     $lines.Add('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |')
     foreach ($row in $summaryRows) {
         $rate = if ($null -eq $row.pass_rate) { 'n/a' } else { '{0:P1}' -f $row.pass_rate }
         $chars = if ($null -eq $row.average_response_chars) { 'n/a' } else { [string]$row.average_response_chars }
         $lines.Add("| $($row.configuration) | $($row.complete_runs)/$($row.expected_runs) | $($row.missing_runs) | $($row.invalid_runs) | $($row.passed) | $($row.total) | $rate | $chars |")
     }
+    $lines.Add('')
+    $lines.Add('## 共同有效样本')
+    $lines.Add('')
+    $lines.Add('只在基线和候选都完成且评分有效的相同用例上比较能力。缺失结果保留为运行完整性问题。')
+    $lines.Add('')
+    $lines.Add("- 共同样本：$($paired.complete_pairs)/$($paired.expected_pairs)，不完整：$($paired.incomplete_pairs)")
+    $lines.Add("- 得分：baseline $($paired.baseline_passed)/$($paired.total)，candidate $($paired.candidate_passed)/$($paired.total)")
+    $lines.Add("- 用例胜负：baseline $($paired.baseline_wins) 胜，candidate $($paired.candidate_wins) 胜，$($paired.ties) 平")
+    $lines.Add("- 平均字符：baseline $($paired.baseline_average_response_chars)，candidate $($paired.candidate_average_response_chars)")
     [System.IO.File]::WriteAllLines((Join-Path $workspacePath 'benchmark-lite.md'), $lines, $utf8)
 
     $problemCount = @($records | Where-Object { $_.state -ne 'complete' }).Count

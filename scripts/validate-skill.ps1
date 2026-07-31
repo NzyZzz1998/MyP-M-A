@@ -320,13 +320,31 @@ foreach ($qualityFile in @('evals\README.md', 'scripts\regression-workspace.ps1'
     }
 }
 
-$regressionScriptPath = Join-Path $root 'scripts\regression-workspace.ps1'
-if (Test-Path -LiteralPath $regressionScriptPath -PathType Leaf) {
+$requiredEvaluationScripts = @(
+    'scripts\regression-workspace.ps1',
+    'scripts\grading-batches.ps1',
+    'scripts\test-evaluation-pipeline.ps1',
+    'scripts\generate-eval-viewer.ps1'
+)
+foreach ($relativeScriptPath in $requiredEvaluationScripts) {
+    $scriptPath = Join-Path $root $relativeScriptPath
+    if (-not (Test-Path -LiteralPath $scriptPath -PathType Leaf)) {
+        Add-Error "Missing evaluation script: $relativeScriptPath"
+        continue
+    }
     $tokens = $null
     $parseErrors = $null
-    [void][System.Management.Automation.Language.Parser]::ParseFile($regressionScriptPath, [ref]$tokens, [ref]$parseErrors)
+    [void][System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors)
     foreach ($parseError in @($parseErrors)) {
-        Add-Error "regression-workspace.ps1 parse error: $($parseError.Message)"
+        Add-Error "$relativeScriptPath parse error: $($parseError.Message)"
+    }
+}
+
+if ($Strict) {
+    try {
+        & (Join-Path $root 'scripts\test-evaluation-pipeline.ps1') | Out-Host
+    } catch {
+        Add-Error "Evaluation pipeline self-test failed: $($_.Exception.Message)"
     }
 }
 

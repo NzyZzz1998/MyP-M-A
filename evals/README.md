@@ -16,10 +16,11 @@ MyP-M-A 使用两套互补评测，不混合计算总分。
 挑战集规则：
 
 1. 新旧版本必须使用同一模型、同一附件和同一评分器。
-2. 首轮各运行一次；存在差异、失败或评分不稳定时，再补到三次。
+2. 默认先用 `coverage` 档位和较低成本推理强度各运行一次；只有受影响、失败或评分不稳定的用例才进入 `targeted-max`，并按需补到三次。
 3. 评分器必须逐条引用输出证据，不能只给总分。
-4. 模型超时等待五分钟；仍未落盘时终止该次运行并用备用模型重试，执行器失败不得记为能力失败。
-5. 稳定集与挑战集分别汇报通过率、输出长度和人工复核项。
+4. 模型超时等待五分钟；仍未落盘时终止该次运行。执行器失败单独计入 SLA 完成率，不得记为能力失败。
+5. 稳定集与挑战集分别汇报；能力比较只使用双方都有效返回的共同样本，同时保留各自完成率和输出长度。
+6. max 盲评默认每批 3 条。每条仍独立评分、保留原检查项和中文证据，批量只减少重复冷启动。
 
 ## 回归工作区
 
@@ -31,7 +32,31 @@ MyP-M-A 使用两套互补评测，不混合计算总分。
   -Workspace D:\Work\Software\codex_home\skill-evals\mypm-workspace\iteration-v023 `
   -BaselinePath D:\path\to\mypm-v022 `
   -CandidatePath D:\Work\Software\codex_home\.agents\skills\mypm `
-  -EvalFile evals\challenge-evals.json
+  -EvalFile evals\challenge-evals.json `
+  -SuiteLabel '挑战集' `
+  -EvaluationTier coverage `
+  -ReasoningEffort low `
+  -SlaSeconds 300 `
+  -MaxConcurrency 3
+```
+
+`regression-workspace.ps1` 不直接调用模型。外部执行器只读取各目录中的 `task.json` 和 `_snapshots`；缺失回答保持缺失，不生成空白占位。
+
+回答落盘后，生成匿名盲评批次：
+
+```powershell
+.\scripts\grading-batches.ps1 `
+  -Action Prepare `
+  -Workspace D:\Work\Software\codex_home\skill-evals\mypm-workspace\iteration-v023 `
+  -BatchSize 3
+```
+
+只能把 `_grading-batches\batch-*-input.json` 提供给评分模型；不得提供 `_private\mapping.json`。评分结果按对应名称保存为 `batch-*-output.json` 后执行：
+
+```powershell
+.\scripts\grading-batches.ps1 `
+  -Action Apply `
+  -Workspace D:\Work\Software\codex_home\skill-evals\mypm-workspace\iteration-v023
 ```
 
 模型与评分结果落盘后执行：
@@ -42,7 +67,7 @@ MyP-M-A 使用两套互补评测，不混合计算总分。
   -Workspace D:\Work\Software\codex_home\skill-evals\mypm-workspace\iteration-v023
 ```
 
-结构校验会生成 `validation-report.json`、`benchmark-lite.json` 和 `benchmark-lite.md`。需要人工逐项对照时，再生成自包含 viewer：
+结构校验会生成 `validation-report.json`、`benchmark-lite.json` 和 `benchmark-lite.md`。其中配置汇总用于观察有效返回质量和 SLA 完整性；`paired_summary` 只比较双方共同有效样本。需要人工逐项对照时，再生成自包含 viewer：
 
 ```powershell
 .\scripts\generate-eval-viewer.ps1 `
