@@ -1,8 +1,8 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "baseline_version": "0.27.0",
-  "target_version": "0.28.0",
+  "baseline_version": "0.28.0",
+  "target_version": "0.29.0",
   "purpose": "高区分度挑战集，用于识别格式正确但证据、数据、边界或发布判断错误的输出。",
   "evals": [
     {

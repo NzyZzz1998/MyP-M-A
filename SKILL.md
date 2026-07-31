@@ -4,184 +4,109 @@ description: "Use when：用户需要做产品评审、判断需求价值、撰�
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.28.0"
+  version: "0.29.0"
   language: zh-CN
 ---
 
 # MyP-M-A
 
-MyP-M-A 是中文优先的个人产品经理工作流。它先帮助用户形成有证据的产品判断，再选择最小必要交付物；正式文档服务下一阶段执行，不以模板完整代替问题理解。
+MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判断，再交付当前阶段真正需要的最小成果；不要用模板完整度代替问题理解。
 
-## 使用边界
+## 通用硬门禁
 
-- 使用本 skill：产品规划、需求澄清、价值判断、版本取舍、PRD、产品评审、开发承接、验收与发布判断。
-- 不单独使用本 skill：纯代码审查、已有 bug 的技术修复、单纯 SQL/日志执行、仅按既定设计实现 UI。此类任务只有在需要判断用户价值、范围、验收或版本取舍时才接入 MyP-M-A。
-- 默认中文输出。除代码标识、命令、文件名、API/数据库字段和专有名词外，正式文档不混入英文段落；新建 Markdown 使用 UTF-8。
-- 区分事实、假设、决策、风险和开放问题。工具不可用时，把受影响结论降级为“待验证”。
-- 保护个人项目和小团队项目的可完成性：先小闭环、核心路径和已有体验，再考虑扩张。
-- **高风险 PRD 硬门禁**：支付、退款、资金、权限、隐私、生产数据迁移和不可逆操作的资格规则、金额/权限边界、人工确认、幂等、审计、失败补偿与回滚未确认前，不得生成或宣称完成完整可开发 PRD，也不得自造 API、表字段、状态机、指标或业务规则。即使用户要求“少问、直接写、马上完成”，也只能先问 3-7 个阻塞问题或输出方案收敛版。
+- 默认使用中文；代码标识、命令、文件名、API/数据库字段和专有名词可保留原文。新建 Markdown 使用 UTF-8。
+- 明确区分事实、推断、假设、决策、风险和开放问题。证据不足或工具不可用时降级为“待验证”，不得补造分支、版本、路径、数据、测试或完成状态。
+- 交付物必须匹配当前阶段。Review 发现不是已确认需求，方案收敛版不是完整 PRD，测试计划不是实际验收。
+- 支付、退款、资金、权限、隐私、生产数据迁移和不可逆操作，在资格/金额/权限边界、人工确认、幂等、状态一致性、结果通知、审计、失败补偿和回滚未确认前，只能提问或输出方案收敛版，不得宣称完成可开发 PRD。
+- 只读取证可在用户给定范围内主动执行。远端修改、发布、发送消息、生产写入、付费操作、提交、推送、tag、Release、附件上传和仓库可见性变更，必须分别判断并取得对应授权。
+- 优先保护个人项目和小团队项目的可完成性：先闭合核心路径与既有体验，再扩张范围。
 
-## 渐进加载
+## 入口路由
 
-不要默认读取全部 reference。先判断任务，再加载最小集合：
+显式命令优先；没有命令时，根据用户当前要解决的决策和已有产物自动选择：
 
-| 任务 | 必读 | 按条件读取 | 正式文件模板 |
-| --- | --- | --- | --- |
-| `/idea`、需求池、价值判断 | `references/idea.md` | 有日志、表格、数据库、Issue、反馈或竞品证据时读 `references/data-analysis.md`；需要专门分析或外部取证时读 `references/capability-routing.md`、`references/tooling.md`；存在关键未知或需要压力测试时读 `references/red-team.md` | 需求超过 2 个时读 `templates/idea-pool-template.md` |
-| `/review`、项目/页面/PRD/实现评审 | `references/review.md` | 有仓库、exe、网页、日志、截图、发布物或复杂领域关系时读 `references/capability-routing.md`、`references/tooling.md`；同时有意图文档、实现和测试时读 `references/intent-implementation-audit.md` | 需要落盘时读 `templates/review-report-template.md` |
-| `/prd`、版本范围、需求文档 | `references/prd.md` | 涉及数据/后端时读 `references/data-analysis.md`；需要原型、设计、数据或外部能力时读 `references/capability-routing.md`；影响范围不清时读 `references/tooling.md`；方案仍依赖承重假设时读 `references/red-team.md` | 完整成文时读 `templates/prd-template.md` |
-| PRD 后开发承接 | `references/development-handoff.md` | 跨线程时读 `references/memory-integration.md` | 读 `templates/dev-plan-template.md`、`templates/progress-template.md`；需要过程记录时再读 `templates/dev-log-template.md` |
-| 实施、Bugfix、分批推进 | `references/workflow-control.md` | 需要开发承接事实时读 `references/development-handoff.md` | 沿用项目已有 progress/dev log/bugfix log |
-| `/acceptance`、发布检查 | `references/acceptance.md`、`references/tooling.md` | 跨 Web、桌面、数据或 Release 轨道时读 `references/capability-routing.md`；需要按文档规则核对实现和测试时读 `references/intent-implementation-audit.md`；有长期发布状态时读 `references/memory-integration.md` | 读 `templates/acceptance-template.md`；有人工补证项时读 `templates/manual-verification-template.md` |
-| `/prompt`、下一步提示词、新线程交接 | `references/prompt.md`、`references/workflow-control.md` | 判断阶段去向时读 `references/next-step-prompts.md`；跨线程时读 `references/memory-integration.md` | 无固定模板 |
-| 产品简报 | `references/product-brief.md` | 无 | 需要落盘时读 `templates/product-brief-template.md` |
-| 问题尚未成形 | `references/problem-framing.md` | 需要判断价值时再进入 `/idea` | 无固定模板 |
-| 路线图 | `references/roadmap.md` | 无 | 需要落盘时读 `templates/roadmap-template.md` |
-| 红队、承重假设、用户故事 | 对应的 `references/red-team.md`、`references/user-stories.md` | 有文档与实现差距时读 `references/intent-implementation-audit.md` | 无固定模板 |
-| 深度判断 | `references/judgment-framework.md` | 用户说“更深入/不要只是能用”时再读 `references/deep-review.md`；个人项目或 UI 取舍时读 `references/personal-preferences.md` | 无固定模板 |
-| 项目进入、阶段收尾 | `references/memory-integration.md` | 阶段真正结束时再读 `references/next-step-prompts.md` | 无固定模板 |
-
-正式多阶段项目还要读取 `references/traceability.md`，保持 Review、IDEA、PRD、开发承接、Acceptance 和 Release 的来源与状态可追踪。一次性轻量咨询不强制建立编号。
-
-有现成 PRD、dev plan、progress、verification 或候选产物时，还要读取 `references/workflow-control.md`，先识别真实子阶段、门禁影响面和可继承证据，再决定本轮工作。
-
-## 四个主阶段与提示词辅助入口
-
-MyP-M-A 在 Codex 中只保留一个 Skill。用户可以显式输入四个产品阶段命令，也可以直接描述任务，由 Skill 自动分流：
-
-| 用户材料或意图 | 自动入口 |
+| 用户目标 | 入口 |
 | --- | --- |
-| 项目路径、页面、PRD、代码实现、版本现状，希望先梳理或找问题 | `/review` |
-| 想法、反馈、候选需求、是否值得做、下一版做什么 | `/idea` |
-| 已确认方向，需要收敛方案、写需求、补影响范围或原型 | `/prd` |
-| 已有实现、exe/网页/包、测试、日志或验收结果，需要判断是否通过/发布 | `/acceptance` |
+| 理解项目/页面/PRD/实现/发布现状并发现问题 | `/review` |
+| 判断想法、反馈或候选需求是否真实、值得、现在该不该做 | `/idea` |
+| 收敛方案、版本范围并形成需求定义或原型验证合同 | `/prd` |
+| 对实际实现、候选产物或发布状态做验收判断 | `/acceptance` |
+| 把当前事实压缩成下一任务可直接执行的提示词 | `/prompt`（辅助入口） |
 
-`/prompt` 是辅助入口：用户要求“写提示词、下一步怎么跟他说、交给另一个窗口或新线程”时加载 `references/prompt.md`，把当前事实压缩成可执行指令；它不改变产品阶段，也不代替目标入口的工作。输出先明确 `入口判断：/prompt（辅助入口，不是新的产品阶段）→ [目标入口]`，再给可直接发送的提示词。
-
-`/prompt` 的正文第一行必须是实际接收任务的 `mypm /review|/idea|/prd|/acceptance`，或明确的“继续实施 / Bugfix / 发布收口”，不能写 `/prompt` 或自造命令。只使用用户本轮明确指向的事实源；未提供的项目、版本、路径、哈希和任务内容使用占位符或写“执行前核对”，不得从 Memory、其他项目或无关历史静默补全。已有 PRD、dev plan、progress、verification 或 bugfix log 时，只引用路径、任务 ID 和本轮增量，不复述其中的完整 checklist、历史结论或测试清单。默认 zero-shot 和最短充分结构；授权、停止条件、成功标准、关键证据及下一步不可为缩短而删除。
+实施、Bugfix、开发承接和发布收口是内部子阶段，不新增对外入口。首行写真实入口和子阶段，例如 `入口判断：/acceptance（发布前复验）` 或 `入口判断：/prompt → 继续 Bugfix`。
 
 <!-- contract:entry-isolation -->
-入口契约彼此隔离：某个入口的详细规则不得替代其他入口规定的首行、对象身份、事实源、证据、授权或停止条件。先加载目标入口的 reference，再执行其不可省略契约。
+入口合同彼此隔离。先读取目标入口的 reference，再执行其中的首行、对象身份、事实源、证据、授权、停止和回写合同；不能用一个入口的规则替代另一个入口。材料同时命中多条通路时，选择最接近当前决策的一条；只有不同选择会显著改变结果时才追问。
 
-显式命令优先。没有命令时，根据用户目标和已有产物判断；先用一行输出 `入口判断：/review|/idea|/prd|/acceptance` 及真实子阶段，或 `入口判断：/prompt → [目标入口/子阶段]`。实施、Bugfix、开发承接和发布收口是内部子阶段。材料同时命中多条通路时，选择最接近用户当前决策的问题；只有选择不同入口会显著改变结果时才追问。
+## 渐进加载
+<!-- contract:context-minimal-loading -->
 
-### `/review`：建立地图，再发现问题
+不要一次读取全部 reference。先路由，再加载最小集合：
 
-自动识别 project、page、prd、implementation、release readiness 主通路。先说明产品定位、目标用户、当前阶段、核心路径、模块/数据/状态关系，再列发现。可视化只在关系复杂、能显著帮助理解时使用；project review 必须有项目或模块图。
+| 当前任务 | 必读 | 条件加载 | 正式文件 |
+| --- | --- | --- | --- |
+| `/review` | `references/review.md` | 复杂对象或外部取证读 `references/capability-routing.md`、`references/tooling.md`；同时有意图、实现和测试时读 `references/intent-implementation-audit.md` | 落盘时读 `templates/review-report-template.md` |
+| `/idea` | `references/idea.md` | 有数据证据读 `references/data-analysis.md`；有关键未知读 `references/red-team.md`；需外部能力时读 `references/capability-routing.md`、`references/tooling.md` | 需求超过 2 个时读 `templates/idea-pool-template.md` |
+| `/prd` | `references/prd.md` | 数据/后端读 `references/data-analysis.md`；承重假设读 `references/red-team.md`；需原型、工具或外部能力时读 `references/capability-routing.md`、`references/tooling.md` | 完整成文读 `templates/prd-template.md` |
+| 开发承接/实施 | `references/development-handoff.md`、`references/workflow-control.md` | 跨线程读 `references/memory-integration.md` | 按需读 `templates/dev-plan-template.md`、`templates/progress-template.md`、`templates/dev-log-template.md` |
+| `/acceptance` | `references/acceptance.md`、`references/tooling.md` | 多轨验收读 `references/capability-routing.md`；核对意图与实现读 `references/intent-implementation-audit.md`；跨线程读 `references/memory-integration.md` | 读 `templates/acceptance-template.md`；有人工补证时读 `templates/manual-verification-template.md` |
+| `/prompt` | `references/prompt.md`、`references/workflow-control.md` | 判断去向读 `references/next-step-prompts.md`；跨线程读 `references/memory-integration.md` | 无固定模板 |
 
-同一输入横跨页面、PRD 与实现时，必须明确一个主通路和辅助通路，列出 review 范围与不覆盖范围，并用紧凑关系图说明三者如何衔接；即使用户只问“应该走哪种 review 通路”或只描述材料但未附原文，也要在路由理由之后继续交付“主/辅通路、范围/不覆盖、关系图、待确认候选点、分流”这五项最小 review，不能停在路由解释。
+其他能力只在问题命中时读取：
 
-每个发现记录现象、证据、影响、严重度、最小建议和去向。证据状态统一使用：`已确认`、`高度可能`、`待确认`、`主观判断`；项目脉络和架构关系还要显式区分`事实`、`推断`与`待确认`，不要让合理推断伪装成已确认实现。Review 发现默认是候选点，不直接等同于确定需求；仅凭 review 新发现且价值、范围或运行证据尚未闭合的事项，先进入 `/idea` 或补证，不能直接推进 `/prd`。
+- 问题尚未成形：`references/problem-framing.md`。
+- 产品简报：`references/product-brief.md` 与 `templates/product-brief-template.md`。
+- 路线图：`references/roadmap.md` 与 `templates/roadmap-template.md`。
+- 用户故事：`references/user-stories.md`。
+- 深度判断：`references/judgment-framework.md`；用户明确要求深入时再读 `references/deep-review.md`，个人项目或 UI 取舍再读 `references/personal-preferences.md`。
+- 正式多阶段项目：`references/traceability.md`。
 
-复杂项目还要补领域对象/术语、关键决策及其依据、模块所有权和架构摩擦。代码“瘦身”建议必须有调用、测试、运行或所有权证据；不能仅因文件大、逻辑旧或暂时看不懂就建议删除。
+有现成 PRD、dev plan、progress、verification 或候选产物时，先读 `references/workflow-control.md`，识别真实子阶段、门禁和可继承证据，不重复规划或重跑仍有效验收。
 
-同时存在 PRD/架构/权限等意图材料、代码实现和测试时，按 `references/intent-implementation-audit.md` 建立“意图 → 实现执行点 → 现有验证”对照。只有两侧证据都足够时才判定实现偏离；文档过期、未验证和路径未查全必须分开记录。
+## 阶段最低合同
 
-### `/idea`：发现问题，判断价值
+以下只负责导航；完整规则以目标 reference 为准。
 
-回答：问题是否真实、证据是否足够、价值是什么、现在是否该做、最小下一步是什么。证据不足、范围过大或方案先行时，使用 8 维 0-5 分压力测试；分数必须绑定证据，证据闸门优先于总分。
+### `/review`：先建立地图
 
-涉及真实数据、指标、漏斗、分群、市场规模或数据质量时，按 `references/capability-routing.md` 选择最小专门能力，并把结果压缩成证据包：统计对象、粒度、时间、新鲜度、质量、发现、反证、不能推出的结论和决策影响。没有数据时只给采集方案，不虚构分析。
+先说明产品定位、用户、阶段、核心路径和模块/数据/状态关系，再列有证据的发现。Project review 必须提供项目或模块关系图。同时有意图、实现和测试时，输出“意图 / 执行点 / 已有验证 / 状态”对照，分开记录实现偏离、文档过期和验证缺口；已经存在的安全边界仍需反例或边界测试，不能以“代码已实现”替代验证。代码瘦身必须基于调用、测试、运行或所有权证据；发现默认进入 `/idea`、Bugfix、文档治理或补证，不自动升级为 PRD。
 
-当结论仍依赖关键未知时，按 `references/red-team.md` 只保留 3-5 个承重假设，逐项写清可证伪条件、支持/反证、最低成本实验和继续/停止阈值。评分不能替代证据；模拟用户或合成数据不能关闭真实需求门禁。
+### `/idea`：判断价值
 
-需求超过 2 个时输出 Markdown 需求池；总览表必须逐项保留证据等级、压力测试分数或免测理由、结论和最小下一步。版本型需求池补充版本主线、证据映射、依赖关系、最小/推荐/过大三档范围和最终分流。
+回答问题是否真实、证据是否足够、价值、是否现在做和最小下一步。数据结论先锁定统计对象与口径；没有数据只给采集方案。输入超过 2 个需求时输出 Markdown 需求池。证据无法关闭结论时，用表格逐项列出并排序 3～5 个承重假设；每项必须写影响、未知程度、可证伪失败条件、最小实验、样本/时间窗和继续/停止阈值。评分不能替代证据。
 
-### `/prd`：收敛方案，定义需求
+### `/prd`：定义需求
 
-先识别正式推进型、原型验证型或方案收敛版。复杂需求分轮补齐用户、场景、范围、数据、失败态、非目标和验收；探索 2-3 个有真实取舍的方案，确认优先级后再成文。
+先判断正式推进型、原型验证型或方案收敛版。保留已确认事实，只问 3～7 个会改变目标、范围、安全边界或核心合同的问题；不猜 API、字段、状态、指标或业务规则。完整 PRD 必须覆盖影响范围、入口到出口、数据来源、失败态、范围保护、开发前验收，以及与风险匹配的原型、接口、ER/数据流、状态机、时序图或影响矩阵。UI/交互需求更新既有高保真原型；没有时必须产出。只有完整 PRD 经确认后才能进入开发承接。
 
-提问是 PRD 门禁。第一轮先列“已确认事实”和“冲突/开放问题”，原样保留输入与项目中已经确认的字段、枚举、范围、方案和非目标，再只问 3-7 个会改变目标、范围、安全边界或核心契约的问题。可从项目核对的事实不反问；关键信息不足时只输出方案收敛版，不编造指标、业务规则、API、表字段或状态机。首轮结尾预告方案比较、影响范围、原型和开发前验收。详细规则见 `references/prd.md` 与 `references/data-analysis.md`。
+### `/acceptance`：验证实际结果
 
-高风险边界未关闭时，方案收敛版仍需在已确认契约后给出明确标注的暂定骨架，并把安全或业务语义选择保留为门禁；不得冒充最终合同。
+先锁定分支/HEAD、产物路径与哈希、环境、证据时间和新鲜度；只有属于同一候选对象的证据才能共同支持通过。身份或新鲜度缺失时，受影响项目一律写“待验证”，不得写“通过”“部分通过”或“继承通过”。只基于实际实现、产物、配置、日志、截图、测试、CI 或用户证据判断“通过 / 部分通过 / 未通过 / 待验证”。每项保留预期、实际证据和结论；未来能力或测试提议必须标为未来，不纳入本次覆盖。自动化无法覆盖时输出手动验证文档。发布面和外部写操作分别判断，验收通过不等于已经获得发布授权。
 
-PRD 必须包含影响范围、完整入口到出口链路、数据来源、开发前验收口径、范围保护和合适的需求表达物：
+### `/prompt`：压缩交接
 
-- UI/交互需求：更新已有高保真原型；没有时输出高保真原型或明确原型文件。
-- API/后端需求：接口契约、错误码、权限和必要时序图。
-- 数据库需求：表字段、关系、迁移、兼容、回滚和必要 ER/数据流图。
-- 状态/异步需求：状态机、时序图或流程图。
-- 纯工程治理：影响矩阵、验证计划和回退方案，不强制伪造 UI 原型。
-
-原型按风险选型：逻辑不确定用状态机/决策表，交互不确定用高保真原型；两者都声明假设、模拟边界和结论回写。Web 原型还要安排真实浏览器的视口、交互与控制台检查。完整 PRD 按 `references/prd.md` 对齐领域词汇、关键决策与测试接缝。
-
-方案仍依赖承重假设时，PRD 要继承对应 IDEA/假设 ID、当前证据、验证方式和决策阈值。未关闭但被明确接受的假设必须进入开发或发布门禁，不能改写成已确认事实。
-
-后端或数据库变更默认采用可回滚、向后兼容的增量迁移，除非用户明确批准，不用破坏性重建替代；开发前验收要覆盖越权、重复提交、重试、结果过期和关键日志字段。异步导出首轮还必须锁定导出对象、数据范围、筛选条件与数据截至时点。
-
-异步任务完整 PRD 必须收敛唯一状态合同；首轮澄清只问现状，不预填枚举。确认现状后可把 `pending -> running -> succeeded / failed` 作为候选基线，旧值核对语义后再设计映射。
-
-报表、排行榜或 KPI PRD 必须加载 `references/data-analysis.md`，基于已知数据先形成暂定契约，再只追问缺口；关键数据边界未关闭时不能宣称契约完整。
-
-完整 PRD 经用户确认后进入开发承接；方案收敛版不能生成 dev plan。
-
-### `/acceptance`：实际验收，控制发布风险
-
-只基于开发结果、构建产物、日志、截图、配置、测试、CI 或用户证据判断。开始时先写 `入口判断：/acceptance` 及当前阶段，避免把验收、开发前标准制定和需求判断混为一谈。结论仅使用：通过、部分通过、未通过、待验证。没有实际证据时只能给待验收清单，不能判定通过。
-
-仍有自动化无法覆盖的托盘、硬件、权限、视觉、真实账号或设备路径时，输出手动验证文档。全部证据闭合后，才给发布收口建议；本地提交、远端推送、tag、Release、附件上传和仓库可见性必须分别判断并等待对应用户授权，不能由“验收通过”自动推导。
-
-执行前建立证据清单，并按 Web、Desktop、Data/API、Release 选择最小轨道。每项记录对象身份、环境、动作、预期、实际、证据文件、时间/新鲜度和“新测/继承通过/证据失效/待补证”；不同工具结果冲突时先核对版本和产物，不投票判通过。
-
-即使材料尚未附上或回复需要精简，验收明细也至少保留“验收项 / 预期 / 实际与证据 / 结论”四列，缺失材料写“待提供”，不能删除预期列。涉及发布时，源码、便携包、安装器、版本整体、本地提交、远端推送、tag、Release、附件上传和仓库可见性分别成行或逐项列出；每项单独写“可执行 / 暂不执行 / 被阻塞”及授权状态。用户没有说明各发布面能否独立放行时，把“是否要求全部发布面同时完成”列为开放门禁，并用条件结论表达，不能默认允许拆分发布。
-
-验收标准来自正式文档且实现复杂时，按 `references/intent-implementation-audit.md` 复用规则 ID，分别记录文档意图、实际执行点和现有验证。建议新增的测试不能冒充已有覆盖；不存在的支付、定时任务、AI 或其他交付面不生成空验收章节。
-
-证据强度不得超过直接证明范围：日志证明事件发生，代码证明实现路径；状态保持、隔离或“未发生”等负向结果须有同一候选对象的前后状态或明确测试断言。只有失败日志和代码审查时最高为部分通过。
-
-## 开发承接边界
-
-- `dev_plan_vx.x.md`：实施顺序、影响文件、任务、验证、风险和回退。
-- `progress_vx.x.md`：状态、最小任务 checklist、阻塞、最近验证和下一步。
-- `dev_log_vx.x.md`：需要时记录开发过程；bugfix 和技术 spike 可继续独立记录。
-
-Progress 不保存开发流水、bug 修复过程或大量排查细节。开发承接发现 PRD 缺少链路、数据、表达物或验收标准时，返回 `/prd`，不靠实施计划补产品缺口。
-
-开发承接完成后进入“实施”子阶段。此后按里程碑或强关联任务分批执行，不因用户继续写 `/prd` 就重复生成需求文档。阶段、门禁状态、验证层级和证据继承以 `references/workflow-control.md` 为准。
-
-实施阶段的输出开头必须列“事实源：PRD、dev plan、progress”及实际文件名，并明确本轮是否改写 PRD。验证层级允许提前推进 MVP 时，必须列“进入开发授权：已获得 / 未获得”；未获得用户明确授权时只能建议，不能擅自进入实施。
-
-实施请求缺少项目路径、正式文件或可访问工作区时，先报告输入阻塞并索取最小信息，绝不编造分支、HEAD、哈希、测试结果或完成状态。用户只问“能否降低某个验证门禁”时，先回答门禁决策，不自动扩写整份 PRD。
+先输出 `入口判断：/prompt → [目标入口/子阶段]`，再给可直接发送的正文；即使用户只要一个短代码块，该入口行也不得省略。正文第一行写实际接收任务的 `mypm /review|/idea|/prd|/acceptance`，或明确的实施/Bugfix/发布收口，不写 `/prompt`。优先引用正式文件路径、任务 ID 和本轮增量；未知事实使用占位符或要求执行前核对，不从 Memory、其他项目或无关历史静默补全。默认 zero-shot 和最短充分结构，但正文必须显式出现范围、至少一项可执行的最小验证、完成汇报、授权、停止条件和成功标准，不追加无关完整工作流。
 
 ## 工具与证据
 
-- `/idea` 用工具找用户、行为、问题和竞品证据。
-- `/review` 用工具理解真实对象和发现问题。
-- `/prd` 用工具确认影响范围、既有行为和数据来源。
-- `/acceptance` 用工具实际操作并形成可审计证据。
-
-先检查当前环境可用能力，再选择最小必要工具。只读检查可以主动执行；会修改远端、发布、发送消息、改生产数据或产生费用的操作必须等待用户授权。具体降级顺序见 `references/tooling.md`。
-
-需要专门方法时再加载 `references/capability-routing.md`。只记录当前环境实际调用的能力；外部 skill 或插件的输出是分析材料，不自动替代 MyP-M-A 的证据分级、范围决策和发布门禁。
+先探测当前真实可用能力，再选择最小必要工具。工具输出只证明其直接覆盖的范围；外部 skill、插件或子 Agent 的结果是分析材料，不自动替代 MyP-M-A 的证据分级、范围决策和发布门禁。详细选择与降级规则见 `references/tooling.md` 和 `references/capability-routing.md`。
 
 ## 长期记忆
 
-Basic Memory 是跨线程续接层，不是聊天归档。每次进入明确项目时先确定 `memory_mode`：`auto`（默认）、`suggest` 或 `off`。
+Basic Memory 只做跨线程续接，不替代仓库事实源。进入明确项目时确定 `memory_mode`：`auto`（默认）、`suggest` 或 `off`。
 
-- `auto`：已知项目的新线程或上下文不足时，先恢复记忆，再读取项目正式文档核对；形成稳定阶段结论后，搜索并更新已有项目笔记，不重复创建。
-- `suggest`：不直接读写，只在适合时给出 Memory 建议。
-- `off`：本轮完全不调用，也不输出 Memory 建议。
+- `auto`：仅在已知项目的新线程/上下文不足时恢复，在稳定阶段收尾时更新；同一线程不反复读写。
+- `suggest`：只建议，不直接读写。
+- `off`：本轮不调用，也不输出 Memory 建议。
 
-只保存未来会复用的决策、偏好、项目约定、稳定路径、版本/发布状态、阻塞和下次继续点。正式 PRD、需求池、进度与验收文档仍留在项目仓库；两者冲突时以仓库事实源为准并修正记忆。工具不可用、信息仍是草稿或内容包含敏感信息时不得假装写入。详细规则见 `references/memory-integration.md`。
+实际读写、冲突处理、来源、新鲜度和失败降级统一按 `references/memory-integration.md`；工具没有返回时不得声称已恢复或已保存。仓库与 Memory 冲突时以本轮核对的仓库事实为准。
 
-Memory 与仓库恢复必须遵守证据状态：只有实际工具结果支持时才能写“已读取”“已恢复”或“已核对”。工具不可用、路径未知、文件未返回或读取失败时，只能写“已尝试”“不可用”“待核对”，并索取路径或继续只读定位；不得补写具体分支、版本、测试、验收或发布状态。没有仓库正式证据时，任何“已通过”“已发布”“无阻塞”结论都必须降级为“待验证”。
+PRD 确认、开发承接确认、实际验收结论和发布结论属于可写的稳定事件。稳定阶段摘要只保留最终方案或状态、非目标、正式文件路径、验收口径、已知限制和下一步；账号、密码、Token、连接串、完整日志和临时输出不得进入记忆。工具不可用时明确“未写入”，并继续完成当前阶段收尾。
 
-已知项目的新线程恢复发生降级时，至少保留这份最小契约，可压缩措辞但不能漏掉含义：`场景：已知项目的新线程恢复。Memory（auto）：已尝试恢复，但当前不可用或未命中；仓库状态待核对。请提供或定位项目路径并读取正式文件，冲突时以仓库为准；本线程核对后沿用，不重复恢复；证据到位前不判断通过、发布或无阻塞。`
+## 完成检查
 
-该契约只用于“读取/恢复失败”，不能套用到稳定阶段的 Memory 写入失败。阶段事实已由用户材料或仓库证据确认、仅 Memory 写工具不可用时，保留原阶段结论，只报告 `Memory：未写入（工具不可用）`；不得把已经成立的验收或发布判断重新降级。需要留下稍后动作时，写清“搜索既有笔记 → 更新 → 回读确认并报告笔记名”，不得省略成泛泛的“以后再写”。
-
-## 阶段完成标准
-
-完成前检查：
-
-- 判断是否基于证据，并标出未验证项。
-- 写清目标用户、场景、目标、非目标、风险和取舍。
-- 交付物是否匹配当前阶段，没有过早升级。
+- 入口、子阶段、对象身份和交付物是否匹配。
+- 结论是否由当前证据支持，未验证项是否显式保留。
+- 目标用户、场景、范围/非目标、风险与取舍是否足以支撑当前决策。
 - 正式文档是否引用上游 ID、版本和来源文件。
-- 输出是否全中文、UTF-8、无乱码。
-- 下一步是否明确；阶段真正结束时加载 `references/next-step-prompts.md`，用户随时要求生成提示词时加载 `references/prompt.md`。
-- 按 `memory_mode` 完成必要的恢复或阶段收尾写入；不保存完整聊天、临时过程、大段日志或敏感信息，并在实际读写后简短报告结果。
-
-## UI 与 AI 补充
-
-UI 反馈要把“怪、丑、不精致”翻译为信息层级、空间密度、组件一致性、交互状态、边界和产品气质问题。AI/Agent 需求要写清输入、模型处理、工具调用、用户确认、失败模式、评估样例、反馈闭环和人工兜底。
+- 中文、UTF-8、授权、停止条件、下一步和必要的 Memory 收尾是否完整。

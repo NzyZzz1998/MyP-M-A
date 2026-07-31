@@ -31,6 +31,44 @@ foreach ($file in $textFiles) {
 
 $skillPath = Join-Path $root 'SKILL.md'
 $skill = [System.IO.File]::ReadAllText($skillPath, $strictUtf8)
+$skillCharBudget = 6000
+if ($skill.Length -gt $skillCharBudget) {
+    Add-Error "SKILL.md context budget exceeded: $($skill.Length) chars > $skillCharBudget"
+}
+
+$stageCorePatterns = [ordered]@{
+    review = '(?s)### `/review`.*?(?=### `/idea`)'
+    idea = '(?s)### `/idea`.*?(?=### `/prd`)'
+    prd = '(?s)### `/prd`.*?(?=### `/acceptance`)'
+    acceptance = '(?s)### `/acceptance`.*?(?=### `/prompt`)'
+    prompt = '(?s)### `/prompt`.*?(?=\r?\n## )'
+}
+$stageCoreBudget = 600
+foreach ($stage in $stageCorePatterns.Keys) {
+    $stageMatch = [regex]::Match($skill, $stageCorePatterns[$stage])
+    if (-not $stageMatch.Success) {
+        Add-Error "Cannot locate the core /$stage section in SKILL.md"
+    } elseif ($stageMatch.Value.Length -gt $stageCoreBudget) {
+        Add-Error "SKILL.md /$stage core is too dense ($($stageMatch.Value.Length) chars > $stageCoreBudget); keep details in its reference"
+    }
+}
+
+$requiredLoadingRoutes = [ordered]@{
+    review = @('references/review.md')
+    idea = @('references/idea.md')
+    prd = @('references/prd.md')
+    acceptance = @('references/acceptance.md', 'references/tooling.md')
+    prompt = @('references/prompt.md', 'references/workflow-control.md')
+}
+foreach ($route in $requiredLoadingRoutes.Keys) {
+    foreach ($referencePath in $requiredLoadingRoutes[$route]) {
+        $referenceLiteral = [string][char]96 + $referencePath + [string][char]96
+        if (-not $skill.Contains($referenceLiteral)) {
+            Add-Error "SKILL.md /$route route is missing required reference: $referencePath"
+        }
+    }
+}
+
 $frontmatterMatch = [regex]::Match($skill, '(?s)\A---\r?\n(?<yaml>.*?)\r?\n---(?:\r?\n|$)')
 if (-not $frontmatterMatch.Success) {
     Add-Error 'SKILL.md is missing valid YAML frontmatter'
@@ -326,13 +364,28 @@ foreach ($requiredOfficialPromptRule in @('zero-shot', 'preserve-first', 'trim-f
 }
 
 $contractAnchors = @{
-    'SKILL.md' = @('contract:entry-isolation')
+    'SKILL.md' = @(
+        'contract:entry-isolation',
+        'contract:context-minimal-loading'
+    )
     'evals\README.md' = @('contract:separate-eval-scores')
+    'references\roadmap.md' = @(
+        'contract:roadmap-core-output',
+        'contract:roadmap-stage-explicit'
+    )
     'references\idea.md' = @('contract:idea-core-output')
-    'references\review.md' = @('contract:review-core-output')
+    'references\review.md' = @(
+        'contract:review-core-output',
+        'contract:review-route-and-visual',
+        'contract:review-slimming-evidence'
+    )
     'references\prd.md' = @(
         'contract:prd-known-facts',
-        'contract:prd-core-output'
+        'contract:prd-core-output',
+        'contract:prd-hifi-gate',
+        'contract:prd-async-idempotency',
+        'contract:prd-ui-coupling',
+        'contract:prd-async-acceptance-matrix'
     )
     'references\prompt.md' = @(
         'contract:prompt-identity',
@@ -341,7 +394,12 @@ $contractAnchors = @{
         'contract:subagent-budget',
         'contract:prompt-preserve-core'
     )
-    'references\data-analysis.md' = @('contract:kpi-data-contract')
+    'references\data-analysis.md' = @(
+        'contract:kpi-data-contract',
+        'contract:metric-object-snapshot',
+        'contract:metric-four-counts',
+        'contract:metric-observed-final-state'
+    )
     'references\capability-routing.md' = @(
         'contract:capability-minimal-route',
         'contract:capability-evidence-package',
@@ -349,6 +407,7 @@ $contractAnchors = @{
     )
     'references\memory-integration.md' = @(
         'contract:memory-conflict-inventory',
+        'contract:memory-auto-restore-attempt',
         'contract:memory-provenance',
         'contract:memory-stable-write'
     )
@@ -359,7 +418,9 @@ $contractAnchors = @{
     )
     'references\acceptance.md' = @(
         'contract:acceptance-evidence-impact',
-        'contract:acceptance-core-output'
+        'contract:acceptance-core-output',
+        'contract:acceptance-tool-manifest',
+        'contract:acceptance-unsigned-installer'
     )
 }
 foreach ($entry in $contractAnchors.GetEnumerator()) {
@@ -370,13 +431,6 @@ foreach ($entry in $contractAnchors.GetEnumerator()) {
             Add-Error "Missing contract anchor in $($entry.Key): $anchor"
         }
     }
-}
-
-$prdCoreMatch = [regex]::Match($skill, '(?s)### `/prd`.*?(?=### `/acceptance`)')
-if (-not $prdCoreMatch.Success) {
-    Add-Error 'Cannot locate the core /prd section in SKILL.md'
-} elseif ($prdCoreMatch.Value.Length -gt 1200) {
-    Add-Error "SKILL.md /prd core is too dense ($($prdCoreMatch.Value.Length) chars); move details to references/prd.md"
 }
 
 if ($null -ne $evalData) {
@@ -459,5 +513,5 @@ if ($errors.Count -gt 0) {
     exit 1
 }
 
-Write-Host "MyP-M-A static validation passed: version=$skillVersion evals=$(@($evalData.evals).Count) challenges=$(@($challengeData.evals).Count) triggers=$(@($triggerData).Count) files=$($textFiles.Count)"
+Write-Host "MyP-M-A static validation passed: version=$skillVersion skill_chars=$($skill.Length)/$skillCharBudget evals=$(@($evalData.evals).Count) challenges=$(@($challengeData.evals).Count) triggers=$(@($triggerData).Count) files=$($textFiles.Count)"
 exit 0
