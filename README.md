@@ -70,8 +70,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.30.0` Stable。评测管线分层、匿名批量盲评、reference 去重、跨模型定向复验和 OCR 发布门禁均已完成，当前进入发布提交收口。
-<!-- project-status: version=0.30.0; state=local-committed -->
+当前版本：`v0.30.0` Stable。评测管线分层、匿名批量盲评、reference 去重、跨模型定向复验和 OCR 发布门禁均已完成，发布提交已同步到远端。
+<!-- project-status: version=0.30.0; state=remote-synced -->
 
 v0.30 不新增入口或产品能力，主要变化：
 

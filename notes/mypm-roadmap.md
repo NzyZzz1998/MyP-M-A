@@ -12,8 +12,8 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.30 已完成评测管线分层、匿名批量盲评、reference 去重、跨模型定向复验和 OCR 发布门禁，达到 Stable，当前进入发布提交收口。v0.29 保留为历史 Stable 基线。
-<!-- project-status: version=0.30.0; state=local-committed -->
+当前阶段判断：v0.30 已完成评测管线分层、匿名批量盲评、reference 去重、跨模型定向复验和 OCR 发布门禁，达到 Stable，发布提交已同步到远端。v0.29 保留为历史 Stable 基线。
+<!-- project-status: version=0.30.0; state=remote-synced -->
 
 ## 当前稳定版本
 
