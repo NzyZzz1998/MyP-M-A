@@ -1,10 +1,10 @@
 ---
 name: mypm
-description: "Use when：用户需要做产品评审、判断需求价值、撰写或完善 PRD、规划开发承接、验收真实实现、决定项目/版本能否发布，或把当前状态生成可交给另一任务执行的提示词；用户不必记命令，可自动分流到 /review、/idea、/prd、/acceptance 或辅助入口 /prompt。纯代码审查、单纯修 bug、直接执行 SQL/日志分析、按既定设计实现 UI 时不单独触发，除非同时需要产品范围或发布判断。"
+description: "Use when：用户需要做产品评审、归纳访谈、判断需求价值、撰写或完善 PRD、规划开发承接、验收真实实现、决定项目/版本能否发布，或把当前状态生成可交给另一任务执行的提示词；用户不必记命令，可自动分流到 /review、/idea、/prd、/acceptance 或辅助入口 /prompt。纯代码审查、单纯修 bug、直接执行 SQL/日志分析、按既定设计实现 UI 时不单独触发，除非同时需要产品范围或发布判断。"
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.30.0"
+  version: "0.31.0"
   language: zh-CN
 ---
 
@@ -34,10 +34,10 @@ MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判
 | 对实际实现、候选产物或发布状态做验收判断 | `/acceptance` |
 | 把当前事实压缩成下一任务可直接执行的提示词 | `/prompt`（辅助入口） |
 
-实施、Bugfix、开发承接和发布收口是内部子阶段，不新增对外入口。首行写真实入口和子阶段，例如 `入口判断：/acceptance（发布前复验）` 或 `入口判断：/prompt → 继续 Bugfix`。
+实施、Bugfix、开发承接、发布收口是内部子阶段。显式命令须在首行逐字复写（含 `/`），如 `入口判断：/idea`、`入口判断：/acceptance（发布前复验）`。
 
-<!-- contract:entry-isolation -->
-入口合同彼此隔离。先读取目标入口的 reference，再执行其中的首行、对象身份、事实源、证据、授权、停止和回写合同；不能用一个入口的规则替代另一个入口。材料同时命中多条通路时，选择最接近当前决策的一条；只有不同选择会显著改变结果时才追问。
+<!-- contract:entry-isolation; entry-leading-slash; idea-no-fabricated-threshold -->
+入口合同彼此隔离。先读目标 reference，再执行其首行、对象、事实源、证据、授权、停止与回写合同；不得借用其他入口规则。材料命中多条通路时选最接近当前决策的一条，只有选择会改变结果时才追问。
 
 ## 渐进加载
 <!-- contract:context-minimal-loading -->
@@ -48,7 +48,7 @@ MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判
 | 当前任务 | 必读 | 条件加载 | 正式文件 |
 | --- | --- | --- | --- |
 | `/review` | `references/review.md` | 外部取证读 `references/capability-routing.md`、`references/tooling.md`；代码差异扫描读 `references/code-review-scanner.md`；意图/实现/测试并存时读 `references/intent-implementation-audit.md` | 落盘时读 `templates/review-report-template.md` |
-| `/idea` | `references/idea.md` | 有数据证据读 `references/data-analysis.md`；有关键未知读 `references/red-team.md`；需外部能力时读 `references/capability-routing.md`、`references/tooling.md` | 需求超过 2 个时读 `templates/idea-pool-template.md` |
+| `/idea` | `references/idea.md` | 数据读 `references/data-analysis.md`；访谈/JTBD/机会树读 `references/discovery.md`；关键未知读 `references/red-team.md`；外部取证读 `references/capability-routing.md` | 需求超过 2 个时读 `templates/idea-pool-template.md` |
 | `/prd` | `references/prd.md` | 数据/后端读 `references/data-analysis.md`；承重假设读 `references/red-team.md`；需原型、工具或外部能力时读 `references/capability-routing.md`、`references/tooling.md` | 完整成文读 `templates/prd-template.md` |
 | 开发承接/实施 | `references/development-handoff.md`、`references/workflow-control.md` | 跨线程读 `references/memory-integration.md` | 按需读 `templates/dev-plan-template.md`、`templates/progress-template.md`、`templates/dev-log-template.md` |
 | `/acceptance` | `references/acceptance.md`、`references/tooling.md` | 多轨验收读 `references/capability-routing.md`；核对意图与实现读 `references/intent-implementation-audit.md`；跨线程读 `references/memory-integration.md` | 读 `templates/acceptance-template.md`；有人工补证时读 `templates/manual-verification-template.md` |
@@ -80,7 +80,7 @@ MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判
 
 ### `/idea`：判断价值
 
-回答问题是否真实、证据是否足够、价值、是否现在做和最小下一步。数据结论先锁定统计对象与口径；没有数据只给采集方案。输入超过 2 个需求时输出 Markdown 需求池。证据无法关闭结论时，用表格逐项列出并排序 3～5 个承重假设；每项必须写影响、未知程度、可证伪失败条件、最小实验、样本/时间窗和继续/停止阈值。评分不能替代证据。
+回答真假、证据、价值、时机和最小下一步。锁定统计口径；无数据只给采集方案。超过 2 项则输出 Markdown 需求池。证据不足时排序 3～5 个承重假设；逐项写影响、未知程度、失败条件、最小实验、样本/时间窗和继续/停止阈值。样本数或阈值无依据时先确认，不编造数字；评分不能替代证据。
 
 ### `/prd`：定义需求
 

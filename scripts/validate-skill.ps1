@@ -35,6 +35,9 @@ $skillCharBudget = 6000
 if ($skill.Length -gt $skillCharBudget) {
     Add-Error "SKILL.md context budget exceeded: $($skill.Length) chars > $skillCharBudget"
 }
+if (-not $skill.Contains('entry-leading-slash')) {
+    Add-Error 'SKILL.md must preserve the leading slash in entry commands'
+}
 
 $stageCorePatterns = [ordered]@{
     review = '(?s)### `/review`.*?(?=### `/idea`)'
@@ -386,6 +389,7 @@ foreach ($requiredOfficialPromptRule in @('zero-shot', 'preserve-first', 'trim-f
 $contractAnchors = @{
     'SKILL.md' = @(
         'contract:entry-isolation',
+        'idea-no-fabricated-threshold',
         'contract:context-minimal-loading',
         'contract:guarded-output-scan'
     )
@@ -399,7 +403,8 @@ $contractAnchors = @{
     )
     'references\idea.md' = @(
         'contract:idea-core-output',
-        'contract:idea-feedback-role-binding'
+        'contract:idea-feedback-role-binding',
+        'contract:idea-discovery-methods'
     )
     'references\review.md' = @(
         'contract:review-core-output',
@@ -454,7 +459,8 @@ $contractAnchors = @{
         'contract:capability-minimal-route',
         'contract:capability-evidence-package',
         'contract:capability-acceptance-tracks',
-        'contract:capability-code-review-scanner'
+        'contract:capability-code-review-scanner',
+        'contract:capability-discovery-pack'
     )
     'references\tooling.md' = @(
         'contract:tooling-code-review-scanner',
@@ -465,6 +471,16 @@ $contractAnchors = @{
         'contract:code-review-scanner-privacy',
         'contract:code-review-scanner-delegation',
         'contract:code-review-scanner-evidence-closure'
+    )
+    'references\discovery.md' = @(
+        'contract:discovery-method-selection',
+        'contract:discovery-evidence-traceability',
+        'contract:discovery-simulation-boundary',
+        'contract:discovery-return-to-idea'
+    )
+    'references\case-library.md' = @(
+        'contract:case-library-historical-boundary',
+        'contract:case-library-no-fact-inheritance'
     )
     'references\memory-integration.md' = @(
         'contract:memory-conflict-inventory',
@@ -554,6 +570,12 @@ if ($null -ne $evalData) {
     }
     if (-not (@($challengeData.evals.id) -contains 'CH-19')) {
         Add-Error 'Missing code-review scanner challenge eval: CH-19'
+    }
+    if (-not (@($evalData.evals.id) -contains 83)) {
+        Add-Error 'Missing Discovery stable eval: 83'
+    }
+    if (-not (@($challengeData.evals.id) -contains 'CH-20')) {
+        Add-Error 'Missing Discovery challenge eval: CH-20'
     }
 }
 $referenceRegex = [regex]'`((?:references|templates)/[^`]+\.md)`'

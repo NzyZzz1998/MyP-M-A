@@ -12,8 +12,22 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.30 已完成评测管线分层、匿名批量盲评、reference 去重、跨模型定向复验和 OCR 发布门禁，达到 Stable，发布提交已同步到远端。v0.29 保留为历史 Stable 基线。
-<!-- project-status: version=0.30.0; state=remote-synced -->
+当前阶段判断：v0.31 Candidate 正在扩展按需 Discovery 能力和真实案例校准，不新增入口；v0.30 仍是远端 Stable 基线。
+<!-- project-status: version=0.31.0; state=candidate -->
+
+## 当前候选版本
+
+### R2.21 v0.31 Discovery 能力扩展层
+
+状态：实现、严格静态校验、定向 A/B 与真实项目正反例门禁完成；Candidate，可本地提交
+
+- 新增按需 Discovery 方法包，覆盖行为访谈、研究归纳、JTBD、机会树和 Agent 模拟边界。
+- 新增 QuickRec 与 LetsMakeMoney 历史案例摘要，只用于校准阶段链路，不继承旧项目事实。
+- 新增稳定用例 ID 83 与挑战用例 CH-20，并补充用户研究触发正反例。
+- 当前目录口径：稳定集 待评测 / 645、挑战集 待评测 / 178；不与 v0.30 历史成绩拼接。
+- Luna medium 定向冒烟：ID 83 为 `10/10 -> 10/10`；CH-20 冻结基线为 `6/10`，候选初版因阈值含糊为 `9/10`，将阈值门禁提升到 `/idea` 顶部合同后为 `10/10`。
+- 真实项目门禁：QuickRec 反馈汇总正例能区分来源声明、实现证据、机会和方案；LetsMakeMoney 普通 `/idea` 对照未加载访谈、JTBD 或机会树，并识别该治理项已经落地。
+- 试跑中修复入口斜杠和无依据样本数长尾；最终正例与对照均满足本轮十项检查。下一步可本地提交 v0.31 Candidate；完整目录仍未全量回归，不升级为 Stable。
 
 ## 当前稳定版本
 

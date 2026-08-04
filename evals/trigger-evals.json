@@ -40,6 +40,10 @@
     "should_trigger": true
   },
   {
+    "query": "我有 8 份用户访谈和客服反馈，请帮我归纳真实机会、反例和证据缺口，再判断哪个方向值得进入需求池。",
+    "should_trigger": true
+  },
+  {
     "query": "/prompt 根据当前 progress 和 bugfix log，帮我生成可以发给另一个项目窗口的定向复验提示词。",
     "should_trigger": true
   },
@@ -81,6 +85,10 @@
   },
   {
     "query": "把这份英文 API 文档翻译成中文，保持 Markdown 结构。",
+    "should_trigger": false
+  },
+  {
+    "query": "把这段用户访谈录音逐字转写成中文并按说话人分段，不需要做产品判断。",
     "should_trigger": false
   },
   {

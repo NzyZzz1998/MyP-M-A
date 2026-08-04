@@ -70,10 +70,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.30.0` Stable。评测管线分层、匿名批量盲评、reference 去重、跨模型定向复验和 OCR 发布门禁均已完成，发布提交已同步到远端。
-<!-- project-status: version=0.30.0; state=remote-synced -->
+当前版本：`v0.31.0` Candidate。第一批能力扩展只增加按需加载的 Discovery 方法包与历史案例库；v0.30.0 仍是远端 Stable 基线。
+<!-- project-status: version=0.31.0; state=candidate -->
 
-v0.30 不新增入口或产品能力，主要变化：
+v0.31 当前变化：
+
+- 不新增入口；访谈、研究归纳、JTBD、切换行为或机会树仍由 `/idea` 与探索型 `/review` 承接。
+- 新增 `references/discovery.md`，覆盖方法选择、来源追溯、反例、样本偏差、JTBD、机会树和 Agent 模拟边界。
+- 新增 `references/case-library.md`，以 QuickRec 和 LetsMakeMoney 的历史链路校准阶段边界；案例不得补全当前项目事实。
+- 新增稳定用例 ID 83、挑战用例 CH-20 和两个触发正反例；当前目录口径为稳定集 待评测 / 645、挑战集 待评测 / 178。
+- 严格静态校验已通过。Luna medium 单次定向中，访谈归纳 ID 83 两版均为 `10/10`；偏置样本与 Agent 模拟 CH-20 由 v0.30 的 `6/10` 提升到 v0.31 最终修订的 `10/10`。这是人工同口径冒烟，不是匿名盲评或全量结论，因此仍保持 Candidate。
+- QuickRec 真实反馈汇总正例与 LetsMakeMoney 普通 `/idea` 对照均已只读试跑。修复了入口斜杠和无依据样本数两个长尾；最终正例与对照均满足本轮十项检查，可作为 Candidate 本地提交，但不升级为 Stable。
+
+已发布基线 v0.30 不新增入口或产品能力，主要变化：
 
 - 全覆盖与 `targeted-max` 分层执行，SLA 完成率、共同样本能力得分和输出长度分开统计。
 - 匿名盲评默认每批 3 条；评分器看不到版本映射，写回前校验检查项原文、顺序、布尔结果和中文证据。

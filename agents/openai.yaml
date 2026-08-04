@@ -1,4 +1,4 @@
 interface:
   display_name: "MyP-M-A"
-  short_description: "项目评审、需求判断、PRD、验收与提示词"
+  short_description: "用户研究、项目评审、需求判断、PRD、验收与提示词"
   default_prompt: "使用 $mypm 自动判断当前产品阶段。你可以直接提供项目路径、需求想法、PRD、截图、日志或验收结果；也可以明确输入 /review、/idea、/prd、/acceptance，或用 /prompt 生成下一步执行提示词。"
