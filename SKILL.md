@@ -41,19 +41,20 @@ MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判
 
 ## 渐进加载
 <!-- contract:context-minimal-loading -->
+<!-- contract:guarded-output-scan -->
 
 不要一次读取全部 reference。先路由，再加载最小集合：
 
 | 当前任务 | 必读 | 条件加载 | 正式文件 |
 | --- | --- | --- | --- |
-| `/review` | `references/review.md` | 复杂对象或外部取证读 `references/capability-routing.md`、`references/tooling.md`；同时有意图、实现和测试时读 `references/intent-implementation-audit.md` | 落盘时读 `templates/review-report-template.md` |
+| `/review` | `references/review.md` | 外部取证读 `references/capability-routing.md`、`references/tooling.md`；代码差异扫描读 `references/code-review-scanner.md`；意图/实现/测试并存时读 `references/intent-implementation-audit.md` | 落盘时读 `templates/review-report-template.md` |
 | `/idea` | `references/idea.md` | 有数据证据读 `references/data-analysis.md`；有关键未知读 `references/red-team.md`；需外部能力时读 `references/capability-routing.md`、`references/tooling.md` | 需求超过 2 个时读 `templates/idea-pool-template.md` |
 | `/prd` | `references/prd.md` | 数据/后端读 `references/data-analysis.md`；承重假设读 `references/red-team.md`；需原型、工具或外部能力时读 `references/capability-routing.md`、`references/tooling.md` | 完整成文读 `templates/prd-template.md` |
 | 开发承接/实施 | `references/development-handoff.md`、`references/workflow-control.md` | 跨线程读 `references/memory-integration.md` | 按需读 `templates/dev-plan-template.md`、`templates/progress-template.md`、`templates/dev-log-template.md` |
 | `/acceptance` | `references/acceptance.md`、`references/tooling.md` | 多轨验收读 `references/capability-routing.md`；核对意图与实现读 `references/intent-implementation-audit.md`；跨线程读 `references/memory-integration.md` | 读 `templates/acceptance-template.md`；有人工补证时读 `templates/manual-verification-template.md` |
 | `/prompt` | `references/prompt.md`、`references/workflow-control.md` | 判断去向读 `references/next-step-prompts.md`；跨线程读 `references/memory-integration.md` | 无固定模板 |
 
-其他能力只在问题命中时读取：
+其他能力按需读取：
 
 - 问题尚未成形：`references/problem-framing.md`。
 - 产品简报：`references/product-brief.md` 与 `templates/product-brief-template.md`。
@@ -63,6 +64,11 @@ MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判
 - 正式多阶段项目：`references/traceability.md`。
 
 有现成 PRD、dev plan、progress、verification 或候选产物时，先读 `references/workflow-control.md`，识别真实子阶段、门禁和可继承证据，不重复规划或重跑仍有效验收。
+
+只将当前子阶段的适用合同转为内部清单：正式 PRD、发布验收和高风险写入逐项扫描；窄范围任务仅保留会改变结论、证据、授权或出口的合同。缺项最小补齐，先删背景，不删合同。
+
+<!-- contract:single-source-output -->
+同一事实或缺口只完整表达一次，后文用 ID 引用；一张表能承载证据、结论和去向时不重复建表。聊天先给结论与主证据，细节落正式文件；接手摘要最多 5 条，只写恢复信息。
 
 ## 阶段最低合同
 
@@ -78,15 +84,15 @@ MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判
 
 ### `/prd`：定义需求
 
-先判断正式推进型、原型验证型或方案收敛版。保留已确认事实，只问 3～7 个会改变目标、范围、安全边界或核心合同的问题；不猜 API、字段、状态、指标或业务规则。完整 PRD 必须覆盖影响范围、入口到出口、数据来源、失败态、范围保护、开发前验收，以及与风险匹配的原型、接口、ER/数据流、状态机、时序图或影响矩阵。UI/交互需求更新既有高保真原型；没有时必须产出。只有完整 PRD 经确认后才能进入开发承接。
+先判断正式推进型、原型验证型或方案收敛版。保留已确认事实，只问 3～7 个会改变目标、范围、安全边界或核心合同的问题；不猜 API、字段、状态、指标或业务规则。完整 PRD 必须覆盖影响范围、入口到出口、数据来源、失败态、范围保护、开发前验收，以及与风险匹配的原型、接口、ER/数据流、状态机、时序图或影响矩阵。UI/交互需求更新既有高保真原型；没有时必须产出，并用五行“原型交付门禁”表逐项写交付文件、状态与出口、模拟边界、浏览器验证、结论回写。只有完整 PRD 经确认后才能进入开发承接。
 
 ### `/acceptance`：验证实际结果
 
-先锁定分支/HEAD、产物路径与哈希、环境、证据时间和新鲜度；只有属于同一候选对象的证据才能共同支持通过。身份或新鲜度缺失时，受影响项目一律写“待验证”，不得写“通过”“部分通过”或“继承通过”。只基于实际实现、产物、配置、日志、截图、测试、CI 或用户证据判断“通过 / 部分通过 / 未通过 / 待验证”。每项保留预期、实际证据和结论；未来能力或测试提议必须标为未来，不纳入本次覆盖。自动化无法覆盖时输出手动验证文档。发布面和外部写操作分别判断，验收通过不等于已经获得发布授权。
+先锁定分支/HEAD、产物路径与哈希、环境、证据时间和新鲜度；只有属于同一候选对象的证据才能共同支持通过。身份或新鲜度缺失时，受影响项目一律写“待验证”，不得写“通过”“部分通过”或“继承通过”。只基于实际实现、产物、配置、日志、截图、测试、CI 或用户证据判断“通过 / 部分通过 / 未通过 / 待验证”。每项保留预期、实际证据和结论；自动化或主流程不能替代材料点名的真实 GUI 与异常路径。结论不是通过时，用四列表逐项写缺口、最小动作、证据和通过标准，未测异常必须给可执行失败注入。自动化无法覆盖时输出手动验证文档。发布面和外部写操作分别判断，验收通过不等于已经获得发布授权。
 
 ### `/prompt`：压缩交接
 
-先输出 `入口判断：/prompt → [目标入口/子阶段]`，再给可直接发送的正文；即使用户只要一个短代码块，该入口行也不得省略。正文第一行写实际接收任务的 `mypm /review|/idea|/prd|/acceptance`，或明确的实施/Bugfix/发布收口，不写 `/prompt`。优先引用正式文件路径、任务 ID 和本轮增量；未知事实使用占位符或要求执行前核对，不从 Memory、其他项目或无关历史静默补全。默认 zero-shot 和最短充分结构，但正文必须显式出现范围、至少一项可执行的最小验证、完成汇报、授权、停止条件和成功标准，不追加无关完整工作流。
+先输出 `入口判断：/prompt → [目标入口/子阶段]`，再给可直接发送的正文；即使用户只要一个短代码块，该入口行也不得省略。用户只要提示词时，入口行后原样写“本轮仅生成提示词，未执行项目操作。”，再输出唯一代码块；L1 代码块正文不超过 600 个中文字。正文第一行写实际接收任务的 `mypm /review|/idea|/prd|/acceptance`，或明确的实施/Bugfix/发布收口，不写 `/prompt`。优先引用正式文件路径、任务 ID 和本轮增量；未知事实使用占位符或要求执行前核对，不从 Memory、其他项目或无关历史静默补全。默认 zero-shot 和最短充分结构，但正文必须显式出现范围、至少一项可执行的最小验证、完成汇报、授权、停止条件和成功标准，不追加无关完整工作流。
 
 ## 工具与证据
 

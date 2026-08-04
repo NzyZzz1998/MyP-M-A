@@ -54,7 +54,7 @@ foreach ($stage in $stageCorePatterns.Keys) {
 }
 
 $requiredLoadingRoutes = [ordered]@{
-    review = @('references/review.md')
+    review = @('references/review.md', 'references/code-review-scanner.md')
     idea = @('references/idea.md')
     prd = @('references/prd.md')
     acceptance = @('references/acceptance.md', 'references/tooling.md')
@@ -271,6 +271,8 @@ if ($null -ne $evalData -and $null -ne $challengeData) {
     # misdecode this script when the UTF-8 file has no BOM.
     $stablePendingPattern = "(?m)\u5F85\u8BC4\u6D4B\s*/\s*$([regex]::Escape([string]$stableExpectationTotal))\b"
     $challengePendingPattern = "(?m)\u5F85\u8BC4\u6D4B\s*/\s*$([regex]::Escape([string]$challengeExpectationTotal))\b"
+    $stableNotRerunPattern = "(?m)\u672A\u5168\u91CF\u91CD\u8DD1\s*/\s*$([regex]::Escape([string]$stableExpectationTotal))\b"
+    $challengeNotRerunPattern = "(?m)\u672A\u5168\u91CF\u91CD\u8DD1\s*/\s*$([regex]::Escape([string]$challengeExpectationTotal))\b"
     $projectState = if ($statusRecords.ContainsKey('README.md')) { ($statusRecords['README.md'] -split '\|')[1] } else { $null }
     $allowPendingScores = $projectState -eq 'candidate'
 
@@ -279,10 +281,10 @@ if ($null -ne $evalData -and $null -ne $challengeData) {
         if ([regex]::IsMatch($reportText, $combinedScorePattern)) {
             Add-Error "Stable and challenge eval scores must not be reported as a combined total in $relativePath"
         }
-        if ((-not [regex]::IsMatch($reportText, $stableScorePattern)) -and (-not ($allowPendingScores -and [regex]::IsMatch($reportText, $stablePendingPattern)))) {
+        if ((-not [regex]::IsMatch($reportText, $stableScorePattern)) -and (-not [regex]::IsMatch($reportText, $stableNotRerunPattern)) -and (-not ($allowPendingScores -and [regex]::IsMatch($reportText, $stablePendingPattern)))) {
             Add-Error "Missing separate stable eval score in $relativePath"
         }
-        if ((-not [regex]::IsMatch($reportText, $challengeScorePattern)) -and (-not ($allowPendingScores -and [regex]::IsMatch($reportText, $challengePendingPattern)))) {
+        if ((-not [regex]::IsMatch($reportText, $challengeScorePattern)) -and (-not [regex]::IsMatch($reportText, $challengeNotRerunPattern)) -and (-not ($allowPendingScores -and [regex]::IsMatch($reportText, $challengePendingPattern)))) {
             Add-Error "Missing separate challenge eval score in $relativePath"
         }
     }
@@ -384,18 +386,30 @@ foreach ($requiredOfficialPromptRule in @('zero-shot', 'preserve-first', 'trim-f
 $contractAnchors = @{
     'SKILL.md' = @(
         'contract:entry-isolation',
-        'contract:context-minimal-loading'
+        'contract:context-minimal-loading',
+        'contract:guarded-output-scan'
     )
-    'evals\README.md' = @('contract:separate-eval-scores')
+    'evals\README.md' = @(
+        'contract:separate-eval-scores',
+        'contract:eval-execution-isolation'
+    )
     'references\roadmap.md' = @(
         'contract:roadmap-core-output',
         'contract:roadmap-stage-explicit'
     )
-    'references\idea.md' = @('contract:idea-core-output')
+    'references\idea.md' = @(
+        'contract:idea-core-output',
+        'contract:idea-feedback-role-binding'
+    )
     'references\review.md' = @(
         'contract:review-core-output',
         'contract:review-route-and-visual',
-        'contract:review-slimming-evidence'
+        'contract:review-slimming-evidence',
+        'contract:review-evidence-handoff',
+        'contract:review-finding-evidence-source',
+        'contract:review-default-handoff',
+        'contract:review-explicit-idea-candidates',
+        'contract:review-code-scanner-layer'
     )
     'references\prd.md' = @(
         'contract:prd-known-facts',
@@ -403,14 +417,32 @@ $contractAnchors = @{
         'contract:prd-hifi-gate',
         'contract:prd-async-idempotency',
         'contract:prd-ui-coupling',
-        'contract:prd-async-acceptance-matrix'
+        'contract:prd-async-acceptance-matrix',
+        'contract:prd-prototype-five-part',
+        'contract:prd-prototype-gate-table',
+        'contract:prd-input-blocker-stop',
+        'contract:prd-ai-agent-four-part',
+        'contract:prd-prototype-simulation-browser',
+        'contract:prd-ai-agent-resilience-governance',
+        'contract:prd-ambiguous-ui-questions',
+        'contract:prd-convergence-preserves-browser-gate',
+        'contract:prd-prototype-atomic-output'
     )
     'references\prompt.md' = @(
         'contract:prompt-identity',
         'contract:recipient-profile',
         'contract:single-verification',
         'contract:subagent-budget',
-        'contract:prompt-preserve-core'
+        'contract:prompt-preserve-core',
+        'contract:prompt-only-generation',
+        'contract:prompt-release-spine',
+        'contract:prompt-generation-first-line',
+        'contract:prompt-render-shell',
+        'contract:prompt-prerequisite-evidence-stop',
+        'contract:prompt-subagent-long-tail',
+        'contract:prompt-document-only-boundary',
+        'contract:prompt-concept-handoff-facts',
+        'contract:prompt-release-gate-details'
     )
     'references\data-analysis.md' = @(
         'contract:kpi-data-contract',
@@ -421,7 +453,17 @@ $contractAnchors = @{
     'references\capability-routing.md' = @(
         'contract:capability-minimal-route',
         'contract:capability-evidence-package',
-        'contract:capability-acceptance-tracks'
+        'contract:capability-acceptance-tracks',
+        'contract:capability-code-review-scanner'
+    )
+    'references\tooling.md' = @(
+        'contract:tooling-code-review-scanner'
+    )
+    'references\code-review-scanner.md' = @(
+        'contract:code-review-scanner-purpose',
+        'contract:code-review-scanner-privacy',
+        'contract:code-review-scanner-delegation',
+        'contract:code-review-scanner-evidence-closure'
     )
     'references\memory-integration.md' = @(
         'contract:memory-conflict-inventory',
@@ -438,7 +480,16 @@ $contractAnchors = @{
         'contract:acceptance-evidence-impact',
         'contract:acceptance-core-output',
         'contract:acceptance-tool-manifest',
-        'contract:acceptance-unsigned-installer'
+        'contract:acceptance-unsigned-installer',
+        'contract:acceptance-selective-inheritance',
+        'contract:acceptance-release-gate',
+        'contract:acceptance-explicit-inheritance',
+        'contract:acceptance-release-prerequisites',
+        'contract:acceptance-artifact-evidence-freshness',
+        'contract:acceptance-gap-closure-triples',
+        'contract:acceptance-gap-closure-table',
+        'contract:acceptance-no-evidence-substitution',
+        'contract:acceptance-concrete-failure-injection'
     )
 }
 foreach ($entry in $contractAnchors.GetEnumerator()) {
@@ -496,6 +547,12 @@ if ($null -ne $evalData) {
         if (-not (@($challengeData.evals.id) -contains $requiredV028Challenge)) {
             Add-Error "Missing v0.28 challenge eval: $requiredV028Challenge"
         }
+    }
+    if (-not (@($evalData.evals.id) -contains 82)) {
+        Add-Error 'Missing code-review scanner stable eval: 82'
+    }
+    if (-not (@($challengeData.evals.id) -contains 'CH-19')) {
+        Add-Error 'Missing code-review scanner challenge eval: CH-19'
     }
 }
 $referenceRegex = [regex]'`((?:references|templates)/[^`]+\.md)`'

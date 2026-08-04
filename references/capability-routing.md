@@ -4,6 +4,7 @@
 <!-- contract:capability-minimal-route -->
 <!-- contract:capability-evidence-package -->
 <!-- contract:capability-acceptance-tracks -->
+<!-- contract:capability-code-review-scanner -->
 
 ## 路由原则
 
@@ -30,6 +31,7 @@
 | 桌面窗口、托盘、系统权限或原生行为 | Computer Use + 日志/配置 | `/review`、`/acceptance` | 可执行产物、配置、日志、恢复方式 | 截图、动作、日志事件、产物变化和未覆盖项 |
 | UI/交互 PRD 需要高保真表达 | 现有设计系统、Figma、frontend/UI skill | `/prd` | 产品气质、页面状态、已有原型 | 可交互原型、状态覆盖、文件路径和验证结果 |
 | 需要核对 GitHub PR、CI、tag、Release | GitHub 插件或本地 git | `/review`、`/acceptance` | 仓库、分支/PR、权限范围 | 可审计的远端状态、CI、发布身份和授权缺口 |
+| 需要评审代码 diff、commit 或发布区间 | OpenCodeReview 或等价扫描器 | `/review` implementation | 锁定的仓库/ref、排除项、最小需求背景、源码外发授权 | 文件覆盖、语言规则、候选 finding、跳过/失败范围和模式限制 |
 
 能力名称只是已知实现示例。当前环境存在等价能力时可以替换，但必须报告真实调用对象；没有能力时不要建议安装与当前结论无关的插件。
 
@@ -43,7 +45,7 @@
 
 ### `/review`
 
-先用本地文件和最小运行证据建立产品、领域和工程地图。外部能力只补当前地图无法回答的部分，例如真实页面行为、远端发布状态或数据库关系。架构分析可以借鉴领域建模和代码库设计方法，但不把未安装的 skill 名写成已调用事实。
+先用本地文件和最小运行证据建立产品、领域和工程地图。外部能力只补当前地图无法回答的部分，例如代码规则扫描、真实页面行为、远端发布状态或数据库关系。代码扫描遵循 `references/code-review-scanner.md`，先锁定范围与源码外发边界，再由 MyP-M-A 核验候选 finding；架构分析可以借鉴领域建模和代码库设计方法，但不把未安装的 skill 名写成已调用事实。
 
 ### `/prd`
 

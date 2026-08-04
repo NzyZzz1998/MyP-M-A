@@ -1,5 +1,7 @@
 # 工具调用策略
 
+<!-- contract:tooling-code-review-scanner -->
+
 本文件定义 MyP-M-A 四个入口如何使用外部工具、插件和本地验证能力。工具不是为了让输出显得复杂，而是为了让产品判断、评审、PRD 和验收更有证据。
 
 当任务需要数据分析、原型、浏览器/桌面验证或远端发布等专门方法时，同时读取 `references/capability-routing.md`。本文件回答“工具怎样安全使用和降级”，能力路由回答“当前产品问题应该选择哪一种专门能力”，两者不要重复堆叠。
@@ -29,6 +31,7 @@
 - 桌面 GUI：Computer Use + 日志/配置 -> 用户手动验证文档 + 日志/配置 -> 待验证。
 - Web：浏览器/Playwright -> HTTP/日志/截图静态检查 -> 用户手动验证 -> 待验证。
 - GitHub：GitHub 插件 -> 本地 git 与用户提供的 CI/PR 证据 -> 待验证远端状态。
+- 代码评审：已授权的独立 OCR review -> 本地 OCR Delegation -> git diff + 语言检查器/定向测试 -> 待验证未覆盖范围。
 - 数据库：只读数据库工具 -> schema/迁移/ORM/样本导出 -> 数据地图与待确认项。
 - 竞品：公开一手资料 -> 用户提供截图/文档 -> 明确标注经验推断。
 
@@ -37,6 +40,7 @@
 | 工具/插件 | 适合做什么 | 常见入口 |
 | --- | --- | --- |
 | 本地文件与 shell | 读项目结构、配置、日志、测试、构建、版本号、数据库迁移 | `/review`、`/prd`、`/acceptance` |
+| OpenCodeReview 或等价代码扫描器 | 选择 diff/commit/range、加载语言规则、生成候选 finding | `/review` 的 implementation 通路 |
 | GitHub 插件 | 读仓库、Issue、PR、diff、review comments、CI、Release、里程碑 | `/idea`、`/review`、`/prd`、`/acceptance` |
 | Computer Use | 操作 Windows 桌面软件、exe、托盘、菜单、弹窗、真实点击路径、截图 | `/review`、`/acceptance`，必要时 `/prd` |
 | 浏览器 / Playwright / webapp-testing | 验证 Web 页面、交互、控制台、网络、响应式截图 | `/review`、`/acceptance`，必要时 `/prd` |
@@ -75,6 +79,7 @@
 可使用：
 
 - 本地文件与 shell：`rg`、文件树、README、入口文件、配置、日志、测试目录。
+- OCR/代码扫描器：在锁定 diff、commit 或发布区间后做语言规则扫描；详细隐私、独立性、证据闭环和降级规则见 `references/code-review-scanner.md`。
 - GitHub：仓库结构、PR 历史、Issue、CI、Release。
 - Computer Use：桌面应用真实窗口、托盘、弹窗、右键菜单、点击路径。
 - 浏览器/Playwright：Web 页面交互、响应式、控制台和网络错误。
@@ -130,6 +135,7 @@
 | 输入线索 | 首选工具 | 入口倾向 |
 | --- | --- | --- |
 | 项目路径、代码库、配置、日志 | 本地文件 + shell | `/review`、`/acceptance` |
+| 代码 diff、commit、PR、发布区间 | 本地 git + OCR/等价代码扫描器；MyP-M-A 复核 | `/review` implementation |
 | GitHub 链接、PR、Issue、CI | GitHub 插件 | 四个入口 |
 | exe、Windows 桌面、托盘、菜单 | Computer Use | `/review`、`/acceptance` |
 | Web 页面、localhost、部署预览 | 浏览器 / Playwright | `/review`、`/acceptance` |

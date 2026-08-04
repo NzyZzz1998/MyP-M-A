@@ -45,6 +45,7 @@ flowchart LR
 |---|---|---|---|---|
 | 本地文件与 shell | Codex 基础工具 | `/review`、`/prd`、`/acceptance`、开发承接 | 读代码、文档、日志、配置、测试、构建、git 状态 | 已写入 `references/tooling.md`，可继续细化 |
 | GitHub 插件 | 外部插件能力 | 四个入口，尤其 review/acceptance/release | 读 PR、Issue、CI、Release、提交/推送、review comments | 已有原则，但每阶段触发条件还可更明确 |
+| OpenCodeReview 或等价代码扫描器 | 外部 CLI/模型能力 | `/review` 的 implementation 通路 | 锁定 diff/commit/release 范围、加载语言规则、发现代码候选问题 | 已接入；远程处理私有源码需明确授权，候选必须由 MyP-M-A 做证据闭环 |
 | Computer Use | 外部插件/skill 能力 | `/review`、`/acceptance`，必要时 `/prd` | 操作 Windows exe、托盘、菜单、弹窗、真实点击路径、截图 | 已写入 tooling；需补“不可稳定操作托盘时标记人工补证” |
 | 浏览器 / Playwright / webapp-testing | 外部工具/skill 能力 | `/review`、`/acceptance`，必要时 `/prd` | 验证网页原型、Web UI、响应式、控制台、交互 | 已有原则，需补高保真原型验证场景 |
 | Web 搜索 | 网络能力 | `/idea`、必要时 `/prd` | 查竞品、市场信号、公开资料、同类产品做法 | 已有原则；要强调证据来源和时效 |

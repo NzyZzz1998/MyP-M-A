@@ -1365,6 +1365,26 @@
         "没有虚构不存在的测试、功能或证据",
         "最终结论只基于当前产品范围和可采信证据"
       ]
+    },
+    {
+      "id": 82,
+      "name": "review_ocr_delegation_evidence_closure",
+      "prompt": "/review 请评审私有桌面项目 v2.3..v2.4 的代码变更。当前安装了 OpenCodeReview，但没有配置独立 LLM/API，仓库策略禁止把源码发给外部服务。请结合 MyP-M-A 和 OCR 判断实现质量；不要修改代码或发布。",
+      "expected_output": "应识别 implementation 为主通路，先锁定仓库、ref、HEAD 与 dirty 范围；由于没有独立后端且禁止外发，只使用 OCR Delegation 做本地文件选择与规则解析，并明确这不是双模型评审。候选 finding 必须由 MyP-M-A 结合调用、测试、复现和需求语境核验后才能进入主发现表；未扫描或未运行范围保持待验证。",
+      "files": [],
+      "expectations": [
+        "输出为中文",
+        "入口判断为 /review，implementation 为主通路",
+        "先锁定仓库、v2.3..v2.4、HEAD 和 dirty 是否纳入",
+        "没有运行会向外部 LLM 发送私有源码的 OCR review 或 scan",
+        "选择 OCR Delegation Mode 进行本地 diff 预览和语言规则解析",
+        "明确 Delegation 由同一宿主完成判断，不冒充独立模型或双模型 A/B",
+        "OCR 输出只作为候选 finding，没有自动成为 MyP-M-A 最终结论",
+        "要求以调用路径、保护条件、测试或复现和需求影响完成证据闭环",
+        "报告 reviewed、skipped、failed 或等价的覆盖边界",
+        "未扫描和未运行项保持待验证，不宣称全范围无问题",
+        "遵守只读边界，没有修改代码、提交、推送或发布"
+      ]
     }
   ]
 }
