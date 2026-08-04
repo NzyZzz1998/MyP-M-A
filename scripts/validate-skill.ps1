@@ -457,7 +457,8 @@ $contractAnchors = @{
         'contract:capability-code-review-scanner'
     )
     'references\tooling.md' = @(
-        'contract:tooling-code-review-scanner'
+        'contract:tooling-code-review-scanner',
+        'contract:artifact-brand-isolation'
     )
     'references\code-review-scanner.md' = @(
         'contract:code-review-scanner-purpose',
