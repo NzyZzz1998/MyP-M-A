@@ -70,8 +70,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.31.0` Stable，发布提交待同步远端；v0.30.0 暂为远端稳定基线。
-<!-- project-status: version=0.31.0; state=local-committed -->
+当前版本：`v0.31.0` Stable，已同步远端 `main`；v0.30.0 保留为上一稳定基线。
+<!-- project-status: version=0.31.0; state=remote-synced -->
 
 v0.31 当前变化：
 

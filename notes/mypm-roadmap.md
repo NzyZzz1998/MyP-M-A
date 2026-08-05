@@ -12,8 +12,8 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.31 已完成按需 Discovery 能力、真实案例校准和 Sol medium 最小差量 A/B，不新增入口；Stable 发布提交待同步远端。
-<!-- project-status: version=0.31.0; state=local-committed -->
+当前阶段判断：v0.31 已完成按需 Discovery 能力、真实案例校准和 Sol medium 最小差量 A/B，不新增入口；Stable 已同步远端 `main`。
+<!-- project-status: version=0.31.0; state=remote-synced -->
 
 ## 当前稳定版本
 
