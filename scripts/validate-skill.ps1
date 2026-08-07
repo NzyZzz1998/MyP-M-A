@@ -404,7 +404,8 @@ $contractAnchors = @{
     'references\idea.md' = @(
         'contract:idea-core-output',
         'contract:idea-feedback-role-binding',
-        'contract:idea-discovery-methods'
+        'contract:idea-discovery-methods',
+        'contract:idea-strategy-gtm-evidence'
     )
     'references\review.md' = @(
         'contract:review-core-output',
@@ -414,7 +415,8 @@ $contractAnchors = @{
         'contract:review-finding-evidence-source',
         'contract:review-default-handoff',
         'contract:review-explicit-idea-candidates',
-        'contract:review-code-scanner-layer'
+        'contract:review-code-scanner-layer',
+        'contract:review-strategy-consistency'
     )
     'references\prd.md' = @(
         'contract:prd-known-facts',
@@ -431,7 +433,8 @@ $contractAnchors = @{
         'contract:prd-ai-agent-resilience-governance',
         'contract:prd-ambiguous-ui-questions',
         'contract:prd-convergence-preserves-browser-gate',
-        'contract:prd-prototype-atomic-output'
+        'contract:prd-prototype-atomic-output',
+        'contract:prd-strategy-gtm-boundary'
     )
     'references\prompt.md' = @(
         'contract:prompt-identity',
@@ -460,7 +463,8 @@ $contractAnchors = @{
         'contract:capability-evidence-package',
         'contract:capability-acceptance-tracks',
         'contract:capability-code-review-scanner',
-        'contract:capability-discovery-pack'
+        'contract:capability-discovery-pack',
+        'contract:capability-strategy-gtm-pack'
     )
     'references\tooling.md' = @(
         'contract:tooling-code-review-scanner',
@@ -477,6 +481,15 @@ $contractAnchors = @{
         'contract:discovery-evidence-traceability',
         'contract:discovery-simulation-boundary',
         'contract:discovery-return-to-idea'
+    )
+    'references\strategy-gtm.md' = @(
+        'contract:strategy-gtm-method-selection',
+        'contract:strategy-gtm-evidence-boundary',
+        'contract:strategy-gtm-choice-and-exclusion',
+    'contract:strategy-gtm-pricing-boundary',
+    'contract:strategy-gtm-return-to-stage',
+    'contract:strategy-gtm-framework-pressure',
+    'contract:strategy-gtm-mutually-exclusive-options'
     )
     'references\case-library.md' = @(
         'contract:case-library-historical-boundary',
@@ -576,6 +589,12 @@ if ($null -ne $evalData) {
     }
     if (-not (@($challengeData.evals.id) -contains 'CH-20')) {
         Add-Error 'Missing Discovery challenge eval: CH-20'
+    }
+    if (-not (@($evalData.evals.id) -contains 84)) {
+        Add-Error 'Missing Strategy/GTM stable eval: 84'
+    }
+    if (-not (@($challengeData.evals.id) -contains 'CH-21')) {
+        Add-Error 'Missing Strategy/GTM challenge eval: CH-21'
     }
 }
 $referenceRegex = [regex]'`((?:references|templates)/[^`]+\.md)`'

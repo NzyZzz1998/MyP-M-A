@@ -11,6 +11,7 @@
 <!-- contract:review-explicit-idea-candidates -->
 <!-- contract:review-default-handoff -->
 <!-- contract:review-code-scanner-layer -->
+<!-- contract:review-strategy-consistency -->
 
 - 首行写 `入口判断：/review`，并声明主通路、辅助通路、覆盖/不覆盖范围和证据来源；不能用并列类型代替主辅判断。
 - 先建立产品与工程地图，再列发现。Project Review 必须给 Mermaid 或等价关系图；多通路材料用一张图说明衔接。
@@ -20,6 +21,7 @@
 - 代码瘦身必须基于摩擦证据。每个删除或下沉候选逐项核对调用方、动态入口/资源/反射、配置、测试、日志、平台行为，并给最小调整、验证和独立回退；缺证时只能标为待确认。
 - 同时有意图文档、代码和测试时读取 `intent-implementation-audit.md`，分开标记实现偏离、文档过期、未验证和待确认。
 - implementation 通路有可锁定 diff/commit/range 且代码扫描器可用时，读取 `references/code-review-scanner.md`：MyP-M-A 先定范围，扫描器产出候选，MyP-M-A 再核验；Delegation Mode 不得冒充独立模型评审。
+- 项目定位、目标市场、价格、套餐、渠道承诺与当前产品/数据并存时读取 `references/strategy-gtm.md`，核对选择、证据和实际能力的一致性；市场宣传不能替代采用、支付或留存证据。
 
 ## 自动选择通路
 

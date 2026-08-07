@@ -122,5 +122,17 @@
   {
     "query": "按照已签字的设计系统缩小输入框和按钮间距，只做 CSS 视觉修复，不改变交互或需求。",
     "should_trigger": false
+  },
+  {
+    "query": "帮我判断这个产品应该先服务个人开发者还是小团队，并收敛定位、定价假设和进入市场的方式。",
+    "should_trigger": true
+  },
+  {
+    "query": "产品定位、套餐和价格已经批准，请只把 pricing_tier 枚举写进 TypeScript 并补单元测试，不重新讨论产品方案。",
+    "should_trigger": false
+  },
+  {
+    "query": "第一版首页采用经营驾驶舱还是客户列表工作台？请比较两种产品结构并给出可点击原型。",
+    "should_trigger": true
   }
 ]

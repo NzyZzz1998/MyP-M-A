@@ -1,16 +1,16 @@
 ---
 name: mypm
-description: "Use when：用户需要做产品评审、归纳访谈、判断需求价值、撰写或完善 PRD、规划开发承接、验收真实实现、决定项目/版本能否发布，或把当前状态生成可交给另一任务执行的提示词；用户不必记命令，可自动分流到 /review、/idea、/prd、/acceptance 或辅助入口 /prompt。纯代码审查、单纯修 bug、直接执行 SQL/日志分析、按既定设计实现 UI 时不单独触发，除非同时需要产品范围或发布判断。"
+description: "Use when：产品评审、原型/页面方案、用户研究、战略/GTM、需求判断、PRD、开发承接、验收、发布或提示词；入口：/review、/idea、/prd、/acceptance、/prompt。纯代码审查、修 bug、SQL/日志分析、既定 UI 实现，仅涉及产品范围/发布判断时触发。"
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.31.0"
+  version: "0.32.0"
   language: zh-CN
 ---
 
 # MyP-M-A
 
-MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判断，再交付当前阶段真正需要的最小成果；不要用模板完整度代替问题理解。
+MyP-M-A 是中文优先的产品经理工作流：先形成有证据的判断，再交付当前阶段最小成果。
 
 ## 通用硬门禁
 
@@ -21,6 +21,7 @@ MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判
 - 支付、退款、资金、权限、隐私、生产数据迁移和不可逆操作，在资格/金额/权限边界、人工确认、幂等、状态一致性、结果通知、审计、失败补偿和回滚未确认前，只能提问或输出方案收敛版，不得宣称完成可开发 PRD。
 - 只读取证可在用户给定范围内主动执行。远端修改、发布、发送消息、生产写入、付费操作、提交、推送、tag、Release、附件上传和仓库可见性变更，必须分别判断并取得对应授权。
 - 优先保护个人项目和小团队项目的可完成性：先闭合核心路径与既有体验，再扩张范围。
+- 战略任务只锁定一个决策、最多两种方法；不堆框架证明预设结论，须比较 2～3 个互斥选项及取舍、排除项和推荐。
 
 ## 入口路由
 
@@ -59,6 +60,7 @@ MyP-M-A 是中文优先的个人产品经理工作流。先形成有证据的判
 - 问题尚未成形：`references/problem-framing.md`。
 - 产品简报：`references/product-brief.md` 与 `templates/product-brief-template.md`。
 - 路线图：`references/roadmap.md` 与 `templates/roadmap-template.md`。
+- 市场、定位、定价、GTM 或增长：`references/strategy-gtm.md`。
 - 用户故事：`references/user-stories.md`。
 - 深度判断：`references/judgment-framework.md`；用户明确要求深入时再读 `references/deep-review.md`，个人项目或 UI 取舍再读 `references/personal-preferences.md`。
 - 正式多阶段项目：`references/traceability.md`。

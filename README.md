@@ -70,10 +70,20 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.31.0` Stable，已同步远端 `main`；v0.30.0 保留为上一稳定基线。
-<!-- project-status: version=0.31.0; state=remote-synced -->
+当前版本：`v0.32.0` 已通过 Stable 门禁并同步远端；v0.31.0 是上一稳定基线。
+<!-- project-status: version=0.32.0; state=remote-synced -->
 
-v0.31 当前变化：
+v0.32 当前变化：
+
+- 延续 v0.30 深度复盘确定的能力扩展顺序，主线为产品战略、市场研究、定位、定价、GTM 与增长，不新增公开入口。
+- 新增 `references/strategy-gtm.md`，强调证据、选择与排除项、角色分离、定价边界和阶段回写；经典框架只按问题选用，不做方法百科。
+- 新增 `notes/v0.32-strategy-gtm-plan.md`，恢复 v0.31 前的真实决策链，并明确 Candidate/Stable 门禁。
+- 新增稳定用例 ID 84、挑战用例 CH-21 和触发正反例；当前目录口径为稳定集未全量重跑 / 656、挑战集未全量重跑 / 190。
+- 严格静态校验已通过。首轮 4 条 Sol medium 盲评 A/B 两版均为 `33/35`，暴露共同的框架堆叠与选项缺失；规则修复后的 2 条定向 A/B 为 `15/17 -> 17/17`，普通 `/prd` 控制用例两版均为 `5/5`。
+- LetsMakeMoney 真实项目只读试跑能区分发布质量与采用/商业证据，拒绝框架堆叠和虚构市场数据，并给出互斥路径、推荐及排除项。
+- 13 条代表性版本演进面板中，v0.32 在 Terra medium 为 `99/107`，高于 v0.31 的 `91/107`；Sol medium 为 `101/107`，与 v0.31 的 `102/107` 基本持平。该结果不是完整目录回归，不宣称所有模型和场景普遍优胜。
+
+已发布基线 v0.31 的主要变化：
 
 - 不新增入口；访谈、研究归纳、JTBD、切换行为或机会树仍由 `/idea` 与探索型 `/review` 承接。
 - 新增 `references/discovery.md`，覆盖方法选择、来源追溯、反例、样本偏差、JTBD、机会树和 Agent 模拟边界。
