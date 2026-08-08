@@ -12,14 +12,14 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.33 已完成完整跨模型 A/B、关键合同修复和最终 Sol 结构化复验，达到本地 Stable；准备提交与推送，远端稳定基线仍是 v0.32。
-<!-- project-status: version=0.33.0; state=candidate -->
+当前阶段判断：v0.33 已完成完整跨模型 A/B、关键合同修复和最终 Sol 结构化复验，达到 Stable 并同步远端；当前远端稳定基线为 v0.33。
+<!-- project-status: version=0.33.0; state=remote-synced -->
 
 ## 当前稳定版本（本地）
 
 ### R2.23 v0.33 执行可靠性与交付密度
 
-状态：实现、严格静态校验、工具链烟测、Terra/Sol medium 全量 A/B 与关键合同定向复验完成；Stable，准备提交与推送
+状态：实现、严格静态校验、工具链烟测、Terra/Sol medium 全量 A/B 与关键合同定向复验完成；Stable，已提交并同步远端
 
 - 不新增入口或 PM 框架，压缩常驻上下文并保护承重合同。
 - Strategy/GTM 聊天只交付一个决策单元，正式文件不因简洁要求丢失影响范围或验收合同。

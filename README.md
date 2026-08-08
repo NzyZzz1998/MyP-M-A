@@ -70,8 +70,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.33.0 Stable` 已完成本地行为门禁和最终 Sol 结构化复验，准备提交与推送；远端稳定基线仍是 v0.32.0。
-<!-- project-status: version=0.33.0; state=candidate -->
+当前版本：`v0.33.0 Stable` 已完成行为门禁、最终 Sol 结构化复验并同步远端；当前远端稳定基线为 v0.33.0。
+<!-- project-status: version=0.33.0; state=remote-synced -->
 
 v0.33 变化：
 
