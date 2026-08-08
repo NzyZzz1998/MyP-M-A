@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "name": "MyP-M-A 13 条发布面板",
+  "purpose": "用少量代表性用例检查入口、证据、数据、工具、Memory、交付密度与发布门禁；不能替代稳定集和挑战集全量回归。",
+  "selection": [
+    { "suite": "stable", "id": 1 },
+    { "suite": "stable", "id": 17 },
+    { "suite": "stable", "id": 22 },
+    { "suite": "stable", "id": 31 },
+    { "suite": "stable", "id": 32 },
+    { "suite": "stable", "id": 38 },
+    { "suite": "stable", "id": 42 },
+    { "suite": "stable", "id": 56 },
+    { "suite": "stable", "id": 72 },
+    { "suite": "stable", "id": 76 },
+    { "suite": "stable", "id": 84 },
+    { "suite": "challenge", "id": "CH-16" },
+    { "suite": "challenge", "id": "CH-21" }
+  ]
+}

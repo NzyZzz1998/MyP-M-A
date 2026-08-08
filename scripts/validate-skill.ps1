@@ -31,7 +31,7 @@ foreach ($file in $textFiles) {
 
 $skillPath = Join-Path $root 'SKILL.md'
 $skill = [System.IO.File]::ReadAllText($skillPath, $strictUtf8)
-$skillCharBudget = 6000
+$skillCharBudget = 5700
 if ($skill.Length -gt $skillCharBudget) {
     Add-Error "SKILL.md context budget exceeded: $($skill.Length) chars > $skillCharBudget"
 }
@@ -319,6 +319,42 @@ try {
     Add-Error "Cannot parse trigger-evals.json: $($_.Exception.Message)"
 }
 
+$releasePanelPath = Join-Path $root 'evals\release-panel.json'
+try {
+    $releasePanel = [System.IO.File]::ReadAllText($releasePanelPath, $strictUtf8) | ConvertFrom-Json
+    $panelEntries = @($releasePanel.selection)
+    if ($panelEntries.Count -ne 13) {
+        Add-Error "Release panel must contain exactly 13 cases: $($panelEntries.Count)"
+    }
+    $panelKeys = @{}
+    foreach ($entry in $panelEntries) {
+        $suite = [string]$entry.suite
+        $id = [string]$entry.id
+        $key = "$suite`:$id"
+        if ($panelKeys.ContainsKey($key)) {
+            Add-Error "Duplicate release-panel entry: $key"
+        } else {
+            $panelKeys[$key] = $true
+        }
+        if ($suite -eq 'stable') {
+            if ($null -eq $evalData -or -not (@($evalData.evals.id | ForEach-Object { [string]$_ }) -contains $id)) {
+                Add-Error "Release-panel stable case not found: $id"
+            }
+        } elseif ($suite -eq 'challenge') {
+            if ($null -eq $challengeData -or -not (@($challengeData.evals.id | ForEach-Object { [string]$_ }) -contains $id)) {
+                Add-Error "Release-panel challenge case not found: $id"
+            }
+        } else {
+            Add-Error "Unsupported release-panel suite: $suite"
+        }
+    }
+    if (@($panelEntries | Where-Object suite -eq 'stable').Count -eq 0 -or @($panelEntries | Where-Object suite -eq 'challenge').Count -eq 0) {
+        Add-Error 'Release panel must include both stable and challenge cases'
+    }
+} catch {
+    Add-Error "Cannot parse evals/release-panel.json: $($_.Exception.Message)"
+}
+
 foreach ($qualityFile in @('evals\README.md', 'scripts\regression-workspace.ps1')) {
     if (-not (Test-Path -LiteralPath (Join-Path $root $qualityFile) -PathType Leaf)) {
         Add-Error "Missing v0.23 quality file: $qualityFile"
@@ -329,7 +365,8 @@ $requiredEvaluationScripts = @(
     'scripts\regression-workspace.ps1',
     'scripts\grading-batches.ps1',
     'scripts\test-evaluation-pipeline.ps1',
-    'scripts\generate-eval-viewer.ps1'
+    'scripts\generate-eval-viewer.ps1',
+    'scripts\build-eval-panel.ps1'
 )
 foreach ($relativeScriptPath in $requiredEvaluationScripts) {
     $scriptPath = Join-Path $root $relativeScriptPath
@@ -395,7 +432,8 @@ $contractAnchors = @{
     )
     'evals\README.md' = @(
         'contract:separate-eval-scores',
-        'contract:eval-execution-isolation'
+        'contract:eval-execution-isolation',
+        'contract:eval-release-panel-lifecycle'
     )
     'references\roadmap.md' = @(
         'contract:roadmap-core-output',
@@ -464,11 +502,13 @@ $contractAnchors = @{
         'contract:capability-acceptance-tracks',
         'contract:capability-code-review-scanner',
         'contract:capability-discovery-pack',
-        'contract:capability-strategy-gtm-pack'
+        'contract:capability-strategy-gtm-pack',
+        'contract:capability-runtime-probe'
     )
     'references\tooling.md' = @(
         'contract:tooling-code-review-scanner',
-        'contract:artifact-brand-isolation'
+        'contract:artifact-brand-isolation',
+        'contract:tooling-capability-state'
     )
     'references\code-review-scanner.md' = @(
         'contract:code-review-scanner-purpose',
@@ -489,7 +529,8 @@ $contractAnchors = @{
     'contract:strategy-gtm-pricing-boundary',
     'contract:strategy-gtm-return-to-stage',
     'contract:strategy-gtm-framework-pressure',
-    'contract:strategy-gtm-mutually-exclusive-options'
+    'contract:strategy-gtm-mutually-exclusive-options',
+    'contract:strategy-gtm-output-density'
     )
     'references\case-library.md' = @(
         'contract:case-library-historical-boundary',

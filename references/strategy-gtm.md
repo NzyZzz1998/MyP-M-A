@@ -9,6 +9,7 @@
 <!-- contract:strategy-gtm-return-to-stage -->
 <!-- contract:strategy-gtm-framework-pressure -->
 <!-- contract:strategy-gtm-mutually-exclusive-options -->
+<!-- contract:strategy-gtm-output-density -->
 
 ## 不可省略输出合同
 
@@ -18,6 +19,10 @@
 - 定价必须区分事实、约束和待验证假设。竞品价格不能直接证明用户支付意愿，也不能单独决定本产品价格。
 - GTM 必须把目标用户、使用者、购买者、决策者和阻碍者按真实场景区分；角色未知时保留为门禁，不用统一的“用户”代替。
 - 最终回到当前入口：`/review` 给一致性与证据缺口，`/idea` 判断价值和时机，`/prd` 固化已确认选择，`/acceptance` 核对实际发布与观察证据。
+
+## 交付密度
+
+聊天默认只交付一个决策单元：决策与期限、关键证据、2～3 个互斥选项、推荐与排除项、最小验证。不要先讲框架定义、方法历史或完整分析过程；用户要求解释方法时再展开。正式 PRD、评审或验收文件仍须保留当前入口要求的影响范围、证据、风险、执行与验收细节，不能用“简洁”删掉承重合同。
 
 ## 方法选择
 
