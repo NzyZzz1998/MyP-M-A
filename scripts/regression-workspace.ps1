@@ -76,6 +76,20 @@ function Test-IsInside {
     return $childPath.StartsWith($parentPath, [System.StringComparison]::OrdinalIgnoreCase)
 }
 
+function Get-Median {
+    param([object[]]$Values)
+
+    $numbers = @($Values | Where-Object { $null -ne $_ } | ForEach-Object { [double]$_ } | Sort-Object)
+    if ($numbers.Count -eq 0) {
+        return $null
+    }
+    $middle = [int][Math]::Floor($numbers.Count / 2)
+    if (($numbers.Count % 2) -eq 1) {
+        return [Math]::Round($numbers[$middle], 1)
+    }
+    return [Math]::Round(($numbers[$middle - 1] + $numbers[$middle]) / 2, 1)
+}
+
 function Copy-RuntimeSnapshot {
     param(
         [Parameter(Mandatory = $true)][string]$Source,
@@ -225,6 +239,7 @@ function Invoke-Validate {
             passed = 0
             total = 0
             response_chars = 0
+            duration_values = [System.Collections.Generic.List[double]]::new()
         }
     }
 
@@ -241,11 +256,15 @@ function Invoke-Validate {
                 $runDirectory = Join-Path $evalDirectory "$($configuration.name)\run-$runNumber"
                 $responsePath = Join-Path $runDirectory 'response.md'
                 $gradingPath = Join-Path $runDirectory 'grading.json'
+                $executionPath = Join-Path $runDirectory 'execution.json'
                 $state = 'complete'
                 $issues = [System.Collections.Generic.List[string]]::new()
+                $executionIssues = [System.Collections.Generic.List[string]]::new()
                 $passed = 0
                 $total = 0
                 $responseChars = 0
+                $durationMs = $null
+                $durationState = 'unavailable'
 
                 if (-not (Test-Path -LiteralPath $responsePath -PathType Leaf)) {
                     $state = 'missing'
@@ -256,6 +275,22 @@ function Invoke-Validate {
                 if (-not (Test-Path -LiteralPath $gradingPath -PathType Leaf)) {
                     $state = 'missing'
                     $issues.Add('grading.json is missing')
+                }
+
+                if (Test-Path -LiteralPath $executionPath -PathType Leaf) {
+                    try {
+                        $execution = [System.IO.File]::ReadAllText($executionPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+                        if ($null -ne $execution.duration_ms -and [double]$execution.duration_ms -ge 0) {
+                            $durationMs = [Math]::Round([double]$execution.duration_ms, 1)
+                            $durationState = 'available'
+                        } else {
+                            $durationState = 'invalid'
+                            $executionIssues.Add('execution.json duration_ms must be a non-negative number')
+                        }
+                    } catch {
+                        $durationState = 'invalid'
+                        $executionIssues.Add("execution.json cannot be parsed: $($_.Exception.Message)")
+                    }
                 }
 
                 if ($state -eq 'complete') {
@@ -300,6 +335,9 @@ function Invoke-Validate {
                     $totals.passed += $passed
                     $totals.total += $total
                     $totals.response_chars += $responseChars
+                    if ($durationState -eq 'available') {
+                        $totals.duration_values.Add([double]$durationMs)
+                    }
                 } elseif ($state -eq 'missing') {
                     $totals.missing_runs++
                 } else {
@@ -315,7 +353,11 @@ function Invoke-Validate {
                     passed = $passed
                     total = $total
                     response_chars = $responseChars
+                    valid_return = ($state -eq 'complete')
+                    duration_ms = $durationMs
+                    duration_state = $durationState
                     issues = @($issues)
+                    execution_issues = @($executionIssues)
                 }
                 $records.Add($record)
                 $recordIndex["$($record.eval_id)|$($record.configuration)|$runNumber"] = $record
@@ -328,6 +370,8 @@ function Invoke-Validate {
         $totals = $configurationTotals[$configuration.name]
         $passRate = if ($totals.total -gt 0) { [Math]::Round($totals.passed / $totals.total, 4) } else { $null }
         $averageChars = if ($totals.complete_runs -gt 0) { [Math]::Round($totals.response_chars / $totals.complete_runs, 1) } else { $null }
+        $validReturnRate = if ($totals.expected_runs -gt 0) { [Math]::Round($totals.complete_runs / $totals.expected_runs, 4) } else { $null }
+        $medianDuration = Get-Median -Values @($totals.duration_values)
         $summaryRows.Add([ordered]@{
             configuration = [string]$configuration.name
             expected_runs = $totals.expected_runs
@@ -338,6 +382,9 @@ function Invoke-Validate {
             total = $totals.total
             pass_rate = $passRate
             average_response_chars = $averageChars
+            valid_return_rate = $validReturnRate
+            duration_samples = $totals.duration_values.Count
+            median_duration_ms = $medianDuration
         })
     }
 
@@ -357,7 +404,12 @@ function Invoke-Validate {
         candidate_pass_rate = $null
         baseline_average_response_chars = $null
         candidate_average_response_chars = $null
+        duration_complete_pairs = 0
+        baseline_median_duration_ms = $null
+        candidate_median_duration_ms = $null
     }
+    $baselineDurationValues = [System.Collections.Generic.List[double]]::new()
+    $candidateDurationValues = [System.Collections.Generic.List[double]]::new()
     foreach ($directoryName in @($manifest.eval_directories)) {
         $metadataPath = Join-Path $workspacePath "$($manifest.grader_directory)\$directoryName.json"
         $metadata = [System.IO.File]::ReadAllText($metadataPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
@@ -376,6 +428,11 @@ function Invoke-Validate {
             $paired.total += [int]$baselineRecord.total
             $paired.baseline_response_chars += [int]$baselineRecord.response_chars
             $paired.candidate_response_chars += [int]$candidateRecord.response_chars
+            if ($baselineRecord.duration_state -eq 'available' -and $candidateRecord.duration_state -eq 'available') {
+                $paired.duration_complete_pairs++
+                $baselineDurationValues.Add([double]$baselineRecord.duration_ms)
+                $candidateDurationValues.Add([double]$candidateRecord.duration_ms)
+            }
             if ([int]$baselineRecord.passed -gt [int]$candidateRecord.passed) {
                 $paired.baseline_wins++
             } elseif ([int]$candidateRecord.passed -gt [int]$baselineRecord.passed) {
@@ -389,6 +446,8 @@ function Invoke-Validate {
     $paired.candidate_pass_rate = if ($paired.total -gt 0) { [Math]::Round($paired.candidate_passed / $paired.total, 4) } else { $null }
     $paired.baseline_average_response_chars = if ($paired.complete_pairs -gt 0) { [Math]::Round($paired.baseline_response_chars / $paired.complete_pairs, 1) } else { $null }
     $paired.candidate_average_response_chars = if ($paired.complete_pairs -gt 0) { [Math]::Round($paired.candidate_response_chars / $paired.complete_pairs, 1) } else { $null }
+    $paired.baseline_median_duration_ms = Get-Median -Values @($baselineDurationValues)
+    $paired.candidate_median_duration_ms = Get-Median -Values @($candidateDurationValues)
 
     $report = [ordered]@{
         schema_version = 2
@@ -407,12 +466,14 @@ function Invoke-Validate {
     $lines.Add('')
     $lines.Add('本文只报告结构、运行完整性与聚合分数，不能替代正式评测页面和人工复核。')
     $lines.Add('')
-    $lines.Add('| 配置 | 有效返回 | 缺失 | 无效 | 通过 | 总计 | 通过率 | 平均字符 |')
-    $lines.Add('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |')
+    $lines.Add('| 配置 | 有效返回 | 有效率 | 缺失 | 无效 | 通过 | 总计 | 通过率 | 平均字符 | 时长样本 | 中位时长(ms) |')
+    $lines.Add('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |')
     foreach ($row in $summaryRows) {
         $rate = if ($null -eq $row.pass_rate) { 'n/a' } else { '{0:P1}' -f $row.pass_rate }
         $chars = if ($null -eq $row.average_response_chars) { 'n/a' } else { [string]$row.average_response_chars }
-        $lines.Add("| $($row.configuration) | $($row.complete_runs)/$($row.expected_runs) | $($row.missing_runs) | $($row.invalid_runs) | $($row.passed) | $($row.total) | $rate | $chars |")
+        $validRate = if ($null -eq $row.valid_return_rate) { 'n/a' } else { '{0:P1}' -f $row.valid_return_rate }
+        $duration = if ($null -eq $row.median_duration_ms) { 'unavailable' } else { [string]$row.median_duration_ms }
+        $lines.Add("| $($row.configuration) | $($row.complete_runs)/$($row.expected_runs) | $validRate | $($row.missing_runs) | $($row.invalid_runs) | $($row.passed) | $($row.total) | $rate | $chars | $($row.duration_samples) | $duration |")
     }
     $lines.Add('')
     $lines.Add('## 共同有效样本')
@@ -423,6 +484,9 @@ function Invoke-Validate {
     $lines.Add("- 得分：baseline $($paired.baseline_passed)/$($paired.total)，candidate $($paired.candidate_passed)/$($paired.total)")
     $lines.Add("- 用例胜负：baseline $($paired.baseline_wins) 胜，candidate $($paired.candidate_wins) 胜，$($paired.ties) 平")
     $lines.Add("- 平均字符：baseline $($paired.baseline_average_response_chars)，candidate $($paired.candidate_average_response_chars)")
+    $baselineDuration = if ($null -eq $paired.baseline_median_duration_ms) { 'unavailable' } else { [string]$paired.baseline_median_duration_ms }
+    $candidateDuration = if ($null -eq $paired.candidate_median_duration_ms) { 'unavailable' } else { [string]$paired.candidate_median_duration_ms }
+    $lines.Add("- 配对中位时长：baseline $baselineDuration ms，candidate $candidateDuration ms；可比较 $($paired.duration_complete_pairs) 对")
     [System.IO.File]::WriteAllLines((Join-Path $workspacePath 'benchmark-lite.md'), $lines, $utf8)
 
     $problemCount = @($records | Where-Object { $_.state -ne 'complete' }).Count

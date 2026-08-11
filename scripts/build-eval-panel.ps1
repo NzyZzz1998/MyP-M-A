@@ -1,5 +1,14 @@
 param(
     [string]$PanelFile = 'evals\release-panel.json',
+    [string]$CoreFile = 'evals\release-panel-core.json',
+    [string]$ContractRegistryFile = 'evals\contract-registry.json',
+    [string]$BaselineRef,
+    [string]$CandidateRef,
+    [string[]]$ChangedFiles = @(),
+    [string[]]$AffectedContracts = @(),
+    [string]$NoBehaviorChangeFile,
+    [int]$MaxCases = 26,
+    [string]$SnapshotPath,
     [Parameter(Mandatory = $true)]
     [string]$OutputPath
 )
@@ -7,37 +16,313 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $utf8 = [System.Text.UTF8Encoding]::new($false)
+$routeOrder = @('/review', '/idea', '/prd', '/acceptance', '/prompt')
 
 function Resolve-RepoFile {
-    param([Parameter(Mandatory = $true)][string]$Path)
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [switch]$AllowMissing
+    )
 
     $candidate = if ([System.IO.Path]::IsPathRooted($Path)) { $Path } else { Join-Path $root $Path }
+    if ($AllowMissing) { return [System.IO.Path]::GetFullPath($candidate) }
     return (Resolve-Path -LiteralPath $candidate -ErrorAction Stop).Path
 }
 
-$panelPath = Resolve-RepoFile -Path $PanelFile
-$panel = [System.IO.File]::ReadAllText($panelPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
-$stable = [System.IO.File]::ReadAllText((Join-Path $root 'evals\evals.json'), [System.Text.Encoding]::UTF8) | ConvertFrom-Json
-$challenge = [System.IO.File]::ReadAllText((Join-Path $root 'evals\challenge-evals.json'), [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+function Read-JsonFile {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    return ([System.IO.File]::ReadAllText((Resolve-RepoFile -Path $Path), [System.Text.Encoding]::UTF8) | ConvertFrom-Json)
+}
 
-$seen = @{}
-$selected = [System.Collections.Generic.List[object]]::new()
-foreach ($entry in @($panel.selection)) {
-    $key = "$($entry.suite):$($entry.id)"
-    if ($seen.ContainsKey($key)) {
-        throw "Duplicate release-panel entry: $key"
+function Write-JsonFile {
+    param(
+        [Parameter(Mandatory = $true)]$Value,
+        [Parameter(Mandatory = $true)][string]$Path
+    )
+
+    $fullPath = Resolve-RepoFile -Path $Path -AllowMissing
+    $directory = Split-Path -Parent $fullPath
+    if ($directory) { New-Item -ItemType Directory -Path $directory -Force | Out-Null }
+    [System.IO.File]::WriteAllText($fullPath, ($Value | ConvertTo-Json -Depth 40) + [Environment]::NewLine, $utf8)
+    return $fullPath
+}
+
+function Normalize-RelativePath {
+    param([string]$Path)
+    if ([string]::IsNullOrWhiteSpace($Path)) { return '' }
+    return (($Path -replace '\\', '/') -replace '^\./', '')
+}
+
+function Get-SelectionKey {
+    param($Entry)
+    return "$([string]$Entry.suite):$([string]$Entry.id)"
+}
+
+function Convert-EvalId {
+    param([string]$Suite, $Id)
+    if ($Suite -eq 'stable' -and [string]$Id -match '^\d+$') { return [int]$Id }
+    return [string]$Id
+}
+
+function New-SelectionEntry {
+    param(
+        [string]$Suite,
+        $Id,
+        [string]$Category,
+        [string]$Route,
+        [string]$ContractId,
+        [string]$Reason
+    )
+
+    return [ordered]@{
+        suite = $Suite
+        id = Convert-EvalId -Suite $Suite -Id $Id
+        category = $Category
+        route = $Route
+        contract_id = $ContractId
+        reason = $Reason
     }
-    $seen[$key] = $true
+}
 
+function Add-UniqueSelection {
+    param(
+        [System.Collections.Generic.List[object]]$Target,
+        [hashtable]$Seen,
+        $Entry
+    )
+
+    $key = Get-SelectionKey -Entry $Entry
+    if ($Seen.ContainsKey($key)) { return $false }
+    $Seen[$key] = $true
+    $Target.Add($Entry)
+    return $true
+}
+
+function Get-ContractEvalEntries {
+    param($Contract, [string]$ReasonPrefix)
+
+    $entries = [System.Collections.Generic.List[object]]::new()
+    $route = if (@($Contract.routes).Count -gt 0) { [string]$Contract.routes[0] } else { '' }
+    foreach ($id in @($Contract.stable_evals)) {
+        $entries.Add((New-SelectionEntry -Suite 'stable' -Id $id -Category 'delta' -Route $route -ContractId ([string]$Contract.contract_id) -Reason "$ReasonPrefix$($Contract.contract_id)"))
+    }
+    foreach ($id in @($Contract.challenge_evals)) {
+        $entries.Add((New-SelectionEntry -Suite 'challenge' -Id $id -Category 'delta' -Route $route -ContractId ([string]$Contract.contract_id) -Reason "$ReasonPrefix$($Contract.contract_id)"))
+    }
+    return @($entries)
+}
+
+function Test-BehaviorPath {
+    param([string]$Path)
+    $normalized = Normalize-RelativePath -Path $Path
+    return ($normalized -eq 'SKILL.md' -or $normalized.StartsWith('references/') -or $normalized.StartsWith('templates/'))
+}
+
+function Test-Waiver {
+    param(
+        [object[]]$Waivers,
+        [string]$SourceFile,
+        [string]$ContractId
+    )
+
+    foreach ($waiver in @($Waivers)) {
+        $reason = [string]$waiver.reason
+        if ([string]::IsNullOrWhiteSpace($reason)) { continue }
+        if ($SourceFile -and (Normalize-RelativePath -Path ([string]$waiver.source_file)) -eq (Normalize-RelativePath -Path $SourceFile)) { return $true }
+        if ($ContractId -and [string]$waiver.contract_id -eq $ContractId) { return $true }
+    }
+    return $false
+}
+
+function Get-SortedSelection {
+    param([object[]]$Entries)
+    return @($Entries | Sort-Object `
+        @{ Expression = { if ([string]$_.suite -eq 'stable') { 0 } else { 1 } } }, `
+        @{ Expression = { if ([string]$_.id -match '^\d+$') { [int]$_.id } else { [int]::MaxValue } } }, `
+        @{ Expression = { [string]$_.id } }, `
+        @{ Expression = { [string]$_.contract_id } })
+}
+
+$stable = Read-JsonFile -Path 'evals\evals.json'
+$challenge = Read-JsonFile -Path 'evals\challenge-evals.json'
+$core = Read-JsonFile -Path $CoreFile
+$registry = Read-JsonFile -Path $ContractRegistryFile
+$contracts = @($registry.contracts)
+$contractById = @{}
+foreach ($contract in $contracts) {
+    $id = [string]$contract.contract_id
+    if ($contractById.ContainsKey($id)) { throw "Duplicate contract id: $id" }
+    $contractById[$id] = $contract
+}
+
+$hasDynamicInput = (-not [string]::IsNullOrWhiteSpace($BaselineRef)) -or
+    (-not [string]::IsNullOrWhiteSpace($CandidateRef)) -or
+    @($ChangedFiles).Count -gt 0 -or
+    @($AffectedContracts).Count -gt 0 -or
+    (-not [string]::IsNullOrWhiteSpace($NoBehaviorChangeFile))
+
+if (-not $hasDynamicInput) {
+    $panel = Read-JsonFile -Path $PanelFile
+    $selection = @($panel.selection)
+    if ($selection.Count -eq 0) { throw 'Release panel selection is empty' }
+    $snapshot = $panel
+} else {
+    if ([string]::IsNullOrWhiteSpace($BaselineRef)) { $BaselineRef = 'working-tree-baseline' }
+    if ([string]::IsNullOrWhiteSpace($CandidateRef)) { $CandidateRef = 'working-tree-candidate' }
+
+    $changed = [System.Collections.Generic.List[string]]::new()
+    if ($BaselineRef -ne 'working-tree-baseline' -and $CandidateRef -ne 'working-tree-candidate') {
+        $range = "$BaselineRef..$CandidateRef"
+        $gitOutput = @(& git -C $root diff --name-only --diff-filter=ACMRT $range 2>&1)
+        if ($LASTEXITCODE -ne 0) { throw "Cannot resolve git diff $range`: $($gitOutput -join ' ')" }
+        foreach ($path in $gitOutput) {
+            $normalized = Normalize-RelativePath -Path ([string]$path)
+            if ($normalized) { $changed.Add($normalized) }
+        }
+    }
+    foreach ($path in @($ChangedFiles)) {
+        $normalized = Normalize-RelativePath -Path ([string]$path)
+        if ($normalized) { $changed.Add($normalized) }
+    }
+    $changedFilesFinal = @($changed | Sort-Object -Unique)
+
+    $waivers = @()
+    if (-not [string]::IsNullOrWhiteSpace($NoBehaviorChangeFile)) {
+        $waiverData = Read-JsonFile -Path $NoBehaviorChangeFile
+        $waivers = @($waiverData.entries)
+    }
+
+    $affectedIds = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    $unmappedFiles = [System.Collections.Generic.List[string]]::new()
+    foreach ($path in $changedFilesFinal) {
+        if (-not (Test-BehaviorPath -Path $path)) { continue }
+        $matches = @($contracts | Where-Object { (Normalize-RelativePath -Path ([string]$_.source_file)) -eq $path })
+        if ($matches.Count -eq 0) {
+            if (-not (Test-Waiver -Waivers $waivers -SourceFile $path -ContractId '')) {
+                $unmappedFiles.Add($path)
+            }
+            continue
+        }
+        foreach ($contract in $matches) { [void]$affectedIds.Add([string]$contract.contract_id) }
+    }
+    foreach ($id in @($AffectedContracts)) {
+        if (-not $contractById.ContainsKey([string]$id)) { throw "Unknown affected contract: $id" }
+        [void]$affectedIds.Add([string]$id)
+    }
+    if ($unmappedFiles.Count -gt 0) {
+        throw "Behavior files have no contract mapping: $($unmappedFiles -join ', '). Add contract mappings or an audited no_behavior_change reason."
+    }
+
+    $affected = @($contracts | Where-Object { $affectedIds.Contains([string]$_.contract_id) } | Sort-Object contract_id)
+    foreach ($contract in $affected) {
+        $mappedCount = @($contract.stable_evals).Count + @($contract.challenge_evals).Count
+        if ($mappedCount -eq 0 -and -not (Test-Waiver -Waivers $waivers -SourceFile ([string]$contract.source_file) -ContractId ([string]$contract.contract_id))) {
+            throw "Affected contract has no eval mapping: $($contract.contract_id). Add an eval or an audited no_behavior_change reason."
+        }
+    }
+
+    $seen = @{}
+    $coreEntries = [System.Collections.Generic.List[object]]::new()
+    foreach ($entry in @($core.selection)) {
+        if (-not (Add-UniqueSelection -Target $coreEntries -Seen $seen -Entry $entry)) {
+            throw "Duplicate core selection: $(Get-SelectionKey -Entry $entry)"
+        }
+    }
+
+    $deltaEntries = [System.Collections.Generic.List[object]]::new()
+    $deltaCandidates = [System.Collections.Generic.List[object]]::new()
+    foreach ($contract in $affected) {
+        foreach ($entry in @(Get-ContractEvalEntries -Contract $contract -ReasonPrefix 'contract-delta:')) { $deltaCandidates.Add($entry) }
+    }
+    foreach ($entry in @(Get-SortedSelection -Entries @($deltaCandidates))) {
+        [void](Add-UniqueSelection -Target $deltaEntries -Seen $seen -Entry $entry)
+    }
+
+    $affectedRoutes = @($affected | ForEach-Object { @($_.routes) } | Sort-Object -Unique)
+    $controlEntries = [System.Collections.Generic.List[object]]::new()
+    foreach ($route in $routeOrder) {
+        if ($controlEntries.Count -ge 5) { break }
+        if ($route -notin $affectedRoutes) { continue }
+        $controlContracts = @($contracts | Where-Object {
+            ([string]$_.contract_id -notin @($affected.contract_id | ForEach-Object { [string]$_ })) -and
+            ($route -in @($_.routes))
+        } | Sort-Object contract_id)
+        $added = $false
+        foreach ($contract in $controlContracts) {
+            foreach ($candidate in @(Get-SortedSelection -Entries @(Get-ContractEvalEntries -Contract $contract -ReasonPrefix "adjacent-control:$route`:"))) {
+                $candidate.category = 'control'
+                $candidate.route = $route
+                if (Add-UniqueSelection -Target $controlEntries -Seen $seen -Entry $candidate) {
+                    $added = $true
+                    break
+                }
+            }
+            if ($added) { break }
+        }
+    }
+
+    $mode = 'release-panel'
+    $upgradeReason = $null
+    $selection = @($coreEntries) + @($deltaEntries) + @($controlEntries)
+    if ($selection.Count -gt $MaxCases) {
+        $mode = 'affected-route-full-regression'
+        $upgradeReason = "Selection count $($selection.Count) exceeds max $MaxCases; affected routes are upgraded without truncating critical contracts."
+        $seen = @{}
+        $fullEntries = [System.Collections.Generic.List[object]]::new()
+        foreach ($entry in @($core.selection)) { [void](Add-UniqueSelection -Target $fullEntries -Seen $seen -Entry $entry) }
+        $routeContracts = @($contracts | Where-Object {
+            $contractRoutes = @($_.routes)
+            @($contractRoutes | Where-Object { $_ -in $affectedRoutes }).Count -gt 0
+        } | Sort-Object contract_id)
+        $fullCandidates = [System.Collections.Generic.List[object]]::new()
+        foreach ($contract in $routeContracts) {
+            foreach ($entry in @(Get-ContractEvalEntries -Contract $contract -ReasonPrefix 'affected-route-full-regression:')) { $fullCandidates.Add($entry) }
+        }
+        foreach ($entry in @(Get-SortedSelection -Entries @($fullCandidates))) { [void](Add-UniqueSelection -Target $fullEntries -Seen $seen -Entry $entry) }
+        $selection = @($fullEntries)
+        $controlEntries = [System.Collections.Generic.List[object]]::new()
+    }
+
+    $snapshot = [ordered]@{
+        schema_version = 2
+        name = 'MyP-M-A dynamic release panel'
+        purpose = 'Fixed core plus contract delta and adjacent controls; full-regression mode is explicit when the panel limit is exceeded.'
+        baseline_ref = $BaselineRef
+        candidate_ref = $CandidateRef
+        mode = $mode
+        max_cases = $MaxCases
+        changed_files = @($changedFilesFinal)
+        affected_contracts = @($affected | ForEach-Object { [string]$_.contract_id })
+        affected_routes = @($affectedRoutes)
+        unmapped_files = @()
+        no_behavior_change = @($waivers)
+        upgrade_reason = $upgradeReason
+        selection_groups = [ordered]@{
+            core = @($coreEntries)
+            delta = @($deltaEntries)
+            controls = @($controlEntries)
+        }
+        selection = @($selection)
+    }
+    if (-not [string]::IsNullOrWhiteSpace($SnapshotPath)) {
+        $writtenSnapshot = Write-JsonFile -Value $snapshot -Path $SnapshotPath
+        Write-Host "Release panel snapshot created: $writtenSnapshot"
+    }
+}
+
+$seenCases = @{}
+$selected = [System.Collections.Generic.List[object]]::new()
+foreach ($entry in @($snapshot.selection)) {
+    $key = Get-SelectionKey -Entry $entry
+    if ($seenCases.ContainsKey($key)) { throw "Duplicate release-panel entry: $key" }
+    $seenCases[$key] = $true
     $source = switch ([string]$entry.suite) {
         'stable' { @($stable.evals) }
         'challenge' { @($challenge.evals) }
         default { throw "Unsupported release-panel suite: $($entry.suite)" }
     }
     $match = @($source | Where-Object { [string]$_.id -eq [string]$entry.id })
-    if ($match.Count -ne 1) {
-        throw "Release-panel case not found or ambiguous: $key"
-    }
+    if ($match.Count -ne 1) { throw "Release-panel case not found or ambiguous: $key" }
     $selected.Add($match[0])
 }
 
@@ -45,20 +330,13 @@ $result = [ordered]@{
     skill_name = 'mypm'
     display_name = 'MyP-M-A'
     version = [string]$stable.version
-    purpose = [string]$panel.purpose
+    purpose = [string]$snapshot.purpose
+    panel_mode = [string]$snapshot.mode
+    baseline_ref = [string]$snapshot.baseline_ref
+    candidate_ref = [string]$snapshot.candidate_ref
     evals = @($selected)
 }
 
-$outputFullPath = [System.IO.Path]::GetFullPath($OutputPath)
-$outputDirectory = Split-Path -Parent $outputFullPath
-if ($outputDirectory) {
-    New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
-}
-[System.IO.File]::WriteAllText(
-    $outputFullPath,
-    ($result | ConvertTo-Json -Depth 30) + [Environment]::NewLine,
-    $utf8
-)
-
-Write-Host "Release panel created: $outputFullPath"
-Write-Host "Cases=$($selected.Count) stable=$(@($panel.selection | Where-Object suite -eq 'stable').Count) challenge=$(@($panel.selection | Where-Object suite -eq 'challenge').Count)"
+$writtenOutput = Write-JsonFile -Value $result -Path $OutputPath
+Write-Host "Release panel created: $writtenOutput"
+Write-Host "Mode=$($snapshot.mode) cases=$($selected.Count) stable=$(@($snapshot.selection | Where-Object suite -eq 'stable').Count) challenge=$(@($snapshot.selection | Where-Object suite -eq 'challenge').Count) affected_contracts=$(@($snapshot.affected_contracts).Count)"

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "baseline_version": "0.33.0",
+  "branch": "main",
+  "candidate_sha": "26e2e66491280470c1876d29544c826aa626d6d5",
+  "source_files_clean_against_candidate": true,
+  "input_hashes": {
+    "skill_description_sha256": "cb93218e66e402248ce4085bcd8566f3f949d179a97d395eeaaf89ee03fe9109",
+    "agents_openai_sha256": "c1dd22343a2298aa20c1f431e7850e7aa9b40549be1b52e045c796d9a2409c0e",
+    "trigger_cases_sha256": "f703e177064ab2712c3a6f0c10abe0fb3db5fd304d04bf16174471cf10b0e201",
+    "trigger_evals_file_sha256": "28fed86d4dbafc8c28718a6e443f46ae0c34ac60178b961ca9287e2c5081f425",
+    "input_bundle_sha256": "7d73bed4e0d3ba8f4663f8eeeb7320315bdf6d5bd103d7483aab5da3917acd25"
+  },
+  "case_counts": {
+    "total": 34,
+    "positive": 17,
+    "negative": 17
+  },
+  "runs": [
+    {
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "medium",
+      "valid_count": 34,
+      "correct_count": 34,
+      "incorrect_ids": [],
+      "retry_count": 0,
+      "status": "passed"
+    },
+    {
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "medium",
+      "valid_count": 34,
+      "correct_count": 34,
+      "incorrect_ids": [],
+      "retry_count": 0,
+      "status": "passed"
+    }
+  ],
+  "evaluated_at": "2026-08-10T21:39:21.4956861+08:00",
+  "status": "passed",
+  "raw_answers_retained": false,
+  "evidence_summary": "Sol medium 与 Terra medium 分别对同一份去标签输入独立分类；两次均返回 34 个有效布尔结果，与 17 条正例和 17 条反例逐项一致。"
+}

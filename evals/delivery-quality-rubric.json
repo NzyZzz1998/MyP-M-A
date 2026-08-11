@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "name": "MyP-M-A 交付质量七维评测",
+  "aggregate_score": null,
+  "dimensions": [
+    {
+      "id": "correctness",
+      "label": "正确性",
+      "kind": "formal_boolean_gate",
+      "source": "grading.json expectations",
+      "missing": "invalid",
+      "rule": "沿用正式行为断言；任一关键合同回退都不能被其他维度抵消。"
+    },
+    {
+      "id": "decision_clarity",
+      "label": "决策清晰度",
+      "kind": "paired_blind",
+      "source": "anonymous pairwise grader",
+      "missing": "observation-unavailable",
+      "rule": "比较结论、依据、边界和下一步是否清楚，输出基线胜、候选胜或平，并给出样本内证据。"
+    },
+    {
+      "id": "redundancy",
+      "label": "重复度",
+      "kind": "paired_blind",
+      "source": "anonymous pairwise grader",
+      "missing": "observation-unavailable",
+      "rule": "比较是否存在重复结论、重复规则或无助于决策的展开；更少无效重复者胜。"
+    },
+    {
+      "id": "actionability",
+      "label": "可执行性",
+      "kind": "paired_blind",
+      "source": "anonymous pairwise grader",
+      "missing": "observation-unavailable",
+      "rule": "比较输出是否给出可直接执行、验证或决策的动作，并保持范围和停止条件。"
+    },
+    {
+      "id": "response_chars",
+      "label": "字符数",
+      "kind": "measured",
+      "source": "response.md UTF-16 code units",
+      "missing": "invalid",
+      "rule": "只报告基线、候选和变化率；字符更少或更多都不自动代表质量更好。"
+    },
+    {
+      "id": "duration_ms",
+      "label": "完成时长",
+      "kind": "measured_optional",
+      "source": "run execution.json duration_ms",
+      "missing": "unavailable",
+      "rule": "只有同一配对两侧都有可信 duration_ms 才比较；缺失时明确标记 unavailable。"
+    },
+    {
+      "id": "valid_return_rate",
+      "label": "有效返回率",
+      "kind": "measured",
+      "source": "response.md and grading.json structural validation",
+      "missing": "invalid",
+      "rule": "有效返回必须同时具备可读回答和结构有效的逐项评分；缺失不计作能力失败，但必须单独报告。"
+    }
+  ],
+  "paired_blind_contract": {
+    "dimensions": [
+      "decision_clarity",
+      "redundancy",
+      "actionability"
+    ],
+    "allowed_winners": [
+      "A",
+      "B",
+      "tie"
+    ],
+    "evidence_language": "zh-CN",
+    "version_mapping": "private",
+    "cross_sample_evidence": "forbidden"
+  },
+  "sample_policy": {
+    "minimum_pairs": 8,
+    "maximum_pairs": 10,
+    "required_entries": [
+      "idea",
+      "review",
+      "prd",
+      "acceptance",
+      "prompt"
+    ],
+    "minimum_complex_scenarios": 2,
+    "selection_rule": "优先选择正式断言同分或接近同分样本；同时保留控制项和不利候选样本，不得只挑候选获胜样本。"
+  },
+  "cost_boundary": {
+    "response_chars_increase_ratio": 0.15,
+    "median_duration_increase_ratio": 0.25,
+    "failure_condition": "字符数超过阈值或可用的中位时长超过阈值，且决策清晰度与可执行性均没有候选收益。",
+    "duration_unavailable_policy": "只评估字符边界，并把时长结论标记为 unavailable。"
+  },
+  "quality_instability_policy": "配对盲评方向不一致或证据串项时，质量维度降级为观察项；正确性继续作为硬门禁。"
+}

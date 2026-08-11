@@ -1,7 +1,7 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "evals": [
     {
       "id": 1,
@@ -232,9 +232,11 @@
     {
       "id": 16,
       "name": "review_project_architecture_and_idea_candidates",
-      "prompt": "/review 项目路径：E:\\codex\\LetsMakeMoney。请帮我快速熟悉项目，梳理目标、核心路径、模块关系和可迭代问题，不要只列问题。",
+      "prompt": "/review 项目路径：E:\\codex\\LetsMakeMoney。附件是当前项目摘要。请帮我快速熟悉项目，梳理目标、核心路径、模块关系和可迭代问题，不要只列问题。",
       "expected_output": "应作为单入口 /review 处理并自动识别为 project review；先梳理产品定位、目标用户、当前阶段目标和项目脉络，再输出 Mermaid 架构图或模块网络图，最后给关键发现、证据状态、严重度、进入 /idea 的候选点、下一步分流建议和给下一次模型接手的摘要。",
-      "files": [],
+      "files": [
+        "evals/files/review-project-lmm-v04-summary.md"
+      ],
       "expectations": [
         "输出为中文",
         "自动识别为 project review 或项目评审",
@@ -250,9 +252,11 @@
     {
       "id": 17,
       "name": "review_single_entry_auto_route_page_prd_implementation",
-      "prompt": "/review 我给你一张设置页截图、一段 PRD 摘要和一段 debug.log。请你自己判断应该按哪种 review 通路走，并说明为什么，不要让我选择 /review page 或 /review prd。",
+      "prompt": "/review 附件汇总了一张设置页截图、一段 PRD 摘要和一段 debug.log。请你自己判断应该按哪种 review 通路走，并说明为什么，不要让我选择 /review page 或 /review prd。",
       "expected_output": "应坚持单一 /review 入口，自动判断主通路和辅助通路；输出 review 范围、不覆盖范围、对象脉络和可视化图。已有具体现象时把发现列为候选点而非确定需求；未附实际材料时明确候选点为空并给出最小补证，不把材料缺口伪装为需求。",
-      "files": [],
+      "files": [
+        "evals/files/review-settings-evidence-pack.md"
+      ],
       "expectations": [
         "输出为中文",
         "不要求用户选择子命令",
@@ -349,9 +353,11 @@
     {
       "id": 23,
       "name": "review_project_pm_context_and_routing",
-      "prompt": "mypm /review 项目路径：E:\\codex\\LetsMakeMoney。这个项目处于 v0.4 Beta 测试态，请帮我快速接手项目，但不要只做代码结构审查。我要知道产品定位、用户场景、当前阶段目标、架构图、关键风险，以及哪些事项应该直接修、进入 /idea、进入 /prd、进入 /acceptance 或暂不做。",
+      "prompt": "mypm /review 项目路径：E:\\codex\\LetsMakeMoney。附件是当前项目摘要。这个项目处于 v0.4 Beta 测试态，请帮我快速接手项目，但不要只做代码结构审查。我要知道产品定位、用户场景、当前阶段目标、架构图、关键风险，以及哪些事项应该直接修、进入 /idea、进入 /prd、进入 /acceptance 或暂不做。",
       "expected_output": "应作为 MyP-M-A /review project 处理，输出产品定位与用户场景、对象脉络、架构图、工具证据来源、关键发现和下一步分流建议。对发布前或测试态项目，应主动把真实运行、日志、截图、手动验证、发布包等事项分流到 /acceptance；不能只输出工程问题列表。",
-      "files": [],
+      "files": [
+        "evals/files/review-project-lmm-v04-summary.md"
+      ],
       "expectations": [
         "输出为中文",
         "识别为 /review 或 project review",
@@ -1425,6 +1431,27 @@
         "给出至少两个可比较战略选项、主要取舍和推荐方向",
         "没有虚构 TAM、市场份额、企业需求、渠道转化或支付数据",
         "给出与证据强度匹配的最小验证，并将无依据的数值阈值列为执行前待确认"
+      ]
+    },
+    {
+      "id": 85,
+      "name": "review_skill_domain_assembly_without_irrelevant_dimensions",
+      "prompt": "/review 深度复盘一个已有产品经理 Skill。附件汇总了 SKILL.md、references、evals、validator 和最近版本记录。我想知道入口路由、上下文装配与评测门禁是否可靠；没有产品页面、市场数据或业务数据库。请给出可执行的优化方向，不要为了‘全面’补 UI、GTM 或数据库建议。",
+      "expected_output": "应识别为 /review，project 为主通路、implementation 为辅助通路，并在建立 Skill 结构与执行关系图后选择 3～6 个相关根因维度。重点应落在触发与路由、阶段和输出合同、证据与权限、渐进加载与上下文、评测与校验、版本生命周期与回退；明确 UI、GTM 和数据库不适用。发现需区分事实、推断与待确认，给出来源、影响、取舍和一个最有价值的下一交付物，不虚构未运行的评测或验证。",
+      "files": [
+        "evals/files/review-skill-governance-pack.md"
+      ],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "选择 project 为主通路、implementation 为辅助通路或给出语义等价判断",
+        "先建立 Skill 入口、reference 装配、评测、校验和版本治理的关系图或结构图",
+        "明确选择 3～6 个与 Skill 相关的深度维度",
+        "覆盖触发与路由、阶段或输出合同、证据与权限、渐进加载或上下文、评测与校验、生命周期或回退中的至少四类",
+        "明确 UI、GTM 和业务数据库不适用或不展开",
+        "发现区分已确认、推断、待确认或主观判断，并提供可定位来源",
+        "没有把未读取、未运行或过期证据写成已验证事实",
+        "给出必须改、应该改、可延后或不建议做的取舍",
+        "只推荐一个最有价值的下一交付物或行动"
       ]
     }
   ]

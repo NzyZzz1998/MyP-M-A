@@ -7,6 +7,10 @@ $root = Split-Path -Parent $PSScriptRoot
 $errors = [System.Collections.Generic.List[string]]::new()
 $warnings = [System.Collections.Generic.List[string]]::new()
 
+. (Join-Path $PSScriptRoot 'validation\validate-docs.ps1')
+. (Join-Path $PSScriptRoot 'validation\validate-evals.ps1')
+. (Join-Path $PSScriptRoot 'validation\validate-contracts.ps1')
+
 function Add-Error([string]$message) { $errors.Add($message) }
 function Add-Warning([string]$message) { $warnings.Add($message) }
 
@@ -323,8 +327,16 @@ $releasePanelPath = Join-Path $root 'evals\release-panel.json'
 try {
     $releasePanel = [System.IO.File]::ReadAllText($releasePanelPath, $strictUtf8) | ConvertFrom-Json
     $panelEntries = @($releasePanel.selection)
-    if ($panelEntries.Count -ne 13) {
-        Add-Error "Release panel must contain exactly 13 cases: $($panelEntries.Count)"
+    if ([int]$releasePanel.schema_version -ge 2) {
+        $panelMax = if ($releasePanel.max_cases) { [int]$releasePanel.max_cases } else { 26 }
+        if ([string]$releasePanel.mode -eq 'release-panel' -and ($panelEntries.Count -lt 9 -or $panelEntries.Count -gt $panelMax)) {
+            Add-Error "Release panel must contain 9..$panelMax cases in release-panel mode: $($panelEntries.Count)"
+        }
+        if (@($releasePanel.selection_groups.core).Count -ne 9) {
+            Add-Error "Release panel fixed core must contain exactly 9 cases: $(@($releasePanel.selection_groups.core).Count)"
+        }
+    } elseif ($panelEntries.Count -ne 13) {
+        Add-Error "Legacy release panel must contain exactly 13 cases: $($panelEntries.Count)"
     }
     $panelKeys = @{}
     foreach ($entry in $panelEntries) {
@@ -355,6 +367,31 @@ try {
     Add-Error "Cannot parse evals/release-panel.json: $($_.Exception.Message)"
 }
 
+$deliveryQualityPath = Join-Path $root 'evals\delivery-quality-rubric.json'
+try {
+    $deliveryQuality = [System.IO.File]::ReadAllText($deliveryQualityPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+    if ($null -ne $deliveryQuality.aggregate_score) {
+        Add-Error 'Delivery quality rubric must not define an aggregate score'
+    }
+    $qualityIds = @($deliveryQuality.dimensions | ForEach-Object { [string]$_.id })
+    $expectedQualityIds = @('correctness', 'decision_clarity', 'redundancy', 'actionability', 'response_chars', 'duration_ms', 'valid_return_rate')
+    if ($qualityIds.Count -ne $expectedQualityIds.Count) {
+        Add-Error "Delivery quality rubric dimension count mismatch: $($qualityIds.Count)"
+    }
+    foreach ($qualityId in $expectedQualityIds) {
+        if ($qualityId -notin $qualityIds) { Add-Error "Missing delivery quality dimension: $qualityId" }
+    }
+    if ([string]$deliveryQuality.dimensions[5].missing -ne 'unavailable') {
+        Add-Error 'Delivery quality duration must use unavailable for missing data'
+    }
+    if ([double]$deliveryQuality.cost_boundary.response_chars_increase_ratio -ne 0.15 -or
+        [double]$deliveryQuality.cost_boundary.median_duration_increase_ratio -ne 0.25) {
+        Add-Error 'Delivery quality cost thresholds must remain 0.15 and 0.25'
+    }
+} catch {
+    Add-Error "Cannot validate evals/delivery-quality-rubric.json: $($_.Exception.Message)"
+}
+
 foreach ($qualityFile in @('evals\README.md', 'scripts\regression-workspace.ps1')) {
     if (-not (Test-Path -LiteralPath (Join-Path $root $qualityFile) -PathType Leaf)) {
         Add-Error "Missing v0.23 quality file: $qualityFile"
@@ -364,9 +401,12 @@ foreach ($qualityFile in @('evals\README.md', 'scripts\regression-workspace.ps1'
 $requiredEvaluationScripts = @(
     'scripts\regression-workspace.ps1',
     'scripts\grading-batches.ps1',
+    'scripts\delivery-quality-batches.ps1',
     'scripts\test-evaluation-pipeline.ps1',
+    'scripts\test-delivery-quality.ps1',
     'scripts\generate-eval-viewer.ps1',
-    'scripts\build-eval-panel.ps1'
+    'scripts\build-eval-panel.ps1',
+    'scripts\test-skill-validation.ps1'
 )
 foreach ($relativeScriptPath in $requiredEvaluationScripts) {
     $scriptPath = Join-Path $root $relativeScriptPath
@@ -385,6 +425,7 @@ foreach ($relativeScriptPath in $requiredEvaluationScripts) {
 if ($Strict) {
     try {
         & (Join-Path $root 'scripts\test-evaluation-pipeline.ps1') | Out-Host
+        & (Join-Path $root 'scripts\test-delivery-quality.ps1') | Out-Host
     } catch {
         Add-Error "Evaluation pipeline self-test failed: $($_.Exception.Message)"
     }
@@ -637,6 +678,9 @@ if ($null -ne $evalData) {
     if (-not (@($challengeData.evals.id) -contains 'CH-21')) {
         Add-Error 'Missing Strategy/GTM challenge eval: CH-21'
     }
+    if (-not (@($evalData.evals.id) -contains 85)) {
+        Add-Error 'Missing Deep Review domain assembly stable eval: 85'
+    }
 }
 $referenceRegex = [regex]'`((?:references|templates)/[^`]+\.md)`'
 foreach ($file in $runtimeFiles) {
@@ -661,6 +705,29 @@ foreach ($template in Get-ChildItem (Join-Path $root 'templates') -File -Filter 
     }
 }
 
+# M1 keeps the legacy checks above and runs the modular validators in parallel.
+$legacyErrorCount = $errors.Count
+$legacyWarningCount = $warnings.Count
+$modularResults = [ordered]@{
+    docs = Invoke-MypmDocsValidation -Root $root
+    evals = Invoke-MypmEvalsValidation -Root $root
+    contracts = Invoke-MypmContractsValidation -Root $root
+}
+$modularErrorCount = 0
+$modularWarningCount = 0
+foreach ($moduleName in $modularResults.Keys) {
+    foreach ($message in @($modularResults[$moduleName].Errors)) { $modularErrorCount++; Add-Error "Modular $moduleName validation: $message" }
+    foreach ($message in @($modularResults[$moduleName].Warnings)) { $modularWarningCount++; Add-Warning "Modular $moduleName validation: $message" }
+}
+
+if ($Strict) {
+    try {
+        & (Join-Path $root 'scripts\test-skill-validation.ps1') | Out-Host
+    } catch {
+        Add-Error "Skill validation fixture test failed: $($_.Exception.Message)"
+    }
+}
+
 if ($Strict -and $warnings.Count -gt 0) {
     foreach ($warning in $warnings) { Add-Error $warning }
 }
@@ -671,5 +738,5 @@ if ($errors.Count -gt 0) {
     exit 1
 }
 
-Write-Host "MyP-M-A static validation passed: version=$skillVersion skill_chars=$($skill.Length)/$skillCharBudget evals=$(@($evalData.evals).Count) challenges=$(@($challengeData.evals).Count) triggers=$(@($triggerData).Count) files=$($textFiles.Count)"
+Write-Host "MyP-M-A static validation passed: version=$skillVersion skill_chars=$($skill.Length)/$skillCharBudget evals=$(@($evalData.evals).Count) challenges=$(@($challengeData.evals).Count) triggers=$(@($triggerData).Count) files=$($textFiles.Count) legacy_errors=$legacyErrorCount legacy_warnings=$legacyWarningCount modular_errors=$modularErrorCount modular_warnings=$modularWarningCount"
 exit 0

@@ -27,11 +27,26 @@ MyP-M-A 使用两套互补评测，不混合计算总分。
 
 ## 发布面板与执行生命周期
 
-`release-panel.json` 引用稳定集和挑战集中的 13 条代表性用例，用于候选版快速门禁，不复制题目或评分点，也不替代全量回归。生成可执行面板：
+`release-panel-core.json` 固定 9 条长期核心；`release-panel.json` 保存当前候选的核心、合同差量和相邻控制快照。动态面板默认最多 26 条，超过上限时升级为受影响入口全量回归，不静默截断 critical 合同。两者都不复制题目或评分点，也不替代稳定集和挑战集全量回归。
+
+只执行当前快照：
 
 ```powershell
 .\scripts\build-eval-panel.ps1 -OutputPath E:\codex\skill-evals\mypm-release-panel.json
 ```
+
+按 Git 差异和显式合同生成候选快照：
+
+```powershell
+.\scripts\build-eval-panel.ps1 `
+  -BaselineRef <baseline-ref> `
+  -CandidateRef <candidate-ref> `
+  -AffectedContracts acceptance-explicit-inheritance,prd-async-idempotency `
+  -SnapshotPath E:\codex\skill-evals\mypm-panel-snapshot.json `
+  -OutputPath E:\codex\skill-evals\mypm-release-panel.json
+```
+
+行为文件没有合同映射时生成失败；确属无行为变化时，使用独立 JSON 记录 `source_file` 或 `contract_id` 与非空 `reason`，再通过 `-NoBehaviorChangeFile` 提供。`contract-registry.json` 是合同来源、入口、风险与评测映射的结构化事实源。
 
 运行时默认最大并发 3；每个子 Agent 最多处理 5 条相互独立的用例，完成一批立即关闭。单批等待上限 5 分钟；超时只重试缺失项，不重跑已落盘回答。执行完成率、共同有效样本得分和输出长度分开报告。入口、常驻合同或证据门禁变化时仍应跑稳定集与挑战集全量 A/B；面板只承担快速反馈。
 
@@ -91,6 +106,35 @@ MyP-M-A 使用两套互补评测，不混合计算总分。
 ```
 
 Viewer 展示提示词、新旧回答、逐条断言、证据和修复前归档；轻量汇总不能代替人工复核。
+
+## 七维交付质量评测
+
+正式布尔断言只回答“合同是否满足”，不能单独说明输出是否清晰、重复或便于执行。v0.34 增加 `evals/delivery-quality-rubric.json`，七个维度必须分开报告：
+
+1. 正确性：沿用 `grading.json` 的正式布尔断言，是硬门禁。
+2. 决策清晰度、重复度、可执行性：使用隐藏 A/B 映射的逐样本配对盲评。
+3. 字符数：机械统计，只报告变化，不把长短直接解释成质量。
+4. 完成时长：可选读取每个运行目录的 `execution.json`；格式为 `{ "duration_ms": 1234 }`。缺失时写 `unavailable`，不能填 0。
+5. 有效返回率：回答和逐项评分都通过结构校验才算有效；缺失单独报告，不伪装成能力失败。
+
+质量面板必须冻结 8～10 对样本，覆盖五入口和至少两个复杂场景，不得只选择候选获胜样本。准备匿名批次：
+
+```powershell
+.\scripts\delivery-quality-batches.ps1 `
+  -Action Prepare `
+  -Workspace D:\path\to\quality-workspace `
+  -BatchSize 4
+```
+
+评分模型只能读取 `_quality-batches/batch-*-input.json`，不得读取 `_private/mapping.json`。结果按 `batch-*-output.json` 落盘后执行：
+
+```powershell
+.\scripts\delivery-quality-batches.ps1 `
+  -Action Apply `
+  -Workspace D:\path\to\quality-workspace
+```
+
+生成的 `quality-report.json` 不包含综合质量总分。字符增加超过 15% 或可比较的中位时长增加超过 25%，且清晰度、可执行性均无候选收益时，该批次不通过。配对盲评不稳定时只把三个体验维度降级为观察项，正确性门禁保持不变。
 
 ## OpenCodeReview 定向覆盖
 

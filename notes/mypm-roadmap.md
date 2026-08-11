@@ -12,10 +12,25 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.33 已完成完整跨模型 A/B、关键合同修复和最终 Sol 结构化复验，达到 Stable 并同步远端；当前远端稳定基线为 v0.33。
-<!-- project-status: version=0.33.0; state=remote-synced -->
+当前阶段判断：v0.34 已完成 M0～M5，独立验收经一次 PARTIAL 修正后由 Sol/Terra medium 共同 PASS，并由用户批准晋升为本地 Stable；远端稳定基线仍为 v0.33。
+<!-- project-status: version=0.34.0; state=local-committed -->
 
 ## 当前稳定版本（本地）
+
+### R2.24 v0.34 入口级上下文与评测门禁治理
+
+状态：Stable，M0～M5 与独立 `/acceptance` 已通过并完成本地提交；尚未推送、打 tag 或创建 Release
+
+- 事实源：`notes/v0.34-governance-prd.md`、`notes/dev_plan_v0.34.md`、`notes/progress_v0.34.md`。
+- 主线：五入口上下文预算、触发新鲜度、固定核心 + 本版差量面板、validator 模块化和文档事实源治理。
+- 当前成果：合同注册表、9 条固定核心、动态差量/控制面板、v0.33 回放和双轨 validator 已通过；五入口 reference 治理完成，四个重入口正式负载最终平均下降 `33.11%`。
+- 行为证据：`/idea` Terra `92/106 -> 99/106`，`/prd` Sol `114/120 -> 120/120`；异步状态回退修复后关键候选样本双模型 `9/9`。`/acceptance` Terra `86/89 = 86/89`，主验收用例提升且控制项复验闭合。
+- 交付质量：10 对盲评正确性 `73/81 -> 81/81`；候选清晰度和可执行性更好，但平均字符增加 `59.6%`、重复度较差。时长缺少可信元数据，明确为 `unavailable`。
+- 当前顺序：本地 Stable 已完成；推送、annotated tag 和 Release 继续分别授权。
+- 范围保护：不新增入口、PM 框架或外部工具硬依赖；本地 Stable 不冒充完整稳定集/挑战集回归或远端发布。
+- 当前目录口径：稳定集 未全量重跑 / 666，挑战集 未全量重跑 / 190。
+
+## 上一稳定版本（远端）
 
 ### R2.23 v0.33 执行可靠性与交付密度
 
@@ -44,7 +59,7 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - LetsMakeMoney 只读试跑能基于仓库证据区分产品/发布战略与 GTM/商业证据，给出互斥选择并拒绝无依据市场外推。
 - 13 条代表性版本演进面板中，Terra medium 为 `86/107 -> 91/107 -> 99/107`，Sol medium 为 `93/107 -> 102/107 -> 101/107`；v0.32 明显高于 v0.28，与 v0.31 在 Sol medium 基本持平。
 - 本轮只证明受影响合同与代表性场景，不宣称完整目录或跨模型普遍优胜；v0.32 的复杂场景输出长度仍需继续控制。
-- 详细范围与历史决策链见 `notes/v0.32-strategy-gtm-plan.md`。
+- 详细范围与历史决策链见 `notes/archive/v0.32-strategy-gtm-plan.md`。
 
 ## 上一稳定版本
 
@@ -172,7 +187,7 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 状态：已完成第一版并完成真实运行
 
 - 建立 v0.17 验证基础设施；历史结果现统一记录在 `notes/evaluation-history.md`。
-- 补强 `notes/acceptance-real-run-notes.md`，加入 LetsMakeMoney v0.5 acceptance 与 bugfix 收口案例。
+- 补强 `notes/cases/acceptance-real-run-notes.md`，加入 LetsMakeMoney v0.5 acceptance 与 bugfix 收口案例。
 - 更新 `evals/evals.json` 到 `0.17.0`，新增数据驱动 `/idea`、版本型需求池、PRD 完整度门禁、UI 高保真原型、部分通过验收、手动验证文档、Memory 边界等防回退用例。
 - 新增 `templates/memory-validation-template.md`，用于测试 `memory-capture` / `memory-continue` 的写入与恢复质量。
 
@@ -257,7 +272,9 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 
 目标：让 skill 的关键能力可回归检查。
 
-当前状态：已有 56 条正式 eval、23 条触发 eval；v0.21/v0.22 已完成 56 条单次全量 A/B、差异项稳定性补跑、benchmark、viewer 与人工抽查。两版 55/56 条均满分，说明稳定集可以防明显回退，但对细节质量的区分度不足。
+历史快照（v0.21/v0.22）：当时已有 56 条正式 eval、23 条触发 eval，并完成 56 条单次全量 A/B、差异项稳定性补跑、benchmark、viewer 与人工抽查。两版 55/56 条均满分，说明当时稳定集可以防明显回退，但对细节质量的区分度不足。
+
+当前治理事实：目录包含 84 条稳定用例、21 条挑战用例和 34 条触发用例；v0.33 使用固定 13 条发布面板。v0.34 正在把它升级为 9 条固定核心 + 本版合同差量 + 相邻控制，稳定集与挑战集继续分开报告。
 
 建议 eval：
 
@@ -389,11 +406,10 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 
 当前最值得推进：
 
-1. 让 v0.32 继续服务真实项目，将重复的 Strategy/GTM 失败样本转成 eval，不按单次个例膨胀规则。
-2. 处理 Memory、GitHub、Computer Use/浏览器和数据库统一工具链 smoke，补足外部能力可用性与降级证据。
-3. 只有路由或常驻合同发生广泛变化时才安排完整目录回归；日常继续使用差量回归。
-4. 后续补充 SaaS、团队协作、移动端和真实商业数据案例，再判断是否需要拆分市场研究、定价或 GTM reference。
-5. v0.33 立项前先从真实使用缺口选主线，不因版本号惯性继续加框架。
+1. 完成 v0.34 M0：冻结五入口预算、补齐当前 description 的 34 条触发新鲜基线并关闭过期文档口径。
+2. M0 通过后完成 M1：合同注册表、动态发布面板和 validator 模块化；在此之前不修改入口行为 reference。
+3. M2 只试点 `/prompt` 与 `/review`，用预算、关键合同和相邻控制决定是否进入其他入口。
+4. Memory、Computer Use 和更多真实项目案例继续按可用性验证，不作为 v0.34 硬依赖。
 
 ## R2.10 Memory 事件驱动续接（v0.20）
 

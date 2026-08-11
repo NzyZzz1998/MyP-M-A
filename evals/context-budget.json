@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "baseline_version": "0.33.0",
+  "normalization": {
+    "newlines": "LF",
+    "character_count": ".NET string Length",
+    "byte_count": "UTF-8 without BOM",
+    "path_base": "skill root",
+    "file_order": "manifest order"
+  },
+  "heavy_route_average_target_percent": 15,
+  "skill_char_budget": 5700,
+  "routes": [
+    {
+      "route": "/review",
+      "minimum_files": [
+        "SKILL.md",
+        "references/review.md"
+      ],
+      "formal_files": [
+        "templates/review-report-template.md"
+      ],
+      "profiles": {
+        "deep_review": {
+          "files": [
+            "references/deep-review.md"
+          ]
+        }
+      },
+      "baseline": {
+        "minimum": {
+          "normalized_chars": 9801,
+          "utf8_bytes": 19769
+        },
+        "formal": {
+          "normalized_chars": 11226,
+          "utf8_bytes": 22218
+        },
+        "profiles": {
+          "deep_review": {
+            "normalized_chars": 12088,
+            "utf8_bytes": 24398
+          }
+        }
+      },
+      "target": {
+        "counts_toward_heavy_average": false,
+        "pilot_reduction_percent": 10,
+        "formal_reduction_percent": 10,
+        "max_increase_percent": 5
+      }
+    },
+    {
+      "route": "/idea",
+      "minimum_files": [
+        "SKILL.md",
+        "references/idea.md"
+      ],
+      "formal_files": [
+        "templates/idea-pool-template.md"
+      ],
+      "profiles": {
+        "data_analysis": {
+          "files": [
+            "references/data-analysis.md"
+          ]
+        }
+      },
+      "baseline": {
+        "minimum": {
+          "normalized_chars": 15424,
+          "utf8_bytes": 35080
+        },
+        "formal": {
+          "normalized_chars": 16750,
+          "utf8_bytes": 37458
+        },
+        "profiles": {
+          "data_analysis": {
+            "normalized_chars": 21598,
+            "utf8_bytes": 49750
+          }
+        }
+      },
+      "target": {
+        "counts_toward_heavy_average": true,
+        "formal_reduction_percent": 15,
+        "max_increase_percent": 5
+      }
+    },
+    {
+      "route": "/prd",
+      "minimum_files": [
+        "SKILL.md",
+        "references/prd.md"
+      ],
+      "formal_files": [
+        "templates/prd-template.md"
+      ],
+      "profiles": {
+        "data_tooling": {
+          "files": [
+            "references/data-analysis.md",
+            "references/capability-routing.md",
+            "references/tooling.md"
+          ]
+        }
+      },
+      "baseline": {
+        "minimum": {
+          "normalized_chars": 21295,
+          "utf8_bytes": 49799
+        },
+        "formal": {
+          "normalized_chars": 23324,
+          "utf8_bytes": 53998
+        },
+        "profiles": {
+          "data_tooling": {
+            "normalized_chars": 39376,
+            "utf8_bytes": 89816
+          }
+        }
+      },
+      "target": {
+        "counts_toward_heavy_average": true,
+        "formal_reduction_percent": 15,
+        "max_increase_percent": 5
+      }
+    },
+    {
+      "route": "/acceptance",
+      "minimum_files": [
+        "SKILL.md",
+        "references/acceptance.md",
+        "references/tooling.md"
+      ],
+      "formal_files": [
+        "templates/acceptance-template.md"
+      ],
+      "profiles": {
+        "manual_multitrack": {
+          "files": [
+            "references/capability-routing.md",
+            "templates/manual-verification-template.md"
+          ]
+        }
+      },
+      "baseline": {
+        "minimum": {
+          "normalized_chars": 20385,
+          "utf8_bytes": 44207
+        },
+        "formal": {
+          "normalized_chars": 22025,
+          "utf8_bytes": 47141
+        },
+        "profiles": {
+          "manual_multitrack": {
+            "normalized_chars": 27159,
+            "utf8_bytes": 57851
+          }
+        }
+      },
+      "target": {
+        "counts_toward_heavy_average": true,
+        "formal_reduction_percent": 15,
+        "max_increase_percent": 5
+      }
+    },
+    {
+      "route": "/prompt",
+      "minimum_files": [
+        "SKILL.md",
+        "references/prompt.md",
+        "references/workflow-control.md"
+      ],
+      "formal_files": [
+        "references/next-step-prompts.md"
+      ],
+      "profiles": {
+        "memory_handoff": {
+          "files": [
+            "references/memory-integration.md"
+          ]
+        }
+      },
+      "baseline": {
+        "minimum": {
+          "normalized_chars": 17185,
+          "utf8_bytes": 38651
+        },
+        "formal": {
+          "normalized_chars": 20931,
+          "utf8_bytes": 47059
+        },
+        "profiles": {
+          "memory_handoff": {
+            "normalized_chars": 29570,
+            "utf8_bytes": 66882
+          }
+        }
+      },
+      "target": {
+        "counts_toward_heavy_average": true,
+        "pilot_reduction_percent": 10,
+        "formal_reduction_percent": 15,
+        "max_increase_percent": 5
+      }
+    }
+  ]
+}

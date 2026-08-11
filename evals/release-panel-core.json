@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "name": "MyP-M-A 固定核心发布面板",
+  "purpose": "长期覆盖五入口、数据、工具、Memory 与高风险证据冲突；本文件不包含版本差量。",
+  "max_cases": 26,
+  "selection": [
+    { "suite": "stable", "id": 1, "category": "idea", "route": "/idea", "contract_id": "idea-core-output", "reason": "覆盖需求真假、价值与最小下一步" },
+    { "suite": "stable", "id": 17, "category": "review", "route": "/review", "contract_id": "review-core-output", "reason": "覆盖单入口自动路由与项目脉络" },
+    { "suite": "stable", "id": 32, "category": "prd", "route": "/prd", "contract_id": "prd-core-output", "reason": "覆盖后端、数据库与状态合同" },
+    { "suite": "stable", "id": 76, "category": "acceptance", "route": "/acceptance", "contract_id": "acceptance-core-output", "reason": "覆盖候选身份、浏览器证据与实际验收" },
+    { "suite": "stable", "id": 38, "category": "prompt", "route": "/prompt", "contract_id": "prompt-preserve-core", "reason": "覆盖精简提示词与必要边界" },
+    { "suite": "stable", "id": 31, "category": "data", "route": "/idea", "contract_id": "metric-four-counts", "reason": "覆盖统计对象、分母和证据边界" },
+    { "suite": "stable", "id": 22, "category": "tools", "route": "/review", "contract_id": "tooling-capability-state", "reason": "覆盖工具选择、可用性与证据来源" },
+    { "suite": "stable", "id": 42, "category": "memory", "route": "/review", "contract_id": "memory-auto-restore-attempt", "reason": "覆盖跨线程恢复与仓库事实优先" },
+    { "suite": "challenge", "id": "CH-16", "category": "high-risk-evidence", "route": "/acceptance", "contract_id": "acceptance-artifact-evidence-freshness", "reason": "覆盖候选身份、数据新鲜度与发布阻断" }
+  ]
+}

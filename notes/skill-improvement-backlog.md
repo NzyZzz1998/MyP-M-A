@@ -1,5 +1,31 @@
 # MyP-M-A Skill 优化 Backlog
 
+## 2026-08-10 v0.34 入口级上下文与评测门禁治理
+
+当前状态：PRD、开发承接、M0～M5 和独立 `/acceptance` 已通过；用户已批准 v0.34.0 晋升为本地 Stable 并进入提交收口，远端稳定基线仍为 v0.33.0。
+
+本版已确认：
+
+- 五入口建立可复算的最小、正式和命名扩展预算，不再只统计 `SKILL.md`。
+- description 或触发输入变化后，Sol medium 与 Terra medium 的 34 条触发分类必须保持新鲜。
+- 发布面板改为 9 条固定核心 + 本版合同差量 + 相邻控制，已知回放必须捕获 eval 36、61。
+- validator 先完成合同清单和双轨 self-test，再模块化；旧检查在结果一致前不删除。
+- reference 治理先试点 `/prompt` 与 `/review`，通过后才逐入口扩展。
+- 正确性、清晰度、重复度、可执行性、字符数、时长和有效返回率分别报告，不合并成单一总分。
+
+M2～M5 已完成：
+
+- `/prompt` 正式加载量下降 `32.84%`，`/review` 下降 `10.10%`，两条试点达到门槛。
+- Deep Review 改为对象地图优先、按领域选择 3～6 个维度；新增稳定用例 85。
+- Sol/Terra medium 受影响项定向 A/B 中候选 0 回退；共享字面漏项单独保留，不继续堆规则。
+- `/idea`、`/prd`、`/acceptance` 已逐入口治理；四个重入口正式负载最终平均下降 `33.11%`，规范状态合同与控制项复验闭合。
+- 七维交付质量管线已建立。10 对样本显示候选正确性、清晰度和可执行性提高，但字符增加 `59.6%`、重复度更差；不使用综合质量总分掩盖取舍。
+
+当前待办：
+
+1. 用户后续决定是否推送 `v0.34.0`、创建 annotated tag 或 Release；各动作分别授权。
+2. 将“候选更完整但更长、更重复”保留为后续真实样本观察项；同类失败再次出现前不新增入口或继续堆规则。
+
 ## 2026-07-31 v0.30 评测提速与 reference 去重
 
 已完成：
@@ -8,7 +34,7 @@
 - 匿名批量盲评与严格写回校验；评测管线自测进入 `-Strict`。
 - Review、PRD、Acceptance 第一批模板正文去重，合计减少约 2,485 个运行时字符。
 - 修复证据表字段、空候选状态和输入数值保真回退。
-- 13 条定向 A/B 与两条 3 次稳定性补跑；当前状态为 Candidate。
+- 13 条定向 A/B 与两条 3 次稳定性补跑；该阶段当时状态为 Candidate，后续已完成收口。
 - 完成 v0.28/v0.29/v0.30 的 Luna/Terra medium 全量对照，确认 v0.30 的改进具有模型差异，不能用单一总分宣布胜出。
 - 将 Luna 易漏的证据继承、发布授权、反馈角色绑定、概念交接、AI Agent 安全/韧性/治理/评测、UI 原型验证、候选产物证据新鲜度和 Project Review 接手摘要收敛为顶部合同，并增加静态锚点。
 - 完成受影响项跨模型复验，并将验收缺口四列表、UI 原型五行门禁表和 `/prompt` 固定输出壳提升为承重结构；最终三条单轮结果为 Luna `23/24`、Terra `23/24`。
@@ -120,12 +146,12 @@ MyP-M-A 已经跑通了两条真实项目链路：
 
 问题：
 
-- 当前只有 `idea/prd/review` 的真实试跑 notes，缺少 `acceptance-real-run-notes.md`。
+- 当前只有 `idea/prd/review` 的真实试跑 notes，缺少 `notes/cases/acceptance-real-run-notes.md`。
 - `/acceptance` 是最依赖工具和证据的入口，需要记录真实场景下的通过、部分通过、待验证、路径不一致、Computer Use 局限。
 
 建议：
 
-- 新增 `notes/acceptance-real-run-notes.md`。
+- 新增 `notes/cases/acceptance-real-run-notes.md`。
 - 记录 QuickRec 案例：实现完成不等于发布证据完成；验收对象路径不一致是发布风险。
 - 记录 LMM 案例：release readiness review 后进入 acceptance，剩余验证项关闭后不应继续扩 v0.4。
 - 后续考虑把经验补进 `references/acceptance.md`。
@@ -264,7 +290,7 @@ MyP-M-A 已经跑通了两条真实项目链路：
 
 优先执行：
 
-1. 新增 `notes/acceptance-real-run-notes.md`。
+1. 新增 `notes/cases/acceptance-real-run-notes.md`。
 2. 在 `/prd` 中补“完整 PRD 完成度闸门”和“高保真原型要求”。
 3. 在 `/idea` 中补“版本主线/依赖关系/三档范围方案”。
 
@@ -333,7 +359,7 @@ MyP-M-A 已经跑通了两条真实项目链路：
 已完成：
 
 - `SKILL.md` 版本更新到 `0.17.0`。
-- `notes/acceptance-real-run-notes.md` 增加 LetsMakeMoney v0.5 acceptance 与 bugfix 收口案例。
+- `notes/cases/acceptance-real-run-notes.md` 增加 LetsMakeMoney v0.5 acceptance 与 bugfix 收口案例。
 - 新增 `templates/memory-validation-template.md`，用于记录 Basic Memory 写入/恢复质量。
 - 更新 `evals/evals.json` 到 `0.17.0`，新增 7 个 eval：
   - 数据驱动 `/idea`。
