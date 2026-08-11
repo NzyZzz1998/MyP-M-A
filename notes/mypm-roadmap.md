@@ -12,25 +12,25 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.34 已完成 M0～M5，独立验收经一次 PARTIAL 修正后由 Sol/Terra medium 共同 PASS，并由用户批准晋升为本地 Stable；远端稳定基线仍为 v0.33。
-<!-- project-status: version=0.34.0; state=local-committed -->
+当前阶段判断：v0.34 已完成 M0～M5，独立验收经一次 PARTIAL 修正后由 Sol/Terra medium 共同 PASS，并由用户批准晋升为 Stable、同步远端；当前远端稳定基线为 v0.34。
+<!-- project-status: version=0.34.0; state=remote-synced -->
 
-## 当前稳定版本（本地）
+## 当前稳定版本
 
 ### R2.24 v0.34 入口级上下文与评测门禁治理
 
-状态：Stable，M0～M5 与独立 `/acceptance` 已通过并完成本地提交；尚未推送、打 tag 或创建 Release
+状态：Stable，M0～M5 与独立 `/acceptance` 已通过，完成提交并同步远端；尚未打 tag 或创建 Release
 
 - 事实源：`notes/v0.34-governance-prd.md`、`notes/dev_plan_v0.34.md`、`notes/progress_v0.34.md`。
 - 主线：五入口上下文预算、触发新鲜度、固定核心 + 本版差量面板、validator 模块化和文档事实源治理。
 - 当前成果：合同注册表、9 条固定核心、动态差量/控制面板、v0.33 回放和双轨 validator 已通过；五入口 reference 治理完成，四个重入口正式负载最终平均下降 `33.11%`。
 - 行为证据：`/idea` Terra `92/106 -> 99/106`，`/prd` Sol `114/120 -> 120/120`；异步状态回退修复后关键候选样本双模型 `9/9`。`/acceptance` Terra `86/89 = 86/89`，主验收用例提升且控制项复验闭合。
 - 交付质量：10 对盲评正确性 `73/81 -> 81/81`；候选清晰度和可执行性更好，但平均字符增加 `59.6%`、重复度较差。时长缺少可信元数据，明确为 `unavailable`。
-- 当前顺序：本地 Stable 已完成；推送、annotated tag 和 Release 继续分别授权。
+- 当前顺序：Stable 与远端同步已完成；annotated tag 和 Release 继续分别授权。
 - 范围保护：不新增入口、PM 框架或外部工具硬依赖；本地 Stable 不冒充完整稳定集/挑战集回归或远端发布。
 - 当前目录口径：稳定集 未全量重跑 / 666，挑战集 未全量重跑 / 190。
 
-## 上一稳定版本（远端）
+## 上一稳定版本
 
 ### R2.23 v0.33 执行可靠性与交付密度
 

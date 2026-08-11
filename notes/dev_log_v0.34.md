@@ -4,11 +4,11 @@
 
 ## 基本信息
 
-- 版本：`v0.34.0 Stable（本地）`
+- 版本：`v0.34.0 Stable（已同步远端）`
 - 对应 PRD：`notes/v0.34-governance-prd.md`
 - 对应 dev plan：`notes/dev_plan_v0.34.md`
 - 对应 progress：`notes/progress_v0.34.md`
-- 当前阶段：独立验收通过，本地 Stable 晋升与提交收口
+- 当前阶段：Stable 晋升、提交与远端同步完成
 - 上一远端稳定版：`v0.33.0 Stable`
 
 ## 记录规则
@@ -129,6 +129,13 @@
 - 当前目录仍明确披露稳定集 `未全量重跑 / 666`、挑战集 `未全量重跑 / 190`，不把本地 Stable 解释为跨模型普遍优于 v0.33。
 - 本轮不推送、不打 tag、不创建 Release；远端稳定基线保持 `v0.33.0`。
 
+### 2026-08-11 / 远端同步
+
+- 用户单独授权 push 后，将发布提交 `e06ee9b` 快进推送到 `origin/main`。
+- 全局 Git 代理指向未监听的 `127.0.0.1:17890`；本轮仅对 push 命令临时清空代理配置，未修改用户全局设置。
+- 同步 README、roadmap、CHANGELOG、evaluation history、backlog、progress 和验收后续状态为 `remote-synced`，并创建独立状态提交。
+- 本轮未创建或移动 tag，未创建 Release。
+
 ## 关键决策
 
 | 决策 | 背景 | 取舍 | 影响范围 | 后续观察 |
@@ -157,7 +164,7 @@
 
 ## 收尾事项
 
-- 文档同步：已完成；当前统一为 `v0.34.0 Stable（本地） / 远端 v0.33.0`。
-- 发布说明：已更新本地 Stable changelog，但不宣称已推送、已打 tag 或已创建 Release。
+- 文档同步：已完成；当前统一为 `v0.34.0 Stable / remote-synced`。
+- 发布说明：已更新 Stable changelog，但不宣称已打 tag 或已创建 Release。
 - 回滚方式：回到 `26e2e66491280470c1876d29544c826aa626d6d5` 可恢复 v0.33 远端稳定基线；评测与校验资料保留在 v0.34 提交中。
-- 下一阶段建议：由用户分别授权推送、annotated tag 和 Release；在此之前停止远端写操作。
+- 下一阶段建议：由用户分别授权 annotated tag 和 Release；在此之前停止其他远端写操作。

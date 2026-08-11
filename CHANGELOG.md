@@ -9,7 +9,7 @@
 - 新增可选 `execution.json duration_ms`、匿名交付质量批次、独立质量 viewer 和 self-test；不生成综合质量总分。
 - 完成历史 notes 入站引用审计，将关闭版本资料和真实案例分入 `notes/archive/`、`notes/cases/`。
 - 独立验收第一轮 Terra medium 为 PARTIAL；修正预算比较与 M3 lineage 后，第二轮 Sol medium、Terra medium 均为 PASS。
-- v0.34 已通过独立验收并由用户批准晋升为本地 Stable；当前目录口径为稳定集 `未全量重跑 / 666`、挑战集 `未全量重跑 / 190`。本轮完成本地提交，不推送、不打 tag、不创建 Release；远端稳定基线仍为 `v0.33.0`。
+- v0.34 已通过独立验收并由用户批准晋升为 Stable；当前目录口径为稳定集 `未全量重跑 / 666`、挑战集 `未全量重跑 / 190`。本轮已提交并同步远端，不打 tag、不创建 Release；远端稳定基线为 `v0.34.0`。
 
 ## v0.33.0 Stable - 2026-08-08
 

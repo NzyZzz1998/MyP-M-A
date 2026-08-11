@@ -70,10 +70,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.34.0 Stable` 已完成 Candidate 门禁、双模型独立验收并在本地提交；当前远端稳定基线仍为 `v0.33.0`。
-<!-- project-status: version=0.34.0; state=local-committed -->
+当前版本：`v0.34.0 Stable` 已完成 Candidate 门禁、双模型独立验收、本地提交并同步远端；当前远端稳定基线为 `v0.34.0`。
+<!-- project-status: version=0.34.0; state=remote-synced -->
 
-v0.34 已由用户批准晋升为本地 Stable；五入口预算、动态发布面板、模块化校验、七维交付质量管线和独立 `/acceptance` 均已通过门禁。新增稳定用例 85 后，当前目录口径：稳定集 未全量重跑 / 666，挑战集 未全量重跑 / 190。
+v0.34 已由用户批准晋升为 Stable 并同步远端；五入口预算、动态发布面板、模块化校验、七维交付质量管线和独立 `/acceptance` 均已通过门禁。新增稳定用例 85 后，当前目录口径：稳定集 未全量重跑 / 666，挑战集 未全量重跑 / 190。
 
 v0.34 Stable 当前证据：
 
