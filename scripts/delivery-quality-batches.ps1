@@ -373,6 +373,11 @@ function Invoke-Apply {
     $charExceeded = $null -ne $charRatio -and $charRatio -gt [double]$rubric.cost_boundary.response_chars_increase_ratio
     $durationExceeded = $null -ne $durationRatio -and $durationRatio -gt [double]$rubric.cost_boundary.median_duration_increase_ratio
     $costPassed = -not (($charExceeded -or $durationExceeded) -and -not $qualityBenefit)
+    $redundancy = $dimensionSummary['redundancy']
+    $baselineRedundancyWinRatio = if ($pairCount -gt 0) { [Math]::Round($redundancy.baseline_wins / $pairCount, 4) } else { 0 }
+    $densityCharExceeded = $null -ne $charRatio -and $charRatio -gt [double]$rubric.density_boundary.response_chars_increase_ratio
+    $densityRedundancyExceeded = $baselineRedundancyWinRatio -ge [double]$rubric.density_boundary.baseline_redundancy_win_ratio
+    $densityPassed = -not ($densityCharExceeded -and $densityRedundancyExceeded)
 
     $report = [ordered]@{
         schema_version = 1
@@ -395,10 +400,16 @@ function Invoke-Apply {
             duration_threshold_exceeded = $durationExceeded
             quality_benefit = $qualityBenefit
         }
+        density_boundary = [ordered]@{
+            passed = $densityPassed
+            char_threshold_exceeded = $densityCharExceeded
+            baseline_redundancy_threshold_exceeded = $densityRedundancyExceeded
+            baseline_redundancy_win_ratio = $baselineRedundancyWinRatio
+        }
         cases = @($cases)
     }
     Write-JsonFile -Value $report -Path (Join-Path $workspacePath 'quality-report.json')
-    Write-Host "Delivery quality report applied: pairs=$pairCount cost_passed=$costPassed"
+    Write-Host "Delivery quality report applied: pairs=$pairCount cost_passed=$costPassed density_passed=$densityPassed"
 }
 
 if ($Action -eq 'Prepare') {

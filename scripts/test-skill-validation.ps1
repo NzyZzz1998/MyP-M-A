@@ -6,6 +6,7 @@ $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("mypm-validation-" + [G
 . (Join-Path $PSScriptRoot 'validation\validate-docs.ps1')
 . (Join-Path $PSScriptRoot 'validation\validate-evals.ps1')
 . (Join-Path $PSScriptRoot 'validation\validate-contracts.ps1')
+. (Join-Path $PSScriptRoot 'validation\validate-runtime.ps1')
 
 function Write-JsonFile {
     param($Value, [string]$Path)
@@ -23,7 +24,8 @@ function Get-ValidationErrors {
     foreach ($result in @(
         (Invoke-MypmDocsValidation -Root $FixtureRoot),
         (Invoke-MypmEvalsValidation -Root $FixtureRoot),
-        (Invoke-MypmContractsValidation -Root $FixtureRoot)
+        (Invoke-MypmContractsValidation -Root $FixtureRoot),
+        (Invoke-MypmRuntimeValidation -Root $FixtureRoot)
     )) {
         foreach ($message in @($result.Errors)) { $errors.Add([string]$message) }
     }
@@ -105,6 +107,13 @@ try {
     Write-JsonFile -Value $json -Path $path
     Assert-FailsWith -FixtureRoot $case -Pattern 'Stale trigger summary hash: trigger_cases_sha256' -Name 'stale trigger summary'
 
+    $case = New-FixtureCase -Base $base -Name 'missing-eval-lifecycle'
+    $path = Join-Path $case 'evals\eval-lifecycle.json'
+    $json = Get-Content -Raw -Encoding UTF8 $path | ConvertFrom-Json
+    $json.scenario_groups[0].stable_evals = @($json.scenario_groups[0].stable_evals | Where-Object { [string]$_ -ne '2' })
+    Write-JsonFile -Value $json -Path $path
+    Assert-FailsWith -FixtureRoot $case -Pattern 'Eval lifecycle ownership missing: stable:2' -Name 'missing eval lifecycle ownership'
+
     $builder = Join-Path $root 'scripts\build-eval-panel.ps1'
     $replayOutput1 = Join-Path $tempRoot 'replay-1-evals.json'
     $replaySnapshot1 = Join-Path $tempRoot 'replay-1-panel.json'
@@ -169,7 +178,7 @@ try {
     Assert-True -Condition ([string]$upgrade.mode -eq 'affected-route-full-regression') -Message 'Panel limit did not upgrade to affected-route full regression'
     Assert-True -Condition (@($upgrade.selection).Count -gt 3) -Message 'Full-regression upgrade silently truncated critical contracts'
 
-    Write-Host 'Skill validation fixtures passed: positive=1 negative=7 builder=replay/determinism/unknown/duplicate/unmapped/waiver/upgrade.'
+    Write-Host 'Skill validation fixtures passed: positive=1 negative=8 builder=replay/determinism/unknown/duplicate/unmapped/waiver/upgrade.'
 } finally {
     if (Test-Path -LiteralPath $tempRoot) {
         $resolved = (Resolve-Path -LiteralPath $tempRoot).Path

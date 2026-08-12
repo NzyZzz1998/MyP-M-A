@@ -12,7 +12,8 @@ function Invoke-MypmContractsValidation {
     $core = Read-MypmJson -Path (Join-Path $root 'evals\release-panel-core.json') -Result $result -Label 'evals/release-panel-core.json'
     $panel = Read-MypmJson -Path (Join-Path $root 'evals\release-panel.json') -Result $result -Label 'evals/release-panel.json'
     $baseline = Read-MypmJson -Path (Join-Path $root 'evals\trigger-baseline.json') -Result $result -Label 'evals/trigger-baseline.json'
-    if ($null -in @($registry, $stable, $challenge, $trigger, $core, $panel, $baseline)) { return $result }
+    $lifecycle = Read-MypmJson -Path (Join-Path $root 'evals\eval-lifecycle.json') -Result $result -Label 'evals/eval-lifecycle.json'
+    if ($null -in @($registry, $stable, $challenge, $trigger, $core, $panel, $baseline, $lifecycle)) { return $result }
 
     $stableIds = @($stable.evals.id | ForEach-Object { [string]$_ })
     $challengeIds = @($challenge.evals.id | ForEach-Object { [string]$_ })
@@ -21,6 +22,8 @@ function Invoke-MypmContractsValidation {
     $requiredProperties = @('contract_id', 'source_file', 'routes', 'risk', 'stable_evals', 'challenge_evals', 'trigger_evals', 'release_core')
     $contracts = @($registry.contracts)
     $byId = @{}
+    $contractStableIds = @{}
+    $contractChallengeIds = @{}
 
     foreach ($contract in $contracts) {
         $id = [string]$contract.contract_id
@@ -46,9 +49,11 @@ function Invoke-MypmContractsValidation {
         }
         foreach ($evalId in @($contract.stable_evals)) {
             if ([string]$evalId -notin $stableIds) { Add-MypmValidationError -Result $result -Message "Contract $id references missing stable eval: $evalId" }
+            $contractStableIds[[string]$evalId] = $true
         }
         foreach ($evalId in @($contract.challenge_evals)) {
             if ([string]$evalId -notin $challengeIds) { Add-MypmValidationError -Result $result -Message "Contract $id references missing challenge eval: $evalId" }
+            $contractChallengeIds[[string]$evalId] = $true
         }
         foreach ($triggerId in @($contract.trigger_evals)) {
             if ([int]$triggerId -lt 1 -or [int]$triggerId -gt @($trigger).Count) { Add-MypmValidationError -Result $result -Message "Contract $id references missing trigger eval: $triggerId" }
@@ -56,6 +61,56 @@ function Invoke-MypmContractsValidation {
         if ([string]$contract.risk -eq 'critical' -and (@($contract.stable_evals).Count + @($contract.challenge_evals).Count) -eq 0) {
             Add-MypmValidationError -Result $result -Message "Critical contract has no behavior eval mapping: $id"
         }
+    }
+
+    $allowedLifecycleRoutes = @('/review', '/idea', '/prd', '/acceptance', '/prompt', 'memory')
+    $lifecycleStableCounts = @{}
+    $lifecycleChallengeCounts = @{}
+    $lifecycleGroupIds = @{}
+    foreach ($group in @($lifecycle.scenario_groups)) {
+        $groupId = [string]$group.group_id
+        foreach ($property in @('group_id', 'route', 'status', 'purpose', 'stable_evals', 'challenge_evals')) {
+            if ($property -notin @($group.PSObject.Properties.Name)) { Add-MypmValidationError -Result $result -Message "Eval lifecycle group $groupId is missing $property" }
+        }
+        if ([string]::IsNullOrWhiteSpace($groupId)) {
+            Add-MypmValidationError -Result $result -Message 'Eval lifecycle group id cannot be empty'
+            continue
+        }
+        if ($lifecycleGroupIds.ContainsKey($groupId)) {
+            Add-MypmValidationError -Result $result -Message "Duplicate eval lifecycle group: $groupId"
+        } else {
+            $lifecycleGroupIds[$groupId] = $true
+        }
+        if ([string]$group.route -notin $allowedLifecycleRoutes) { Add-MypmValidationError -Result $result -Message "Eval lifecycle group $groupId has unsupported route: $($group.route)" }
+        if ([string]$group.status -ne 'active') { Add-MypmValidationError -Result $result -Message "Current eval lifecycle group must be active: $groupId" }
+        if ([string]::IsNullOrWhiteSpace([string]$group.purpose)) { Add-MypmValidationError -Result $result -Message "Eval lifecycle group purpose cannot be empty: $groupId" }
+
+        foreach ($evalId in @($group.stable_evals)) {
+            $key = [string]$evalId
+            if ($key -notin $stableIds) { Add-MypmValidationError -Result $result -Message "Eval lifecycle group $groupId references missing stable eval: $key" }
+            if ($contractStableIds.ContainsKey($key)) { Add-MypmValidationError -Result $result -Message "Eval lifecycle overlaps contract mapping: stable:$key" }
+            if (-not $lifecycleStableCounts.ContainsKey($key)) { $lifecycleStableCounts[$key] = 0 }
+            $lifecycleStableCounts[$key]++
+        }
+        foreach ($evalId in @($group.challenge_evals)) {
+            $key = [string]$evalId
+            if ($key -notin $challengeIds) { Add-MypmValidationError -Result $result -Message "Eval lifecycle group $groupId references missing challenge eval: $key" }
+            if ($contractChallengeIds.ContainsKey($key)) { Add-MypmValidationError -Result $result -Message "Eval lifecycle overlaps contract mapping: challenge:$key" }
+            if (-not $lifecycleChallengeCounts.ContainsKey($key)) { $lifecycleChallengeCounts[$key] = 0 }
+            $lifecycleChallengeCounts[$key]++
+        }
+    }
+    foreach ($evalId in $stableIds) {
+        $inContract = $contractStableIds.ContainsKey($evalId)
+        $lifecycleCount = if ($lifecycleStableCounts.ContainsKey($evalId)) { [int]$lifecycleStableCounts[$evalId] } else { 0 }
+        if (-not $inContract -and $lifecycleCount -eq 0) { Add-MypmValidationError -Result $result -Message "Eval lifecycle ownership missing: stable:$evalId" }
+        if ($lifecycleCount -gt 1) { Add-MypmValidationError -Result $result -Message "Duplicate eval lifecycle ownership: stable:$evalId" }
+    }
+    foreach ($evalId in $challengeIds) {
+        $inContract = $contractChallengeIds.ContainsKey($evalId)
+        $lifecycleCount = if ($lifecycleChallengeCounts.ContainsKey($evalId)) { [int]$lifecycleChallengeCounts[$evalId] } else { 0 }
+        if (-not $inContract -and $lifecycleCount -eq 0) { Add-MypmValidationError -Result $result -Message "Eval lifecycle ownership missing: challenge:$evalId" }
+        if ($lifecycleCount -gt 1) { Add-MypmValidationError -Result $result -Message "Duplicate eval lifecycle ownership: challenge:$evalId" }
     }
 
     $coreContractIds = @{}
@@ -130,5 +185,8 @@ function Invoke-MypmContractsValidation {
 
     $result.Metrics['contracts'] = $contracts.Count
     $result.Metrics['critical'] = @($contracts | Where-Object risk -eq 'critical').Count
+    $result.Metrics['lifecycle_groups'] = @($lifecycle.scenario_groups).Count
+    $result.Metrics['scenario_stable'] = $lifecycleStableCounts.Count
+    $result.Metrics['scenario_challenge'] = $lifecycleChallengeCounts.Count
     return $result
 }

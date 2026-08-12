@@ -236,7 +236,7 @@
       "source_file": "references/acceptance.md",
       "routes": ["/acceptance"],
       "risk": "critical",
-      "stable_evals": [76],
+      "stable_evals": [76, 81],
       "challenge_evals": ["CH-16"],
       "trigger_evals": [6, 15],
       "release_core": true

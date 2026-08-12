@@ -4,7 +4,7 @@ description: "Use when：产品评审、原型、研究、战略/GTM、需求、
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.34.0"
+  version: "0.35.0"
   language: zh-CN
 ---
 

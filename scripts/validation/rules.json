@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "skill_char_budget": 5700,
+  "stage_core_budget": 600,
+  "allowed_frontmatter_keys": ["name", "description", "license", "allowed-tools", "metadata"],
+  "required_loading_routes": {
+    "review": ["references/review.md", "references/code-review-scanner.md"],
+    "idea": ["references/idea.md"],
+    "prd": ["references/prd.md"],
+    "acceptance": ["references/acceptance.md", "references/tooling.md"],
+    "prompt": ["references/prompt.md", "references/workflow-control.md"]
+  },
+  "required_quality_files": [
+    "evals/README.md",
+    "scripts/regression-workspace.ps1"
+  ],
+  "required_evaluation_scripts": [
+    "scripts/regression-workspace.ps1",
+    "scripts/grading-batches.ps1",
+    "scripts/delivery-quality-batches.ps1",
+    "scripts/test-evaluation-pipeline.ps1",
+    "scripts/test-delivery-quality.ps1",
+    "scripts/generate-eval-viewer.ps1",
+    "scripts/build-eval-panel.ps1",
+    "scripts/test-skill-validation.ps1"
+  ],
+  "runtime_terms": {
+    "memory": ["memory_mode", "auto", "suggest", "off", "memory-continue", "memory-notes", "memory-capture"],
+    "memory_evidence": ["unavailable", "not-found", "memory-only", "verified-source"],
+    "prompt": ["/prompt", "next", "continue", "bugfix", "acceptance", "release", "handoff", "commit", "push", "tag", "Release"],
+    "prompt_compression": ["L1", "L2", "L3", "300-600", "500-900", "800-1500"],
+    "official_prompt_guidance": ["zero-shot", "preserve-first", "trim-first", "tool-orchestration", "retry-limit", "stop-condition"]
+  }
+}

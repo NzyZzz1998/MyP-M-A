@@ -94,5 +94,11 @@
     "failure_condition": "字符数超过阈值或可用的中位时长超过阈值，且决策清晰度与可执行性均没有候选收益。",
     "duration_unavailable_policy": "只评估字符边界，并把时长结论标记为 unavailable。"
   },
+  "density_boundary": {
+    "response_chars_increase_ratio": 0.35,
+    "baseline_redundancy_win_ratio": 0.5,
+    "failure_condition": "候选平均字符数增长超过 35%，且基线在至少 50% 的配对样本中重复度更优时失败；清晰度或可执行性收益不能抵消该门禁。",
+    "reporting_rule": "与成本门禁分别报告，不并入综合分，也不追溯改写历史版本结论。"
+  },
   "quality_instability_policy": "配对盲评方向不一致或证据串项时，质量维度降级为观察项；正确性继续作为硬门禁。"
 }

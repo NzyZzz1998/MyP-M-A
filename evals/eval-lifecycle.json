@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "contract_mapped": "用例出现在 contract-registry.json 时，由对应行为合同负责选择和回归。",
+    "scenario_regression": "未绑定单一合同的复合场景必须在本文件登记一次，由入口级场景回归负责。",
+    "exclusivity": "每条稳定或挑战用例必须属于至少一个行为合同，或恰好一个 active 场景组；不得同时属于两类。"
+  },
+  "scenario_groups": [
+    {
+      "group_id": "idea-scenarios",
+      "route": "/idea",
+      "status": "active",
+      "purpose": "需求发现、证据质量、压力测试和偏差识别的复合场景回归。",
+      "stable_evals": [2, 3, 4, 14, 24, 25, 70, 71, 78],
+      "challenge_evals": ["CH-01", "CH-02", "CH-13", "CH-18"]
+    },
+    {
+      "group_id": "review-scenarios",
+      "route": "/review",
+      "status": "active",
+      "purpose": "项目事实冲突、动态入口和文件型项目审阅的复合场景回归。",
+      "stable_evals": [33, 40],
+      "challenge_evals": ["CH-03", "CH-17"]
+    },
+    {
+      "group_id": "prd-scenarios",
+      "route": "/prd",
+      "status": "active",
+      "purpose": "方案收敛、影响范围、异步契约、原型决策和开发前门禁的复合场景回归。",
+      "stable_evals": [5, 6, 8, 9, 10, 11, 12, 13, 15, 18, 26, 34, 35, 37, 60, 62, 63, 73, 74, 75, 80],
+      "challenge_evals": ["CH-05", "CH-06", "CH-12", "CH-15"]
+    },
+    {
+      "group_id": "acceptance-scenarios",
+      "route": "/acceptance",
+      "status": "active",
+      "purpose": "产物身份、证据继承、发布面、人工补证和条件功能的复合场景回归。",
+      "stable_evals": [19, 20, 21, 28, 29, 39, 41, 49, 77],
+      "challenge_evals": ["CH-07", "CH-08"]
+    },
+    {
+      "group_id": "prompt-scenarios",
+      "route": "/prompt",
+      "status": "active",
+      "purpose": "自然语言分流、零样本优先和接收方校准的复合场景回归。",
+      "stable_evals": [47, 58, 64],
+      "challenge_evals": []
+    },
+    {
+      "group_id": "memory-scenarios",
+      "route": "memory",
+      "status": "active",
+      "purpose": "记忆建议、自动写入、关闭模式、安全降级、来源和过期事实的跨入口回归。",
+      "stable_evals": [30, 43, 44, 45, 67, 68],
+      "challenge_evals": ["CH-11"]
+    }
+  ]
+}

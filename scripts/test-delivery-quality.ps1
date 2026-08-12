@@ -86,7 +86,9 @@ try {
             $candidateSide = if ([string]$map.a_configuration -eq 'candidate') { 'A' } else { 'B' }
             $comparisons = [System.Collections.Generic.List[object]]::new()
             foreach ($dimension in @($item.dimensions)) {
-                $winner = if ([string]$dimension.id -eq 'redundancy') { 'tie' } else { $candidateSide }
+                $winner = if ([string]$dimension.id -eq 'redundancy') {
+                    if ($candidateSide -eq 'A') { 'B' } else { 'A' }
+                } else { $candidateSide }
                 $comparisons.Add([ordered]@{
                     dimension = [string]$dimension.id
                     winner = $winner
@@ -104,15 +106,18 @@ try {
     Assert-Equal -Actual ([int]$report.pair_count) -Expected 8 -Message 'quality report pair count'
     Assert-Equal -Actual ([int]$report.dimensions.correctness.candidate_passed) -Expected 8 -Message 'formal correctness'
     Assert-Equal -Actual ([int]$report.dimensions.decision_clarity.candidate_wins) -Expected 8 -Message 'clarity wins'
-    Assert-Equal -Actual ([int]$report.dimensions.redundancy.ties) -Expected 8 -Message 'redundancy ties'
+    Assert-Equal -Actual ([int]$report.dimensions.redundancy.baseline_wins) -Expected 8 -Message 'redundancy baseline wins'
     Assert-Equal -Actual ([int]$report.dimensions.actionability.candidate_wins) -Expected 8 -Message 'actionability wins'
     Assert-Equal -Actual ([string]$report.dimensions.duration_ms.state) -Expected 'available' -Message 'duration state'
     Assert-Equal -Actual ([bool]$report.cost_boundary.passed) -Expected $true -Message 'cost boundary'
+    Assert-Equal -Actual ([bool]$report.density_boundary.passed) -Expected $false -Message 'density boundary catches verbose redundant candidate'
+    Assert-Equal -Actual ([double]$report.density_boundary.baseline_redundancy_win_ratio) -Expected 1 -Message 'density redundancy ratio'
     if ($null -ne $report.aggregate_score) { throw 'aggregate quality score must stay null' }
     & (Join-Path $scriptRoot 'generate-eval-viewer.ps1') -Workspace $workspace -Title 'quality-test-viewer' `
         -BaselineLabel old -CandidateLabel new -SuiteLabel 'quality-test'
     $viewer = [System.IO.File]::ReadAllText((Join-Path $workspace 'eval-viewer.html'), [System.Text.Encoding]::UTF8)
-    foreach ($requiredText in @('quality-test-viewer', 'quality-detail-panel', 'quality-grid', 'unavailable')) {
+    $densityGateText = -join @([char]0x5BC6, [char]0x5EA6, [char]0x95E8, [char]0x7981)
+    foreach ($requiredText in @('quality-test-viewer', 'quality-detail-panel', 'quality-grid', $densityGateText, 'unavailable')) {
         if (-not $viewer.Contains($requiredText)) { throw "viewer is missing quality text: $requiredText" }
     }
     if ($viewer -match 'Superpowers|Prime Radiant') { throw 'viewer contains foreign brand text' }
