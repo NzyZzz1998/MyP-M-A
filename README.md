@@ -70,8 +70,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skill.ps1
 
 ## 当前状态
 
-当前版本：`v0.35.0 Stable` 已通过最终验收并完成本地提交；远端稳定基线仍为 `v0.34.0`。
-<!-- project-status: version=0.35.0; state=local-committed -->
+当前版本：`v0.35.0 Stable` 已通过最终验收、完成本地提交并同步远端；当前远端稳定基线为 `v0.35.0`。
+<!-- project-status: version=0.35.0; state=remote-synced -->
 
 v0.35 以治理改动为主。85 条稳定用例与 21 条挑战用例现均有唯一的合同或场景生命周期归属；质量报告新增独立密度门禁；`validate-skill.ps1` 已收敛为五模块编排入口。Sol medium 分层回归后，仅对 `/review` 材料不足和 `/acceptance` 代码证据新鲜度做了两处定向收紧。最终验收确认运行时快照、评测归属、静态检查和工具链证据闭合。当前目录口径：稳定集 未全量重跑 / 666，挑战集 未全量重跑 / 190。
 
