@@ -12,7 +12,15 @@
   },
   "required_quality_files": [
     "evals/README.md",
-    "scripts/regression-workspace.ps1"
+    "scripts/regression-workspace.ps1",
+    "capabilities/README.md",
+    "capabilities/registry.json",
+    "evals/external-candidates.json",
+    "evals/external-benchmark.json",
+    "evals/external-benchmark-contract.json",
+    "examples/public-case-spec.md",
+    "examples/case-manifest.schema.json",
+    "examples/index.json"
   ],
   "required_evaluation_scripts": [
     "scripts/regression-workspace.ps1",
@@ -22,7 +30,11 @@
     "scripts/test-delivery-quality.ps1",
     "scripts/generate-eval-viewer.ps1",
     "scripts/build-eval-panel.ps1",
-    "scripts/test-skill-validation.ps1"
+    "scripts/test-skill-validation.ps1",
+    "scripts/test-v036-governance.ps1",
+    "scripts/validation/validate-capabilities.ps1",
+    "scripts/validation/validate-external-benchmark.ps1",
+    "scripts/validation/validate-public-cases.ps1"
   ],
   "runtime_terms": {
     "memory": ["memory_mode", "auto", "suggest", "off", "memory-continue", "memory-notes", "memory-capture"],

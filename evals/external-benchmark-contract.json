@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "requirement_id": "FR-007",
+  "source_prd": "notes/v0.36-capability-ecosystem-prd.md",
+  "tasks": [
+    {"id":"EB-01","semantic_key":"mixed_evidence_problem_judgment","domain":"discovery","title_zh":"从混合反馈、日志和 Review 结果判断真实问题","capability":"Discovery","hard_gate":"证据与推断分开"},
+    {"id":"EB-02","semantic_key":"weak_evidence_pressure_test","domain":"discovery","title_zh":"对弱证据新想法做压力测试","capability":"Discovery","hard_gate":"不伪造用户需求"},
+    {"id":"EB-03","semantic_key":"feedback_metric_denominator","domain":"analytics","title_zh":"分析反馈数据并锁定统计对象","capability":"Analytics","hard_gate":"分母、去重、时间窗明确"},
+    {"id":"EB-04","semantic_key":"kpi_data_contract","domain":"analytics","title_zh":"设计 KPI 与数据合同","capability":"Analytics","hard_gate":"来源、口径、异常和权限完整"},
+    {"id":"EB-05","semantic_key":"mutually_exclusive_strategy_choice","domain":"strategy","title_zh":"比较 2～3 个互斥产品战略","capability":"Strategy","hard_gate":"有取舍与排除项，不堆框架"},
+    {"id":"EB-06","semantic_key":"competitor_market_judgment","domain":"strategy-research","title_zh":"形成竞品与市场判断","capability":"Strategy/Research","hard_gate":"可核查来源与适用边界"},
+    {"id":"EB-07","semantic_key":"full_ui_prd","domain":"prd","title_zh":"为完整 UI 功能输出正式 PRD","capability":"PRD","hard_gate":"全链路、影响范围、高保真交付门禁"},
+    {"id":"EB-08","semantic_key":"async_backend_prd","domain":"prd-data","title_zh":"为异步后端任务输出正式 PRD","capability":"PRD/Data","hard_gate":"状态、幂等、权限、失败与数据库合同"},
+    {"id":"EB-09","semantic_key":"deep_structured_project_review","domain":"review","title_zh":"深度 Review 一个真实结构化项目","capability":"Review","hard_gate":"架构、主链、风险、证据状态"},
+    {"id":"EB-10","semantic_key":"intent_implementation_consistency_review","domain":"review","title_zh":"Review PRD 与实现的一致性","capability":"Review","hard_gate":"原目标、实现、测试和回归关联"},
+    {"id":"EB-11","semantic_key":"release_candidate_acceptance","domain":"acceptance","title_zh":"验收候选发布包","capability":"Acceptance","hard_gate":"身份、新鲜度、真实证据、阻塞判断"},
+    {"id":"EB-12","semantic_key":"next_stage_prompt_handoff","domain":"prompt-handoff","title_zh":"将阶段结论转成下一阶段提示词","capability":"Prompt/Handoff","hard_gate":"不重做上一步、授权和停止点明确"}
+  ]
+}

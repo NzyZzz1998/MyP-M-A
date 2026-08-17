@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-08-17T00:00:00Z",
+  "capabilities": [
+    {
+      "id": "discovery.problem-validation",
+      "name_zh": "问题验证",
+      "domain": "discovery",
+      "status": "pilot",
+      "card_file": "capabilities/discovery/problem-validation.md",
+      "entrypoints": ["/idea", "/review"],
+      "stages": ["discover", "validate", "review"],
+      "triggers": [
+        "输入包含访谈、反馈、JTBD、机会树或替代行为，需要判断问题真假与适用场景",
+        "已有方案但承重问题、反例或用户行为证据仍未闭合"
+      ],
+      "anti_triggers": [
+        "范围和验收已批准，用户只要求实现、修复或机械处理材料",
+        "仅要求转写、翻译或摘要，不要求产品判断"
+      ],
+      "required_inputs": ["决策问题", "来源 ID 与原始观察", "角色、场景、时间和版本"],
+      "outputs": ["问题判断与证据边界", "反例和承重假设", "带分母与时间窗的最小验证"],
+      "evidence_contract": "观察、解释、机会和方案分层；保留来源、反例与样本偏差；模拟不得冒充真实用户证据。",
+      "tool_categories": ["文档读取", "定性材料归纳", "公开资料检索"],
+      "fallback": "材料或工具不足时保留未知，输出最小补证动作，不生成虚构样本或总体比例。",
+      "references": ["references/discovery.md"],
+      "eval_ids": {"stable": [83], "challenge": ["CH-20"], "trigger": [11, 23]},
+      "owner": "MyP-M-A maintainers",
+      "introduced_in": "0.36.0"
+    },
+    {
+      "id": "analytics.product-data-analysis",
+      "name_zh": "产品数据分析",
+      "domain": "analytics",
+      "status": "pilot",
+      "card_file": "capabilities/analytics/product-data-analysis.md",
+      "entrypoints": ["/idea", "/review", "/prd"],
+      "stages": ["discover", "validate", "define", "review"],
+      "triggers": [
+        "输入包含日志、数据库、表格、埋点或反馈，需要据此作产品判断",
+        "需求涉及指标口径、状态契约、数据模型、迁移或查询行为"
+      ],
+      "anti_triggers": [
+        "只执行已经定义的查询、代码修复或图表制作，不需要产品判断",
+        "当前决策不依赖数据且已有证据足以回答"
+      ],
+      "required_inputs": ["决策问题", "统计对象和唯一键", "时间窗、筛选条件和来源"],
+      "outputs": ["统计对象快照", "可支持与不可支持的结论", "产品判断、补证动作或数据契约"],
+      "evidence_contract": "事件、任务、用户和租户分别计数；比例绑定分子分母；样本内终态不冒充业务权威终态。",
+      "tool_categories": ["日志读取", "只读数据库", "表格与数据分析"],
+      "fallback": "无法访问数据时输出可执行查询或采集方案，不宣称已观察到结果。",
+      "references": ["references/data-analysis.md"],
+      "eval_ids": {"stable": [31, 70, 71], "challenge": ["CH-01", "CH-13"], "trigger": [14, 29]},
+      "owner": "MyP-M-A maintainers",
+      "introduced_in": "0.36.0"
+    },
+    {
+      "id": "strategy.strategy-gtm-decision",
+      "name_zh": "战略与市场进入决策",
+      "domain": "strategy",
+      "status": "pilot",
+      "card_file": "capabilities/strategy/strategy-gtm-decision.md",
+      "entrypoints": ["/idea", "/review", "/prd"],
+      "stages": ["discover", "validate", "define", "review"],
+      "triggers": [
+        "需要选择目标市场、用户细分、定位、定价、商业模式、渠道或 GTM 路径",
+        "多个战略方向互斥并争抢资源，需要明确取舍与停止条件"
+      ],
+      "anti_triggers": [
+        "普通功能需求、已批准方案实现或只写入既定价格字段",
+        "当前问题可由产品范围、交互或技术实现直接回答"
+      ],
+      "required_inputs": ["决策与期限", "目标角色和替代方案", "能力约束与市场证据"],
+      "outputs": ["互斥选项与推荐", "取舍和排除项", "承重假设、验证与停止条件"],
+      "evidence_contract": "市场、竞品、价格和渠道主张绑定来源与时间；竞品价格不能直接证明支付意愿；框架不制造答案。",
+      "tool_categories": ["公开资料检索", "市场证据分析", "产品数据分析"],
+      "fallback": "证据不足时区分事实与假设，只给研究计划与可逆选择，不宣布正式战略或价格。",
+      "references": ["references/strategy-gtm.md"],
+      "eval_ids": {"stable": [84], "challenge": ["CH-21"], "trigger": [32, 33]},
+      "owner": "MyP-M-A maintainers",
+      "introduced_in": "0.36.0"
+    }
+  ]
+}

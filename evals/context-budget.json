@@ -64,6 +64,27 @@
           "files": [
             "references/data-analysis.md"
           ]
+        },
+        "capability_discovery": {
+          "baseline_version": "0.36.0-pilot",
+          "files": [
+            "capabilities/discovery/problem-validation.md",
+            "references/discovery.md"
+          ]
+        },
+        "capability_analytics": {
+          "baseline_version": "0.36.0-pilot",
+          "files": [
+            "capabilities/analytics/product-data-analysis.md",
+            "references/data-analysis.md"
+          ]
+        },
+        "capability_strategy": {
+          "baseline_version": "0.36.0-pilot",
+          "files": [
+            "capabilities/strategy/strategy-gtm-decision.md",
+            "references/strategy-gtm.md"
+          ]
         }
       },
       "baseline": {
@@ -79,6 +100,18 @@
           "data_analysis": {
             "normalized_chars": 21598,
             "utf8_bytes": 49750
+          },
+          "capability_discovery": {
+            "normalized_chars": 14401,
+            "utf8_bytes": 31533
+          },
+          "capability_analytics": {
+            "normalized_chars": 16174,
+            "utf8_bytes": 36126
+          },
+          "capability_strategy": {
+            "normalized_chars": 15141,
+            "utf8_bytes": 32917
           }
         }
       },

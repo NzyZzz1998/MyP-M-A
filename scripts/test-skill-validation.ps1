@@ -7,6 +7,9 @@ $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("mypm-validation-" + [G
 . (Join-Path $PSScriptRoot 'validation\validate-evals.ps1')
 . (Join-Path $PSScriptRoot 'validation\validate-contracts.ps1')
 . (Join-Path $PSScriptRoot 'validation\validate-runtime.ps1')
+. (Join-Path $PSScriptRoot 'validation\validate-capabilities.ps1')
+. (Join-Path $PSScriptRoot 'validation\validate-external-benchmark.ps1')
+. (Join-Path $PSScriptRoot 'validation\validate-public-cases.ps1')
 
 function Write-JsonFile {
     param($Value, [string]$Path)
@@ -25,7 +28,10 @@ function Get-ValidationErrors {
         (Invoke-MypmDocsValidation -Root $FixtureRoot),
         (Invoke-MypmEvalsValidation -Root $FixtureRoot),
         (Invoke-MypmContractsValidation -Root $FixtureRoot),
-        (Invoke-MypmRuntimeValidation -Root $FixtureRoot)
+        (Invoke-MypmRuntimeValidation -Root $FixtureRoot),
+        (Invoke-MypmCapabilitiesValidation -Root $FixtureRoot),
+        (Invoke-MypmExternalBenchmarkValidation -Root $FixtureRoot),
+        (Invoke-MypmPublicCasesValidation -Root $FixtureRoot)
     )) {
         foreach ($message in @($result.Errors)) { $errors.Add([string]$message) }
     }
@@ -52,11 +58,12 @@ try {
     foreach ($file in @('SKILL.md', 'README.md', 'CHANGELOG.md')) {
         Copy-Item -LiteralPath (Join-Path $root $file) -Destination (Join-Path $base $file)
     }
-    foreach ($directory in @('agents', 'evals', 'references', 'templates')) {
+    foreach ($directory in @('agents', 'capabilities', 'evals', 'examples', 'references', 'templates')) {
         Copy-Item -LiteralPath (Join-Path $root $directory) -Destination (Join-Path $base $directory) -Recurse
     }
     New-Item -ItemType Directory -Path (Join-Path $base 'notes') -Force | Out-Null
     Copy-Item -LiteralPath (Join-Path $root 'notes\mypm-roadmap.md') -Destination (Join-Path $base 'notes\mypm-roadmap.md')
+    Copy-Item -LiteralPath (Join-Path $root 'notes\v0.36-capability-ecosystem-prd.md') -Destination (Join-Path $base 'notes\v0.36-capability-ecosystem-prd.md')
 
     $positiveErrors = @(Get-ValidationErrors -FixtureRoot $base)
     Assert-True -Condition ($positiveErrors.Count -eq 0) -Message "Positive fixture failed: $($positiveErrors -join ' | ')"

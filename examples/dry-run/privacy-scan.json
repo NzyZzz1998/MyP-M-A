@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "scanned_at": "2026-08-17T00:00:00Z",
+  "patterns": ["absolute-user-path", "email", "phone", "private-ip", "token", "credential", "private-repository"],
+  "files_scanned": 7,
+  "findings": 0,
+  "notes": "输入、交付、证据、授权、人工复核、撤回审计和 manifest 均为合成治理材料。"
+}

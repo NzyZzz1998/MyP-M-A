@@ -1,0 +1,7 @@
+event_id,task_id,user_id,tenant_id,attempt,result,version
+E01,T01,U01,A,1,failed,2.3.0
+E02,T01,U01,A,2,succeeded,2.3.0
+E03,T02,U01,A,1,failed,2.3.0
+E04,T03,U02,B,1,succeeded,2.3.0
+E05,T04,U03,B,1,failed,2.2.4
+E06,T05,U03,B,1,succeeded,2.3.0

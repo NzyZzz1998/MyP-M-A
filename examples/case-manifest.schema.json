@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/mypm/case-manifest.schema.json",
+  "title": "MyP-M-A public case manifest",
+  "type": "object",
+  "required": ["schema_version", "case_id", "title_zh", "status", "source_type", "authorization", "privacy", "versions", "artifacts", "evidence", "third_party_content", "withdrawal"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "case_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+    "title_zh": {"type": "string", "minLength": 1},
+    "status": {"enum": ["draft", "review", "approved", "published", "withdrawn"]},
+    "source_type": {"enum": ["synthetic", "user-owned", "public-licensed"]},
+    "authorization": {
+      "type": "object",
+      "required": ["owner", "basis", "recorded_at", "redistribution_allowed", "evidence_file"],
+      "properties": {
+        "owner": {"type": "string"},
+        "basis": {"type": "string"},
+        "recorded_at": {"type": "string"},
+        "redistribution_allowed": {"type": "boolean"},
+        "evidence_file": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["contains_real_user_data", "anonymization_method", "scan_report", "scan_findings", "manual_review_file", "manual_review_status"],
+      "properties": {
+        "contains_real_user_data": {"type": "boolean"},
+        "anonymization_method": {"type": "string"},
+        "scan_report": {"type": "string"},
+        "scan_findings": {"type": "integer", "minimum": 0},
+        "manual_review_file": {"type": "string"},
+        "manual_review_status": {"enum": ["pending", "passed", "failed"]}
+      },
+      "additionalProperties": false
+    },
+    "versions": {
+      "type": "object",
+      "required": ["case_version", "mypm_version", "generated_at"],
+      "properties": {
+        "case_version": {"type": "string"},
+        "mypm_version": {"type": "string"},
+        "generated_at": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "kind", "sha256", "public"],
+        "properties": {
+          "path": {"type": "string"},
+          "kind": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "public": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "artifact", "locator", "state"],
+        "properties": {
+          "claim_id": {"type": "string"},
+          "artifact": {"type": "string"},
+          "locator": {"type": "string"},
+          "state": {"enum": ["confirmed", "inferred", "unknown"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "third_party_content": {"type": "array", "items": {"type": "object"}},
+    "withdrawal": {
+      "type": ["object", "null"],
+      "properties": {
+        "reason": {"type": "string"},
+        "requested_at": {"type": "string"},
+        "removed_from_index_at": {"type": "string"},
+        "audit_file": {"type": "string"}
+      },
+      "required": ["reason", "requested_at", "removed_from_index_at", "audit_file"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -490,6 +490,76 @@
       "challenge_evals": ["CH-21"],
       "trigger_evals": [32],
       "release_core": false
+    },
+    {
+      "contract_id": "capability-registry-schema",
+      "source_file": "capabilities/README.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
+      "risk": "high",
+      "stable_evals": [],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "capability-card-single-source",
+      "source_file": "capabilities/README.md",
+      "routes": ["/review", "/idea", "/prd"],
+      "risk": "high",
+      "stable_evals": [],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "capability-card-minimal-loading",
+      "source_file": "capabilities/README.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
+      "risk": "high",
+      "stable_evals": [],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "public-case-authorization",
+      "source_file": "examples/public-case-spec.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
+      "risk": "high",
+      "stable_evals": [],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "public-case-anonymization",
+      "source_file": "examples/public-case-spec.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
+      "risk": "high",
+      "stable_evals": [],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "public-case-evidence-traceability",
+      "source_file": "examples/public-case-spec.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
+      "risk": "high",
+      "stable_evals": [],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "public-case-withdrawal",
+      "source_file": "examples/public-case-spec.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
+      "risk": "high",
+      "stable_evals": [],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
     }
   ]
 }

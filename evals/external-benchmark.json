@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "candidate_manifest": "evals/external-candidates.json",
+  "task_contract": "evals/external-benchmark-contract.json",
+  "execution": {
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "medium",
+    "runs_per_task": 1,
+    "output_language": "zh-CN",
+    "tools": "disabled",
+    "timeout_seconds": 300,
+    "retry_policy": "仅无输出、执行器错误或无法评分时补跑一次；差异或波动任务再补到三次"
+  },
+  "reporting": {
+    "no_unified_total_score": true,
+    "minimum_common_valid_tasks": 10,
+    "show_per_task": true,
+    "show_invalid_samples": true,
+    "separate_structure_from_behavior": true
+  },
+  "scoring_dimensions": [
+    {"id": "correctness", "label_zh": "正确性", "scale": "0-4"},
+    {"id": "evidence_discipline", "label_zh": "证据纪律", "scale": "0-4"},
+    {"id": "decision_clarity", "label_zh": "决策清晰度", "scale": "0-4"},
+    {"id": "completeness", "label_zh": "完整性", "scale": "0-4"},
+    {"id": "executability", "label_zh": "可执行性", "scale": "0-4"},
+    {"id": "redundancy", "label_zh": "重复度", "scale": "0-4，越高越精炼"},
+    {"id": "characters", "label_zh": "字符数", "scale": "机械统计"},
+    {"id": "duration_ms", "label_zh": "完成时长", "scale": "机械统计"},
+    {"id": "valid_return", "label_zh": "有效返回", "scale": "true/false"}
+  ],
+  "tasks": [
+    {
+      "id": "EB-01", "requirement_id": "FR-007/EB-01", "semantic_key": "mixed_evidence_problem_judgment", "domain": "discovery",
+      "title_zh": "从混合反馈、日志和 Review 结果判断真实问题",
+      "fixture": "evals/files/external-benchmark/eb01-mixed-evidence.md",
+      "prompt": "基于附件中的用户反馈、运行日志和项目 Review 结果，判断批量导出失败是否是真问题、是否值得继续、现在是否应该做。不要直接写 PRD。",
+      "minimum_contract": ["证据与推断分开", "区分反馈人数、日志事件和失败任务", "识别问题边界与反例", "给阶段判断、最小补证和停止条件"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/discovery/problem-validation.md", "references/discovery.md"],
+        "phuryn-pm-skills": ["pm-product-discovery/skills/summarize-interview/SKILL.md", "pm-product-discovery/skills/analyze-feature-requests/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/discover-interview-synthesis/SKILL.md", "skills/define-problem-statement/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-02", "requirement_id": "FR-007/EB-02", "semantic_key": "weak_evidence_pressure_test", "domain": "discovery",
+      "title_zh": "对弱证据新想法做压力测试",
+      "fixture": "evals/files/external-benchmark/eb02-weak-evidence.md",
+      "prompt": "判断插件市场需求是否值得进入下一版本。请压力测试证据、成本、时机和更小替代方案，不要直接写 PRD。",
+      "minimum_contract": ["不伪造用户需求", "区分愿望与行为证据", "识别机会成本", "给明确阶段判断与继续/停止阈值"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/idea.md", "references/red-team.md", "references/judgment-framework.md"],
+        "phuryn-pm-skills": ["pm-product-discovery/skills/prioritize-assumptions/SKILL.md", "pm-product-discovery/skills/identify-assumptions-existing/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/define-hypothesis/SKILL.md", "skills/foundation-build-risk-review/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-03", "requirement_id": "FR-007/EB-03", "semantic_key": "feedback_metric_denominator", "domain": "analytics",
+      "title_zh": "分析反馈数据并锁定统计对象",
+      "fixture": "evals/files/external-benchmark/eb03-feedback-metrics.csv",
+      "prompt": "团队称失败率为 50%。请基于附件校准事件、任务、最终失败任务和用户口径，再判断是否需要重做整个导出中心。",
+      "minimum_contract": ["分母、去重、时间窗明确", "准确区分四类统计对象", "重试不重复计任务", "不外推总体失败率并给最小补证"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/analytics/product-data-analysis.md", "references/data-analysis.md"],
+        "phuryn-pm-skills": ["pm-product-discovery/skills/metrics-dashboard/SKILL.md", "pm-data-analytics/skills/sql-queries/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/measure-dashboard-requirements/SKILL.md", "skills/measure-experiment-results/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-04", "requirement_id": "FR-007/EB-04", "semantic_key": "kpi_data_contract", "domain": "analytics",
+      "title_zh": "设计 KPI 与数据合同",
+      "fixture": "evals/files/external-benchmark/eb04-kpi-contract.md",
+      "prompt": "为团队活跃榜定义可开发的数据契约和验收样例。已有事实必须保留，未知项标门禁，不要退化成问题清单。",
+      "minimum_contract": ["来源、口径、异常和权限完整", "分子分母和去重键明确", "时间与权限边界完整", "来源到页面血缘及迟到数据验收"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/prd.md", "capabilities/analytics/product-data-analysis.md", "references/data-analysis.md"],
+        "phuryn-pm-skills": ["pm-execution/skills/create-prd/SKILL.md", "pm-product-discovery/skills/metrics-dashboard/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/deliver-prd/SKILL.md", "skills/measure-instrumentation-spec/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-05", "requirement_id": "FR-007/EB-05", "semantic_key": "mutually_exclusive_strategy_choice", "domain": "strategy",
+      "title_zh": "比较 2～3 个互斥产品战略",
+      "fixture": "evals/files/external-benchmark/eb05-strategy-options.md",
+      "prompt": "在个人开发者与小团队之间收敛首版 ICP 和定位。给互斥选项、推荐、排除项和最小验证，不外推企业市场。",
+      "minimum_contract": ["有取舍与排除项，不堆框架", "至少比较两个互斥选项", "区分使用者、决策者和买方", "给证据边界、最小验证和停止条件"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/strategy/strategy-gtm-decision.md", "references/strategy-gtm.md"],
+        "phuryn-pm-skills": ["pm-product-strategy/skills/product-strategy/SKILL.md", "pm-go-to-market/skills/ideal-customer-profile/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/foundation-persona/SKILL.md", "skills/foundation-lean-canvas/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-06", "requirement_id": "FR-007/EB-06", "semantic_key": "competitor_market_judgment", "domain": "strategy-research",
+      "title_zh": "形成竞品与市场判断",
+      "fixture": "evals/files/external-benchmark/eb06-market-competitor.md",
+      "prompt": "评估席位定价和社区发布方案。区分事实、价格假设和支付证据，给分阶段 GTM 与停止条件。",
+      "minimum_contract": ["可核查来源与适用边界", "竞品标价不等于支付意愿", "区分使用者与购买链", "给分阶段渠道实验、护栏和停止条件"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/strategy/strategy-gtm-decision.md", "references/strategy-gtm.md"],
+        "phuryn-pm-skills": ["pm-product-strategy/skills/pricing-strategy/SKILL.md", "pm-go-to-market/skills/gtm-strategy/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/foundation-lean-canvas/SKILL.md", "skills/discover-competitive-analysis/SKILL.md", "skills/deliver-launch-checklist/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-07", "requirement_id": "FR-007/EB-07", "semantic_key": "full_ui_prd", "domain": "prd",
+      "title_zh": "为完整 UI 功能输出正式 PRD",
+      "fixture": "evals/files/external-benchmark/eb07-settings-ui.md",
+      "prompt": "补全设置页功能需求，覆盖所有控件、保存/取消/关闭、空载失败状态、键盘与窄屏，并判断原型交付要求。",
+      "minimum_contract": ["全链路、影响范围、高保真交付门禁", "成功、失败和无变化反馈", "保存、取消和关闭行为明确", "原型和可访问性要求可验收"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/prd.md", "references/user-stories.md", "references/traceability.md"],
+        "phuryn-pm-skills": ["pm-execution/skills/create-prd/SKILL.md", "pm-execution/skills/test-scenarios/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/deliver-prd/SKILL.md", "skills/deliver-edge-cases/SKILL.md", "skills/deliver-acceptance-criteria/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-08", "requirement_id": "FR-007/EB-08", "semantic_key": "async_backend_prd", "domain": "prd-data",
+      "title_zh": "为异步后端任务输出正式 PRD",
+      "fixture": "evals/files/external-benchmark/eb08-async-backend.md",
+      "prompt": "将异步导出收敛为详细功能需求，覆盖入口到出口、状态迁移、失败恢复、影响范围和开发前验收。",
+      "minimum_contract": ["状态、幂等、权限、失败与数据库合同", "规范状态机和迁移边界", "前后端及数据影响完整", "取消、重试、过期与开发前验收明确"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/prd.md", "references/traceability.md", "references/user-stories.md"],
+        "phuryn-pm-skills": ["pm-execution/skills/create-prd/SKILL.md", "pm-execution/skills/user-stories/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/deliver-prd/SKILL.md", "skills/deliver-user-stories/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-09", "requirement_id": "FR-007/EB-09", "semantic_key": "deep_structured_project_review", "domain": "review",
+      "title_zh": "深度 Review 一个真实结构化项目",
+      "fixture": "evals/files/external-benchmark/eb09-project-review.md",
+      "prompt": "评审该项目快照：先梳理目标、核心路径、模块和当前阶段，再按证据列问题、影响与下一步，不把未知写成缺陷。",
+      "minimum_contract": ["架构、主链、风险、证据状态", "先建立项目脉络", "事实、推断和未知分层", "问题带影响、证据、可视化结构和分流"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/review.md", "references/deep-review.md", "references/traceability.md"],
+        "phuryn-pm-skills": ["pm-execution/skills/strategy-red-team/SKILL.md", "pm-product-strategy/skills/product-strategy/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/foundation-build-risk-review/SKILL.md", "skills/utility-pm-critic/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-10", "requirement_id": "FR-007/EB-10", "semantic_key": "intent_implementation_consistency_review", "domain": "review",
+      "title_zh": "Review PRD 与实现的一致性",
+      "fixture": "evals/files/external-benchmark/eb10-intent-implementation-review.md",
+      "prompt": "对照附件中的 PRD、实现摘要和测试证据，评审需求是否被正确实现。列出一致项、偏差、回归风险、证据缺口和下一步，不把未验证项写成缺陷或通过。",
+      "minimum_contract": ["原目标、实现、测试和回归关联", "逐项建立需求到实现和证据的映射", "区分确定偏差、待验证和范围外变化", "给影响、优先级、最小修复或补证"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/review.md", "references/intent-implementation-audit.md", "references/traceability.md"],
+        "phuryn-pm-skills": ["pm-ai-shipping/skills/intended-vs-implemented/SKILL.md", "pm-execution/skills/test-scenarios/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/foundation-build-risk-review/SKILL.md", "skills/utility-pm-critic/SKILL.md", "skills/deliver-acceptance-criteria/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-11", "requirement_id": "FR-007/EB-11", "semantic_key": "release_candidate_acceptance", "domain": "acceptance",
+      "title_zh": "验收候选发布包",
+      "fixture": "evals/files/external-benchmark/eb11-acceptance.md",
+      "prompt": "根据验收证据判断候选版本是否可发布。区分通过、部分通过、待验证和阻塞，继承有效证据并给最小补证。",
+      "minimum_contract": ["身份、新鲜度、真实证据、阻塞判断", "不把未执行项写通过", "正确处理冲突与旧 build 证据", "给发布判断和必要手工补证"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/acceptance.md", "references/tooling.md", "references/traceability.md"],
+        "phuryn-pm-skills": ["pm-ai-shipping/skills/intended-vs-implemented/SKILL.md", "pm-execution/skills/test-scenarios/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/deliver-acceptance-criteria/SKILL.md", "skills/deliver-edge-cases/SKILL.md", "skills/utility-pm-release-conductor/SKILL.md"]
+      }
+    },
+    {
+      "id": "EB-12", "requirement_id": "FR-007/EB-12", "semantic_key": "next_stage_prompt_handoff", "domain": "prompt-handoff",
+      "title_zh": "将阶段结论转成下一阶段提示词",
+      "fixture": "evals/files/external-benchmark/eb12-handoff.md",
+      "prompt": "根据附件生成一条可直接交给下一任务的完整提示词。继承已完成结论，只推进下一阶段，并明确授权边界、停止点和禁止事项。",
+      "minimum_contract": ["不重做上一步、授权和停止点明确", "继承候选身份、证据和未关闭项", "输入、任务、输出和范围约束可执行", "不擅自提交、发布或扩大范围"],
+      "candidate_context": {
+        "mypm-v036": ["SKILL.md", "references/prompt.md", "references/workflow-control.md", "references/next-step-prompts.md"],
+        "phuryn-pm-skills": ["pm-execution/skills/outcome-roadmap/SKILL.md", "pm-execution/skills/release-notes/SKILL.md", "pm-ai-shipping/skills/intended-vs-implemented/SKILL.md"],
+        "product-on-purpose-pm-skills": ["skills/foundation-prioritized-action-plan/SKILL.md", "skills/utility-pm-release-conductor/SKILL.md", "skills/deliver-release-notes/SKILL.md"]
+      }
+    }
+  ]
+}

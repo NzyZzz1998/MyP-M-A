@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "frozen_at": "2026-08-17",
+  "candidates": [
+    {
+      "id": "mypm-v036",
+      "display_name": "MyP-M-A v0.36 Pilot",
+      "repository_url": "https://github.com/NzyZzz1998/MyP-M-A",
+      "clone_dir": null,
+      "base_commit": "c8af239a91043a35d8229746f36cb7f393fb4526",
+      "license": "MIT",
+      "comparison_mode": "behavior",
+      "host_compatibility": "portable-context",
+      "adapter": "selective-file-context",
+      "notes": "使用当前工作树的五入口合同、相关 reference 与命中的 v0.36 pilot 能力卡；不加载无关文件。"
+    },
+    {
+      "id": "phuryn-pm-skills",
+      "display_name": "phuryn/pm-skills",
+      "repository_url": "https://github.com/phuryn/pm-skills",
+      "clone_dir": "phuryn-pm-skills",
+      "base_commit": "18468a95b427e70e258b51389796367c6f684e7d",
+      "license": "MIT",
+      "comparison_mode": "behavior",
+      "host_compatibility": "portable-context",
+      "adapter": "selective-file-context",
+      "notes": "每题只装配公开仓库中与该任务直接相关的 1 至 3 个 skill，不加载完整 marketplace。"
+    },
+    {
+      "id": "product-on-purpose-pm-skills",
+      "display_name": "product-on-purpose/pm-skills",
+      "repository_url": "https://github.com/product-on-purpose/pm-skills",
+      "clone_dir": "product-on-purpose-pm-skills",
+      "base_commit": "6dcc092f7f77af502077a04cf94b38fc10d2d3c5",
+      "license": "Apache-2.0",
+      "comparison_mode": "behavior",
+      "host_compatibility": "portable-context",
+      "adapter": "selective-file-context",
+      "notes": "每题只装配相关的原子 skill，保持与其他候选相同的用户输入、模型、工具边界和语言。"
+    },
+    {
+      "id": "deanpeters-product-manager-skills",
+      "display_name": "deanpeters/Product-Manager-Skills",
+      "repository_url": "https://github.com/deanpeters/Product-Manager-Skills",
+      "clone_dir": "deanpeters-pm-skills",
+      "base_commit": "a03af68414bb0b924746c97bddf9a5057d017af7",
+      "license": "CC-BY-NC-SA-4.0",
+      "comparison_mode": "structure-only",
+      "host_compatibility": "manual-routing",
+      "adapter": "none",
+      "notes": "覆盖面广但许可证和手动编排方式与本轮可移植同题执行不等价，不计行为得分。"
+    },
+    {
+      "id": "anthropic-knowledge-work-plugins",
+      "display_name": "anthropics/knowledge-work-plugins",
+      "repository_url": "https://github.com/anthropics/knowledge-work-plugins",
+      "clone_dir": "anthropic-knowledge-work-plugins",
+      "base_commit": "bd1fb11095669f76797a12427791d3b4deeabd16",
+      "license": "Apache-2.0",
+      "comparison_mode": "structure-only",
+      "host_compatibility": "claude-cowork-connectors",
+      "adapter": "none",
+      "notes": "产品管理插件依赖特定宿主与连接器，结构可借鉴，但本轮不把宿主差异算作能力失败。"
+    },
+    {
+      "id": "kappa-startup-pressure-test",
+      "display_name": "Kappaemme-git/codex-startup-pressure-test-skill",
+      "repository_url": "https://github.com/Kappaemme-git/codex-startup-pressure-test-skill",
+      "clone_dir": "kappa-pressure-test",
+      "base_commit": "247b06546a4beaf5775180e587d8b3e772ea8574",
+      "license": "MIT",
+      "comparison_mode": "structure-only",
+      "host_compatibility": "single-purpose",
+      "adapter": "none",
+      "notes": "单一压力测试能力无法公平覆盖 12 条通用 PM 任务，仅作为专项结构参考。"
+    }
+  ]
+}

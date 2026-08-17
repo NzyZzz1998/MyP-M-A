@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "case_id": "deskflow-export-reliability",
+  "title_zh": "DeskFlow 导出可靠性判断",
+  "status": "withdrawn",
+  "source_type": "synthetic",
+  "authorization": {
+    "owner": "MyP-M-A maintainers",
+    "basis": "为 v0.36 公开案例治理演练原创编写",
+    "recorded_at": "2026-08-17T00:00:00Z",
+    "redistribution_allowed": true,
+    "evidence_file": "authorization.md"
+  },
+  "privacy": {
+    "contains_real_user_data": false,
+    "anonymization_method": "完全合成，不含真实用户数据",
+    "scan_report": "privacy-scan.json",
+    "scan_findings": 0,
+    "manual_review_file": "manual-review.md",
+    "manual_review_status": "passed"
+  },
+  "versions": {
+    "case_version": "1.0",
+    "mypm_version": "0.36.0-draft",
+    "generated_at": "2026-08-17T00:00:00Z"
+  },
+  "artifacts": [
+    {
+      "path": "source-brief.md",
+      "kind": "source",
+      "sha256": "29f5ac2117a29f1096e210b054519c4b89ff2af2e2c6deef5209d546fb849d22",
+      "public": true
+    },
+    {
+      "path": "deliverable.md",
+      "kind": "deliverable",
+      "sha256": "8baf22de4530b2fe1b7d20c18271e556e0edaf9965840a3a796b870d057e56dd",
+      "public": true
+    },
+    {
+      "path": "evidence-register.md",
+      "kind": "evidence-register",
+      "sha256": "17718c46cab32a2874e2f9184a002b5a88fca4dd7355cf1893874c8a5859d154",
+      "public": true
+    },
+    {
+      "path": "authorization.md",
+      "kind": "authorization",
+      "sha256": "1cb51fcff93b4193fa8ee81d40de63cfc1be0876e15002bbd7e2a7c9f05de4b7",
+      "public": true
+    },
+    {
+      "path": "privacy-scan.json",
+      "kind": "privacy-scan",
+      "sha256": "b0047e42c3e320cc638b5986357a6e4bdfc1d0b0c0a665964605d3a3d16ad5d6",
+      "public": true
+    },
+    {
+      "path": "manual-review.md",
+      "kind": "manual-review",
+      "sha256": "19d5fb434aa32dda64201bf8cf2f5fa7079d9993141928f5c3aac3cb141bdab2",
+      "public": true
+    },
+    {
+      "path": "withdrawal-audit.md",
+      "kind": "withdrawal-audit",
+      "sha256": "9afe1e103051a7fc6d7601f15561f37c88fcb1b926b8d65146edd1add8ab5575",
+      "public": false
+    }
+  ],
+  "evidence": [
+    {
+      "claim_id": "CL-001",
+      "artifact": "source-brief.md",
+      "locator": "已知材料第 1～3 条",
+      "state": "confirmed"
+    },
+    {
+      "claim_id": "CL-002",
+      "artifact": "source-brief.md",
+      "locator": "已知材料第 4 条",
+      "state": "confirmed"
+    },
+    {
+      "claim_id": "CL-003",
+      "artifact": "source-brief.md",
+      "locator": "已知材料第 5 条",
+      "state": "inferred"
+    },
+    {
+      "claim_id": "CL-004",
+      "artifact": "deliverable.md",
+      "locator": "最小补证",
+      "state": "inferred"
+    }
+  ],
+  "third_party_content": [],
+  "withdrawal": {
+    "reason": "验证 withdrawn 生命周期，不代表内容或隐私缺陷",
+    "requested_at": "2026-08-17T00:30:00Z",
+    "removed_from_index_at": "2026-08-17T00:35:00Z",
+    "audit_file": "withdrawal-audit.md"
+  }
+}

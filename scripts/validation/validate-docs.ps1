@@ -37,7 +37,7 @@ function Invoke-MypmDocsValidation {
     if (-not $version) { Add-MypmValidationError -Result $result -Message 'SKILL.md is missing metadata.version' }
 
     $statusPattern = '<!-- project-status: version=([^;]+); state=([a-z-]+) -->'
-    $allowedStates = @('candidate', 'local-committed', 'remote-synced')
+    $allowedStates = @('candidate', 'stable-local-pending', 'local-committed', 'remote-synced')
     $records = [System.Collections.Generic.List[string]]::new()
     $stateByDocument = @{}
     foreach ($relative in @('README.md', 'notes/mypm-roadmap.md')) {
