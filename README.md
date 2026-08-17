@@ -9,7 +9,7 @@
 
 **把产品评审、价值判断、需求定义与真实验收，串成一条可追溯的中文工作流。**
 
-`v0.36.0 Stable（本地已提交）` · `v0.35.0 远端回退基线` · `中文优先` · `5 个入口`
+`v0.36.0 Stable（已同步远端）` · `v0.35.0 历史回退基线` · `中文优先` · `5 个入口`
 
 MyP-M-A（My Product Manager Assistant）是面向 Codex 的个人产品经理 Skill。你可以直接给它项目路径、产品想法、PRD、截图、日志或构建产物；它会先判断当前阶段，再交付该阶段真正需要的成果。
 
@@ -109,8 +109,8 @@ v0.36 在五个入口之下增加离线治理的能力注册表。首批 Discove
 
 ## 当前质量证据
 
-当前版本：`v0.36.0 Stable（本地已提交）` 已完成 M0～M5 与独立 `/acceptance`；尚未推送、打 tag 或创建 Release。当前远端回退基线仍为 `v0.35.0 Stable`。
-<!-- project-status: version=0.36.0; state=local-committed -->
+当前版本：`v0.36.0 Stable（已同步远端）` 已完成 M0～M5 与独立 `/acceptance`，提交 `4bf426c` 已推送；尚未打 tag 或创建 Release。`v0.35.0 Stable` 保留为历史回退基线。
+<!-- project-status: version=0.36.0; state=remote-synced -->
 
 | 证据面 | 当前结果 |
 | --- | --- |
