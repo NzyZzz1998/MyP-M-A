@@ -4,44 +4,19 @@
     {
       "contract_id": "entry-isolation",
       "source_file": "SKILL.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance",
-        "/prompt"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
       "risk": "critical",
-      "stable_evals": [
-        17,
-        38
-      ],
+      "stable_evals": [17, 38],
       "challenge_evals": [],
-      "trigger_evals": [
-        2,
-        3,
-        5,
-        6,
-        12
-      ],
+      "trigger_evals": [2, 3, 5, 6, 12],
       "release_core": false
     },
     {
       "contract_id": "context-minimal-loading",
       "source_file": "SKILL.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance",
-        "/prompt"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
       "risk": "high",
-      "stable_evals": [
-        17,
-        22,
-        42
-      ],
+      "stable_evals": [17, 22, 42],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -49,42 +24,19 @@
     {
       "contract_id": "guarded-output-scan",
       "source_file": "SKILL.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance",
-        "/prompt"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
       "risk": "critical",
-      "stable_evals": [
-        31,
-        32,
-        56,
-        76,
-        91
-      ],
-      "challenge_evals": [
-        "CH-16"
-      ],
+      "stable_evals": [31, 32, 56, 76, 91],
+      "challenge_evals": ["CH-16"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "single-source-output",
       "source_file": "SKILL.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance",
-        "/prompt"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
       "risk": "high",
-      "stable_evals": [
-        38,
-        56
-      ],
+      "stable_evals": [38, 56],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -92,181 +44,99 @@
     {
       "contract_id": "idea-core-output",
       "source_file": "references/idea.md",
-      "routes": [
-        "/idea"
-      ],
+      "routes": ["/idea"],
       "risk": "critical",
-      "stable_evals": [
-        1,
-        31,
-        84,
-        90
-      ],
-      "challenge_evals": [
-        "CH-24"
-      ],
-      "trigger_evals": [
-        1,
-        2,
-        11,
-        14,
-        32
-      ],
+      "stable_evals": [1, 31, 84, 90],
+      "challenge_evals": ["CH-24"],
+      "trigger_evals": [1, 2, 11, 14, 32],
       "release_core": true
     },
     {
       "contract_id": "idea-feedback-role-binding",
       "source_file": "references/idea.md",
-      "routes": [
-        "/idea"
-      ],
+      "routes": ["/idea"],
       "risk": "high",
-      "stable_evals": [
-        31
-      ],
+      "stable_evals": [31],
       "challenge_evals": [],
-      "trigger_evals": [
-        11
-      ],
+      "trigger_evals": [11],
       "release_core": false
     },
     {
       "contract_id": "idea-strategy-gtm-evidence",
       "source_file": "references/idea.md",
-      "routes": [
-        "/idea"
-      ],
+      "routes": ["/idea"],
       "risk": "critical",
-      "stable_evals": [
-        84
-      ],
-      "challenge_evals": [
-        "CH-21"
-      ],
-      "trigger_evals": [
-        32
-      ],
+      "stable_evals": [84],
+      "challenge_evals": ["CH-21"],
+      "trigger_evals": [32],
       "release_core": false
     },
     {
       "contract_id": "review-core-output",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "critical",
-      "stable_evals": [
-        17,
-        72
-      ],
+      "stable_evals": [17, 72],
       "challenge_evals": [],
-      "trigger_evals": [
-        3,
-        4,
-        8
-      ],
+      "trigger_evals": [3, 4, 8],
       "release_core": true
     },
     {
       "contract_id": "review-route-and-visual",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "high",
-      "stable_evals": [
-        16,
-        17,
-        85
-      ],
-      "challenge_evals": [
-        "CH-04"
-      ],
-      "trigger_evals": [
-        3,
-        4
-      ],
+      "stable_evals": [16, 17, 85],
+      "challenge_evals": ["CH-04"],
+      "trigger_evals": [3, 4],
       "release_core": false
     },
     {
       "contract_id": "review-slimming-evidence",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "critical",
-      "stable_evals": [
-        72
-      ],
-      "challenge_evals": [
-        "CH-14"
-      ],
+      "stable_evals": [72],
+      "challenge_evals": ["CH-14"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "review-evidence-handoff",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "high",
-      "stable_evals": [
-        79
-      ],
-      "challenge_evals": [
-        "CH-04"
-      ],
+      "stable_evals": [79],
+      "challenge_evals": ["CH-04"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "review-finding-evidence-source",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "critical",
-      "stable_evals": [
-        17,
-        22,
-        79,
-        85
-      ],
-      "challenge_evals": [
-        "CH-04"
-      ],
+      "stable_evals": [17, 22, 79, 85],
+      "challenge_evals": ["CH-04"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "review-explicit-idea-candidates",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "high",
-      "stable_evals": [
-        16,
-        23
-      ],
-      "challenge_evals": [
-        "CH-04"
-      ],
+      "stable_evals": [16, 23],
+      "challenge_evals": ["CH-04"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "review-default-handoff",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "high",
-      "stable_evals": [
-        16,
-        23
-      ],
+      "stable_evals": [16, 23],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -274,66 +144,39 @@
     {
       "contract_id": "review-strategy-consistency",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "high",
-      "stable_evals": [
-        23
-      ],
-      "challenge_evals": [
-        "CH-04"
-      ],
+      "stable_evals": [23],
+      "challenge_evals": ["CH-04"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "review-deep-domain-assembly",
       "source_file": "references/deep-review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "critical",
-      "stable_evals": [
-        7,
-        72,
-        85
-      ],
-      "challenge_evals": [
-        "CH-04",
-        "CH-14"
-      ],
+      "stable_evals": [7, 72, 85],
+      "challenge_evals": ["CH-04", "CH-14"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "review-code-scanner-layer",
       "source_file": "references/review.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "critical",
-      "stable_evals": [
-        22,
-        82
-      ],
-      "challenge_evals": [
-        "CH-19"
-      ],
+      "stable_evals": [22, 82],
+      "challenge_evals": ["CH-19"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "intent-implementation-audit",
       "source_file": "references/intent-implementation-audit.md",
-      "routes": [
-        "/review",
-        "/acceptance"
-      ],
+      "routes": ["/review", "/acceptance"],
       "risk": "critical",
-      "stable_evals": [
-        87
-      ],
+      "stable_evals": [87],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -341,256 +184,139 @@
     {
       "contract_id": "prd-core-output",
       "source_file": "references/prd.md",
-      "routes": [
-        "/prd"
-      ],
+      "routes": ["/prd"],
       "risk": "critical",
-      "stable_evals": [
-        32,
-        61
-      ],
-      "challenge_evals": [
-        "CH-21"
-      ],
-      "trigger_evals": [
-        5,
-        10
-      ],
+      "stable_evals": [32, 61],
+      "challenge_evals": ["CH-21"],
+      "trigger_evals": [5, 10],
       "release_core": true
     },
     {
       "contract_id": "prd-known-facts",
       "source_file": "references/prd.md",
-      "routes": [
-        "/prd"
-      ],
+      "routes": ["/prd"],
       "risk": "critical",
-      "stable_evals": [
-        86
-      ],
-      "challenge_evals": [
-        "CH-22"
-      ],
+      "stable_evals": [86],
+      "challenge_evals": ["CH-22"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "prd-hifi-gate",
       "source_file": "references/prd.md",
-      "routes": [
-        "/prd"
-      ],
+      "routes": ["/prd"],
       "risk": "critical",
-      "stable_evals": [
-        27
-      ],
+      "stable_evals": [27],
       "challenge_evals": [],
-      "trigger_evals": [
-        34
-      ],
+      "trigger_evals": [34],
       "release_core": false
     },
     {
       "contract_id": "prd-async-idempotency",
       "source_file": "references/prd.md",
-      "routes": [
-        "/prd"
-      ],
+      "routes": ["/prd"],
       "risk": "critical",
-      "stable_evals": [
-        32,
-        61
-      ],
+      "stable_evals": [32, 61],
       "challenge_evals": [],
-      "trigger_evals": [
-        5,
-        10
-      ],
+      "trigger_evals": [5, 10],
       "release_core": false
     },
     {
       "contract_id": "prd-strategy-gtm-boundary",
       "source_file": "references/prd.md",
-      "routes": [
-        "/prd"
-      ],
+      "routes": ["/prd"],
       "risk": "critical",
-      "stable_evals": [
-        84
-      ],
-      "challenge_evals": [
-        "CH-21"
-      ],
-      "trigger_evals": [
-        32
-      ],
+      "stable_evals": [84],
+      "challenge_evals": ["CH-21"],
+      "trigger_evals": [32],
       "release_core": false
     },
     {
       "contract_id": "acceptance-core-output",
       "source_file": "references/acceptance.md",
-      "routes": [
-        "/acceptance"
-      ],
+      "routes": ["/acceptance"],
       "risk": "critical",
-      "stable_evals": [
-        36,
-        76
-      ],
-      "challenge_evals": [
-        "CH-16"
-      ],
-      "trigger_evals": [
-        6,
-        15
-      ],
+      "stable_evals": [36, 76],
+      "challenge_evals": ["CH-16"],
+      "trigger_evals": [6, 15],
       "release_core": true
     },
     {
       "contract_id": "acceptance-explicit-inheritance",
       "source_file": "references/acceptance.md",
-      "routes": [
-        "/acceptance"
-      ],
+      "routes": ["/acceptance"],
       "risk": "critical",
-      "stable_evals": [
-        36,
-        89
-      ],
-      "challenge_evals": [
-        "CH-25"
-      ],
+      "stable_evals": [36, 89],
+      "challenge_evals": ["CH-25"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "acceptance-artifact-evidence-freshness",
       "source_file": "references/acceptance.md",
-      "routes": [
-        "/acceptance"
-      ],
+      "routes": ["/acceptance"],
       "risk": "critical",
-      "stable_evals": [
-        76,
-        81
-      ],
-      "challenge_evals": [
-        "CH-16"
-      ],
-      "trigger_evals": [
-        6,
-        15
-      ],
+      "stable_evals": [76, 81],
+      "challenge_evals": ["CH-16"],
+      "trigger_evals": [6, 15],
       "release_core": true
     },
     {
       "contract_id": "acceptance-release-gate",
       "source_file": "references/acceptance.md",
-      "routes": [
-        "/acceptance"
-      ],
+      "routes": ["/acceptance"],
       "risk": "critical",
-      "stable_evals": [
-        76
-      ],
-      "challenge_evals": [
-        "CH-16"
-      ],
-      "trigger_evals": [
-        15
-      ],
+      "stable_evals": [76],
+      "challenge_evals": ["CH-16"],
+      "trigger_evals": [15],
       "release_core": false
     },
     {
       "contract_id": "prompt-preserve-core",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "critical",
-      "stable_evals": [
-        38,
-        48,
-        52,
-        54,
-        56,
-        57,
-        59,
-        88,
-        92
-      ],
-      "challenge_evals": [
-        "CH-23"
-      ],
-      "trigger_evals": [
-        12,
-        13
-      ],
+      "stable_evals": [38, 48, 52, 54, 56, 57, 59, 88, 92],
+      "challenge_evals": ["CH-23"],
+      "trigger_evals": [12, 13],
       "release_core": true
     },
     {
       "contract_id": "prompt-only-generation",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        38,
-        56
-      ],
+      "stable_evals": [38, 56],
       "challenge_evals": [],
-      "trigger_evals": [
-        12,
-        13
-      ],
+      "trigger_evals": [12, 13],
       "release_core": false
     },
     {
       "contract_id": "prompt-release-spine",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "critical",
-      "stable_evals": [
-        53
-      ],
-      "challenge_evals": [
-        "CH-10"
-      ],
+      "stable_evals": [53],
+      "challenge_evals": ["CH-10"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "prompt-generation-first-line",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        46,
-        51
-      ],
+      "stable_evals": [46, 51],
       "challenge_evals": [],
-      "trigger_evals": [
-        12,
-        13
-      ],
+      "trigger_evals": [12, 13],
       "release_core": false
     },
     {
       "contract_id": "prompt-render-shell",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        46,
-        51
-      ],
+      "stable_evals": [46, 51],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -598,13 +324,9 @@
     {
       "contract_id": "prompt-prerequisite-evidence-stop",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "critical",
-      "stable_evals": [
-        56
-      ],
+      "stable_evals": [56],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -612,13 +334,9 @@
     {
       "contract_id": "prompt-subagent-long-tail",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        65
-      ],
+      "stable_evals": [65],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -626,27 +344,19 @@
     {
       "contract_id": "prompt-document-only-boundary",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
       "stable_evals": [],
-      "challenge_evals": [
-        "CH-09"
-      ],
+      "challenge_evals": ["CH-09"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "prompt-concept-handoff-facts",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        50
-      ],
+      "stable_evals": [50],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -654,29 +364,19 @@
     {
       "contract_id": "prompt-release-gate-details",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "critical",
-      "stable_evals": [
-        53
-      ],
-      "challenge_evals": [
-        "CH-10"
-      ],
+      "stable_evals": [53],
+      "challenge_evals": ["CH-10"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "recipient-profile",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        69
-      ],
+      "stable_evals": [69],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -684,14 +384,9 @@
     {
       "contract_id": "prompt-identity",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        46,
-        55
-      ],
+      "stable_evals": [46, 55],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -699,13 +394,9 @@
     {
       "contract_id": "single-verification",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        66
-      ],
+      "stable_evals": [66],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -713,13 +404,9 @@
     {
       "contract_id": "subagent-budget",
       "source_file": "references/prompt.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        65
-      ],
+      "stable_evals": [65],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -727,14 +414,9 @@
     {
       "contract_id": "next-step-routing",
       "source_file": "references/next-step-prompts.md",
-      "routes": [
-        "/prompt"
-      ],
+      "routes": ["/prompt"],
       "risk": "high",
-      "stable_evals": [
-        38,
-        50
-      ],
+      "stable_evals": [38, 50],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -742,53 +424,29 @@
     {
       "contract_id": "metric-four-counts",
       "source_file": "references/data-analysis.md",
-      "routes": [
-        "/idea",
-        "/prd"
-      ],
+      "routes": ["/idea", "/prd"],
       "risk": "critical",
-      "stable_evals": [
-        31
-      ],
+      "stable_evals": [31],
       "challenge_evals": [],
-      "trigger_evals": [
-        14
-      ],
+      "trigger_evals": [14],
       "release_core": true
     },
     {
       "contract_id": "kpi-data-contract",
       "source_file": "references/data-analysis.md",
-      "routes": [
-        "/idea",
-        "/prd",
-        "/acceptance"
-      ],
+      "routes": ["/idea", "/prd", "/acceptance"],
       "risk": "high",
-      "stable_evals": [
-        31,
-        32
-      ],
+      "stable_evals": [31, 32],
       "challenge_evals": [],
-      "trigger_evals": [
-        14,
-        29
-      ],
+      "trigger_evals": [14, 29],
       "release_core": false
     },
     {
       "contract_id": "capability-minimal-route",
       "source_file": "references/capability-routing.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
       "risk": "high",
-      "stable_evals": [
-        22
-      ],
+      "stable_evals": [22],
       "challenge_evals": [],
       "trigger_evals": [],
       "release_core": false
@@ -796,125 +454,67 @@
     {
       "contract_id": "tooling-capability-state",
       "source_file": "references/tooling.md",
-      "routes": [
-        "/review",
-        "/prd",
-        "/acceptance"
-      ],
+      "routes": ["/review", "/prd", "/acceptance"],
       "risk": "critical",
-      "stable_evals": [
-        22,
-        76
-      ],
-      "challenge_evals": [
-        "CH-16"
-      ],
+      "stable_evals": [22, 76],
+      "challenge_evals": ["CH-16"],
       "trigger_evals": [],
       "release_core": true
     },
     {
       "contract_id": "memory-auto-restore-attempt",
       "source_file": "references/memory-integration.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance",
-        "/prompt"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
       "risk": "critical",
-      "stable_evals": [
-        42
-      ],
+      "stable_evals": [42],
       "challenge_evals": [],
-      "trigger_evals": [
-        9
-      ],
+      "trigger_evals": [9],
       "release_core": true
     },
     {
       "contract_id": "memory-provenance",
       "source_file": "references/memory-integration.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance",
-        "/prompt"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
       "risk": "critical",
-      "stable_evals": [
-        42
-      ],
+      "stable_evals": [42],
       "challenge_evals": [],
-      "trigger_evals": [
-        9
-      ],
+      "trigger_evals": [9],
       "release_core": false
     },
     {
       "contract_id": "code-review-scanner-purpose",
       "source_file": "references/code-review-scanner.md",
-      "routes": [
-        "/review"
-      ],
+      "routes": ["/review"],
       "risk": "high",
-      "stable_evals": [
-        82
-      ],
-      "challenge_evals": [
-        "CH-19"
-      ],
+      "stable_evals": [82],
+      "challenge_evals": ["CH-19"],
       "trigger_evals": [],
       "release_core": false
     },
     {
       "contract_id": "discovery-method-selection",
       "source_file": "references/discovery.md",
-      "routes": [
-        "/idea"
-      ],
+      "routes": ["/idea"],
       "risk": "high",
-      "stable_evals": [
-        83
-      ],
-      "challenge_evals": [
-        "CH-20"
-      ],
-      "trigger_evals": [
-        11
-      ],
+      "stable_evals": [83],
+      "challenge_evals": ["CH-20"],
+      "trigger_evals": [11],
       "release_core": false
     },
     {
       "contract_id": "strategy-gtm-method-selection",
       "source_file": "references/strategy-gtm.md",
-      "routes": [
-        "/idea",
-        "/prd"
-      ],
+      "routes": ["/idea", "/prd"],
       "risk": "critical",
-      "stable_evals": [
-        84
-      ],
-      "challenge_evals": [
-        "CH-21"
-      ],
-      "trigger_evals": [
-        32
-      ],
+      "stable_evals": [84],
+      "challenge_evals": ["CH-21"],
+      "trigger_evals": [32],
       "release_core": false
     },
     {
       "contract_id": "capability-registry-schema",
       "source_file": "capabilities/README.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance",
-        "/prompt"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
       "risk": "high",
       "stable_evals": [],
       "challenge_evals": [],
@@ -924,11 +524,7 @@
     {
       "contract_id": "capability-card-single-source",
       "source_file": "capabilities/README.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd"
-      ],
+      "routes": ["/review", "/idea", "/prd"],
       "risk": "high",
       "stable_evals": [],
       "challenge_evals": [],
@@ -938,13 +534,7 @@
     {
       "contract_id": "capability-card-minimal-loading",
       "source_file": "capabilities/README.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance",
-        "/prompt"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
       "risk": "high",
       "stable_evals": [],
       "challenge_evals": [],
@@ -954,12 +544,7 @@
     {
       "contract_id": "public-case-authorization",
       "source_file": "examples/public-case-spec.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
       "risk": "high",
       "stable_evals": [],
       "challenge_evals": [],
@@ -969,12 +554,7 @@
     {
       "contract_id": "public-case-anonymization",
       "source_file": "examples/public-case-spec.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
       "risk": "high",
       "stable_evals": [],
       "challenge_evals": [],
@@ -984,12 +564,7 @@
     {
       "contract_id": "public-case-evidence-traceability",
       "source_file": "examples/public-case-spec.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
       "risk": "high",
       "stable_evals": [],
       "challenge_evals": [],
@@ -999,15 +574,50 @@
     {
       "contract_id": "public-case-withdrawal",
       "source_file": "examples/public-case-spec.md",
-      "routes": [
-        "/review",
-        "/idea",
-        "/prd",
-        "/acceptance"
-      ],
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
       "risk": "high",
       "stable_evals": [],
       "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "evidence-action-minimal-contract",
+      "source_file": "references/idea.md",
+      "routes": ["/idea", "/review", "/prd"],
+      "risk": "critical",
+      "stable_evals": [93],
+      "challenge_evals": ["CH-28"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "handoff-no-new-gates",
+      "source_file": "references/prompt.md",
+      "routes": ["/prompt"],
+      "risk": "critical",
+      "stable_evals": [94],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "enterprise-adapter-readonly",
+      "source_file": "references/enterprise-adapters.md",
+      "routes": ["/review", "/acceptance", "/prompt"],
+      "risk": "critical",
+      "stable_evals": [95],
+      "challenge_evals": ["CH-26"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "enterprise-adapter-data-provenance",
+      "source_file": "references/enterprise-adapters.md",
+      "routes": ["/idea", "/review", "/acceptance"],
+      "risk": "critical",
+      "stable_evals": [96],
+      "challenge_evals": ["CH-27"],
       "trigger_evals": [],
       "release_core": false
     }

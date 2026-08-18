@@ -1,67 +1,473 @@
 {
   "schema_version": 2,
-  "name": "MyP-M-A v0.34 M1 当前候选发布面板",
-  "purpose": "固定核心与当前候选差量的可审计快照；不替代稳定集或挑战集全量回归。",
-  "baseline_ref": "26e2e66491280470c1876d29544c826aa626d6d5",
-  "candidate_ref": "working-tree-v0.34-m1",
+  "name": "MyP-M-A working-tree-v0.38 发布面板",
+  "purpose": "固定核心、合同差量与相邻控制项；超过面板上限时显式升级为受影响入口全量回归。",
+  "baseline_ref": "v0.37-frozen-candidate-88bce700",
+  "candidate_ref": "working-tree-v0.38",
   "mode": "release-panel",
   "max_cases": 26,
   "changed_files": [
-    "evals/README.md",
-    "evals/context-budget.json",
-    "evals/contract-registry.json",
-    "evals/release-panel-core.json",
-    "evals/release-panel.json",
-    "evals/trigger-baseline.json",
-    "notes/dev_log_v0.34.md",
-    "notes/dev_plan_v0.34.md",
-    "notes/mypm-roadmap.md",
-    "notes/progress_v0.34.md",
-    "notes/skill-improvement-backlog.md",
-    "notes/v0.34-governance-prd.md",
-    "notes/v0.34-idea-pool.md",
-    "scripts/build-eval-panel.ps1",
-    "scripts/measure-context-budget.ps1",
-    "scripts/test-context-budget.ps1",
-    "scripts/test-skill-validation.ps1",
-    "scripts/validate-skill.ps1",
-    "scripts/validation/common.ps1",
-    "scripts/validation/validate-contracts.ps1",
-    "scripts/validation/validate-docs.ps1",
-    "scripts/validation/validate-evals.ps1"
+    "references/acceptance.md",
+    "references/capability-routing.md",
+    "references/enterprise-adapters.md",
+    "references/idea.md",
+    "references/prd.md",
+    "references/prompt.md",
+    "references/review.md",
+    "references/tooling.md",
+    "SKILL.md"
   ],
-  "affected_contracts": [],
+  "contract_selection_mode": "explicit-audited",
+  "affected_contracts": [
+    "acceptance-artifact-evidence-freshness",
+    "capability-minimal-route",
+    "enterprise-adapter-data-provenance",
+    "enterprise-adapter-readonly",
+    "evidence-action-minimal-contract",
+    "handoff-no-new-gates",
+    "prd-known-facts",
+    "review-evidence-handoff",
+    "tooling-capability-state"
+  ],
+  "affected_routes": [
+    "/acceptance",
+    "/idea",
+    "/prd",
+    "/prompt",
+    "/review"
+  ],
   "unmapped_files": [],
   "no_behavior_change": [
     {
-      "scope": "M1 infrastructure",
-      "reason": "M0/M1 只建设基线、评测、校验与治理文档，不修改五入口行为 reference。"
+      "source_file": "SKILL.md",
+      "reason": "v0.38 在 SKILL.md 中只更新版本与入口摘要；对应行为变化已由 idea、acceptance 及其显式合同覆盖，不形成独立合同差量。"
     }
   ],
+  "upgrade_reason": null,
   "selection_groups": {
     "core": [
-      { "suite": "stable", "id": 1, "category": "idea", "route": "/idea", "contract_id": "idea-core-output", "reason": "覆盖需求真假、价值与最小下一步" },
-      { "suite": "stable", "id": 17, "category": "review", "route": "/review", "contract_id": "review-core-output", "reason": "覆盖单入口自动路由与项目脉络" },
-      { "suite": "stable", "id": 32, "category": "prd", "route": "/prd", "contract_id": "prd-core-output", "reason": "覆盖后端、数据库与状态合同" },
-      { "suite": "stable", "id": 76, "category": "acceptance", "route": "/acceptance", "contract_id": "acceptance-core-output", "reason": "覆盖候选身份、浏览器证据与实际验收" },
-      { "suite": "stable", "id": 38, "category": "prompt", "route": "/prompt", "contract_id": "prompt-preserve-core", "reason": "覆盖精简提示词与必要边界" },
-      { "suite": "stable", "id": 31, "category": "data", "route": "/idea", "contract_id": "metric-four-counts", "reason": "覆盖统计对象、分母和证据边界" },
-      { "suite": "stable", "id": 22, "category": "tools", "route": "/review", "contract_id": "tooling-capability-state", "reason": "覆盖工具选择、可用性与证据来源" },
-      { "suite": "stable", "id": 42, "category": "memory", "route": "/review", "contract_id": "memory-auto-restore-attempt", "reason": "覆盖跨线程恢复与仓库事实优先" },
-      { "suite": "challenge", "id": "CH-16", "category": "high-risk-evidence", "route": "/acceptance", "contract_id": "acceptance-artifact-evidence-freshness", "reason": "覆盖候选身份、数据新鲜度与发布阻断" }
+      {
+        "suite": "stable",
+        "id": 1,
+        "category": "idea",
+        "route": "/idea",
+        "contract_id": "idea-core-output",
+        "reason": "覆盖需求真假、价值与最小下一步"
+      },
+      {
+        "suite": "stable",
+        "id": 17,
+        "category": "review",
+        "route": "/review",
+        "contract_id": "review-core-output",
+        "reason": "覆盖单入口自动路由与项目脉络"
+      },
+      {
+        "suite": "stable",
+        "id": 32,
+        "category": "prd",
+        "route": "/prd",
+        "contract_id": "prd-core-output",
+        "reason": "覆盖后端、数据库与状态合同"
+      },
+      {
+        "suite": "stable",
+        "id": 76,
+        "category": "acceptance",
+        "route": "/acceptance",
+        "contract_id": "acceptance-core-output",
+        "reason": "覆盖候选身份、浏览器证据与实际验收"
+      },
+      {
+        "suite": "stable",
+        "id": 38,
+        "category": "prompt",
+        "route": "/prompt",
+        "contract_id": "prompt-preserve-core",
+        "reason": "覆盖精简提示词与必要边界"
+      },
+      {
+        "suite": "stable",
+        "id": 31,
+        "category": "data",
+        "route": "/idea",
+        "contract_id": "metric-four-counts",
+        "reason": "覆盖统计对象、分母和证据边界"
+      },
+      {
+        "suite": "stable",
+        "id": 22,
+        "category": "tools",
+        "route": "/review",
+        "contract_id": "tooling-capability-state",
+        "reason": "覆盖工具选择、可用性与证据来源"
+      },
+      {
+        "suite": "stable",
+        "id": 42,
+        "category": "memory",
+        "route": "/review",
+        "contract_id": "memory-auto-restore-attempt",
+        "reason": "覆盖跨线程恢复与仓库事实优先"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-16",
+        "category": "high-risk-evidence",
+        "route": "/acceptance",
+        "contract_id": "acceptance-artifact-evidence-freshness",
+        "reason": "覆盖候选身份、数据新鲜度与发布阻断"
+      }
     ],
-    "delta": [],
-    "controls": []
+    "delta": [
+      {
+        "suite": "stable",
+        "id": 79,
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "review-evidence-handoff",
+        "reason": "contract-delta:review-evidence-handoff"
+      },
+      {
+        "suite": "stable",
+        "id": 81,
+        "category": "delta",
+        "route": "/acceptance",
+        "contract_id": "acceptance-artifact-evidence-freshness",
+        "reason": "contract-delta:acceptance-artifact-evidence-freshness"
+      },
+      {
+        "suite": "stable",
+        "id": 86,
+        "category": "delta",
+        "route": "/prd",
+        "contract_id": "prd-known-facts",
+        "reason": "contract-delta:prd-known-facts"
+      },
+      {
+        "suite": "stable",
+        "id": 93,
+        "category": "delta",
+        "route": "/idea",
+        "contract_id": "evidence-action-minimal-contract",
+        "reason": "contract-delta:evidence-action-minimal-contract"
+      },
+      {
+        "suite": "stable",
+        "id": 94,
+        "category": "delta",
+        "route": "/prompt",
+        "contract_id": "handoff-no-new-gates",
+        "reason": "contract-delta:handoff-no-new-gates"
+      },
+      {
+        "suite": "stable",
+        "id": 95,
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "enterprise-adapter-readonly",
+        "reason": "contract-delta:enterprise-adapter-readonly"
+      },
+      {
+        "suite": "stable",
+        "id": 96,
+        "category": "delta",
+        "route": "/idea",
+        "contract_id": "enterprise-adapter-data-provenance",
+        "reason": "contract-delta:enterprise-adapter-data-provenance"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-04",
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "review-evidence-handoff",
+        "reason": "contract-delta:review-evidence-handoff"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-22",
+        "category": "delta",
+        "route": "/prd",
+        "contract_id": "prd-known-facts",
+        "reason": "contract-delta:prd-known-facts"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-26",
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "enterprise-adapter-readonly",
+        "reason": "contract-delta:enterprise-adapter-readonly"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-27",
+        "category": "delta",
+        "route": "/idea",
+        "contract_id": "enterprise-adapter-data-provenance",
+        "reason": "contract-delta:enterprise-adapter-data-provenance"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-28",
+        "category": "delta",
+        "route": "/idea",
+        "contract_id": "evidence-action-minimal-contract",
+        "reason": "contract-delta:evidence-action-minimal-contract"
+      }
+    ],
+    "controls": [
+      {
+        "suite": "stable",
+        "id": 82,
+        "category": "control",
+        "route": "/review",
+        "contract_id": "code-review-scanner-purpose",
+        "reason": "adjacent-control:/review:code-review-scanner-purpose"
+      },
+      {
+        "suite": "stable",
+        "id": 83,
+        "category": "control",
+        "route": "/idea",
+        "contract_id": "discovery-method-selection",
+        "reason": "adjacent-control:/idea:discovery-method-selection"
+      },
+      {
+        "suite": "stable",
+        "id": 56,
+        "category": "control",
+        "route": "/prd",
+        "contract_id": "guarded-output-scan",
+        "reason": "adjacent-control:/prd:guarded-output-scan"
+      },
+      {
+        "suite": "stable",
+        "id": 36,
+        "category": "control",
+        "route": "/acceptance",
+        "contract_id": "acceptance-core-output",
+        "reason": "adjacent-control:/acceptance:acceptance-core-output"
+      },
+      {
+        "suite": "stable",
+        "id": 91,
+        "category": "control",
+        "route": "/prompt",
+        "contract_id": "guarded-output-scan",
+        "reason": "adjacent-control:/prompt:guarded-output-scan"
+      }
+    ]
   },
   "selection": [
-    { "suite": "stable", "id": 1, "category": "idea", "route": "/idea", "contract_id": "idea-core-output", "reason": "覆盖需求真假、价值与最小下一步" },
-    { "suite": "stable", "id": 17, "category": "review", "route": "/review", "contract_id": "review-core-output", "reason": "覆盖单入口自动路由与项目脉络" },
-    { "suite": "stable", "id": 32, "category": "prd", "route": "/prd", "contract_id": "prd-core-output", "reason": "覆盖后端、数据库与状态合同" },
-    { "suite": "stable", "id": 76, "category": "acceptance", "route": "/acceptance", "contract_id": "acceptance-core-output", "reason": "覆盖候选身份、浏览器证据与实际验收" },
-    { "suite": "stable", "id": 38, "category": "prompt", "route": "/prompt", "contract_id": "prompt-preserve-core", "reason": "覆盖精简提示词与必要边界" },
-    { "suite": "stable", "id": 31, "category": "data", "route": "/idea", "contract_id": "metric-four-counts", "reason": "覆盖统计对象、分母和证据边界" },
-    { "suite": "stable", "id": 22, "category": "tools", "route": "/review", "contract_id": "tooling-capability-state", "reason": "覆盖工具选择、可用性与证据来源" },
-    { "suite": "stable", "id": 42, "category": "memory", "route": "/review", "contract_id": "memory-auto-restore-attempt", "reason": "覆盖跨线程恢复与仓库事实优先" },
-    { "suite": "challenge", "id": "CH-16", "category": "high-risk-evidence", "route": "/acceptance", "contract_id": "acceptance-artifact-evidence-freshness", "reason": "覆盖候选身份、数据新鲜度与发布阻断" }
+    {
+      "suite": "stable",
+      "id": 1,
+      "category": "idea",
+      "route": "/idea",
+      "contract_id": "idea-core-output",
+      "reason": "覆盖需求真假、价值与最小下一步"
+    },
+    {
+      "suite": "stable",
+      "id": 17,
+      "category": "review",
+      "route": "/review",
+      "contract_id": "review-core-output",
+      "reason": "覆盖单入口自动路由与项目脉络"
+    },
+    {
+      "suite": "stable",
+      "id": 32,
+      "category": "prd",
+      "route": "/prd",
+      "contract_id": "prd-core-output",
+      "reason": "覆盖后端、数据库与状态合同"
+    },
+    {
+      "suite": "stable",
+      "id": 76,
+      "category": "acceptance",
+      "route": "/acceptance",
+      "contract_id": "acceptance-core-output",
+      "reason": "覆盖候选身份、浏览器证据与实际验收"
+    },
+    {
+      "suite": "stable",
+      "id": 38,
+      "category": "prompt",
+      "route": "/prompt",
+      "contract_id": "prompt-preserve-core",
+      "reason": "覆盖精简提示词与必要边界"
+    },
+    {
+      "suite": "stable",
+      "id": 31,
+      "category": "data",
+      "route": "/idea",
+      "contract_id": "metric-four-counts",
+      "reason": "覆盖统计对象、分母和证据边界"
+    },
+    {
+      "suite": "stable",
+      "id": 22,
+      "category": "tools",
+      "route": "/review",
+      "contract_id": "tooling-capability-state",
+      "reason": "覆盖工具选择、可用性与证据来源"
+    },
+    {
+      "suite": "stable",
+      "id": 42,
+      "category": "memory",
+      "route": "/review",
+      "contract_id": "memory-auto-restore-attempt",
+      "reason": "覆盖跨线程恢复与仓库事实优先"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-16",
+      "category": "high-risk-evidence",
+      "route": "/acceptance",
+      "contract_id": "acceptance-artifact-evidence-freshness",
+      "reason": "覆盖候选身份、数据新鲜度与发布阻断"
+    },
+    {
+      "suite": "stable",
+      "id": 79,
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "review-evidence-handoff",
+      "reason": "contract-delta:review-evidence-handoff"
+    },
+    {
+      "suite": "stable",
+      "id": 81,
+      "category": "delta",
+      "route": "/acceptance",
+      "contract_id": "acceptance-artifact-evidence-freshness",
+      "reason": "contract-delta:acceptance-artifact-evidence-freshness"
+    },
+    {
+      "suite": "stable",
+      "id": 86,
+      "category": "delta",
+      "route": "/prd",
+      "contract_id": "prd-known-facts",
+      "reason": "contract-delta:prd-known-facts"
+    },
+    {
+      "suite": "stable",
+      "id": 93,
+      "category": "delta",
+      "route": "/idea",
+      "contract_id": "evidence-action-minimal-contract",
+      "reason": "contract-delta:evidence-action-minimal-contract"
+    },
+    {
+      "suite": "stable",
+      "id": 94,
+      "category": "delta",
+      "route": "/prompt",
+      "contract_id": "handoff-no-new-gates",
+      "reason": "contract-delta:handoff-no-new-gates"
+    },
+    {
+      "suite": "stable",
+      "id": 95,
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "enterprise-adapter-readonly",
+      "reason": "contract-delta:enterprise-adapter-readonly"
+    },
+    {
+      "suite": "stable",
+      "id": 96,
+      "category": "delta",
+      "route": "/idea",
+      "contract_id": "enterprise-adapter-data-provenance",
+      "reason": "contract-delta:enterprise-adapter-data-provenance"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-04",
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "review-evidence-handoff",
+      "reason": "contract-delta:review-evidence-handoff"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-22",
+      "category": "delta",
+      "route": "/prd",
+      "contract_id": "prd-known-facts",
+      "reason": "contract-delta:prd-known-facts"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-26",
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "enterprise-adapter-readonly",
+      "reason": "contract-delta:enterprise-adapter-readonly"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-27",
+      "category": "delta",
+      "route": "/idea",
+      "contract_id": "enterprise-adapter-data-provenance",
+      "reason": "contract-delta:enterprise-adapter-data-provenance"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-28",
+      "category": "delta",
+      "route": "/idea",
+      "contract_id": "evidence-action-minimal-contract",
+      "reason": "contract-delta:evidence-action-minimal-contract"
+    },
+    {
+      "suite": "stable",
+      "id": 82,
+      "category": "control",
+      "route": "/review",
+      "contract_id": "code-review-scanner-purpose",
+      "reason": "adjacent-control:/review:code-review-scanner-purpose"
+    },
+    {
+      "suite": "stable",
+      "id": 83,
+      "category": "control",
+      "route": "/idea",
+      "contract_id": "discovery-method-selection",
+      "reason": "adjacent-control:/idea:discovery-method-selection"
+    },
+    {
+      "suite": "stable",
+      "id": 56,
+      "category": "control",
+      "route": "/prd",
+      "contract_id": "guarded-output-scan",
+      "reason": "adjacent-control:/prd:guarded-output-scan"
+    },
+    {
+      "suite": "stable",
+      "id": 36,
+      "category": "control",
+      "route": "/acceptance",
+      "contract_id": "acceptance-core-output",
+      "reason": "adjacent-control:/acceptance:acceptance-core-output"
+    },
+    {
+      "suite": "stable",
+      "id": 91,
+      "category": "control",
+      "route": "/prompt",
+      "contract_id": "guarded-output-scan",
+      "reason": "adjacent-control:/prompt:guarded-output-scan"
+    }
   ]
 }

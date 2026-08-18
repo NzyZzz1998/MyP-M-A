@@ -32,6 +32,8 @@
     "scripts/build-eval-panel.ps1",
     "scripts/test-skill-validation.ps1",
     "scripts/test-v036-governance.ps1",
+    "scripts/test-v037-fact-fidelity.ps1",
+    "scripts/test-v038-evidence-action-adapters.ps1",
     "scripts/validation/validate-capabilities.ps1",
     "scripts/validation/validate-external-benchmark.ps1",
     "scripts/validation/validate-public-cases.ps1"

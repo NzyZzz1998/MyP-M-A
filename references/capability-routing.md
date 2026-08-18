@@ -8,6 +8,7 @@
 <!-- contract:capability-discovery-pack -->
 <!-- contract:capability-strategy-gtm-pack -->
 <!-- contract:capability-runtime-probe -->
+<!-- contract:capability-enterprise-adapter-route -->
 
 ## 路由原则
 
@@ -36,6 +37,8 @@
 | 桌面窗口、托盘、系统权限或原生行为 | Computer Use + 日志/配置 | `/review`、`/acceptance` | 可执行产物、配置、日志、恢复方式 | 截图、动作、日志事件、产物变化和未覆盖项 |
 | UI/交互 PRD 需要高保真表达 | 现有设计系统、Figma、frontend/UI skill | `/prd` | 产品气质、页面状态、已有原型 | 可交互原型、状态覆盖、文件路径和验证结果 |
 | 需要核对 GitHub PR、CI、tag、Release | GitHub 插件或本地 git | `/review`、`/acceptance` | 仓库、分支/PR、权限范围 | 可审计的远端状态、CI、发布身份和授权缺口 |
+| 需要对齐远端仓库、协作文档或任务系统与本地事实 | `references/enterprise-adapters.md` + 当前可用只读工具 | `/review`、`/acceptance`、`/prompt` | 稳定对象 ID、读取范围、时间和目标事实源 | 只读证据信封、身份冲突、可继承事实和最小补证 |
+| 需要读取外部指标、评测 JSON/CSV 或查询结果作产品判断 | `references/enterprise-adapters.md` + 数据能力 | `/idea`、`/review`、`/acceptance` | 数据对象、唯一键、分母、时间窗、筛选和版本 | 可复算分维结果、数据新鲜度、限制和产品判断 |
 | 需要评审代码 diff、commit 或发布区间 | OpenCodeReview 或等价扫描器 | `/review` implementation | 锁定的仓库/ref、排除项、最小需求背景、源码外发授权 | 文件覆盖、语言规则、候选 finding、跳过/失败范围和模式限制 |
 
 能力名称只是已知实现示例。当前环境存在等价能力时可以替换，但必须报告真实调用对象；没有能力时不要建议安装与当前结论无关的插件。
@@ -46,11 +49,11 @@
 
 访谈、研究笔记、JTBD 或机会树优先使用 Discovery；结构化数据进入数据分析；市场、定位、定价、GTM 或增长取舍进入 Strategy/GTM。证据可以汇合，但不得用访谈次数冒充用户比例、用行为数据猜动机，或用竞品标价证明支付意愿。先锁定问题、对象、时间窗、粒度和可信边界，再选择最贴近的能力；最终只形成一份当前入口结论。
 
-有真实数据但质量未知时，先用数据质量能力；质量达到可用范围后，再用产品分析、指标诊断或市场规模能力回答业务问题。没有数据时不假装调用分析能力，只说明要先采集什么，以及达到什么最低条件后再调用哪一种能力。最终输出要明确记录“选择的能力 + 用途”，或“未调用 + 原因”。
+有真实数据但质量未知时，先用数据质量能力；质量达到可用范围后，再用产品分析、指标诊断或市场规模能力回答业务问题。数据来自外部系统或结构化评测文件时，按需读取 `references/enterprise-adapters.md`，先锁定对象、版本、分母和新鲜度。没有数据时不假装调用分析能力，只说明要先采集什么，以及达到什么最低条件后再调用哪一种能力。最终输出要明确记录“选择的能力 + 用途”，或“未调用 + 原因”。
 
 ### `/review`
 
-先用本地文件和最小运行证据建立产品、领域和工程地图。外部能力只补当前地图无法回答的部分，例如代码规则扫描、真实页面行为、远端发布状态、数据库关系或市场主张。代码扫描遵循 `references/code-review-scanner.md`；定位、定价或渠道承诺与产品事实并存时读取 `references/strategy-gtm.md`。外部结论均需 MyP-M-A 核验证据，不把未安装的 skill 名写成已调用事实。
+先用本地文件和最小运行证据建立产品、领域和工程地图。外部能力只补当前地图无法回答的部分，例如代码规则扫描、真实页面行为、远端发布状态、数据库关系或市场主张。需要跨系统对齐仓库、任务或文档时按需读取 `references/enterprise-adapters.md`，不得用标题相似自动合并对象。代码扫描遵循 `references/code-review-scanner.md`；定位、定价或渠道承诺与产品事实并存时读取 `references/strategy-gtm.md`。外部结论均需 MyP-M-A 核验证据，不把未安装的 skill 名写成已调用事实。
 
 ### `/prd`
 
@@ -74,6 +77,8 @@
 - Release：源码、候选产物、哈希、CI、tag/Release、回滚和发布面。
 
 一个验收项可以跨轨道，但必须在同一证据清单中汇总，不能让不同工具各自给出互相冲突的“通过”。
+
+验收依赖外部协作或数据系统时，按需读取 `references/enterprise-adapters.md`；记录稳定身份、读取时间、版本/筛选、新鲜度和限制。默认只读，任何评论、任务、文档、代码或仪表盘写入都单独等待授权。
 
 发布后需要判断渠道、激活、留存或定价假设时，可读取 `references/strategy-gtm.md`，但该分析属于上线观察或下一轮 `/idea`，不能回写为候选实现已经通过。
 

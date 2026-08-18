@@ -79,6 +79,58 @@
       "eval_ids": {"stable": [84], "challenge": ["CH-21"], "trigger": [32, 33]},
       "owner": "MyP-M-A maintainers",
       "introduced_in": "0.36.0"
+    },
+    {
+      "id": "collaboration.project-evidence-adapter",
+      "name_zh": "协作项目证据适配",
+      "domain": "collaboration",
+      "status": "pilot",
+      "card_file": "capabilities/collaboration/project-evidence-adapter.md",
+      "entrypoints": ["/review", "/acceptance", "/prompt"],
+      "stages": ["review", "validate", "handoff"],
+      "triggers": [
+        "当前判断必须核对远端仓库、任务或文档对象，并与本地事实或交接状态对齐",
+        "多个协作系统提供同名对象，需要按稳定身份判断是否为同一对象"
+      ],
+      "anti_triggers": [
+        "本地正式文件已经足以回答，外部读取不会改变结论",
+        "只知道插件名称但没有可调用接口、目标对象或读取权限"
+      ],
+      "required_inputs": ["决策问题", "目标系统与稳定对象身份", "读取范围和时间"],
+      "outputs": ["只读证据信封", "跨系统身份与冲突清单", "可继承事实和最小补证动作"],
+      "evidence_contract": "只按稳定 ID、URL、commit/ref、外键或用户确认关系合并对象；标题相同不是同一对象；远端写入另行授权。",
+      "tool_categories": ["代码托管读取", "协作文档读取", "任务系统读取", "本地版本控制"],
+      "fallback": "外部能力不可用时使用本地事实或用户导出，远端状态标待验证，不新增插件硬依赖。",
+      "references": ["references/enterprise-adapters.md", "references/capability-routing.md"],
+      "eval_ids": {"stable": [95], "challenge": ["CH-26"], "trigger": []},
+      "owner": "MyP-M-A maintainers",
+      "introduced_in": "0.38.0"
+    },
+    {
+      "id": "analytics.product-evidence-adapter",
+      "name_zh": "产品数据证据适配",
+      "domain": "analytics",
+      "status": "pilot",
+      "card_file": "capabilities/analytics/product-evidence-adapter.md",
+      "entrypoints": ["/idea", "/review", "/acceptance"],
+      "stages": ["discover", "validate", "review"],
+      "triggers": [
+        "当前判断依赖外部指标、评测 JSON、CSV、查询结果或仪表盘数据",
+        "需要复算分维指标并核对分母、时间窗、筛选和数据新鲜度"
+      ],
+      "anti_triggers": [
+        "输入只有截图且无法核对查询、数据版本或统计口径",
+        "当前任务只要求制作图表，不需要产品判断或验收结论"
+      ],
+      "required_inputs": ["决策问题", "数据对象与唯一键", "分母、时间窗、筛选和来源版本"],
+      "outputs": ["产品数据证据信封", "可复算分维结果", "冲突、限制和产品判断"],
+      "evidence_contract": "计算事实、评分器判断和产品解释分层；不同维度分别报告；仪表盘展示不自动证明查询或数据新鲜度。",
+      "tool_categories": ["结构化文件读取", "只读数据库", "产品分析", "数据质量校验"],
+      "fallback": "数据不可访问时给出只读查询或导出字段清单，不声称已分析，也不制造统一总分。",
+      "references": ["references/enterprise-adapters.md", "references/data-analysis.md"],
+      "eval_ids": {"stable": [96], "challenge": ["CH-27"], "trigger": []},
+      "owner": "MyP-M-A maintainers",
+      "introduced_in": "0.38.0"
     }
   ]
 }

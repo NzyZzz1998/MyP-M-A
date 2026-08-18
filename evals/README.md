@@ -46,6 +46,8 @@ MyP-M-A 使用两套互补评测，不混合计算总分。
   -OutputPath E:\codex\skill-evals\mypm-release-panel.json
 ```
 
+同一行为文件承载多个合同、而本轮只修改其中一部分时，可使用 `-UseExplicitAffectedContracts`。此模式要求每个行为文件至少命中一个显式合同；仅版本元数据或重复摘要等无独立行为变化的文件，必须通过 `-NoBehaviorChangeFile` 给出非空审计理由。它不会自动放宽评测范围。
+
 行为文件没有合同映射时生成失败；确属无行为变化时，使用独立 JSON 记录 `source_file` 或 `contract_id` 与非空 `reason`，再通过 `-NoBehaviorChangeFile` 提供。`contract-registry.json` 是合同来源、入口、风险与评测映射的结构化事实源。
 
 运行时默认最大并发 3；每个子 Agent 最多处理 5 条相互独立的用例，完成一批立即关闭。单批等待上限 5 分钟；超时只重试缺失项，不重跑已落盘回答。执行完成率、共同有效样本得分和输出长度分开报告。入口、常驻合同或证据门禁变化时仍应跑稳定集与挑战集全量 A/B；面板只承担快速反馈。

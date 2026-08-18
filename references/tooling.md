@@ -67,6 +67,8 @@
 | OpenAI/API 相关工具 | 检查 AI 功能配置、API key 环境、模型调用失败、评估样例 | AI 产品的 `/prd`、`/acceptance` |
 | Basic Memory / `memory-*` skills | 保存长期产品决策、项目上下文、用户偏好、任务状态和下次继续点 | 四个入口、开发承接、线程结束 |
 
+企业协作或外部数据取证不绑定具体插件。需要跨系统对齐对象或读取产品指标时，按需读取 `references/enterprise-adapters.md`：先生成只读证据信封，再把事实带回当前入口。插件已安装不代表对象可读；读取成功也不授权评论、建任务、改文档、推送或更新仪表盘。
+
 ## 四个入口的工具策略
 
 ### /idea：找证据，不做重验收
@@ -160,6 +162,8 @@
 | 竞品、市场、公开资料 | Web 搜索 | `/idea` |
 | 发布、灰度、回滚 | GitHub/Vercel/Netlify/部署工具 + 日志 | `/acceptance` |
 | 长期记忆、跨线程、下次继续、记住偏好/决策/项目状态 | Basic Memory / `memory-*` skills | 四个入口、开发承接 |
+| 远端仓库、协作文档、任务系统与本地事实对齐 | 当前可用只读连接器 + `enterprise-adapters.md` | `/review`、`/acceptance`、`/prompt` |
+| 外部指标、评测 JSON/CSV、查询结果与产品判断 | 数据能力 + `enterprise-adapters.md` | `/idea`、`/review`、`/acceptance` |
 
 ## 长期记忆工具策略
 

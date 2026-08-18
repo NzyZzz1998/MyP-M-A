@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "candidate": "MyP-M-A v0.38 working tree",
+  "captured_at": "2026-08-17T16:09:07.0996198Z",
+  "write_audit_boundary": "本文件枚举本轮实际调用；连接器未提供独立平台审计日志，因此只能证明记录中的调用均为只读，不能外推其他会话。",
+  "external_write_operations": [],
+  "project_evidence_pilot": {
+    "repository": "NzyZzz1998/MyP-M-A",
+    "read_operations": [
+      {
+        "tool": "github.search_installed_repositories_v2",
+        "result": "failed",
+        "error": "MCP internal error"
+      },
+      {
+        "tool": "github.fetch_commit",
+        "object": "83e619c7ef7cd31cb782f142fa4b5ad65f01c115",
+        "result": "failed",
+        "error_code": "FORBIDDEN",
+        "http_status": 403,
+        "message": "Resource not accessible by integration"
+      },
+      {
+        "tool": "git ls-remote origin refs/heads/main",
+        "result": "success",
+        "ref": "refs/heads/main",
+        "sha": "83e619c7ef7cd31cb782f142fa4b5ad65f01c115"
+      }
+    ],
+    "local_identity": {
+      "branch": "main",
+      "head": "83e619c7ef7cd31cb782f142fa4b5ad65f01c115",
+      "remote_main": "83e619c7ef7cd31cb782f142fa4b5ad65f01c115",
+      "working_tree": "dirty candidate"
+    },
+    "conclusion": "连接器读取失败；远端 main 仅由本地 Git 只读降级确认。不得称为 GitHub 连接器完整通过，也未读取私有 CI。"
+  },
+  "product_data_pilot": {
+    "source_path": "E:/codex/skill-evals/mypm-v037-external-benchmark-fresh-20260817-r1/final-comparison.json",
+    "source_sha256": "8567ae347a16c1811e8426d7bc57a59984b000f21dd50408eec64e97b19699d2",
+    "source_bytes": 320843,
+    "source_generated_at": "2026-08-17T12:33:08.7715539Z",
+    "candidate_bundle_sha256": "34b4c44a6c878569e794619d0fd4ac7bc1305a10c227dd58f0b33d7b1859abac",
+    "task_contract_sha256": "eca02c0f7093412f798217314413a607ead84c6766bc574bf0c95b9d1299a523",
+    "weighting": "12 条任务等权；EB-07 与 EB-12 先在任务内平均三轮，再进入任务均值。",
+    "counts": {
+      "tasks": 12,
+      "candidates": 3,
+      "candidate_task_cells": 36,
+      "valid_runs": 48
+    },
+    "recalculation": [
+      {
+        "candidate_id": "mypm-v037",
+        "task_cells": 12,
+        "runs": 16,
+        "correctness": 3.39,
+        "evidence_discipline": 3.47,
+        "decision_clarity": 3.86,
+        "completeness": 3.67,
+        "executability": 3.03,
+        "redundancy": 2.72,
+        "average_characters": 2177.42,
+        "average_duration_ms": 41157.61,
+        "critical_samples": 2
+      },
+      {
+        "candidate_id": "phuryn-pm-skills",
+        "task_cells": 12,
+        "runs": 16,
+        "correctness": 3.61,
+        "evidence_discipline": 3.75,
+        "decision_clarity": 3.81,
+        "completeness": 3.36,
+        "executability": 3.33,
+        "redundancy": 3.56,
+        "average_characters": 2095.36,
+        "average_duration_ms": 41864.31,
+        "critical_samples": 3
+      },
+      {
+        "candidate_id": "product-on-purpose-pm-skills",
+        "task_cells": 12,
+        "runs": 16,
+        "correctness": 3.5,
+        "evidence_discipline": 3.92,
+        "decision_clarity": 3.83,
+        "completeness": 3.56,
+        "executability": 3.53,
+        "redundancy": 3.53,
+        "average_characters": 2095.19,
+        "average_duration_ms": 42877.22,
+        "critical_samples": 3
+      }
+    ],
+    "aggregate_difference": 0,
+    "limitations": "冻结评测证据、单模型、单强度、小样本；只用于版本治理，不能外推长期排名。"
+  }
+}

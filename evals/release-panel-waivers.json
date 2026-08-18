@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "candidate": "working-tree-v0.38",
+  "entries": [
+    {
+      "source_file": "SKILL.md",
+      "reason": "v0.38 在 SKILL.md 中只更新版本与入口摘要；对应行为变化已由 idea、acceptance 及其显式合同覆盖，不形成独立合同差量。"
+    }
+  ]
+}

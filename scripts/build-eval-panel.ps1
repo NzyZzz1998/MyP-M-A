@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$PanelFile = 'evals\release-panel.json',
     [string]$CoreFile = 'evals\release-panel-core.json',
     [string]$ContractRegistryFile = 'evals\contract-registry.json',
@@ -6,6 +6,7 @@ param(
     [string]$CandidateRef,
     [string[]]$ChangedFiles = @(),
     [string[]]$AffectedContracts = @(),
+    [switch]$UseExplicitAffectedContracts,
     [string]$NoBehaviorChangeFile,
     [int]$MaxCases = 26,
     [string]$SnapshotPath,
@@ -43,7 +44,8 @@ function Write-JsonFile {
     $fullPath = Resolve-RepoFile -Path $Path -AllowMissing
     $directory = Split-Path -Parent $fullPath
     if ($directory) { New-Item -ItemType Directory -Path $directory -Force | Out-Null }
-    [System.IO.File]::WriteAllText($fullPath, ($Value | ConvertTo-Json -Depth 40) + [Environment]::NewLine, $utf8)
+    $json = ($Value | ConvertTo-Json -Depth 40) -replace "`r`n", "`n"
+    [System.IO.File]::WriteAllText($fullPath, $json + "`n", $utf8)
     return $fullPath
 }
 
@@ -118,6 +120,11 @@ function Test-BehaviorPath {
     return ($normalized -eq 'SKILL.md' -or $normalized.StartsWith('references/') -or $normalized.StartsWith('templates/'))
 }
 
+function Test-WorkingTreeRef {
+    param([string]$Ref)
+    return (-not [string]::IsNullOrWhiteSpace($Ref)) -and $Ref.StartsWith('working-tree-', [System.StringComparison]::Ordinal)
+}
+
 function Test-Waiver {
     param(
         [object[]]$Waivers,
@@ -159,6 +166,7 @@ $hasDynamicInput = (-not [string]::IsNullOrWhiteSpace($BaselineRef)) -or
     (-not [string]::IsNullOrWhiteSpace($CandidateRef)) -or
     @($ChangedFiles).Count -gt 0 -or
     @($AffectedContracts).Count -gt 0 -or
+    $UseExplicitAffectedContracts -or
     (-not [string]::IsNullOrWhiteSpace($NoBehaviorChangeFile))
 
 if (-not $hasDynamicInput) {
@@ -171,7 +179,7 @@ if (-not $hasDynamicInput) {
     if ([string]::IsNullOrWhiteSpace($CandidateRef)) { $CandidateRef = 'working-tree-candidate' }
 
     $changed = [System.Collections.Generic.List[string]]::new()
-    if ($BaselineRef -ne 'working-tree-baseline' -and $CandidateRef -ne 'working-tree-candidate') {
+    if (-not (Test-WorkingTreeRef -Ref $BaselineRef) -and -not (Test-WorkingTreeRef -Ref $CandidateRef)) {
         $range = "$BaselineRef..$CandidateRef"
         $gitOutput = @(& git -C $root diff --name-only --diff-filter=ACMRT $range 2>&1)
         if ($LASTEXITCODE -ne 0) { throw "Cannot resolve git diff $range`: $($gitOutput -join ' ')" }
@@ -192,6 +200,15 @@ if (-not $hasDynamicInput) {
         $waivers = @($waiverData.entries)
     }
 
+    $explicitAffectedIds = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    foreach ($id in @($AffectedContracts)) {
+        if (-not $contractById.ContainsKey([string]$id)) { throw "Unknown affected contract: $id" }
+        [void]$explicitAffectedIds.Add([string]$id)
+    }
+    if ($UseExplicitAffectedContracts -and $explicitAffectedIds.Count -eq 0) {
+        throw 'UseExplicitAffectedContracts requires at least one AffectedContracts entry.'
+    }
+
     $affectedIds = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
     $unmappedFiles = [System.Collections.Generic.List[string]]::new()
     foreach ($path in $changedFilesFinal) {
@@ -203,12 +220,20 @@ if (-not $hasDynamicInput) {
             }
             continue
         }
-        foreach ($contract in $matches) { [void]$affectedIds.Add([string]$contract.contract_id) }
+        if ($UseExplicitAffectedContracts) {
+            $selectedMatches = @($matches | Where-Object { $explicitAffectedIds.Contains([string]$_.contract_id) })
+            if ($selectedMatches.Count -eq 0) {
+                if (-not (Test-Waiver -Waivers $waivers -SourceFile $path -ContractId '')) {
+                    $unmappedFiles.Add($path)
+                }
+                continue
+            }
+            foreach ($contract in $selectedMatches) { [void]$affectedIds.Add([string]$contract.contract_id) }
+        } else {
+            foreach ($contract in $matches) { [void]$affectedIds.Add([string]$contract.contract_id) }
+        }
     }
-    foreach ($id in @($AffectedContracts)) {
-        if (-not $contractById.ContainsKey([string]$id)) { throw "Unknown affected contract: $id" }
-        [void]$affectedIds.Add([string]$id)
-    }
+    foreach ($id in $explicitAffectedIds) { [void]$affectedIds.Add([string]$id) }
     if ($unmappedFiles.Count -gt 0) {
         throw "Behavior files have no contract mapping: $($unmappedFiles -join ', '). Add contract mappings or an audited no_behavior_change reason."
     }
@@ -285,13 +310,14 @@ if (-not $hasDynamicInput) {
 
     $snapshot = [ordered]@{
         schema_version = 2
-        name = 'MyP-M-A dynamic release panel'
-        purpose = 'Fixed core plus contract delta and adjacent controls; full-regression mode is explicit when the panel limit is exceeded.'
+        name = "MyP-M-A $CandidateRef 发布面板"
+        purpose = '固定核心、合同差量与相邻控制项；超过面板上限时显式升级为受影响入口全量回归。'
         baseline_ref = $BaselineRef
         candidate_ref = $CandidateRef
         mode = $mode
         max_cases = $MaxCases
         changed_files = @($changedFilesFinal)
+        contract_selection_mode = if ($UseExplicitAffectedContracts) { 'explicit-audited' } else { 'source-file-expanded' }
         affected_contracts = @($affected | ForEach-Object { [string]$_.contract_id })
         affected_routes = @($affectedRoutes)
         unmapped_files = @()
