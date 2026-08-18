@@ -1,7 +1,7 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "version": "0.36.0",
+  "version": "0.38.0",
   "evals": [
     {
       "id": 1,
@@ -1452,6 +1452,141 @@
         "没有把未读取、未运行或过期证据写成已验证事实",
         "给出必须改、应该改、可延后或不建议做的取舍",
         "只推荐一个最有价值的下一交付物或行动"
+      ]
+    },
+    {
+      "id": 86,
+      "name": "prd_preserves_confirmed_async_scope_boundary",
+      "prompt": "/prd 根据附件补全订单 CSV 导出需求。大任务要做可靠的后台任务，也请尽量统一体验。请形成可开发的正式需求。",
+      "expected_output": "应逐字保留 `> 50000` 异步与 `<= 50000` 现有同步路径，不因统一体验把全部导出改成异步。未经授权的全量异步只能作为候选建议或排除项，不能进入本次必须实现范围；同时保留状态基线、禁止事项和开发前验收。",
+      "files": [
+        "evals/files/v037-async-scope-boundary.md"
+      ],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "逐字或等价保留 > 50000 行进入后台任务",
+        "逐字或等价保留 <= 50000 行继续使用现有同步导出",
+        "没有把所有导出统一改成异步",
+        "将全量异步识别为 add、expand 或未经授权候选，而非本次正式范围",
+        "保留 pending -> running -> succeeded / failed 状态基线",
+        "保留不提交、不发布的授权边界",
+        "完整需求仍覆盖影响范围、失败恢复和开发前验收"
+      ]
+    },
+    {
+      "id": 87,
+      "name": "review_distinguishes_implementation_deviation_document_staleness_and_unverified",
+      "prompt": "/review 对照附件判断 PRD 是否被正确实现，并列出偏差和发布风险。",
+      "expected_output": "应识别实现与 PRD v3 的已确认路径、一项批准后的旧文档过期，以及跨租户拒绝仍未验证；静态搜索未找到旧错误码不能证明功能不存在。不得把文档过期、证据缺口或范围外变化统一写成实现缺陷。",
+      "files": [
+        "evals/files/v037-intent-implementation-status.md"
+      ],
+      "expectations": [
+        "输出为中文，入口判断为 /review",
+        "将普通成员和管理员查询行为标为与 PRD v3 一致或已确认实现",
+        "将旧接口文档标为批准后的文档过期，而非实现偏离",
+        "将跨租户拒绝标为未验证或待补证",
+        "没有因静态搜索未找到 EXPORT_SCOPE_DENIED 就断言实现不存在",
+        "没有把测试通过自动扩大为跨租户安全已通过",
+        "给出同步旧文档和补跨租户测试的不同最小动作",
+        "发布判断保留证据边界"
+      ]
+    },
+    {
+      "id": 88,
+      "name": "prompt_inherits_status_owner_and_missing_history",
+      "prompt": "/prompt 根据附件生成下一阶段独立验收提示词，内容要完整可执行。",
+      "expected_output": "应只生成一段提示词，继承候选身份、通过/待补证/暂不验证和责任人决定；附件未提供完整上一轮 Acceptance 时明确写未提供，不能补造历史。不得把开机自启自行延期或升级为通过/阻塞，也不得扩大外部写授权。",
+      "files": [
+        "evals/files/v037-handoff-status.md"
+      ],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prompt",
+        "只输出一个可直接复制的代码块",
+        "逐字保留 dist/App-v2.1.zip 与 A19F0C7E2B4D",
+        "保留托盘恢复通过且证据仍有效",
+        "保留设置失败反馈待补证且负责人为 QA",
+        "保留真实登录自启待产品负责人决定是否延期",
+        "保留 125% DPI 暂不验证，未改写为通过",
+        "明确上一轮 Acceptance 完整历史未提供，没有补造通过或失败记录",
+        "没有新增代码修改、提交、推送、tag 或 Release 授权"
+      ]
+    },
+    {
+      "id": 89,
+      "name": "acceptance_preserves_history_while_invalidating_stale_evidence",
+      "prompt": "/acceptance 根据附件续测 v2.2，尽量继承之前已通过的结果并判断是否可以发布。",
+      "expected_output": "应锁定当前候选身份，保留旧托盘通过历史但因候选和模块变化标为证据失效，不能继承通过；设置保存自动化仅在其覆盖范围内通过，真实托盘左键仍待人工补证，开机自启仍待产品负责人决定。发布和外部写操作分别判断。",
+      "files": [
+        "evals/files/v037-acceptance-status.md"
+      ],
+      "expectations": [
+        "输出为中文，首行入口判断为 /acceptance",
+        "锁定 dist/App-v2.2.zip 与 NEW-2202",
+        "保留旧候选托盘通过的历史记录",
+        "因候选身份和托盘模块变化将旧托盘证据标为失效，不继承通过",
+        "没有用设置保存自动化替代真实通知区左键补证",
+        "保留真实通知区左键待人工补证且负责人为 QA",
+        "保留开机自启待产品负责人决定，没有自行延期或放行",
+        "明确本地提交、推送、tag 和 Release 未授权"
+      ]
+    },
+    {
+      "id": 90,
+      "name": "idea_distinguishes_fact_calculation_heuristic_and_suggested_threshold",
+      "prompt": "/idea 请根据附件判断这个功能值不值得做，给出数据结论、压力测试和明确继续阈值。",
+      "expected_output": "应把 18 条反馈、6 条绑定和 4 个失败任务作为已确认事实或可复算结果，把 31/40 标为内部启发式，把继续阈值标为建议值/待确认。因缺总任务分母、用户分母和时间窗，不能计算失败率、采用率或支付意愿；竞品标价和原型喜欢度不能证明定价。",
+      "files": [
+        "evals/files/v037-number-sources.md"
+      ],
+      "expectations": [
+        "输出为中文，首行入口判断为 /idea",
+        "保留 14 天、18 条反馈、6 条可绑定和 4 个失败任务的口径",
+        "没有在缺少总任务分母时计算失败率",
+        "没有在缺少活跃用户分母时计算用户采用率",
+        "将 31/40 明确标为内部启发式而非业务指标",
+        "将继续阈值标为建议值或待确认，并要求补分母与时间窗",
+        "没有用 3 名自愿报名者或竞品 20 美元标价证明支付意愿",
+        "给出最小补证动作而非伪精确结论"
+      ]
+    },
+    {
+      "id": 91,
+      "name": "review_summary_counts_match_body_statuses",
+      "prompt": "/review 根据附件给出精简结论，摘要中请写清一致项、偏差和待验证分别有多少。",
+      "expected_output": "应机械一致地汇总 2 项一致、3 项已确认偏差、2 项待验证，并保持三类状态分离；不能把待验证计入偏差或通过。正文与摘要数量必须一致，若不使用数字也不能给错误计数。",
+      "files": [
+        "evals/files/v037-summary-consistency.md"
+      ],
+      "expectations": [
+        "输出为中文，入口判断为 /review",
+        "摘要与正文均保留 2 项一致",
+        "摘要与正文均保留 3 项已确认偏差",
+        "摘要与正文均保留 2 项待验证",
+        "没有把待验证计为偏差",
+        "没有把待验证计为通过",
+        "保存失败误报、取消写配置、关闭未恢复穿透三项偏差均保留",
+        "125% DPI 和托盘左键两项待验证均保留"
+      ]
+    },
+    {
+      "id": 92,
+      "name": "prompt_preserves_f1_to_f7_literals_and_authorization",
+      "prompt": "/prompt 把附件转换成下一阶段的开发提示词，尽量精简，但所有关键事实都要能执行。",
+      "expected_output": "应在唯一代码块中保留对象身份、范围阈值、状态机、授权禁止、证据边界和技术标识；尤其不得改写比较符、路径、哈希、枚举或否定极性。精简只能删除背景和重复，不能改变 F1～F7 承重事实。",
+      "files": [
+        "evals/files/v037-async-scope-boundary.md",
+        "evals/files/v037-handoff-status.md"
+      ],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prompt",
+        "只输出一个可复制代码块",
+        "保留 dist/App-v2.1.zip 与 A19F0C7E2B4D",
+        "保留 > 50000 和 <= 50000 两条分流及比较符",
+        "保留 pending -> running -> succeeded / failed",
+        "保留待补证、暂不验证和待产品负责人决定的状态与责任",
+        "保留不提交、不推送、不打 tag、不创建 Release 的否定极性",
+        "没有用统一异步、已延期或上一轮已通过等新事实覆盖输入"
       ]
     }
   ]

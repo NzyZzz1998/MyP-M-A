@@ -15,6 +15,44 @@
       "notes": "使用当前工作树的五入口合同、相关 reference 与命中的 v0.36 pilot 能力卡；不加载无关文件。"
     },
     {
+      "id": "mypm-v037",
+      "display_name": "MyP-M-A v0.37 Candidate",
+      "repository_url": "https://github.com/NzyZzz1998/MyP-M-A",
+      "clone_dir": null,
+      "base_commit": "83e619c7ef7cd31cb782f142fa4b5ad65f01c115",
+      "runtime_sha256": "88bce7001c8500f67f4c0c290569a3a78cb6aaa3c969c062a71aee32f31135dd",
+      "runtime_lock": {
+        "algorithm": "sha256(path-tab-sha256-lf-utf8)",
+        "files": [
+          {"path":"SKILL.md","sha256":"192ae16694697d9ae2d6070fd54e2e4470c62acb149251578ff2b28612b76556","bytes":11044},
+          {"path":"references/prd.md","sha256":"709ed300d89a02d88d9a367311be45b88ddc3fc4f647ab8c08a351c104398a69","bytes":12672},
+          {"path":"references/prompt.md","sha256":"2f7dbb47ad89db3681e6093c72a23a0a94730041f833e084b20d1311028d151e","bytes":8961},
+          {"path":"references/acceptance.md","sha256":"b2ac0648af3ef71aa4bfb8eaaab05e9440d7e3d0dd2790032ed9bc5c3c2c5838","bytes":8249},
+          {"path":"references/idea.md","sha256":"6df0f545d30618f8a067d6297fcc4f882be62afe0cc847647ac1788840fdabb5","bytes":8621},
+          {"path":"references/intent-implementation-audit.md","sha256":"6c319d717aac6a02242da1a42bb382e160b9b395b545562e2c4c0a98808b3567","bytes":6608}
+        ]
+      },
+      "promoted_runtime_sha256": "291b348486f05f2a2d2d7fc7019de8aac2e353d6546386d793b18d6435d02a5b",
+      "evaluated_snapshot": {
+        "root_env": "MYPM_V037_EVIDENCE_ROOT",
+        "relative_path": "candidate-snapshot.json",
+        "runtime_dir": "candidate",
+        "sha256": "1cb80cf13615d84f11fefbe09758894186b5a9bb8a1dc0abfd728201d5b5b834",
+        "bytes": 3892,
+        "files": 21,
+        "allowed_promotion_change": {
+          "path": "SKILL.md",
+          "from": "version: \"0.36.0\"",
+          "to": "version: \"0.37.0\""
+        }
+      },
+      "license": "MIT",
+      "comparison_mode": "behavior",
+      "host_compatibility": "portable-context",
+      "adapter": "selective-file-context",
+      "notes": "以 base_commit 加本地 v0.37 Candidate 差量装配；六个运行时文件由 runtime_sha256 锁定，不把未提交状态冒充 source commit。"
+    },
+    {
       "id": "phuryn-pm-skills",
       "display_name": "phuryn/pm-skills",
       "repository_url": "https://github.com/phuryn/pm-skills",

@@ -88,9 +88,11 @@ function Invoke-MypmCoreValidation {
             Add-MypmValidationError -Result $result -Message "Missing evaluation script: $relative"
             continue
         }
+        $scriptText = Read-MypmUtf8Text -Path $path -Result $result -Label ([string]$relative)
+        if ($null -eq $scriptText) { continue }
         $tokens = $null
         $parseErrors = $null
-        [void][System.Management.Automation.Language.Parser]::ParseFile($path, [ref]$tokens, [ref]$parseErrors)
+        [void][System.Management.Automation.Language.Parser]::ParseInput($scriptText, $path, [ref]$tokens, [ref]$parseErrors)
         foreach ($parseError in @($parseErrors)) { Add-MypmValidationError -Result $result -Message "$relative parse error: $($parseError.Message)" }
     }
 

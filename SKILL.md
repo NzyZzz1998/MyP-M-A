@@ -4,13 +4,13 @@ description: "Use when：产品评审、原型、研究、战略/GTM、需求、
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.36.0"
+  version: "0.37.0"
   language: zh-CN
 ---
 
 # MyP-M-A
 
-MyP-M-A 是中文优先的产品经理工作流：以证据判断，交付阶段最小成果。
+MyP-M-A 是中文优先的产品经理工作流：以证据判断，交付阶段成果。
 
 ## 通用硬门禁
 
@@ -55,7 +55,7 @@ MyP-M-A 是中文优先的产品经理工作流：以证据判断，交付阶段
 | `/acceptance` | `references/acceptance.md`、`references/tooling.md` | 多轨验收读 `references/capability-routing.md`；核对意图与实现读 `references/intent-implementation-audit.md`；跨线程读 `references/memory-integration.md` | 读 `templates/acceptance-template.md`；有人工补证时读 `templates/manual-verification-template.md` |
 | `/prompt` | `references/prompt.md`、`references/workflow-control.md` | 判断去向读 `references/next-step-prompts.md`；跨线程读 `references/memory-integration.md` | 无固定模板 |
 
-其他能力按需读取：
+其他能力按需读：
 
 - 问题尚未成形：`references/problem-framing.md`。
 - 产品简报：`references/product-brief.md` 与 `templates/product-brief-template.md`。
@@ -67,7 +67,7 @@ MyP-M-A 是中文优先的产品经理工作流：以证据判断，交付阶段
 
 有现成 PRD、dev plan、progress、verification 或候选产物时，先读 `references/workflow-control.md`，识别真实子阶段、门禁和可继承证据，不重复规划或重跑仍有效验收。
 
-只扫描当前子阶段合同：正式 PRD、发布验收和高风险写入逐项核对；窄任务只保留会改变结论、证据、授权或出口的规则。缺项最小补齐，先删背景，不删合同。
+只扫描当前子阶段合同：成文前核对事实、范围、状态、数值、摘要及入口保护；缺项补齐，先删背景重复，不删正式 PRD、深度 Review、实际验收与发布门禁。
 
 <!-- contract:single-source-output -->
 同一事实或缺口只完整表达一次，后文用 ID 引用；能合并时不重复建表。聊天先给结论和主证据，细节落文件；接手摘要最多 5 条。

@@ -2,6 +2,12 @@
   "schema_version": 1,
   "candidate_manifest": "evals/external-candidates.json",
   "task_contract": "evals/external-benchmark-contract.json",
+  "frozen_input": {
+    "algorithm": "sha256(path-tab-sha256-lf-utf8)",
+    "files": 13,
+    "bytes": 10116,
+    "sha256": "cc107f9d7ff7814a8a9122a2d509d2c9166d662bd86495d68b3e4509094c8169"
+  },
   "execution": {
     "model": "gpt-5.6-luna",
     "reasoning_effort": "medium",
@@ -38,6 +44,7 @@
       "minimum_contract": ["证据与推断分开", "区分反馈人数、日志事件和失败任务", "识别问题边界与反例", "给阶段判断、最小补证和停止条件"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/discovery/problem-validation.md", "references/discovery.md"],
+        "mypm-v037": ["SKILL.md", "references/idea.md", "capabilities/discovery/problem-validation.md", "references/discovery.md"],
         "phuryn-pm-skills": ["pm-product-discovery/skills/summarize-interview/SKILL.md", "pm-product-discovery/skills/analyze-feature-requests/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/discover-interview-synthesis/SKILL.md", "skills/define-problem-statement/SKILL.md"]
       }
@@ -50,6 +57,7 @@
       "minimum_contract": ["不伪造用户需求", "区分愿望与行为证据", "识别机会成本", "给明确阶段判断与继续/停止阈值"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/idea.md", "references/red-team.md", "references/judgment-framework.md"],
+        "mypm-v037": ["SKILL.md", "references/idea.md", "references/red-team.md", "references/judgment-framework.md"],
         "phuryn-pm-skills": ["pm-product-discovery/skills/prioritize-assumptions/SKILL.md", "pm-product-discovery/skills/identify-assumptions-existing/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/define-hypothesis/SKILL.md", "skills/foundation-build-risk-review/SKILL.md"]
       }
@@ -62,6 +70,7 @@
       "minimum_contract": ["分母、去重、时间窗明确", "准确区分四类统计对象", "重试不重复计任务", "不外推总体失败率并给最小补证"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/analytics/product-data-analysis.md", "references/data-analysis.md"],
+        "mypm-v037": ["SKILL.md", "references/idea.md", "capabilities/analytics/product-data-analysis.md", "references/data-analysis.md"],
         "phuryn-pm-skills": ["pm-product-discovery/skills/metrics-dashboard/SKILL.md", "pm-data-analytics/skills/sql-queries/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/measure-dashboard-requirements/SKILL.md", "skills/measure-experiment-results/SKILL.md"]
       }
@@ -74,6 +83,7 @@
       "minimum_contract": ["来源、口径、异常和权限完整", "分子分母和去重键明确", "时间与权限边界完整", "来源到页面血缘及迟到数据验收"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/prd.md", "capabilities/analytics/product-data-analysis.md", "references/data-analysis.md"],
+        "mypm-v037": ["SKILL.md", "references/prd.md", "capabilities/analytics/product-data-analysis.md", "references/data-analysis.md"],
         "phuryn-pm-skills": ["pm-execution/skills/create-prd/SKILL.md", "pm-product-discovery/skills/metrics-dashboard/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/deliver-prd/SKILL.md", "skills/measure-instrumentation-spec/SKILL.md"]
       }
@@ -86,6 +96,7 @@
       "minimum_contract": ["有取舍与排除项，不堆框架", "至少比较两个互斥选项", "区分使用者、决策者和买方", "给证据边界、最小验证和停止条件"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/strategy/strategy-gtm-decision.md", "references/strategy-gtm.md"],
+        "mypm-v037": ["SKILL.md", "references/idea.md", "capabilities/strategy/strategy-gtm-decision.md", "references/strategy-gtm.md"],
         "phuryn-pm-skills": ["pm-product-strategy/skills/product-strategy/SKILL.md", "pm-go-to-market/skills/ideal-customer-profile/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/foundation-persona/SKILL.md", "skills/foundation-lean-canvas/SKILL.md"]
       }
@@ -98,6 +109,7 @@
       "minimum_contract": ["可核查来源与适用边界", "竞品标价不等于支付意愿", "区分使用者与购买链", "给分阶段渠道实验、护栏和停止条件"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/strategy/strategy-gtm-decision.md", "references/strategy-gtm.md"],
+        "mypm-v037": ["SKILL.md", "references/idea.md", "capabilities/strategy/strategy-gtm-decision.md", "references/strategy-gtm.md"],
         "phuryn-pm-skills": ["pm-product-strategy/skills/pricing-strategy/SKILL.md", "pm-go-to-market/skills/gtm-strategy/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/foundation-lean-canvas/SKILL.md", "skills/discover-competitive-analysis/SKILL.md", "skills/deliver-launch-checklist/SKILL.md"]
       }
@@ -110,6 +122,7 @@
       "minimum_contract": ["全链路、影响范围、高保真交付门禁", "成功、失败和无变化反馈", "保存、取消和关闭行为明确", "原型和可访问性要求可验收"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/prd.md", "references/user-stories.md", "references/traceability.md"],
+        "mypm-v037": ["SKILL.md", "references/prd.md", "references/user-stories.md", "references/traceability.md"],
         "phuryn-pm-skills": ["pm-execution/skills/create-prd/SKILL.md", "pm-execution/skills/test-scenarios/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/deliver-prd/SKILL.md", "skills/deliver-edge-cases/SKILL.md", "skills/deliver-acceptance-criteria/SKILL.md"]
       }
@@ -122,6 +135,7 @@
       "minimum_contract": ["状态、幂等、权限、失败与数据库合同", "规范状态机和迁移边界", "前后端及数据影响完整", "取消、重试、过期与开发前验收明确"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/prd.md", "references/traceability.md", "references/user-stories.md"],
+        "mypm-v037": ["SKILL.md", "references/prd.md", "references/traceability.md", "references/user-stories.md"],
         "phuryn-pm-skills": ["pm-execution/skills/create-prd/SKILL.md", "pm-execution/skills/user-stories/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/deliver-prd/SKILL.md", "skills/deliver-user-stories/SKILL.md"]
       }
@@ -134,6 +148,7 @@
       "minimum_contract": ["架构、主链、风险、证据状态", "先建立项目脉络", "事实、推断和未知分层", "问题带影响、证据、可视化结构和分流"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/review.md", "references/deep-review.md", "references/traceability.md"],
+        "mypm-v037": ["SKILL.md", "references/review.md", "references/deep-review.md", "references/traceability.md"],
         "phuryn-pm-skills": ["pm-execution/skills/strategy-red-team/SKILL.md", "pm-product-strategy/skills/product-strategy/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/foundation-build-risk-review/SKILL.md", "skills/utility-pm-critic/SKILL.md"]
       }
@@ -146,6 +161,7 @@
       "minimum_contract": ["原目标、实现、测试和回归关联", "逐项建立需求到实现和证据的映射", "区分确定偏差、待验证和范围外变化", "给影响、优先级、最小修复或补证"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/review.md", "references/intent-implementation-audit.md", "references/traceability.md"],
+        "mypm-v037": ["SKILL.md", "references/review.md", "references/intent-implementation-audit.md", "references/traceability.md"],
         "phuryn-pm-skills": ["pm-ai-shipping/skills/intended-vs-implemented/SKILL.md", "pm-execution/skills/test-scenarios/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/foundation-build-risk-review/SKILL.md", "skills/utility-pm-critic/SKILL.md", "skills/deliver-acceptance-criteria/SKILL.md"]
       }
@@ -158,6 +174,7 @@
       "minimum_contract": ["身份、新鲜度、真实证据、阻塞判断", "不把未执行项写通过", "正确处理冲突与旧 build 证据", "给发布判断和必要手工补证"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/acceptance.md", "references/tooling.md", "references/traceability.md"],
+        "mypm-v037": ["SKILL.md", "references/acceptance.md", "references/tooling.md", "references/traceability.md"],
         "phuryn-pm-skills": ["pm-ai-shipping/skills/intended-vs-implemented/SKILL.md", "pm-execution/skills/test-scenarios/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/deliver-acceptance-criteria/SKILL.md", "skills/deliver-edge-cases/SKILL.md", "skills/utility-pm-release-conductor/SKILL.md"]
       }
@@ -170,6 +187,7 @@
       "minimum_contract": ["不重做上一步、授权和停止点明确", "继承候选身份、证据和未关闭项", "输入、任务、输出和范围约束可执行", "不擅自提交、发布或扩大范围"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/prompt.md", "references/workflow-control.md", "references/next-step-prompts.md"],
+        "mypm-v037": ["SKILL.md", "references/prompt.md", "references/workflow-control.md", "references/next-step-prompts.md"],
         "phuryn-pm-skills": ["pm-execution/skills/outcome-roadmap/SKILL.md", "pm-execution/skills/release-notes/SKILL.md", "pm-ai-shipping/skills/intended-vs-implemented/SKILL.md"],
         "product-on-purpose-pm-skills": ["skills/foundation-prioritized-action-plan/SKILL.md", "skills/utility-pm-release-conductor/SKILL.md", "skills/deliver-release-notes/SKILL.md"]
       }

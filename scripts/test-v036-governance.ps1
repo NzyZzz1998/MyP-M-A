@@ -25,19 +25,19 @@ function Copy-EvalCatalogs {
 function New-Capability {
     return [ordered]@{
         id = 'test.problem-validation'
-        name_zh = '测试问题验证'
+        name_zh = 'Test problem validation'
         domain = 'test'
         status = 'pilot'
         card_file = 'capabilities/test/problem-validation.md'
         entrypoints = @('/idea')
         stages = @('validate')
-        triggers = @('存在待验证问题')
-        anti_triggers = @('需求已确认并进入实施')
-        required_inputs = @('问题', '用户', '证据')
-        outputs = @('判断', '最小实验')
-        evidence_contract = '区分事实与推断'
+        triggers = @('A problem still needs validation')
+        anti_triggers = @('The requirement is confirmed and implementation has started')
+        required_inputs = @('problem', 'user', 'evidence')
+        outputs = @('decision', 'minimum experiment')
+        evidence_contract = 'Separate facts from inference'
         tool_categories = @('project-read')
-        fallback = '证据不足时标为待验证'
+        fallback = 'Mark as unverified when evidence is insufficient'
         references = @('references/test.md')
         eval_ids = [ordered]@{ stable = @(1); challenge = @(); trigger = @(1) }
         owner = 'mypm'
@@ -197,7 +197,7 @@ try {
     New-PublicCaseFixture -Mutate {
         param($fixtureRoot)
         $artifactPath = Join-Path $fixtureRoot 'examples\dry-run\deliverable.md'
-        $content = [System.IO.File]::ReadAllText($artifactPath, $utf8) + "`n证据路径：C:\Users\example\private.txt`n"
+        $content = [System.IO.File]::ReadAllText($artifactPath, $utf8) + "`nEvidence path: C:\Users\example\private.txt`n"
         Write-TestFile -Path $artifactPath -Content $content
         $manifestPath = Join-Path $fixtureRoot 'examples\dry-run\case-manifest.json'
         $document = [System.IO.File]::ReadAllText($manifestPath, $utf8) | ConvertFrom-Json
