@@ -1,7 +1,7 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "evals": [
     {
       "id": 1,
@@ -1655,6 +1655,108 @@
         "没有生成跨维度统一总分",
         "没有仅凭当前样本批准整体重做",
         "给出最小补证或受控修复动作及停止条件"
+      ]
+    },
+    {
+      "id": 97,
+      "name": "idea_preserves_statistical_object_across_summary",
+      "prompt": "/idea 根据附件判断是否应该整体重做导出中心。请给精炼结论并引用失败率。",
+      "expected_output": "应分别命名事件失败占比 10/50=20% 和任务最终失败占比 4/40=10%，并说明缺失败用户分子而无法计算用户失败率。摘要和行动不得把 20% 改称任务或用户失败率，也不能据此直接批准整体重做。",
+      "files": ["evals/files/v039-statistical-object.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /idea",
+        "事件失败占比明确为 10/50=20%",
+        "任务最终失败占比明确为 4/40=10%",
+        "明确用户失败率无法计算",
+        "后文引用百分比时保留对应统计对象",
+        "没有把事件率静默改成任务率或用户率",
+        "没有仅凭当前样本批准整体重做",
+        "给出补齐失败用户分子或同口径趋势的最小动作"
+      ]
+    },
+    {
+      "id": 98,
+      "name": "prompt_terminal_scan_preserves_numeric_literals",
+      "prompt": "/prompt 把附件压缩成下一阶段实施提示词，务必简短。",
+      "expected_output": "应在唯一提示词中原样保留版本、产物、哈希、50000 的两个比较区间、¥50,000 预算、当前状态和外部写入否定；不得把金额扩大一个数量级或丢掉互补同步路径。",
+      "files": ["evals/files/v039-numeric-literals.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prompt",
+        "只输出一个可复制代码块",
+        "保留 v2.4.0-beta.3、产物路径和 05AF91C2D18E",
+        "保留 > 50000 后台任务",
+        "保留 <= 50000 同步路径",
+        "保留 ¥50,000 且没有改写为 ¥500,000",
+        "保留实现完成、验收待补证",
+        "保留不提交、不推送、不打 tag、不创建 Release"
+      ]
+    },
+    {
+      "id": 99,
+      "name": "review_labels_relation_evidence_states",
+      "prompt": "/review 根据附件画出项目关系图并给出最小核验动作。",
+      "expected_output": "应把 API 写入 export.jobs 标为已确认事实，把文档中的 Worker/Storage 链路标为过期待核对或推断，把 reporting-cache 标为待确认。不得因静态搜索未命中断言 worker 不存在，每条承重推断应给来源或最小核验。",
+      "files": ["evals/files/v039-review-relations.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "提供关系图或等价项目地图",
+        "API 写入 export.jobs 标为已确认并引用源码",
+        "Worker 消费关系没有被冒充为已确认",
+        "reporting-cache 关系标为待确认",
+        "没有因静态搜索未命中断言处理器不存在",
+        "承重推断带最小核验动作",
+        "事实、推断和待确认在图或说明中可区分"
+      ]
+    },
+    {
+      "id": 100,
+      "name": "prd_defines_current_saved_default_value_semantics",
+      "prompt": "/prd 根据附件补齐月薪输入框的完整正式需求，重点写保存、失败、取消、重置和重启。",
+      "expected_output": "应区分当前输入值 1300、最后已保存值 1000 和首次默认值 800，逐项定义成功、失败、无变化、取消/关闭、重置和重启后的显示与持久化行为，不得用模糊的保留当前值替代。",
+      "files": ["evals/files/v039-ui-values.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "明确当前输入 1300、最后已保存 1000、首次默认 800",
+        "保存成功后 1300 成为已保存值",
+        "保存失败时 UI 保留 1300 且持久化仍为 1000",
+        "无变化保存不写配置并给反馈",
+        "取消和关闭恢复最后已保存值",
+        "重置默认只改当前输入，保存后才持久化",
+        "重启读取最后成功保存值"
+      ]
+    },
+    {
+      "id": 101,
+      "name": "acceptance_summary_preserves_item_states",
+      "prompt": "/acceptance 根据附件续测当前包，尽量沿用历史并给精炼发布结论。",
+      "expected_output": "应继承未受影响的 Settings 自动化，保留旧托盘通过历史但因候选和模块变化标证据失效，当前通知区左键待补证；开机自启仍待产品负责人决定，DPI 仍暂不验证。摘要不得合并或弱化这些状态，发布和外部写入不放行。",
+      "files": ["evals/files/v039-acceptance-evidence.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /acceptance",
+        "锁定当前 App-v2.3.zip 与 NEW-2300",
+        "Settings 自动化仅在未受影响范围继承通过",
+        "旧托盘通过保留但标证据失效",
+        "当前真实通知区左键仍待补证",
+        "开机自启仍待产品负责人决定",
+        "125% DPI 仍暂不验证",
+        "摘要与逐项状态一致且不放行外部写入"
+      ]
+    },
+    {
+      "id": 102,
+      "name": "review_routes_verified_data_to_optional_chart_delivery",
+      "prompt": "/review 根据附件判断是否适合生成图表，并给出可执行交付合同。",
+      "expected_output": "应先锁定决策问题、数据来源、字段和禁止合并规则，再探测 Lieflat 安装、来源 commit 与许可；仅在本地非商业用途成立时按需生成，并要求 HTML、manifest、双视口和逐值验证。不可用时保留原表格，不得声称已生成。",
+      "files": ["evals/files/v039-chart-data.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "先锁定决策问题和 benchmark 数据来源",
+        "六个质量维度保持分开且不生成统一总分",
+        "探测 Lieflat 是否安装、来源 commit 和许可证",
+        "商业用途没有单独许可时不得调用",
+        "要求 HTML、manifest、桌面和窄屏浏览器验证",
+        "要求逐值核对数值、单位、标签和聚合",
+        "不可用时降级为表格且不声称图表已生成"
       ]
     }
   ]

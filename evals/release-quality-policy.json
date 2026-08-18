@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "name": "MyP-M-A 发布质量优先级策略",
+  "aggregate_score": null,
+  "hard_gates": ["correctness", "evidence_discipline", "completeness"],
+  "quality_gates": ["decision_clarity", "executability", "valid_return"],
+  "observation_only": ["redundancy", "characters", "duration_ms"],
+  "non_compensation_rule": "正确性、证据纪律或完整性的关键失败不能被精炼度、字符数、时长或其他维度抵消。",
+  "formal_artifact_rule": "PRD、验收报告和深度 Review 不设置通用字符上限；只删除重复、矛盾、无证据或无助于实施验收的内容。",
+  "compact_output_rule": "仅当用户明确要求摘要、短提示词或给出字符上限时，长度才可成为阻塞条件；压缩不得删除承重事实和必要链路。",
+  "reporting_rule": "所有维度分别报告，不生成统一总分；观察项可以触发后续优化，但不能单独阻止正式文档晋升。"
+}

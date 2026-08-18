@@ -118,6 +118,7 @@ function Invoke-MypmEvalsValidation {
 
     if ($null -ne $quality) {
         if ($null -ne $quality.aggregate_score) { Add-MypmValidationError -Result $result -Message 'Delivery quality aggregate score must be null' }
+        if ([string]$quality.release_quality_policy -ne 'evals/release-quality-policy.json') { Add-MypmValidationError -Result $result -Message 'Delivery quality release policy is not canonical' }
         $qualityIds = @($quality.dimensions | ForEach-Object { [string]$_.id })
         $expectedQualityIds = @('correctness', 'decision_clarity', 'redundancy', 'actionability', 'response_chars', 'duration_ms', 'valid_return_rate')
         foreach ($qualityId in $expectedQualityIds) {
@@ -133,6 +134,9 @@ function Invoke-MypmEvalsValidation {
         if ([double]$quality.density_boundary.response_chars_increase_ratio -ne 0.35 -or
             [double]$quality.density_boundary.baseline_redundancy_win_ratio -ne 0.5) {
             Add-MypmValidationError -Result $result -Message 'Delivery quality density thresholds must remain 0.35 and 0.5'
+        }
+        if ([bool]$quality.cost_boundary.blocking -or [bool]$quality.density_boundary.blocking) {
+            Add-MypmValidationError -Result $result -Message 'Cost and density boundaries must remain observation-only'
         }
     }
 

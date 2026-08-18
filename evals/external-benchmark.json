@@ -24,6 +24,7 @@
     "show_invalid_samples": true,
     "separate_structure_from_behavior": true
   },
+  "quality_gate_policy": "evals/release-quality-policy.json",
   "scoring_dimensions": [
     {"id": "correctness", "label_zh": "正确性", "scale": "0-4"},
     {"id": "evidence_discipline", "label_zh": "证据纪律", "scale": "0-4"},
@@ -41,7 +42,7 @@
       "title_zh": "从混合反馈、日志和 Review 结果判断真实问题",
       "fixture": "evals/files/external-benchmark/eb01-mixed-evidence.md",
       "prompt": "基于附件中的用户反馈、运行日志和项目 Review 结果，判断批量导出失败是否是真问题、是否值得继续、现在是否应该做。不要直接写 PRD。",
-      "minimum_contract": ["证据与推断分开", "区分反馈人数、日志事件和失败任务", "识别问题边界与反例", "给阶段判断、最小补证和停止条件"],
+      "minimum_contract": ["证据与推断分开", "区分反馈人数、日志事件和失败任务", "原因只归属于已观察子集，未知原因不外推", "识别问题边界与反例", "给阶段判断、最小补证和停止条件"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/idea.md", "capabilities/discovery/problem-validation.md", "references/discovery.md"],
         "mypm-v037": ["SKILL.md", "references/idea.md", "capabilities/discovery/problem-validation.md", "references/discovery.md"],
@@ -80,7 +81,7 @@
       "title_zh": "设计 KPI 与数据合同",
       "fixture": "evals/files/external-benchmark/eb04-kpi-contract.md",
       "prompt": "为团队活跃榜定义可开发的数据契约和验收样例。已有事实必须保留，未知项标门禁，不要退化成问题清单。",
-      "minimum_contract": ["来源、口径、异常和权限完整", "分子分母和去重键明确", "时间与权限边界完整", "来源到页面血缘及迟到数据验收"],
+      "minimum_contract": ["来源、口径、异常和权限完整", "分子分母和去重键明确", "租户内唯一键使用完整复合键", "时间与权限边界完整", "来源到页面血缘及迟到数据验收"],
       "candidate_context": {
         "mypm-v036": ["SKILL.md", "references/prd.md", "capabilities/analytics/product-data-analysis.md", "references/data-analysis.md"],
         "mypm-v037": ["SKILL.md", "references/prd.md", "capabilities/analytics/product-data-analysis.md", "references/data-analysis.md"],

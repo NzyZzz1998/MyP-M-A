@@ -1,10 +1,18 @@
 {
   "schema_version": 1,
-  "candidate": "working-tree-v0.38",
+  "candidate": "working-tree-v0.39",
   "entries": [
     {
       "source_file": "SKILL.md",
-      "reason": "v0.38 在 SKILL.md 中只更新版本与入口摘要；对应行为变化已由 idea、acceptance 及其显式合同覆盖，不形成独立合同差量。"
+      "reason": "兼容 v0.38 历史自测：当该自测只选择 v0.38 合同时，SKILL.md 的旧版本摘要不形成独立行为差量；v0.39 面板已显式选择 fact-anchor-terminal-scan。"
+    },
+    {
+      "source_file": "references/prompt.md",
+      "reason": "本文件只镜像 fact-anchor-terminal-scan 的交接终检；行为由 stable 98 与 CH-30 覆盖，不形成第二个独立合同。"
+    },
+    {
+      "source_file": "templates/prd-template.md",
+      "reason": "模板只镜像 prd-ui-state-semantics 的当前值、已保存值和默认值字段，不形成独立运行时合同。"
     }
   ]
 }

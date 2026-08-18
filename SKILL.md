@@ -4,7 +4,7 @@ description: "Use when：产品评审、原型、研究、战略/GTM、需求、
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.38.0"
+  version: "0.39.0"
   language: zh-CN
 ---
 
@@ -35,7 +35,7 @@ MyP-M-A 是中文优先的产品经理工作流：以证据判断，交付阶段
 | 对实际实现、候选产物或发布状态做验收判断 | `/acceptance` |
 | 把当前事实压缩成下一任务可直接执行的提示词 | `/prompt`（辅助入口） |
 
-实施、Bugfix、开发承接和发布收口是内部阶段。显式命令首行逐字复写，如 `入口判断：/idea`。
+实施、Bugfix、开发承接和发布收口是内部阶段；显式命令首行逐字复写。
 
 <!-- contract:entry-isolation; entry-leading-slash; idea-no-fabricated-threshold -->
 入口合同隔离。先读目标 reference，再执行对象、事实源、证据、授权、停止与回写合同；多通路时选最接近当前决策的一条，仅在结果会变化时追问。
@@ -43,6 +43,7 @@ MyP-M-A 是中文优先的产品经理工作流：以证据判断，交付阶段
 ## 渐进加载
 <!-- contract:context-minimal-loading -->
 <!-- contract:guarded-output-scan -->
+<!-- contract:fact-anchor-terminal-scan -->
 
 不要一次读取全部 reference。先路由，再加载最小集合：
 
@@ -67,7 +68,7 @@ MyP-M-A 是中文优先的产品经理工作流：以证据判断，交付阶段
 
 有现成 PRD、dev plan、progress、verification 或候选产物时，先读 `references/workflow-control.md`，识别真实子阶段、门禁和可继承证据，不重复规划或重跑仍有效验收。
 
-只扫描当前子阶段合同：成文前核对事实、范围、状态、数值、摘要、行动及入口保护；无来源评分删除，缺项补齐，先删背景重复，不删正式 PRD、深度 Review、实际验收与发布门禁。
+只扫描当前子阶段合同：发送前对照对象、范围、状态、数字/单位、推断、证据和授权；冲突显式保留，无来源评分删除，先删重复，不删正式交付门禁。
 
 <!-- contract:single-source-output -->
 同一事实或缺口只完整表达一次，后文用 ID 引用；能合并时不重复建表。聊天先给结论和主证据，细节落文件；接手摘要最多 5 条。

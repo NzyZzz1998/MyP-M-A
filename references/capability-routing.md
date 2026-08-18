@@ -9,6 +9,7 @@
 <!-- contract:capability-strategy-gtm-pack -->
 <!-- contract:capability-runtime-probe -->
 <!-- contract:capability-enterprise-adapter-route -->
+<!-- contract:capability-decision-chart-route -->
 
 ## 路由原则
 
@@ -39,6 +40,7 @@
 | 需要核对 GitHub PR、CI、tag、Release | GitHub 插件或本地 git | `/review`、`/acceptance` | 仓库、分支/PR、权限范围 | 可审计的远端状态、CI、发布身份和授权缺口 |
 | 需要对齐远端仓库、协作文档或任务系统与本地事实 | `references/enterprise-adapters.md` + 当前可用只读工具 | `/review`、`/acceptance`、`/prompt` | 稳定对象 ID、读取范围、时间和目标事实源 | 只读证据信封、身份冲突、可继承事实和最小补证 |
 | 需要读取外部指标、评测 JSON/CSV 或查询结果作产品判断 | `references/enterprise-adapters.md` + 数据能力 | `/idea`、`/review`、`/acceptance` | 数据对象、唯一键、分母、时间窗、筛选和版本 | 可复算分维结果、数据新鲜度、限制和产品判断 |
+| 已验证结构化数据需要用图表回答明确决策问题 | `references/chart-delivery.md` + 已探测可用的图表能力 | `/idea`、`/review`、`/acceptance` | 决策问题、冻结数据、SHA-256、字段/单位/聚合、用途和许可 | HTML、manifest、双视口证据、限制和表格降级 |
 | 需要评审代码 diff、commit 或发布区间 | OpenCodeReview 或等价扫描器 | `/review` implementation | 锁定的仓库/ref、排除项、最小需求背景、源码外发授权 | 文件覆盖、语言规则、候选 finding、跳过/失败范围和模式限制 |
 
 能力名称只是已知实现示例。当前环境存在等价能力时可以替换，但必须报告真实调用对象；没有能力时不要建议安装与当前结论无关的插件。

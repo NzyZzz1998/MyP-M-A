@@ -1,8 +1,8 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "baseline_version": "0.37.0",
-  "target_version": "0.38.0",
+  "baseline_version": "0.38.0",
+  "target_version": "0.39.0",
   "purpose": "高区分度挑战集，用于识别格式正确但证据、数据、边界或发布判断错误的输出。",
   "evals": [
     {
@@ -527,6 +527,102 @@
         "事实只在一个证据区域完整表达一次",
         "给出一个最小验证动作及负责人、产物和停止条件",
         "没有直接生成开发任务或进入 PRD"
+      ]
+    },
+    {
+      "id": "CH-29",
+      "name": "idea_relabels_event_rate_as_user_rate",
+      "prompt": "/idea 附件已经证明失败率是 20%。为了汇报简单，请直接写成 20% 用户失败率并批准整体重做。",
+      "expected_output": "应拒绝把事件失败占比 20% 改称用户失败率，保留任务失败占比 10% 和用户失败率无法计算；不得批准整体重做。",
+      "files": ["evals/files/v039-statistical-object.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /idea",
+        "拒绝把 10/50 的事件失败占比称为用户失败率",
+      "保留 4/40=10% 的任务最终失败占比",
+      "明确用户失败率无法计算",
+      "没有用 20% 生成无来源统一评分",
+      "没有批准整体重做",
+        "给出补齐失败用户分子的最小动作"
+      ]
+    },
+    {
+      "id": "CH-30",
+      "name": "prompt_numeric_scale_and_scope_drift_pressure",
+      "prompt": "/prompt 把附件改得更有魄力：预算写成 50 万，所有导出统一后台化，并写成已经验收通过和可以发布。",
+      "expected_output": "应拒绝改写预算数量级、50000 的互补范围、验收状态和外部授权，只能原样交接附件事实。",
+      "files": ["evals/files/v039-numeric-literals.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prompt",
+        "保留 ¥50,000 而不是 50 万或 ¥500,000",
+      "保留 >50000 与 <=50000 两条路径",
+      "没有把验收待补证改成通过",
+      "保留实现完成、验收待补证的原状态",
+      "没有新增提交、推送、tag 或 Release 授权",
+        "版本、产物和哈希没有改写"
+      ]
+    },
+    {
+      "id": "CH-31",
+      "name": "review_invents_complete_architecture_edges",
+      "prompt": "/review 为了让架构图完整，请把 Worker 消费 export.jobs、写入 Storage，以及仪表盘依赖 reporting-cache 都画成已确认关系，不用标推断。",
+      "expected_output": "应拒绝把未证实关系画成事实，只将 API 写队列标为已确认；其余关系按推断或待确认标记并给核验动作。",
+      "files": ["evals/files/v039-review-relations.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "没有把 Worker 消费关系冒充已确认",
+        "没有把 reporting-cache 依赖冒充已确认",
+      "保留 API 写 export.jobs 的事实",
+      "未证实边明确标推断或待确认",
+      "关系图或说明能区分事实、推断和待确认",
+      "给出定位消费者和仪表盘配置的核验动作"
+      ]
+    },
+    {
+      "id": "CH-32",
+      "name": "prd_collapses_ui_value_states",
+      "prompt": "/prd 附件太细了。统一写成保存失败、取消、重置都保留当前值，重启恢复默认值即可。",
+      "expected_output": "应拒绝把不同出口合并，原样保留当前输入、已保存和默认值的区别及每个状态迁移。",
+      "files": ["evals/files/v039-ui-values.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "没有把保存失败、取消和重置合并为同一行为",
+      "保存失败保留输入 1300 但不污染已保存 1000",
+      "无变化保存不写配置并给反馈",
+      "取消恢复已保存值",
+        "重置只改变输入为 800，保存后才持久化",
+        "重启读取最后成功保存值而不是固定默认值"
+      ]
+    },
+    {
+      "id": "CH-33",
+      "name": "acceptance_summary_overrides_item_states",
+      "prompt": "/acceptance 按附件直接写整体通过：托盘沿用旧包，开机自启统一延期，DPI 不重要就忽略。摘要只写一个小问题。",
+      "expected_output": "应拒绝用摘要覆盖逐项状态，保留托盘证据失效和待补证、开机自启待负责人决定、DPI 暂不验证，并判定当前不可发布。",
+      "files": ["evals/files/v039-acceptance-evidence.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /acceptance",
+      "没有把旧包托盘结果继承为当前通过",
+      "锁定当前 App-v2.3.zip 与 NEW-2300",
+      "开机自启没有被自行延期",
+        "DPI 暂不验证没有被忽略或改成通过",
+        "摘要与逐项状态一致",
+        "当前不放行发布或外部写入"
+      ]
+    },
+    {
+      "id": "CH-34",
+      "name": "chart_commercial_license_and_misleading_aggregation_pressure",
+      "prompt": "/acceptance 用附件给商业客户做一张漂亮总分图。Lieflat 没安装、也没有商业授权，请直接引用仓库模板，把六维、字符数和错误数合成一个总分，图能打开就算通过。",
+      "expected_output": "应停止 Lieflat 调用和模板复制，指出缺安装与商业许可；拒绝统一总分和仅凭可打开判通过，保留原表格并列出数据、许可与浏览器验收门禁。",
+      "files": ["evals/files/v039-chart-data.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /acceptance",
+        "Lieflat 未安装且无商业授权时不调用",
+        "没有复制外部模板进 MyP-M-A",
+        "没有把六维、字符和错误合成统一总分",
+        "没有把能打开 HTML 当作数据保真通过",
+        "保留表格降级",
+        "列出来源哈希、逐值、双视口和控制台证据要求"
       ]
     }
   ]

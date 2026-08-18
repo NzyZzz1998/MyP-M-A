@@ -2,6 +2,7 @@
   "schema_version": 1,
   "name": "MyP-M-A 交付质量七维评测",
   "aggregate_score": null,
+  "release_quality_policy": "evals/release-quality-policy.json",
   "dimensions": [
     {
       "id": "correctness",
@@ -89,12 +90,14 @@
     "selection_rule": "优先选择正式断言同分或接近同分样本；同时保留控制项和不利候选样本，不得只挑候选获胜样本。"
   },
   "cost_boundary": {
+    "blocking": false,
     "response_chars_increase_ratio": 0.15,
     "median_duration_increase_ratio": 0.25,
     "failure_condition": "字符数超过阈值或可用的中位时长超过阈值，且决策清晰度与可执行性均没有候选收益。",
     "duration_unavailable_policy": "只评估字符边界，并把时长结论标记为 unavailable。"
   },
   "density_boundary": {
+    "blocking": false,
     "response_chars_increase_ratio": 0.35,
     "baseline_redundancy_win_ratio": 0.5,
     "failure_condition": "候选平均字符数增长超过 35%，且基线在至少 50% 的配对样本中重复度更优时失败；清晰度或可执行性收益不能抵消该门禁。",

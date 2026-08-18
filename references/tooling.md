@@ -61,6 +61,7 @@
 | Web 搜索 | 查竞品、市场信号、公开文档、同类产品做法 | `/idea`、必要时 `/prd` |
 | 文档/PDF/图片/表格工具 | 读取 PRD、截图反馈、用户访谈、数据表、验收记录 | `/idea`、`/review`、`/prd`、`/acceptance` |
 | 数据库/数据分析工具 | 读取 schema、样本数据、字段分布、指标口径、漏斗和错误率 | `/idea`、`/prd`、必要时 `/acceptance` |
+| 图表/报告 Skill | 把已验证数据表达为 HTML 图表；先探测 installed/callable/succeeded、来源 commit、许可证用途和外部资源 | `/idea`、`/review`、`/acceptance` 按需 |
 | UI/UX / frontend-design 类 skill | 组件规范、高保真原型、视觉精修、页面结构和交互状态 | `/prd`、`/review` |
 | Lark/飞书工具 | 读取或写入协作文档、需求池、任务、会议纪要、表格、发布说明 | 四个入口均可按用户环境使用 |
 | Vercel/Netlify/部署工具 | 检查部署、Preview、环境变量、发布状态、回滚 | `/acceptance`，必要时 `/review` |
@@ -68,6 +69,8 @@
 | Basic Memory / `memory-*` skills | 保存长期产品决策、项目上下文、用户偏好、任务状态和下次继续点 | 四个入口、开发承接、线程结束 |
 
 企业协作或外部数据取证不绑定具体插件。需要跨系统对齐对象或读取产品指标时，按需读取 `references/enterprise-adapters.md`：先生成只读证据信封，再把事实带回当前入口。插件已安装不代表对象可读；读取成功也不授权评论、建任务、改文档、推送或更新仪表盘。
+
+图表交付按需读取 `references/chart-delivery.md`。Lieflat Charts 仅是可选实现：仓库存在不等于已安装，已安装不等于当前可调用，调用成功也不等于数据保真或许可适用。其 PolyForm Noncommercial 许可不覆盖未获单独授权的商业用途；不满足时降级为表格、Mermaid 或已有可商用能力，且不得复制外部模板进 MyP-M-A。
 
 ## 四个入口的工具策略
 

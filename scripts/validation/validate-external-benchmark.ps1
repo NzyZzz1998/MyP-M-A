@@ -11,12 +11,14 @@ function Invoke-MypmExternalBenchmarkValidation {
     $candidatePath = Join-Path $root 'evals\external-candidates.json'
     $benchmarkPath = Join-Path $root 'evals\external-benchmark.json'
     $contractPath = Join-Path $root 'evals\external-benchmark-contract.json'
+    $qualityPolicyPath = Join-Path $root 'evals\release-quality-policy.json'
     $candidatesDocument = Read-MypmJson -Path $candidatePath -Result $result -Label 'evals/external-candidates.json'
     $benchmark = Read-MypmJson -Path $benchmarkPath -Result $result -Label 'evals/external-benchmark.json'
     $contract = Read-MypmJson -Path $contractPath -Result $result -Label 'evals/external-benchmark-contract.json'
-    if ($null -in @($candidatesDocument, $benchmark, $contract)) { return $result }
+    $qualityPolicy = Read-MypmJson -Path $qualityPolicyPath -Result $result -Label 'evals/release-quality-policy.json'
+    if ($null -in @($candidatesDocument, $benchmark, $contract, $qualityPolicy)) { return $result }
 
-    if ([int]$candidatesDocument.schema_version -ne 1 -or [int]$benchmark.schema_version -ne 1 -or [int]$contract.schema_version -ne 1) {
+    if ([int]$candidatesDocument.schema_version -ne 1 -or [int]$benchmark.schema_version -ne 1 -or [int]$contract.schema_version -ne 1 -or [int]$qualityPolicy.schema_version -ne 1) {
         Add-MypmValidationError -Result $result -Message 'External benchmark schema_version must be 1'
     }
     if ([string]$benchmark.candidate_manifest -ne 'evals/external-candidates.json') {
@@ -24,6 +26,9 @@ function Invoke-MypmExternalBenchmarkValidation {
     }
     if ([string]$benchmark.task_contract -ne 'evals/external-benchmark-contract.json') {
         Add-MypmValidationError -Result $result -Message 'External benchmark task_contract is not canonical'
+    }
+    if ([string]$benchmark.quality_gate_policy -ne 'evals/release-quality-policy.json') {
+        Add-MypmValidationError -Result $result -Message 'External benchmark quality_gate_policy is not canonical'
     }
     if ([string]$contract.requirement_id -ne 'FR-007' -or [string]$contract.source_prd -ne 'notes/v0.36-capability-ecosystem-prd.md') {
         Add-MypmValidationError -Result $result -Message 'External benchmark task contract is not bound to FR-007'
@@ -88,6 +93,25 @@ function Invoke-MypmExternalBenchmarkValidation {
     }
     if (@($dimensionIds | Sort-Object -Unique).Count -ne $dimensionIds.Count) {
         Add-MypmValidationError -Result $result -Message 'External benchmark contains duplicate scoring dimensions'
+    }
+    if ($null -ne $qualityPolicy.aggregate_score) {
+        Add-MypmValidationError -Result $result -Message 'Release quality policy must not define an aggregate score'
+    }
+    $expectedHard = @('completeness', 'correctness', 'evidence_discipline')
+    $expectedQuality = @('decision_clarity', 'executability', 'valid_return')
+    $expectedObservation = @('characters', 'duration_ms', 'redundancy')
+    if ((@($qualityPolicy.hard_gates | Sort-Object) -join ',') -ne ($expectedHard -join ',')) {
+        Add-MypmValidationError -Result $result -Message 'Release hard gates must be correctness, evidence_discipline and completeness'
+    }
+    if ((@($qualityPolicy.quality_gates | Sort-Object) -join ',') -ne ($expectedQuality -join ',')) {
+        Add-MypmValidationError -Result $result -Message 'Release quality gates are inconsistent'
+    }
+    if ((@($qualityPolicy.observation_only | Sort-Object) -join ',') -ne ($expectedObservation -join ',')) {
+        Add-MypmValidationError -Result $result -Message 'Redundancy, characters and duration must remain observation-only'
+    }
+    $priorityDimensions = @($qualityPolicy.hard_gates) + @($qualityPolicy.quality_gates) + @($qualityPolicy.observation_only)
+    if (@($priorityDimensions | Sort-Object -Unique).Count -ne $priorityDimensions.Count) {
+        Add-MypmValidationError -Result $result -Message 'Release quality policy dimensions must not overlap'
     }
 
     $taskIds = @{}

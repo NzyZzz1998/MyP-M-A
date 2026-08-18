@@ -74,6 +74,7 @@ function New-BenchmarkFixture {
     Copy-Item -LiteralPath (Join-Path $root 'evals\external-candidates.json') -Destination (Join-Path $tempRoot 'evals\external-candidates.json')
     Copy-Item -LiteralPath (Join-Path $root 'evals\external-benchmark.json') -Destination (Join-Path $tempRoot 'evals\external-benchmark.json')
     Copy-Item -LiteralPath (Join-Path $root 'evals\external-benchmark-contract.json') -Destination (Join-Path $tempRoot 'evals\external-benchmark-contract.json')
+    Copy-Item -LiteralPath (Join-Path $root 'evals\release-quality-policy.json') -Destination (Join-Path $tempRoot 'evals\release-quality-policy.json')
     Copy-Item -LiteralPath (Join-Path $root 'notes\v0.36-capability-ecosystem-prd.md') -Destination (Join-Path $tempRoot 'notes\v0.36-capability-ecosystem-prd.md')
     Copy-Item -LiteralPath (Join-Path $root 'evals\files\external-benchmark') -Destination (Join-Path $tempRoot 'evals\files\external-benchmark') -Recurse
     if ($null -ne $Mutate) {

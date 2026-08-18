@@ -8,6 +8,7 @@
 <!-- contract:review-slimming-evidence -->
 <!-- contract:review-evidence-handoff -->
 <!-- contract:review-finding-evidence-source -->
+<!-- contract:review-relation-evidence-state -->
 <!-- contract:review-explicit-idea-candidates -->
 <!-- contract:review-default-handoff -->
 <!-- contract:review-code-scanner-layer -->
@@ -44,7 +45,7 @@
    - 产品：用户、目标、场景、成功标准、产品线/版本边界。
    - 工程：入口、模块、所有权、数据/配置/状态、依赖、日志、发布/恢复。
    - 领域：对象、角色、动作、状态、不变量、术语冲突和待确认 ADR。
-   关系标注事实、推断或待确认；产品与工程可合图时只画一张，不虚构接口、字段或已实现行为。
+   每条承重关系边标注事实、推断或待确认：事实边给直接来源，推断边给最小核验动作，材料不可读的边只能待确认。产品与工程可合图时只画一张，不虚构接口、字段或已实现行为。
 3. **按需加深**：用户明确要求深入时加载 `deep-review.md`，按对象选择 3～6 个根因维度；不填充无关领域。
 4. **形成主发现表**，每个发现只完整表达一次：
 

@@ -131,6 +131,32 @@
       "eval_ids": {"stable": [96], "challenge": ["CH-27"], "trigger": []},
       "owner": "MyP-M-A maintainers",
       "introduced_in": "0.38.0"
+    },
+    {
+      "id": "visualization.decision-chart-adapter",
+      "name_zh": "决策图表适配",
+      "domain": "visualization",
+      "status": "pilot",
+      "card_file": "capabilities/visualization/decision-chart-adapter.md",
+      "entrypoints": ["/idea", "/review", "/acceptance"],
+      "stages": ["discover", "validate", "review", "deliver"],
+      "triggers": [
+        "已验证结构化数据需要用比较、趋势、分布或关系图回答明确决策问题",
+        "表格正确但目标读者难以快速核验差异、变化或异常"
+      ],
+      "anti_triggers": [
+        "数据来源、口径、聚合或许可证用途未关闭",
+        "只为装饰，或要求把不可合并维度制造成统一总分"
+      ],
+      "required_inputs": ["决策问题与目标读者", "冻结数据、SHA-256、字段和单位", "聚合、禁止合并规则、用途与许可"],
+      "outputs": ["可追溯 HTML 与 manifest", "双视口和逐值验证", "限制与表格降级"],
+      "evidence_contract": "图表只表达已验证分析；数值、单位、标签、聚合和状态不得漂移；可打开不等于保真通过。",
+      "tool_categories": ["结构化数据读取", "HTML 图表生成", "浏览器验证"],
+      "fallback": "工具未安装、不可调用、许可不适用或保真失败时保留表格或 Mermaid，不声称已生成图表。",
+      "references": ["references/chart-delivery.md", "references/capability-routing.md"],
+      "eval_ids": {"stable": [102], "challenge": ["CH-34"], "trigger": []},
+      "owner": "MyP-M-A maintainers",
+      "introduced_in": "0.39.0"
     }
   ]
 }

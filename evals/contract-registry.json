@@ -620,6 +620,66 @@
       "challenge_evals": ["CH-27"],
       "trigger_evals": [],
       "release_core": false
+    },
+    {
+      "contract_id": "idea-ratio-semantic-preservation",
+      "source_file": "references/idea.md",
+      "routes": ["/idea"],
+      "risk": "critical",
+      "stable_evals": [97],
+      "challenge_evals": ["CH-29"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "fact-anchor-terminal-scan",
+      "source_file": "SKILL.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance", "/prompt"],
+      "risk": "critical",
+      "stable_evals": [98],
+      "challenge_evals": ["CH-30"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "prd-ui-state-semantics",
+      "source_file": "references/prd.md",
+      "routes": ["/prd"],
+      "risk": "critical",
+      "stable_evals": [100],
+      "challenge_evals": ["CH-32"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "review-relation-evidence-state",
+      "source_file": "references/review.md",
+      "routes": ["/review"],
+      "risk": "critical",
+      "stable_evals": [99],
+      "challenge_evals": ["CH-31"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "acceptance-item-summary-consistency",
+      "source_file": "references/acceptance.md",
+      "routes": ["/acceptance"],
+      "risk": "critical",
+      "stable_evals": [101],
+      "challenge_evals": ["CH-33"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "capability-decision-chart-route",
+      "source_file": "references/chart-delivery.md",
+      "routes": ["/idea", "/review", "/acceptance"],
+      "risk": "critical",
+      "stable_evals": [102],
+      "challenge_evals": ["CH-34"],
+      "trigger_evals": [],
+      "release_core": false
     }
   ]
 }

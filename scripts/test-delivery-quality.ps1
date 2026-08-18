@@ -111,13 +111,15 @@ try {
     Assert-Equal -Actual ([string]$report.dimensions.duration_ms.state) -Expected 'available' -Message 'duration state'
     Assert-Equal -Actual ([bool]$report.cost_boundary.passed) -Expected $true -Message 'cost boundary'
     Assert-Equal -Actual ([bool]$report.density_boundary.passed) -Expected $false -Message 'density boundary catches verbose redundant candidate'
+    Assert-Equal -Actual ([bool]$report.cost_boundary.blocking) -Expected $false -Message 'cost boundary is observation-only'
+    Assert-Equal -Actual ([bool]$report.density_boundary.blocking) -Expected $false -Message 'density boundary is observation-only'
     Assert-Equal -Actual ([double]$report.density_boundary.baseline_redundancy_win_ratio) -Expected 1 -Message 'density redundancy ratio'
     if ($null -ne $report.aggregate_score) { throw 'aggregate quality score must stay null' }
     & (Join-Path $scriptRoot 'generate-eval-viewer.ps1') -Workspace $workspace -Title 'quality-test-viewer' `
         -BaselineLabel old -CandidateLabel new -SuiteLabel 'quality-test'
     $viewer = [System.IO.File]::ReadAllText((Join-Path $workspace 'eval-viewer.html'), [System.Text.Encoding]::UTF8)
-    $densityGateText = -join @([char]0x5BC6, [char]0x5EA6, [char]0x95E8, [char]0x7981)
-    foreach ($requiredText in @('quality-test-viewer', 'quality-detail-panel', 'quality-grid', $densityGateText, 'unavailable')) {
+    $densityObservationText = -join @([char]0x5BC6, [char]0x5EA6, [char]0x89C2, [char]0x5BDF)
+    foreach ($requiredText in @('quality-test-viewer', 'quality-detail-panel', 'quality-grid', $densityObservationText, 'unavailable')) {
         if (-not $viewer.Contains($requiredText)) { throw "viewer is missing quality text: $requiredText" }
     }
     if ($viewer -match 'Superpowers|Prime Radiant') { throw 'viewer contains foreign brand text' }

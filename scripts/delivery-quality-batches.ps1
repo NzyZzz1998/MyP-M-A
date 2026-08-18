@@ -395,12 +395,14 @@ function Invoke-Apply {
             valid_return_rate = [ordered]@{ baseline = 1.0; candidate = 1.0; baseline_count = $pairCount; candidate_count = $pairCount; expected = $pairCount }
         }
         cost_boundary = [ordered]@{
+            blocking = [bool]$rubric.cost_boundary.blocking
             passed = $costPassed
             char_threshold_exceeded = $charExceeded
             duration_threshold_exceeded = $durationExceeded
             quality_benefit = $qualityBenefit
         }
         density_boundary = [ordered]@{
+            blocking = [bool]$rubric.density_boundary.blocking
             passed = $densityPassed
             char_threshold_exceeded = $densityCharExceeded
             baseline_redundancy_threshold_exceeded = $densityRedundancyExceeded

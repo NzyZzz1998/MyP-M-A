@@ -1,32 +1,34 @@
 {
   "schema_version": 2,
-  "name": "MyP-M-A working-tree-v0.38 发布面板",
+  "name": "MyP-M-A working-tree-v0.39 发布面板",
   "purpose": "固定核心、合同差量与相邻控制项；超过面板上限时显式升级为受影响入口全量回归。",
-  "baseline_ref": "v0.37-frozen-candidate-88bce700",
-  "candidate_ref": "working-tree-v0.38",
+  "baseline_ref": "v0.38-frozen-snapshot-9c1f9708",
+  "candidate_ref": "working-tree-v0.39",
   "mode": "release-panel",
   "max_cases": 26,
   "changed_files": [
     "references/acceptance.md",
     "references/capability-routing.md",
-    "references/enterprise-adapters.md",
+    "references/chart-delivery.md",
+    "references/data-analysis.md",
     "references/idea.md",
     "references/prd.md",
     "references/prompt.md",
     "references/review.md",
     "references/tooling.md",
-    "SKILL.md"
+    "SKILL.md",
+    "templates/prd-template.md"
   ],
   "contract_selection_mode": "explicit-audited",
   "affected_contracts": [
-    "acceptance-artifact-evidence-freshness",
+    "acceptance-item-summary-consistency",
+    "capability-decision-chart-route",
     "capability-minimal-route",
-    "enterprise-adapter-data-provenance",
-    "enterprise-adapter-readonly",
-    "evidence-action-minimal-contract",
-    "handoff-no-new-gates",
-    "prd-known-facts",
-    "review-evidence-handoff",
+    "fact-anchor-terminal-scan",
+    "idea-ratio-semantic-preservation",
+    "kpi-data-contract",
+    "prd-ui-state-semantics",
+    "review-relation-evidence-state",
     "tooling-capability-state"
   ],
   "affected_routes": [
@@ -40,7 +42,15 @@
   "no_behavior_change": [
     {
       "source_file": "SKILL.md",
-      "reason": "v0.38 在 SKILL.md 中只更新版本与入口摘要；对应行为变化已由 idea、acceptance 及其显式合同覆盖，不形成独立合同差量。"
+      "reason": "兼容 v0.38 历史自测：当该自测只选择 v0.38 合同时，SKILL.md 的旧版本摘要不形成独立行为差量；v0.39 面板已显式选择 fact-anchor-terminal-scan。"
+    },
+    {
+      "source_file": "references/prompt.md",
+      "reason": "本文件只镜像 fact-anchor-terminal-scan 的交接终检；行为由 stable 98 与 CH-30 覆盖，不形成第二个独立合同。"
+    },
+    {
+      "source_file": "templates/prd-template.md",
+      "reason": "模板只镜像 prd-ui-state-semantics 的当前值、已保存值和默认值字段，不形成独立运行时合同。"
     }
   ],
   "upgrade_reason": null,
@@ -122,99 +132,99 @@
     "delta": [
       {
         "suite": "stable",
-        "id": 79,
+        "id": 97,
         "category": "delta",
-        "route": "/review",
-        "contract_id": "review-evidence-handoff",
-        "reason": "contract-delta:review-evidence-handoff"
+        "route": "/idea",
+        "contract_id": "idea-ratio-semantic-preservation",
+        "reason": "contract-delta:idea-ratio-semantic-preservation"
       },
       {
         "suite": "stable",
-        "id": 81,
+        "id": 98,
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "fact-anchor-terminal-scan",
+        "reason": "contract-delta:fact-anchor-terminal-scan"
+      },
+      {
+        "suite": "stable",
+        "id": 99,
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "review-relation-evidence-state",
+        "reason": "contract-delta:review-relation-evidence-state"
+      },
+      {
+        "suite": "stable",
+        "id": 100,
+        "category": "delta",
+        "route": "/prd",
+        "contract_id": "prd-ui-state-semantics",
+        "reason": "contract-delta:prd-ui-state-semantics"
+      },
+      {
+        "suite": "stable",
+        "id": 101,
         "category": "delta",
         "route": "/acceptance",
-        "contract_id": "acceptance-artifact-evidence-freshness",
-        "reason": "contract-delta:acceptance-artifact-evidence-freshness"
+        "contract_id": "acceptance-item-summary-consistency",
+        "reason": "contract-delta:acceptance-item-summary-consistency"
       },
       {
         "suite": "stable",
-        "id": 86,
+        "id": 102,
+        "category": "delta",
+        "route": "/idea",
+        "contract_id": "capability-decision-chart-route",
+        "reason": "contract-delta:capability-decision-chart-route"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-29",
+        "category": "delta",
+        "route": "/idea",
+        "contract_id": "idea-ratio-semantic-preservation",
+        "reason": "contract-delta:idea-ratio-semantic-preservation"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-30",
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "fact-anchor-terminal-scan",
+        "reason": "contract-delta:fact-anchor-terminal-scan"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-31",
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "review-relation-evidence-state",
+        "reason": "contract-delta:review-relation-evidence-state"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-32",
         "category": "delta",
         "route": "/prd",
-        "contract_id": "prd-known-facts",
-        "reason": "contract-delta:prd-known-facts"
+        "contract_id": "prd-ui-state-semantics",
+        "reason": "contract-delta:prd-ui-state-semantics"
       },
       {
-        "suite": "stable",
-        "id": 93,
+        "suite": "challenge",
+        "id": "CH-33",
+        "category": "delta",
+        "route": "/acceptance",
+        "contract_id": "acceptance-item-summary-consistency",
+        "reason": "contract-delta:acceptance-item-summary-consistency"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-34",
         "category": "delta",
         "route": "/idea",
-        "contract_id": "evidence-action-minimal-contract",
-        "reason": "contract-delta:evidence-action-minimal-contract"
-      },
-      {
-        "suite": "stable",
-        "id": 94,
-        "category": "delta",
-        "route": "/prompt",
-        "contract_id": "handoff-no-new-gates",
-        "reason": "contract-delta:handoff-no-new-gates"
-      },
-      {
-        "suite": "stable",
-        "id": 95,
-        "category": "delta",
-        "route": "/review",
-        "contract_id": "enterprise-adapter-readonly",
-        "reason": "contract-delta:enterprise-adapter-readonly"
-      },
-      {
-        "suite": "stable",
-        "id": 96,
-        "category": "delta",
-        "route": "/idea",
-        "contract_id": "enterprise-adapter-data-provenance",
-        "reason": "contract-delta:enterprise-adapter-data-provenance"
-      },
-      {
-        "suite": "challenge",
-        "id": "CH-04",
-        "category": "delta",
-        "route": "/review",
-        "contract_id": "review-evidence-handoff",
-        "reason": "contract-delta:review-evidence-handoff"
-      },
-      {
-        "suite": "challenge",
-        "id": "CH-22",
-        "category": "delta",
-        "route": "/prd",
-        "contract_id": "prd-known-facts",
-        "reason": "contract-delta:prd-known-facts"
-      },
-      {
-        "suite": "challenge",
-        "id": "CH-26",
-        "category": "delta",
-        "route": "/review",
-        "contract_id": "enterprise-adapter-readonly",
-        "reason": "contract-delta:enterprise-adapter-readonly"
-      },
-      {
-        "suite": "challenge",
-        "id": "CH-27",
-        "category": "delta",
-        "route": "/idea",
-        "contract_id": "enterprise-adapter-data-provenance",
-        "reason": "contract-delta:enterprise-adapter-data-provenance"
-      },
-      {
-        "suite": "challenge",
-        "id": "CH-28",
-        "category": "delta",
-        "route": "/idea",
-        "contract_id": "evidence-action-minimal-contract",
-        "reason": "contract-delta:evidence-action-minimal-contract"
+        "contract_id": "capability-decision-chart-route",
+        "reason": "contract-delta:capability-decision-chart-route"
       }
     ],
     "controls": [
@@ -236,27 +246,27 @@
       },
       {
         "suite": "stable",
-        "id": 56,
+        "id": 93,
         "category": "control",
         "route": "/prd",
-        "contract_id": "guarded-output-scan",
-        "reason": "adjacent-control:/prd:guarded-output-scan"
+        "contract_id": "evidence-action-minimal-contract",
+        "reason": "adjacent-control:/prd:evidence-action-minimal-contract"
       },
       {
         "suite": "stable",
-        "id": 36,
+        "id": 81,
         "category": "control",
         "route": "/acceptance",
-        "contract_id": "acceptance-core-output",
-        "reason": "adjacent-control:/acceptance:acceptance-core-output"
+        "contract_id": "acceptance-artifact-evidence-freshness",
+        "reason": "adjacent-control:/acceptance:acceptance-artifact-evidence-freshness"
       },
       {
         "suite": "stable",
-        "id": 91,
+        "id": 95,
         "category": "control",
         "route": "/prompt",
-        "contract_id": "guarded-output-scan",
-        "reason": "adjacent-control:/prompt:guarded-output-scan"
+        "contract_id": "enterprise-adapter-readonly",
+        "reason": "adjacent-control:/prompt:enterprise-adapter-readonly"
       }
     ]
   },
@@ -335,99 +345,99 @@
     },
     {
       "suite": "stable",
-      "id": 79,
+      "id": 97,
       "category": "delta",
-      "route": "/review",
-      "contract_id": "review-evidence-handoff",
-      "reason": "contract-delta:review-evidence-handoff"
+      "route": "/idea",
+      "contract_id": "idea-ratio-semantic-preservation",
+      "reason": "contract-delta:idea-ratio-semantic-preservation"
     },
     {
       "suite": "stable",
-      "id": 81,
+      "id": 98,
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "fact-anchor-terminal-scan",
+      "reason": "contract-delta:fact-anchor-terminal-scan"
+    },
+    {
+      "suite": "stable",
+      "id": 99,
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "review-relation-evidence-state",
+      "reason": "contract-delta:review-relation-evidence-state"
+    },
+    {
+      "suite": "stable",
+      "id": 100,
+      "category": "delta",
+      "route": "/prd",
+      "contract_id": "prd-ui-state-semantics",
+      "reason": "contract-delta:prd-ui-state-semantics"
+    },
+    {
+      "suite": "stable",
+      "id": 101,
       "category": "delta",
       "route": "/acceptance",
-      "contract_id": "acceptance-artifact-evidence-freshness",
-      "reason": "contract-delta:acceptance-artifact-evidence-freshness"
+      "contract_id": "acceptance-item-summary-consistency",
+      "reason": "contract-delta:acceptance-item-summary-consistency"
     },
     {
       "suite": "stable",
-      "id": 86,
+      "id": 102,
+      "category": "delta",
+      "route": "/idea",
+      "contract_id": "capability-decision-chart-route",
+      "reason": "contract-delta:capability-decision-chart-route"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-29",
+      "category": "delta",
+      "route": "/idea",
+      "contract_id": "idea-ratio-semantic-preservation",
+      "reason": "contract-delta:idea-ratio-semantic-preservation"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-30",
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "fact-anchor-terminal-scan",
+      "reason": "contract-delta:fact-anchor-terminal-scan"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-31",
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "review-relation-evidence-state",
+      "reason": "contract-delta:review-relation-evidence-state"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-32",
       "category": "delta",
       "route": "/prd",
-      "contract_id": "prd-known-facts",
-      "reason": "contract-delta:prd-known-facts"
+      "contract_id": "prd-ui-state-semantics",
+      "reason": "contract-delta:prd-ui-state-semantics"
     },
     {
-      "suite": "stable",
-      "id": 93,
+      "suite": "challenge",
+      "id": "CH-33",
+      "category": "delta",
+      "route": "/acceptance",
+      "contract_id": "acceptance-item-summary-consistency",
+      "reason": "contract-delta:acceptance-item-summary-consistency"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-34",
       "category": "delta",
       "route": "/idea",
-      "contract_id": "evidence-action-minimal-contract",
-      "reason": "contract-delta:evidence-action-minimal-contract"
-    },
-    {
-      "suite": "stable",
-      "id": 94,
-      "category": "delta",
-      "route": "/prompt",
-      "contract_id": "handoff-no-new-gates",
-      "reason": "contract-delta:handoff-no-new-gates"
-    },
-    {
-      "suite": "stable",
-      "id": 95,
-      "category": "delta",
-      "route": "/review",
-      "contract_id": "enterprise-adapter-readonly",
-      "reason": "contract-delta:enterprise-adapter-readonly"
-    },
-    {
-      "suite": "stable",
-      "id": 96,
-      "category": "delta",
-      "route": "/idea",
-      "contract_id": "enterprise-adapter-data-provenance",
-      "reason": "contract-delta:enterprise-adapter-data-provenance"
-    },
-    {
-      "suite": "challenge",
-      "id": "CH-04",
-      "category": "delta",
-      "route": "/review",
-      "contract_id": "review-evidence-handoff",
-      "reason": "contract-delta:review-evidence-handoff"
-    },
-    {
-      "suite": "challenge",
-      "id": "CH-22",
-      "category": "delta",
-      "route": "/prd",
-      "contract_id": "prd-known-facts",
-      "reason": "contract-delta:prd-known-facts"
-    },
-    {
-      "suite": "challenge",
-      "id": "CH-26",
-      "category": "delta",
-      "route": "/review",
-      "contract_id": "enterprise-adapter-readonly",
-      "reason": "contract-delta:enterprise-adapter-readonly"
-    },
-    {
-      "suite": "challenge",
-      "id": "CH-27",
-      "category": "delta",
-      "route": "/idea",
-      "contract_id": "enterprise-adapter-data-provenance",
-      "reason": "contract-delta:enterprise-adapter-data-provenance"
-    },
-    {
-      "suite": "challenge",
-      "id": "CH-28",
-      "category": "delta",
-      "route": "/idea",
-      "contract_id": "evidence-action-minimal-contract",
-      "reason": "contract-delta:evidence-action-minimal-contract"
+      "contract_id": "capability-decision-chart-route",
+      "reason": "contract-delta:capability-decision-chart-route"
     },
     {
       "suite": "stable",
@@ -447,27 +457,27 @@
     },
     {
       "suite": "stable",
-      "id": 56,
+      "id": 93,
       "category": "control",
       "route": "/prd",
-      "contract_id": "guarded-output-scan",
-      "reason": "adjacent-control:/prd:guarded-output-scan"
+      "contract_id": "evidence-action-minimal-contract",
+      "reason": "adjacent-control:/prd:evidence-action-minimal-contract"
     },
     {
       "suite": "stable",
-      "id": 36,
+      "id": 81,
       "category": "control",
       "route": "/acceptance",
-      "contract_id": "acceptance-core-output",
-      "reason": "adjacent-control:/acceptance:acceptance-core-output"
+      "contract_id": "acceptance-artifact-evidence-freshness",
+      "reason": "adjacent-control:/acceptance:acceptance-artifact-evidence-freshness"
     },
     {
       "suite": "stable",
-      "id": 91,
+      "id": 95,
       "category": "control",
       "route": "/prompt",
-      "contract_id": "guarded-output-scan",
-      "reason": "adjacent-control:/prompt:guarded-output-scan"
+      "contract_id": "enterprise-adapter-readonly",
+      "reason": "adjacent-control:/prompt:enterprise-adapter-readonly"
     }
   ]
 }
