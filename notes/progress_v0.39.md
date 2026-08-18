@@ -107,10 +107,11 @@
 
 ## 外部操作
 
-- commit：未授权
-- push：未授权
-- tag：未授权
-- Release：未授权
+- commit：已完成，Candidate 记录提交 `05cab0e`
+- push：已同步到远端 `main`
+- tag：未执行
+- Release：未执行
+- 边界：远端记录不代表 Stable 晋升，v0.38 仍为稳定回退
 
 ## 记录边界
 
