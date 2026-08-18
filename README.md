@@ -109,7 +109,7 @@ v0.36 在五个入口之下增加离线治理的能力注册表。首批 Discove
 
 ## 当前质量证据
 
-当前版本：`v0.39.0 Candidate`。本版在 v0.38 之上补齐统计对象、数值、关系、UI 状态和验收继承的事实终检，并完成可选决策图表 pilot；首轮两处关键事实违规已经修复，任务级结构也分别改善 EB-02/04/07，但最新 EB-03/08 多样本门禁暴露 3 项关键违规，因此仍不替代 v0.38 Stable 回退快照。Candidate 记录提交 `05cab0e` 已同步远端；尚未打 tag 或创建 Release。
+当前版本：`v0.39.0 Candidate`。本版在 v0.38 之上补齐统计对象、数值、关系、UI 状态和验收继承的事实终检，并完成可选决策图表 pilot；首轮两处关键事实违规已经修复，任务级结构也分别改善 EB-02/04/07，但最新 EB-03/08 多样本门禁暴露 3 项关键违规，因此仍不替代 v0.38 Stable 回退快照。Candidate 记录提交 `05cab0e` 与 tag `v0.39.0-candidate` 已同步远端；尚未创建 Release。
 <!-- project-status: version=0.39.0; state=candidate -->
 
 当前目录评测口径：稳定集 `待评测 / 803`，挑战集 `待评测 / 290`。本版只按受影响合同运行定向和候选面板，不把局部结果写成全量通过。
@@ -167,6 +167,7 @@ mypm/
 ## 深入了解
 
 - [版本变化](CHANGELOG.md)
+- [版本标签索引](notes/version-tags.md)
 - [评测方法与运行说明](evals/README.md)
 - [长期评测历史](notes/evaluation-history.md)
 - [产品路线图](notes/mypm-roadmap.md)

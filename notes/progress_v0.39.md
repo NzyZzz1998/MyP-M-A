@@ -109,9 +109,9 @@
 
 - commit：已完成，Candidate 记录提交 `05cab0e`
 - push：已同步到远端 `main`
-- tag：未执行
+- tag：已创建并推送 `v0.39.0-candidate`
 - Release：未执行
-- 边界：远端记录不代表 Stable 晋升，v0.38 仍为稳定回退
+- 边界：Candidate tag 不代表 Stable 晋升，v0.38 仍为稳定回退
 
 ## 记录边界
 

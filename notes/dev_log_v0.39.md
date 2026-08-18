@@ -89,7 +89,7 @@
 
 - 先将本地主分支快进到远端 v0.38 状态提交 `80e6abe`，再应用 v0.39 最终候选快照，避免覆盖已同步历史。
 - Candidate 记录提交 `05cab0e` 已推送到远端 `main`；提交同时保留 v0.40 Planned 文档，但未启动 v0.40 运行时。
-- 本次远端归档不改变验收结论：v0.39 仍为 Candidate，v0.38 仍为 Stable 回退；未打 tag、未创建 Release。
+- 本次远端归档不改变验收结论：v0.39 仍为 Candidate，v0.38 仍为 Stable 回退；已创建 `v0.39.0-candidate`，未创建 Release。
 
 ## 后续记录规则
 
