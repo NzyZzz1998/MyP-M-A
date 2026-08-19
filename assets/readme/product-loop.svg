@@ -1,75 +1,123 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
-  <title id="title">MyP-M-A 从输入到发布判断的产品闭环</title>
-  <desc id="desc">项目、反馈和构建产物依次经过 Review、Idea、PRD、开发承接和 Acceptance，Prompt 在任意阶段压缩下一步交接，证据轨道贯穿全流程。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">MyP-M-A 面向 Vibe Coding 的产品闭环</title>
+  <desc id="desc">项目材料依次经过 Review、Idea、PRD、开发承接和 Acceptance。Prompt 横跨各阶段压缩交接，验收产生的新证据回到 Review，底部证据轨道贯穿全流程。</desc>
 
-  <rect width="1200" height="500" rx="20" fill="#F7F2E8"/>
-  <rect x="1" y="1" width="1198" height="498" rx="19" fill="none" stroke="#D9D0C0" stroke-width="2"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#688078"/>
+    </marker>
+    <marker id="arrow-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#D98522"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="560" fill="#F7F2E8"/>
+  <rect x="1" y="1" width="1198" height="558" fill="none" stroke="#D8CEBC" stroke-width="2"/>
 
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
-    <text x="56" y="64" fill="#17231F" font-size="32" font-weight="750">从输入到发布判断，一条链路</text>
-    <text x="56" y="96" fill="#6C746F" font-size="20">每一步只回答当前阶段的问题，并把事实、范围和证据交给下一步。</text>
+    <text x="48" y="54" fill="#17231F" font-size="32" font-weight="750">从输入到发布判断，形成产品闭环</text>
+    <text x="48" y="86" fill="#68736E" font-size="19">每个阶段只回答一个问题，并把可追溯的交付物传给下一步。</text>
 
-    <path d="M220 208 H240 M420 208 H440 M620 208 H640 M820 208 H840" fill="none" stroke="#7C8C85" stroke-width="3"/>
-    <path d="M232 200 L244 208 L232 216" fill="none" stroke="#7C8C85" stroke-width="3"/>
-    <path d="M432 200 L444 208 L432 216" fill="none" stroke="#7C8C85" stroke-width="3"/>
-    <path d="M632 200 L644 208 L632 216" fill="none" stroke="#7C8C85" stroke-width="3"/>
-    <path d="M832 200 L844 208 L832 216" fill="none" stroke="#7C8C85" stroke-width="3"/>
-
-    <g transform="translate(40 136)">
-      <rect width="180" height="144" rx="8" fill="#EEE7D9" stroke="#C9BEAA"/>
-      <text x="16" y="28" fill="#8A6B3B" font-size="16" font-weight="700" letter-spacing="1">INPUT</text>
-      <text x="16" y="68" fill="#17231F" font-size="24" font-weight="700">项目与材料</text>
-      <text x="16" y="100" fill="#5D6762" font-size="20">路径 · 反馈 · PRD</text>
-      <text x="16" y="124" fill="#5D6762" font-size="20">截图 · 日志 · 产物</text>
+    <g transform="translate(810 38)">
+      <rect width="342" height="52" rx="6" fill="#FFF9EF" stroke="#E1A354"/>
+      <text x="18" y="22" fill="#B66B18" font-size="16" font-weight="700">/prompt · 跨阶段能力</text>
+      <text x="18" y="42" fill="#6A716D" font-size="14">压缩下一步交接，不改写已确认事实</text>
     </g>
 
-    <g transform="translate(240 136)">
-      <rect width="180" height="144" rx="8" fill="#FFFFFF" stroke="#1F5B4A" stroke-width="2"/>
-      <text x="16" y="28" fill="#1F7D61" font-size="16" font-weight="700" letter-spacing="1">01 / REVIEW</text>
-      <text x="16" y="68" fill="#17231F" font-size="24" font-weight="700">建立地图</text>
-      <text x="16" y="100" fill="#5D6762" font-size="20">定位问题与影响</text>
-      <text x="16" y="124" fill="#5D6762" font-size="20">分流而不越级</text>
+    <path d="M190 150 H1088" fill="none" stroke="#80928B" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M1050 360 V408 H282 V368" fill="none" stroke="#D98522" stroke-width="2" marker-end="url(#arrow-accent)"/>
+    <rect x="532" y="390" width="270" height="34" fill="#F7F2E8"/>
+    <text x="667" y="413" text-anchor="middle" fill="#B66B18" font-size="15" font-weight="700">验收反馈与新证据返回 /review</text>
+
+    <g transform="translate(40 124)">
+      <rect width="150" height="236" rx="6" fill="#EEE6D7" stroke="#D4C7B1"/>
+      <text x="18" y="30" fill="#8A6B3B" font-size="14" font-weight="700" letter-spacing="1">输入</text>
+      <text x="18" y="68" fill="#17231F" font-size="23" font-weight="700">项目与材料</text>
+      <line x1="18" y1="86" x2="132" y2="86" stroke="#CBBDA6"/>
+      <text x="18" y="116" fill="#5D6762" font-size="17">项目路径</text>
+      <text x="18" y="144" fill="#5D6762" font-size="17">想法与反馈</text>
+      <text x="18" y="172" fill="#5D6762" font-size="17">PRD 与截图</text>
+      <text x="18" y="200" fill="#5D6762" font-size="17">日志与产物</text>
     </g>
 
-    <g transform="translate(440 136)">
-      <rect width="180" height="144" rx="8" fill="#FFF8EC" stroke="#D89432" stroke-width="2"/>
-      <text x="16" y="28" fill="#B76A18" font-size="16" font-weight="700" letter-spacing="1">02 / IDEA</text>
-      <text x="16" y="68" fill="#17231F" font-size="24" font-weight="700">判断价值</text>
-      <text x="16" y="100" fill="#5D6762" font-size="20">真假 · 价值 · 时机</text>
-      <text x="16" y="124" fill="#5D6762" font-size="20">最小实验与停止点</text>
+    <g text-anchor="middle" font-size="14" font-weight="750">
+      <circle cx="282" cy="150" r="17" fill="#F7F2E8" stroke="#1F7D61" stroke-width="2"/>
+      <text x="282" y="155" fill="#1F7D61">01</text>
+      <circle cx="462" cy="150" r="17" fill="#FFF0D9" stroke="#D98522" stroke-width="2"/>
+      <text x="462" y="155" fill="#B66B18">02</text>
+      <circle cx="642" cy="150" r="17" fill="#F7F2E8" stroke="#1F7D61" stroke-width="2"/>
+      <text x="642" y="155" fill="#1F7D61">03</text>
+      <circle cx="842" cy="150" r="17" fill="#E7F1EC" stroke="#1F7D61" stroke-width="2"/>
+      <text x="842" y="155" fill="#1F7D61">04</text>
+      <circle cx="1050" cy="150" r="17" fill="#10221C" stroke="#10221C" stroke-width="2"/>
+      <text x="1050" y="155" fill="#F7F2E8">05</text>
     </g>
 
-    <g transform="translate(640 136)">
-      <rect width="180" height="144" rx="8" fill="#FFFFFF" stroke="#1F5B4A" stroke-width="2"/>
-      <text x="16" y="28" fill="#1F7D61" font-size="16" font-weight="700" letter-spacing="1">03 / PRD</text>
-      <text x="16" y="68" fill="#17231F" font-size="24" font-weight="700">定义需求</text>
-      <text x="16" y="100" fill="#5D6762" font-size="20">范围 · 状态 · 原型</text>
-      <text x="16" y="124" fill="#5D6762" font-size="20">开发前验收合同</text>
+    <g transform="translate(218 184)">
+      <line x1="0" y1="0" x2="0" y2="176" stroke="#1F7D61" stroke-width="3"/>
+      <text x="16" y="22" fill="#1F7D61" font-size="15" font-weight="700">/review</text>
+      <text x="16" y="58" fill="#17231F" font-size="24" font-weight="750">建立地图</text>
+      <text x="16" y="88" fill="#59645F" font-size="16">问题在哪里？</text>
+      <text x="16" y="112" fill="#59645F" font-size="16">影响延伸到哪？</text>
+      <rect x="16" y="140" width="110" height="28" rx="4" fill="#E7F1EC"/>
+      <text x="71" y="159" text-anchor="middle" fill="#1F6D55" font-size="14" font-weight="700">问题地图</text>
     </g>
 
-    <g transform="translate(840 136)">
-      <rect width="320" height="144" rx="8" fill="#14221F" stroke="#14221F" stroke-width="2"/>
-      <text x="16" y="28" fill="#9DD9C4" font-size="16" font-weight="700" letter-spacing="1">04 / HANDOFF → ACCEPTANCE</text>
-      <text x="16" y="68" fill="#F7F2E8" font-size="24" font-weight="700">承接开发，验证结果</text>
-      <text x="16" y="100" fill="#C4D1CC" font-size="20">计划 · 进度 · 开发日志</text>
-      <text x="16" y="124" fill="#C4D1CC" font-size="20">真实产物 · 缺口 · 发布判断</text>
+    <g transform="translate(392 176)">
+      <rect width="150" height="184" rx="7" fill="#FFF0D9" stroke="#D98522" stroke-width="1.5"/>
+      <text x="16" y="30" fill="#B66B18" font-size="15" font-weight="700">/idea</text>
+      <text x="16" y="68" fill="#17231F" font-size="24" font-weight="750">判断价值</text>
+      <text x="16" y="100" fill="#59645F" font-size="16">是真问题吗？</text>
+      <text x="16" y="124" fill="#59645F" font-size="16">现在值得做吗？</text>
+      <rect x="16" y="144" width="110" height="28" rx="4" fill="#F7F2E8" stroke="#E6B97A"/>
+      <text x="71" y="163" text-anchor="middle" fill="#9A5915" font-size="14" font-weight="700">价值结论</text>
     </g>
 
-    <path d="M320 280 V320 H1000 V280" fill="none" stroke="#D89432" stroke-width="3" stroke-dasharray="6 5"/>
-    <rect x="440" y="300" width="320" height="72" rx="8" fill="#FFF8EC" stroke="#D89432"/>
-    <text x="460" y="328" fill="#B76A18" font-size="20" font-weight="700">/prompt</text>
-    <text x="460" y="356" fill="#5D6762" font-size="20">压缩交接，不重做已确认事实</text>
+    <g transform="translate(578 184)">
+      <line x1="0" y1="0" x2="0" y2="176" stroke="#1F7D61" stroke-width="3"/>
+      <text x="16" y="22" fill="#1F7D61" font-size="15" font-weight="700">/prd</text>
+      <text x="16" y="58" fill="#17231F" font-size="24" font-weight="750">定义需求</text>
+      <text x="16" y="88" fill="#59645F" font-size="16">范围与状态</text>
+      <text x="16" y="112" fill="#59645F" font-size="16">原型与验收合同</text>
+      <rect x="16" y="140" width="118" height="28" rx="4" fill="#E7F1EC"/>
+      <text x="75" y="159" text-anchor="middle" fill="#1F6D55" font-size="14" font-weight="700">PRD · 原型</text>
+    </g>
 
-    <line x1="56" y1="400" x2="1144" y2="400" stroke="#C9BEAA" stroke-width="2"/>
-    <text x="56" y="440" fill="#8A6B3B" font-size="16" font-weight="700" letter-spacing="1">EVIDENCE RAIL</text>
-    <text x="204" y="440" fill="#17231F" font-size="20" font-weight="700">仓库事实源</text>
-    <text x="332" y="440" fill="#7C8C85" font-size="20">→</text>
-    <text x="372" y="440" fill="#17231F" font-size="20" font-weight="700">需求与版本 ID</text>
-    <text x="532" y="440" fill="#7C8C85" font-size="20">→</text>
-    <text x="572" y="440" fill="#17231F" font-size="20" font-weight="700">实施与测试</text>
-    <text x="700" y="440" fill="#7C8C85" font-size="20">→</text>
-    <text x="740" y="440" fill="#17231F" font-size="20" font-weight="700">截图 / 日志 / 产物</text>
-    <text x="924" y="440" fill="#7C8C85" font-size="20">→</text>
-    <text x="964" y="440" fill="#17231F" font-size="20" font-weight="700">发布结论</text>
+    <g transform="translate(758 176)">
+      <rect width="174" height="184" rx="7" fill="#E6EFEB" stroke="#AFC4BB"/>
+      <text x="16" y="30" fill="#1F6D55" font-size="15" font-weight="700">开发承接</text>
+      <text x="16" y="68" fill="#17231F" font-size="24" font-weight="750">拆成可执行任务</text>
+      <text x="16" y="100" fill="#59645F" font-size="16">如何实施？</text>
+      <text x="16" y="124" fill="#59645F" font-size="16">怎样记录与回退？</text>
+      <rect x="16" y="144" width="142" height="28" rx="4" fill="#F7F2E8"/>
+      <text x="87" y="163" text-anchor="middle" fill="#1F6D55" font-size="14" font-weight="700">计划 · 进度 · 日志</text>
+    </g>
+
+    <g transform="translate(948 176)">
+      <rect width="204" height="184" rx="7" fill="#10221C"/>
+      <text x="18" y="30" fill="#9DD9C4" font-size="15" font-weight="700">/acceptance</text>
+      <text x="18" y="68" fill="#F7F2E8" font-size="24" font-weight="750">验证真实结果</text>
+      <text x="18" y="100" fill="#C6D4CE" font-size="16">产物是否一致？</text>
+      <text x="18" y="124" fill="#C6D4CE" font-size="16">能发布，还是回退？</text>
+      <rect x="18" y="144" width="126" height="28" rx="4" fill="#234338"/>
+      <text x="81" y="163" text-anchor="middle" fill="#EAF7F1" font-size="14" font-weight="700">发布判断</text>
+    </g>
+
+    <g transform="translate(40 452)">
+      <rect width="1112" height="72" rx="7" fill="#10221C"/>
+      <text x="22" y="29" fill="#F0B35B" font-size="14" font-weight="700" letter-spacing="1">证据轨道</text>
+      <text x="22" y="51" fill="#AFC2BA" font-size="13">不因阶段切换而丢失</text>
+      <circle cx="202" cy="36" r="5" fill="#39BC91"/>
+      <text x="218" y="42" fill="#F7F2E8" font-size="16" font-weight="650">仓库事实源</text>
+      <path d="M330 36 H390" stroke="#6E8B80" marker-end="url(#arrow)"/>
+      <circle cx="412" cy="36" r="5" fill="#39BC91"/>
+      <text x="428" y="42" fill="#F7F2E8" font-size="16" font-weight="650">需求与版本 ID</text>
+      <path d="M570 36 H630" stroke="#6E8B80" marker-end="url(#arrow)"/>
+      <circle cx="652" cy="36" r="5" fill="#39BC91"/>
+      <text x="668" y="42" fill="#F7F2E8" font-size="16" font-weight="650">实施与测试</text>
+      <path d="M786 36 H846" stroke="#6E8B80" marker-end="url(#arrow)"/>
+      <circle cx="868" cy="36" r="5" fill="#F0B35B"/>
+      <text x="884" y="42" fill="#F7F2E8" font-size="16" font-weight="650">截图 · 日志 · 产物 · 结论</text>
+    </g>
   </g>
 </svg>

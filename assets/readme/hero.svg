@@ -6,7 +6,7 @@
   <rect x="1" y="1" width="1198" height="418" rx="23" fill="none" stroke="#2A3B36" stroke-width="2"/>
 
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
-    <text x="60" y="66" fill="#F0B35B" font-size="18" font-weight="700" letter-spacing="2">EVIDENCE-DRIVEN PRODUCT WORKFLOW</text>
+    <text x="60" y="66" fill="#F0B35B" font-size="18" font-weight="700" letter-spacing="1">VIBE CODING · 证据驱动产品工作流</text>
     <text x="60" y="154" fill="#F6F2E8" font-size="68" font-weight="750">MyP-M-A</text>
     <text x="60" y="204" fill="#D4DED9" font-size="26">从项目地图到发布判断</text>
     <text x="60" y="240" fill="#D4DED9" font-size="26">让事实、范围与交付证据保持连续</text>
@@ -21,7 +21,7 @@
     <line x1="636" y1="44" x2="636" y2="376" stroke="#2A3B36" stroke-width="2"/>
 
     <g transform="translate(688 50)">
-      <text x="0" y="0" fill="#A8BBB3" font-size="16" font-weight="700" letter-spacing="2">THE PRODUCT LOOP</text>
+      <text x="0" y="0" fill="#A8BBB3" font-size="16" font-weight="700" letter-spacing="2">产品闭环</text>
 
       <line x1="18" y1="52" x2="18" y2="286" stroke="#355048" stroke-width="3"/>
       <path d="M18 286 V316 H388" fill="none" stroke="#F0B35B" stroke-width="3"/>

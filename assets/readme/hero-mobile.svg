@@ -6,7 +6,7 @@
   <rect x="1" y="1" width="718" height="918" rx="23" fill="none" stroke="#2A3B36" stroke-width="2"/>
 
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
-    <text x="48" y="64" fill="#F0B35B" font-size="20" font-weight="700" letter-spacing="2">PRODUCT WORKFLOW</text>
+    <text x="48" y="64" fill="#F0B35B" font-size="20" font-weight="700" letter-spacing="1">VIBE CODING · 产品工作流</text>
     <text x="48" y="148" fill="#F6F2E8" font-size="64" font-weight="750">MyP-M-A</text>
     <text x="48" y="202" fill="#D4DED9" font-size="28">从项目地图到发布判断</text>
     <text x="48" y="242" fill="#D4DED9" font-size="28">让事实与交付证据保持连续</text>
@@ -16,10 +16,10 @@
       <circle cx="24" cy="24" r="6" fill="#39BC91"/>
       <text x="44" y="32" fill="#EAF7F1" font-size="22" font-weight="700">v0.40.0 Stable</text>
     </g>
-    <text x="282" y="310" fill="#A8BBB3" font-size="19">106 stable · 39 challenge · 34 trigger</text>
+    <text x="282" y="310" fill="#A8BBB3" font-size="19">106 稳定 · 39 挑战 · 34 触发</text>
 
     <line x1="48" y1="370" x2="672" y2="370" stroke="#2A3B36" stroke-width="2"/>
-    <text x="48" y="418" fill="#A8BBB3" font-size="17" font-weight="700" letter-spacing="2">THE PRODUCT LOOP</text>
+    <text x="48" y="418" fill="#A8BBB3" font-size="17" font-weight="700" letter-spacing="2">产品闭环</text>
 
     <line x1="82" y1="462" x2="82" y2="748" stroke="#355048" stroke-width="4"/>
 

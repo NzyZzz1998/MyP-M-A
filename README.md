@@ -7,7 +7,7 @@
 
 # MyP-M-A
 
-**一套面向 Codex 的中文产品经理 Skill，把项目评审、价值判断、需求定义、开发承接和真实验收连接成可追溯的工作流。**
+**一套面向 Vibe Coding 工作流的中文产品经理 Skill，把项目评审、价值判断、需求定义、开发承接和真实验收连接成可追溯的工作流。**
 
 `v0.40.0 Stable` · `中文优先` · `5 个入口` · `证据驱动` · `外部工具按需接入`
 
@@ -28,13 +28,16 @@
 
 ## 30 秒开始
 
-把仓库放到支持本地 Skill 的 Codex 目录，并确保入口文件位于：
+MyP-M-A 使用标准 `SKILL.md` 目录结构，可安装到支持自定义 Agent Skills 的编码环境：
 
-```text
-<CODEX_HOME>/.agents/skills/mypm/SKILL.md
-```
+| 环境 | 个人安装位置 | 项目级安装位置 |
+| --- | --- | --- |
+| Codex | `<CODEX_HOME>/.agents/skills/mypm/` | 由当前 Codex 工作区配置决定 |
+| Claude Code | `~/.claude/skills/mypm/` | `<PROJECT>/.claude/skills/mypm/` |
 
-重新加载 Codex 后，选择 `MyP-M-A`，或直接点名 `$mypm`：
+Claude Code 的个人与项目级目录来自其[官方 Agent Skills 说明](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)。不同宿主的工具、插件和 Computer Use 能力可能不同，MyP-M-A 会按实际可用能力降级，不把“已安装”写成“已验证可用”。
+
+完整复制仓库目录并重新加载对应 Agent。系统可以按任务自动匹配 Skill，也可以直接点名 `mypm`；在 Codex 中还可显式选择 `MyP-M-A` 或使用 `$mypm`：
 
 ```text
 使用 $mypm 深度评审当前项目。先建立产品和工程地图，再告诉我最值得解决的问题。
@@ -163,7 +166,7 @@ mypm/
 ├─ scripts/       # 静态校验与评测治理工具
 ├─ assets/readme/ # GitHub README 的静态视觉资产
 ├─ notes/         # 路线图、评测历史与版本事实源
-└─ agents/        # Codex 展示与默认提示配置
+└─ agents/        # Agent 宿主展示与默认提示配置
 ```
 
 ## 深入了解
