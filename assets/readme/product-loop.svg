@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
-  <title id="title">MyP-M-A 面向 Vibe Coding 的产品闭环</title>
-  <desc id="desc">项目材料依次经过 Review、Idea、PRD、开发承接和 Acceptance。Prompt 横跨各阶段压缩交接，验收产生的新证据回到 Review，底部证据轨道贯穿全流程。</desc>
+  <title id="title">MyP-M-A 面向 Vibe Coding 的五阶段产品闭环</title>
+  <desc id="desc">五个同构阶段依次为 Review、Idea、PRD、开发承接和 Acceptance。绿色表示工作阶段，橙色表示决策门；Prompt 跨阶段工作，验收产生的新证据返回 Review，深绿色证据轨道贯穿全流程。</desc>
 
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#688078"/>
+      <path d="M0 0 L10 5 L0 10 Z" fill="#70847C"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#D98522"/>
+    <marker id="arrow-gate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#D47B18"/>
     </marker>
   </defs>
 
@@ -15,109 +15,126 @@
   <rect x="1" y="1" width="1198" height="558" fill="none" stroke="#D8CEBC" stroke-width="2"/>
 
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
-    <text x="48" y="54" fill="#17231F" font-size="32" font-weight="750">从输入到发布判断，形成产品闭环</text>
-    <text x="48" y="86" fill="#68736E" font-size="19">每个阶段只回答一个问题，并把可追溯的交付物传给下一步。</text>
+    <text x="40" y="52" fill="#17231F" font-size="31" font-weight="750">从输入到发布判断，形成产品闭环</text>
+    <text x="40" y="82" fill="#68736E" font-size="18">五个阶段共享同一结构：当前问题、阶段动作、明确交付物。</text>
 
-    <g transform="translate(810 38)">
-      <rect width="342" height="52" rx="6" fill="#FFF9EF" stroke="#E1A354"/>
-      <text x="18" y="22" fill="#B66B18" font-size="16" font-weight="700">/prompt · 跨阶段能力</text>
-      <text x="18" y="42" fill="#6A716D" font-size="14">压缩下一步交接，不改写已确认事实</text>
+    <g transform="translate(822 34)">
+      <circle cx="8" cy="10" r="6" fill="#2A8468"/>
+      <text x="22" y="15" fill="#4F5E58" font-size="14" font-weight="650">工作阶段</text>
+      <circle cx="112" cy="10" r="6" fill="#D98522"/>
+      <text x="126" y="15" fill="#4F5E58" font-size="14" font-weight="650">决策门</text>
+      <rect x="204" y="0" width="126" height="28" rx="4" fill="#EEE6D7" stroke="#CFC3AF"/>
+      <text x="267" y="19" text-anchor="middle" fill="#5F665F" font-size="13" font-weight="700">/prompt 跨阶段</text>
     </g>
 
-    <path d="M190 150 H1088" fill="none" stroke="#80928B" stroke-width="2" marker-end="url(#arrow)"/>
-    <path d="M1050 360 V408 H282 V368" fill="none" stroke="#D98522" stroke-width="2" marker-end="url(#arrow-accent)"/>
-    <rect x="532" y="390" width="270" height="34" fill="#F7F2E8"/>
-    <text x="667" y="413" text-anchor="middle" fill="#B66B18" font-size="15" font-weight="700">验收反馈与新证据返回 /review</text>
+    <!-- Stage rail and feedback loop render behind the cards. -->
+    <path d="M176 142 H1136" fill="none" stroke="#7E9189" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M1036 380 V424 H284 V384" fill="none" stroke="#D47B18" stroke-width="2" marker-end="url(#arrow-gate)"/>
+    <rect x="538" y="408" width="250" height="30" fill="#F7F2E8"/>
+    <text x="663" y="429" text-anchor="middle" fill="#B76612" font-size="14" font-weight="700">验收反馈与新证据返回 /review</text>
 
-    <g transform="translate(40 124)">
-      <rect width="150" height="236" rx="6" fill="#EEE6D7" stroke="#D4C7B1"/>
-      <text x="18" y="30" fill="#8A6B3B" font-size="14" font-weight="700" letter-spacing="1">输入</text>
-      <text x="18" y="68" fill="#17231F" font-size="23" font-weight="700">项目与材料</text>
-      <line x1="18" y1="86" x2="132" y2="86" stroke="#CBBDA6"/>
-      <text x="18" y="116" fill="#5D6762" font-size="17">项目路径</text>
-      <text x="18" y="144" fill="#5D6762" font-size="17">想法与反馈</text>
-      <text x="18" y="172" fill="#5D6762" font-size="17">PRD 与截图</text>
-      <text x="18" y="200" fill="#5D6762" font-size="17">日志与产物</text>
+    <!-- Neutral source block. -->
+    <g id="source-input" data-stage-card="source" transform="translate(32 170)">
+      <rect class="stage-frame" width="144" height="210" rx="6" fill="#EEE6D7" stroke="#D2C5AF"/>
+      <text x="16" y="28" fill="#806842" font-size="14" font-weight="700">输入</text>
+      <text x="16" y="62" fill="#17231F" font-size="21" font-weight="750">项目与材料</text>
+      <line x1="16" y1="78" x2="128" y2="78" stroke="#CBBDA6"/>
+      <text x="16" y="106" fill="#59645F" font-size="15">项目路径</text>
+      <text x="16" y="132" fill="#59645F" font-size="15">想法与反馈</text>
+      <text x="16" y="158" fill="#59645F" font-size="15">PRD 与截图</text>
+      <text x="16" y="184" fill="#59645F" font-size="15">日志与产物</text>
     </g>
 
+    <!-- Consistent stage markers. -->
     <g text-anchor="middle" font-size="14" font-weight="750">
-      <circle cx="282" cy="150" r="17" fill="#F7F2E8" stroke="#1F7D61" stroke-width="2"/>
-      <text x="282" y="155" fill="#1F7D61">01</text>
-      <circle cx="462" cy="150" r="17" fill="#FFF0D9" stroke="#D98522" stroke-width="2"/>
-      <text x="462" y="155" fill="#B66B18">02</text>
-      <circle cx="642" cy="150" r="17" fill="#F7F2E8" stroke="#1F7D61" stroke-width="2"/>
-      <text x="642" y="155" fill="#1F7D61">03</text>
-      <circle cx="842" cy="150" r="17" fill="#E7F1EC" stroke="#1F7D61" stroke-width="2"/>
-      <text x="842" y="155" fill="#1F7D61">04</text>
-      <circle cx="1050" cy="150" r="17" fill="#10221C" stroke="#10221C" stroke-width="2"/>
-      <text x="1050" y="155" fill="#F7F2E8">05</text>
+      <circle cx="284" cy="142" r="17" fill="#F7F2E8" stroke="#2A8468" stroke-width="2"/><text x="284" y="147" fill="#1F7159">01</text>
+      <circle cx="472" cy="142" r="17" fill="#FFF3E4" stroke="#D98522" stroke-width="2"/><text x="472" y="147" fill="#B76612">02</text>
+      <circle cx="660" cy="142" r="17" fill="#F7F2E8" stroke="#2A8468" stroke-width="2"/><text x="660" y="147" fill="#1F7159">03</text>
+      <circle cx="848" cy="142" r="17" fill="#F7F2E8" stroke="#2A8468" stroke-width="2"/><text x="848" y="147" fill="#1F7159">04</text>
+      <circle cx="1036" cy="142" r="17" fill="#FFF3E4" stroke="#D98522" stroke-width="2"/><text x="1036" y="147" fill="#B76612">05</text>
     </g>
 
-    <g transform="translate(218 184)">
-      <line x1="0" y1="0" x2="0" y2="176" stroke="#1F7D61" stroke-width="3"/>
-      <text x="16" y="22" fill="#1F7D61" font-size="15" font-weight="700">/review</text>
-      <text x="16" y="58" fill="#17231F" font-size="24" font-weight="750">建立地图</text>
-      <text x="16" y="88" fill="#59645F" font-size="16">问题在哪里？</text>
-      <text x="16" y="112" fill="#59645F" font-size="16">影响延伸到哪？</text>
-      <rect x="16" y="140" width="110" height="28" rx="4" fill="#E7F1EC"/>
-      <text x="71" y="159" text-anchor="middle" fill="#1F6D55" font-size="14" font-weight="700">问题地图</text>
+    <!-- Work stage: Review. -->
+    <g id="stage-review" data-stage-card="work" transform="translate(196 170)">
+      <rect class="stage-frame" width="176" height="210" rx="6" fill="#FBFCF9" stroke="#2A8468" stroke-width="1.5"/>
+      <text x="16" y="28" fill="#1F7159" font-size="14" font-weight="700">/review</text>
+      <rect x="116" y="12" width="44" height="24" rx="4" fill="#E6F1EC"/>
+      <text x="138" y="29" text-anchor="middle" fill="#1F7159" font-size="12" font-weight="700">工作</text>
+      <text x="16" y="66" fill="#17231F" font-size="24" font-weight="750">建立地图</text>
+      <text x="16" y="100" fill="#59645F" font-size="15">问题在哪里？</text>
+      <text x="16" y="126" fill="#59645F" font-size="15">影响延伸到哪？</text>
+      <rect x="14" y="160" width="148" height="34" rx="4" fill="#E6F1EC"/>
+      <text x="88" y="183" text-anchor="middle" fill="#1F7159" font-size="14" font-weight="700">交付：问题地图</text>
     </g>
 
-    <g transform="translate(392 176)">
-      <rect width="150" height="184" rx="7" fill="#FFF0D9" stroke="#D98522" stroke-width="1.5"/>
-      <text x="16" y="30" fill="#B66B18" font-size="15" font-weight="700">/idea</text>
-      <text x="16" y="68" fill="#17231F" font-size="24" font-weight="750">判断价值</text>
-      <text x="16" y="100" fill="#59645F" font-size="16">是真问题吗？</text>
-      <text x="16" y="124" fill="#59645F" font-size="16">现在值得做吗？</text>
-      <rect x="16" y="144" width="110" height="28" rx="4" fill="#F7F2E8" stroke="#E6B97A"/>
-      <text x="71" y="163" text-anchor="middle" fill="#9A5915" font-size="14" font-weight="700">价值结论</text>
+    <!-- Decision gate: Idea. -->
+    <g id="stage-idea" data-stage-card="gate" transform="translate(384 170)">
+      <rect class="stage-frame" width="176" height="210" rx="6" fill="#FFF8ED" stroke="#D98522" stroke-width="1.5"/>
+      <text x="16" y="28" fill="#B76612" font-size="14" font-weight="700">/idea</text>
+      <rect x="110" y="12" width="50" height="24" rx="4" fill="#FFE8C8"/>
+      <text x="135" y="29" text-anchor="middle" fill="#A85D0E" font-size="12" font-weight="700">决策门</text>
+      <text x="16" y="66" fill="#17231F" font-size="24" font-weight="750">判断价值</text>
+      <text x="16" y="100" fill="#59645F" font-size="15">是真问题吗？</text>
+      <text x="16" y="126" fill="#59645F" font-size="15">现在值得做吗？</text>
+      <rect x="14" y="160" width="148" height="34" rx="4" fill="#FFE8C8"/>
+      <text x="88" y="183" text-anchor="middle" fill="#A85D0E" font-size="14" font-weight="700">交付：价值结论</text>
     </g>
 
-    <g transform="translate(578 184)">
-      <line x1="0" y1="0" x2="0" y2="176" stroke="#1F7D61" stroke-width="3"/>
-      <text x="16" y="22" fill="#1F7D61" font-size="15" font-weight="700">/prd</text>
-      <text x="16" y="58" fill="#17231F" font-size="24" font-weight="750">定义需求</text>
-      <text x="16" y="88" fill="#59645F" font-size="16">范围与状态</text>
-      <text x="16" y="112" fill="#59645F" font-size="16">原型与验收合同</text>
-      <rect x="16" y="140" width="118" height="28" rx="4" fill="#E7F1EC"/>
-      <text x="75" y="159" text-anchor="middle" fill="#1F6D55" font-size="14" font-weight="700">PRD · 原型</text>
+    <!-- Work stage: PRD. -->
+    <g id="stage-prd" data-stage-card="work" transform="translate(572 170)">
+      <rect class="stage-frame" width="176" height="210" rx="6" fill="#FBFCF9" stroke="#2A8468" stroke-width="1.5"/>
+      <text x="16" y="28" fill="#1F7159" font-size="14" font-weight="700">/prd</text>
+      <rect x="116" y="12" width="44" height="24" rx="4" fill="#E6F1EC"/>
+      <text x="138" y="29" text-anchor="middle" fill="#1F7159" font-size="12" font-weight="700">工作</text>
+      <text x="16" y="66" fill="#17231F" font-size="24" font-weight="750">定义需求</text>
+      <text x="16" y="100" fill="#59645F" font-size="15">范围与状态</text>
+      <text x="16" y="126" fill="#59645F" font-size="15">原型与验收合同</text>
+      <rect x="14" y="160" width="148" height="34" rx="4" fill="#E6F1EC"/>
+      <text x="88" y="183" text-anchor="middle" fill="#1F7159" font-size="14" font-weight="700">交付：PRD · 原型</text>
     </g>
 
-    <g transform="translate(758 176)">
-      <rect width="174" height="184" rx="7" fill="#E6EFEB" stroke="#AFC4BB"/>
-      <text x="16" y="30" fill="#1F6D55" font-size="15" font-weight="700">开发承接</text>
-      <text x="16" y="68" fill="#17231F" font-size="24" font-weight="750">拆成可执行任务</text>
-      <text x="16" y="100" fill="#59645F" font-size="16">如何实施？</text>
-      <text x="16" y="124" fill="#59645F" font-size="16">怎样记录与回退？</text>
-      <rect x="16" y="144" width="142" height="28" rx="4" fill="#F7F2E8"/>
-      <text x="87" y="163" text-anchor="middle" fill="#1F6D55" font-size="14" font-weight="700">计划 · 进度 · 日志</text>
+    <!-- Work stage: development handoff. -->
+    <g id="stage-handoff" data-stage-card="work" transform="translate(760 170)">
+      <rect class="stage-frame" width="176" height="210" rx="6" fill="#FBFCF9" stroke="#2A8468" stroke-width="1.5"/>
+      <text x="16" y="28" fill="#1F7159" font-size="14" font-weight="700">开发承接</text>
+      <rect x="116" y="12" width="44" height="24" rx="4" fill="#E6F1EC"/>
+      <text x="138" y="29" text-anchor="middle" fill="#1F7159" font-size="12" font-weight="700">工作</text>
+      <text x="16" y="66" fill="#17231F" font-size="24" font-weight="750">承接开发</text>
+      <text x="16" y="100" fill="#59645F" font-size="15">如何实施？</text>
+      <text x="16" y="126" fill="#59645F" font-size="15">怎样记录与回退？</text>
+      <rect x="14" y="160" width="148" height="34" rx="4" fill="#E6F1EC"/>
+      <text x="88" y="183" text-anchor="middle" fill="#1F7159" font-size="14" font-weight="700">交付：执行计划</text>
     </g>
 
-    <g transform="translate(948 176)">
-      <rect width="204" height="184" rx="7" fill="#10221C"/>
-      <text x="18" y="30" fill="#9DD9C4" font-size="15" font-weight="700">/acceptance</text>
-      <text x="18" y="68" fill="#F7F2E8" font-size="24" font-weight="750">验证真实结果</text>
-      <text x="18" y="100" fill="#C6D4CE" font-size="16">产物是否一致？</text>
-      <text x="18" y="124" fill="#C6D4CE" font-size="16">能发布，还是回退？</text>
-      <rect x="18" y="144" width="126" height="28" rx="4" fill="#234338"/>
-      <text x="81" y="163" text-anchor="middle" fill="#EAF7F1" font-size="14" font-weight="700">发布判断</text>
+    <!-- Decision gate: Acceptance. -->
+    <g id="stage-acceptance" data-stage-card="gate" transform="translate(948 170)">
+      <rect class="stage-frame" width="176" height="210" rx="6" fill="#FFF8ED" stroke="#D98522" stroke-width="1.5"/>
+      <text x="16" y="28" fill="#B76612" font-size="14" font-weight="700">/acceptance</text>
+      <rect x="110" y="12" width="50" height="24" rx="4" fill="#FFE8C8"/>
+      <text x="135" y="29" text-anchor="middle" fill="#A85D0E" font-size="12" font-weight="700">决策门</text>
+      <text x="16" y="66" fill="#17231F" font-size="24" font-weight="750">验证结果</text>
+      <text x="16" y="100" fill="#59645F" font-size="15">产物是否一致？</text>
+      <text x="16" y="126" fill="#59645F" font-size="15">能发布或需回退？</text>
+      <rect x="14" y="160" width="148" height="34" rx="4" fill="#FFE8C8"/>
+      <text x="88" y="183" text-anchor="middle" fill="#A85D0E" font-size="14" font-weight="700">交付：发布判断</text>
     </g>
 
-    <g transform="translate(40 452)">
-      <rect width="1112" height="72" rx="7" fill="#10221C"/>
-      <text x="22" y="29" fill="#F0B35B" font-size="14" font-weight="700" letter-spacing="1">证据轨道</text>
-      <text x="22" y="51" fill="#AFC2BA" font-size="13">不因阶段切换而丢失</text>
-      <circle cx="202" cy="36" r="5" fill="#39BC91"/>
-      <text x="218" y="42" fill="#F7F2E8" font-size="16" font-weight="650">仓库事实源</text>
-      <path d="M330 36 H390" stroke="#6E8B80" marker-end="url(#arrow)"/>
-      <circle cx="412" cy="36" r="5" fill="#39BC91"/>
-      <text x="428" y="42" fill="#F7F2E8" font-size="16" font-weight="650">需求与版本 ID</text>
-      <path d="M570 36 H630" stroke="#6E8B80" marker-end="url(#arrow)"/>
-      <circle cx="652" cy="36" r="5" fill="#39BC91"/>
-      <text x="668" y="42" fill="#F7F2E8" font-size="16" font-weight="650">实施与测试</text>
-      <path d="M786 36 H846" stroke="#6E8B80" marker-end="url(#arrow)"/>
-      <circle cx="868" cy="36" r="5" fill="#F0B35B"/>
-      <text x="884" y="42" fill="#F7F2E8" font-size="16" font-weight="650">截图 · 日志 · 产物 · 结论</text>
+    <!-- Durable evidence rail uses dark green exclusively. -->
+    <g transform="translate(32 462)">
+      <rect width="1092" height="66" rx="6" fill="#10221C"/>
+      <text x="20" y="27" fill="#F0B35B" font-size="14" font-weight="700">证据轨道</text>
+      <text x="20" y="48" fill="#AFC2BA" font-size="12">跨阶段持续</text>
+      <circle cx="174" cy="33" r="5" fill="#39BC91"/>
+      <text x="190" y="39" fill="#F7F2E8" font-size="15" font-weight="650">仓库事实源</text>
+      <path d="M298 33 H346" stroke="#6E8B80" marker-end="url(#arrow)"/>
+      <circle cx="368" cy="33" r="5" fill="#39BC91"/>
+      <text x="384" y="39" fill="#F7F2E8" font-size="15" font-weight="650">需求与版本 ID</text>
+      <path d="M524 33 H572" stroke="#6E8B80" marker-end="url(#arrow)"/>
+      <circle cx="594" cy="33" r="5" fill="#39BC91"/>
+      <text x="610" y="39" fill="#F7F2E8" font-size="15" font-weight="650">实施与测试</text>
+      <path d="M720 33 H768" stroke="#6E8B80" marker-end="url(#arrow)"/>
+      <circle cx="790" cy="33" r="5" fill="#F0B35B"/>
+      <text x="806" y="39" fill="#F7F2E8" font-size="15" font-weight="650">截图 · 日志 · 产物 · 结论</text>
     </g>
   </g>
 </svg>
