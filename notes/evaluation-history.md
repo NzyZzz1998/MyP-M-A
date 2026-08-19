@@ -2,7 +2,7 @@
 
 本文是 MyP-M-A 行为评测结果的唯一长期汇总。它保留版本结论、评分口径、已知限制和下一轮基线，不保存逐次回答、评分器中间文件或静态对照网页。
 
-## v0.40 双通路可视化交付（Stable，本地待提交）
+## v0.40 双通路可视化交付（Stable，main 已同步，tag 待审核）
 
 ### 首轮验收（历史）
 
@@ -18,7 +18,7 @@ v0.40 以 v0.38.0 为同题基线，对稳定用例 103～106、挑战用例 CH-
 
 首轮失败证据完整保留。修复后的最终视觉整组中，稳定用例 103～106 为 `29/29`；挑战 CH-35～39 为 `36/37`，唯一失败是 CH-37 没有同时交付两张承重图。随后运行时只修改混合双图规则，因此仅 CH-37 旧证据失效；定向复验为 `7/7`。EB-05/12 外部控制为 `8/8`，关键违规 0。
 
-独立复验确认选择性继承成立，M5 QuickRec `/review` 与 LetsMakeMoney `/prd` 真实只读复用、Stable 回退、Strict、上下文预算、视觉专用自测和差异检查全部闭合，阻塞项 0。v0.40.0 因而晋升 Stable（本地待提交）。最终证据位于 `E:\codex\skill-evals\mypm-v040-final-visual-r2-20260819`、`E:\codex\skill-evals\mypm-v040-bugfix-targeted-20260819-r10` 与 `E:\codex\skill-evals\mypm-v040-independent-reacceptance-20260819`。
+独立复验确认选择性继承成立，M5 QuickRec `/review` 与 LetsMakeMoney `/prd` 真实只读复用、Stable 回退、Strict、上下文预算、视觉专用自测和差异检查全部闭合，阻塞项 0。v0.40.0 因而晋升 Stable，`main` 已同步远端，tag 待审核。最终证据位于 `E:\codex\skill-evals\mypm-v040-final-visual-r2-20260819`、`E:\codex\skill-evals\mypm-v040-bugfix-targeted-20260819-r10` 与 `E:\codex\skill-evals\mypm-v040-independent-reacceptance-20260819`。
 
 本次没有重跑完整 106 条稳定集和 39 条挑战集，也没有证明跨模型全面领先；精炼度与耗时不能抵消正确性、证据或完整性缺口。
 

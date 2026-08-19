@@ -2,8 +2,8 @@
 
 ## 状态总览
 
-- 目标版本：`0.40.0 Stable（本地待提交）`
-- 当前阶段：M0～M6 与修复后独立验收通过；等待提交授权
+- 目标版本：`0.40.0 Stable（main 已同步，tag 待审核）`
+- 当前阶段：M0～M6、修复后独立验收、提交与远端同步完成；等待 tag 审核
 - 来源 PRD：`notes/v0.40-visual-delivery-prd.md`
 - 实施计划：`notes/dev_plan_v0.40.md`
 - 开发日志：`notes/dev_log_v0.40.md`
@@ -108,8 +108,8 @@
 
 ## 下一步
 
-1. 用户授权后提交 v0.40.0 Stable。
-2. push、tag 与 Release 继续分别确认，不由验收结论自动触发。
+1. 用户审核远端 README 与版本状态。
+2. 审核通过后仅创建 `v0.40.0` tag；Release 仍需单独确认。
 
 ## 记录边界
 

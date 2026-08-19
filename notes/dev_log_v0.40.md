@@ -4,11 +4,11 @@
 
 ## 基本信息
 
-- 版本：`0.40.0 Stable（本地待提交）`
+- 版本：`0.40.0 Stable（main 已同步，tag 待审核）`
 - PRD：`notes/v0.40-visual-delivery-prd.md`
 - dev plan：`notes/dev_plan_v0.40.md`
 - progress：`notes/progress_v0.40.md`
-- 当前阶段：修复后动态回归与独立验收通过；等待提交授权
+- 当前阶段：修复后动态回归、独立验收、提交与远端同步完成；等待 tag 审核
 
 ## 开发记录
 
@@ -86,7 +86,7 @@
 - 最终整组稳定用例 103～106 为 `29/29`；挑战 CH-35～39 为 `36/37`。随后唯一运行时变化只影响 CH-37，定向复验为 `7/7`；EB-05/12 外部控制为 `8/8`。
 - 独立复验确认选择性证据继承成立、关键违规 0、阻塞项 0，QuickRec 与 LetsMakeMoney 仅作只读证据且工作区未被本轮修改。
 - Strict、上下文预算、v0.40 专用自测、PowerShell/JSON/UTF-8/乱码/Markdown 链接和 `git diff --check` 均通过。
-- 版本决定：`v0.40.0 Stable（本地待提交）`；完整稳定集与挑战集未重跑，push、tag、Release 仍分别等待授权。
+- 版本决定：`v0.40.0 Stable`；完整稳定集与挑战集未重跑，`main` 已同步远端，tag 与 Release 仍分别等待授权。
 
 ## 关键决策
 

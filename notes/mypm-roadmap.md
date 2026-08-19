@@ -12,8 +12,8 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.40 的 4 个 P1、route 漂移、行为合同、M5、动态复验和最终独立验收均已关闭；当前为 Stable（本地待提交），v0.38.0 继续作为远端回退。
-<!-- project-status: version=0.40.0; state=stable-local-pending -->
+当前阶段判断：v0.40 的 4 个 P1、route 漂移、行为合同、M5、动态复验和最终独立验收均已关闭；当前为 Stable，`main` 已同步远端，v0.40 tag 待审核；v0.38.0 保持已验证 tag 回退点。
+<!-- project-status: version=0.40.0; state=remote-synced -->
 
 当前目录口径：稳定集 `未全量重跑 / 832`，挑战集 `未全量重跑 / 327`；局部定向结果不得改写为全量通过。
 
@@ -31,7 +31,7 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 
 ### R2.30 v0.40 双通路可视化交付
 
-状态：Stable（本地待提交）；M0～M6、行为门禁、真实复用和修复后独立验收通过
+状态：Stable（main 已同步，tag 待审核）；M0～M6、行为门禁、真实复用和修复后独立验收通过
 
 - 事实源：`notes/v0.40-visual-delivery-plan.md`、`notes/v0.40-visual-delivery-prd.md`、`notes/dev_plan_v0.40.md`、`notes/progress_v0.40.md`。
 - 保留“决策图表”和“语义图解”两条独立路由，前者服务冻结数值，后者服务节点、关系、状态、顺序和职责。

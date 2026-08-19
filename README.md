@@ -114,8 +114,8 @@ Basic Memory 支持 `auto`、`suggest`、`off` 三种模式。默认只在已知
 
 ## 质量证据
 
-当前版本：`v0.40.0 Stable`。首轮失败记录完整保留；修复后的视觉回归、外部控制、真实项目只读复用、机械门禁和最终独立复验均已通过。
-<!-- project-status: version=0.40.0; state=stable-local-pending -->
+当前版本：`v0.40.0 Stable`，`main` 已同步远端，版本 tag 待审核。首轮失败记录完整保留；修复后的视觉回归、外部控制、真实项目只读复用、机械门禁和最终独立复验均已通过。
+<!-- project-status: version=0.40.0; state=remote-synced -->
 
 | 证据面 | v0.40 结果 |
 | --- | --- |
