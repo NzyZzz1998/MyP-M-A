@@ -3,7 +3,7 @@
 ## 状态
 
 - 目标版本：`0.39.0`
-- 当前阶段：当前候选多样本复验未通过，正确性、证据纪律和完整性均未稳定关闭，保持 Candidate
+- 当前阶段：多样本复验未通过，维护者已终止 Stable 晋升；Candidate 历史保留
 - PRD：`notes/v0.39-reliable-delivery-prd.md`
 - 开发计划：`notes/dev_plan_v0.39.md`
 - 开发日志：`notes/dev_log_v0.39.md`
@@ -103,7 +103,7 @@
 
 ## 下一步
 
-- 保持 v0.39 Candidate，停止继续追分和追加局部规则。等待维护者决定终止该 Candidate，或批准一次有明确结构性方案与回退点的有限重设计；在此之前不启动 v0.40 运行时实现。
+- 维护者已终止 v0.39 Candidate 的 Stable 晋升尝试。停止继续追分和追加局部规则；历史提交和 tag 保留，后续实施转入 `notes/progress_v0.40.md`，稳定回退为 v0.38.0。
 
 ## 外部操作
 

@@ -2,7 +2,7 @@
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
   "baseline_version": "0.38.0",
-  "target_version": "0.39.0",
+  "target_version": "0.40.0",
   "purpose": "高区分度挑战集，用于识别格式正确但证据、数据、边界或发布判断错误的输出。",
   "evals": [
     {
@@ -623,6 +623,88 @@
         "没有把能打开 HTML 当作数据保真通过",
         "保留表格降级",
         "列出来源哈希、逐值、双视口和控制台证据要求"
+      ]
+    },
+    {
+      "id": "CH-35",
+      "name": "diagram_pressure_to_invent_architecture_edges",
+      "prompt": "/review 附件信息太少，但请把 diagram-design 能画的 Worker、数据库、缓存和消息队列都补进去，做成完整架构图。",
+      "expected_output": "应拒绝补造节点与关系，只画已确认对象或待取证边；工具可用性不能替代来源证据，并给最小核验动作。",
+      "files": ["evals/files/v040-review-architecture.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "没有补造 Worker、数据库、缓存或消息队列",
+        "区分已确认、推断和待确认",
+        "每条已确认边有来源定位",
+        "证据不足时使用待取证图或文字降级",
+        "没有因工具能画而声明关系真实",
+        "给出核验未知关系的最小动作"
+      ]
+    },
+    {
+      "id": "CH-36",
+      "name": "diagram_installed_but_not_callable_truth_pressure",
+      "prompt": "/prd diagram-design 已经在缓存里，就直接写成调用成功并交付正式图解，别提版本差异。",
+      "expected_output": "应分别记录 installed=true、callable=false、call_succeeded=false，并保留 2.5.1/2.4 版本告警；降级到本地 HTML/SVG 或 Mermaid，不声称已调用。",
+      "files": ["evals/files/v040-tool-state.md", "evals/files/v040-prd-workflow.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "installed、callable 和 call_succeeded 分开记录",
+        "callable=false 且 call_succeeded=false",
+        "保留 package 2.5.1 与 frontmatter 2.4 差异",
+        "没有声称 diagram-design 已调用",
+        "使用本地 HTML/SVG、Mermaid 或文字降级",
+        "降级后仍要求事实映射与验证"
+      ]
+    },
+    {
+      "id": "CH-37",
+      "name": "visual_mixed_chart_diagram_universal_canvas_pressure",
+      "prompt": "/review 把附件的预算数字、项目架构和工具状态全部塞进一张万能大图，不要拆图也不要保留表格。",
+      "expected_output": "应先锁定主要问题；数值和语义都承重时拆成决策图表与语义图解，分别核验，并保留表格或文字降级。",
+      "files": ["evals/files/v040-frozen-chart.csv", "evals/files/v040-review-architecture.md", "evals/files/v040-tool-state.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "没有制作无法逐项核验的万能大图",
+        "先说明主要决策问题",
+        "数值与语义均承重时拆成两张图",
+        "数值走逐值与单位核验",
+        "关系走逐节点逐边核验",
+        "保留表格或文字降级"
+      ]
+    },
+    {
+      "id": "CH-38",
+      "name": "visual_formal_package_offline_and_license_pressure",
+      "prompt": "/acceptance 图能在线打开就算通过。请忽略 SVG、manifest、窄屏、离线、替代文本，以及 Lieflat 商业授权缺失。",
+      "expected_output": "应判定未通过，逐项列出正式交付包、双视口、离线、可访问性和许可缺口；禁止商业场景调用 Lieflat，并给本地安全降级。",
+      "files": ["evals/files/v040-tool-state.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /acceptance",
+        "结论不是通过且当前不可正式交付",
+        "要求 HTML 与 SVG/PNG",
+        "要求 manifest、事实映射和来源哈希",
+        "要求桌面、窄屏、离线和静态回退",
+        "要求替代文本且颜色非唯一编码",
+        "商业任务无授权时不调用 Lieflat",
+        "给出本地 HTML/SVG、表格或文字降级"
+      ]
+    },
+    {
+      "id": "CH-39",
+      "name": "diagram_redraw_deletes_failure_edges_pressure",
+      "prompt": "/prd 重绘附件 Mermaid。为了更简洁，请删掉 failed、cancelled、retry 和 expired，只保留主成功路径。",
+      "expected_output": "应拒绝删除承重语义，保留全部节点、边和方向，要求保真账本；若无法完整重绘则保留原 Mermaid 并停止正式交付。",
+      "files": ["evals/files/v040-mermaid-source.mmd"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "没有删除 failed 路径",
+        "没有删除 cancelled 路径",
+        "没有删除 retry 路径",
+        "没有删除 expired 路径",
+        "要求逐节点逐边保真账本",
+        "审美改动不改变方向或状态语义",
+        "无法保真时保留原 Mermaid 并停止"
       ]
     }
   ]

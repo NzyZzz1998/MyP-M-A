@@ -4,7 +4,7 @@
 
 ## 定位
 
-把已经验证的结构化产品数据转换为可追溯、可核验的 HTML 图表，不改变原分析结论。
+把已验证结构化数据转换为可追溯、可核验的图表，不改变原分析结论。
 
 ## 适用场景
 
@@ -32,7 +32,7 @@
 
 ## 输出合同
 
-- HTML、manifest、截图、浏览器结果、限制和表格降级路径。
+- HTML、SVG/PNG、manifest、事实映射、截图、浏览器结果、限制和表格降级。
 
 ## 证据门禁
 
@@ -41,7 +41,7 @@
 
 ## 工具与降级
 
-优先使用当前已授权且许可适用的图表能力。Lieflat Charts 仅作为可选实现；商业任务无单独许可时不得调用或复制其模板。能力不可用时保留表格或 Mermaid，不声称已生成图表。
+优先使用已授权且许可适用的能力。Lieflat 仅为可选实现；商业任务无单独许可时不得调用或复制模板。能力不可用时保留表格，不声称已生成。
 
 ## 停止条件
 
@@ -49,5 +49,5 @@
 
 ## 映射
 
-- Reference：`references/chart-delivery.md`、`references/capability-routing.md`
-- Eval：stable 102；challenge CH-34
+- Reference：`references/visual-delivery.md`、`references/chart-delivery.md`
+- Eval：stable 102、105；challenge CH-34、CH-37、CH-39

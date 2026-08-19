@@ -39,7 +39,7 @@ if ($Strict) {
         'test-v036-governance.ps1',
         'test-v037-fact-fidelity.ps1',
         'test-v038-evidence-action-adapters.ps1',
-        'test-v039-reliable-delivery.ps1'
+        'test-v040-visual-delivery.ps1'
     )) {
         try {
             & (Join-Path $PSScriptRoot $test) | Out-Host

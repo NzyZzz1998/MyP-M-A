@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-17T00:00:00Z",
+  "updated_at": "2026-08-18T22:45:00Z",
   "capabilities": [
     {
       "id": "discovery.problem-validation",
@@ -149,14 +149,40 @@
         "只为装饰，或要求把不可合并维度制造成统一总分"
       ],
       "required_inputs": ["决策问题与目标读者", "冻结数据、SHA-256、字段和单位", "聚合、禁止合并规则、用途与许可"],
-      "outputs": ["可追溯 HTML 与 manifest", "双视口和逐值验证", "限制与表格降级"],
+      "outputs": ["HTML、SVG/PNG、manifest 与事实映射", "双视口和逐值验证", "限制与表格降级"],
       "evidence_contract": "图表只表达已验证分析；数值、单位、标签、聚合和状态不得漂移；可打开不等于保真通过。",
       "tool_categories": ["结构化数据读取", "HTML 图表生成", "浏览器验证"],
-      "fallback": "工具未安装、不可调用、许可不适用或保真失败时保留表格或 Mermaid，不声称已生成图表。",
-      "references": ["references/chart-delivery.md", "references/capability-routing.md"],
-      "eval_ids": {"stable": [102], "challenge": ["CH-34"], "trigger": []},
+      "fallback": "工具未安装、不可调用、许可不适用或保真失败时保留表格，不声称已生成图表。",
+      "references": ["references/visual-delivery.md", "references/chart-delivery.md"],
+      "eval_ids": {"stable": [102, 105], "challenge": ["CH-34", "CH-37", "CH-39"], "trigger": []},
       "owner": "MyP-M-A maintainers",
       "introduced_in": "0.39.0"
+    },
+    {
+      "id": "visualization.decision-diagram-adapter",
+      "name_zh": "语义图解适配",
+      "domain": "visualization",
+      "status": "pilot",
+      "card_file": "capabilities/visualization/decision-diagram-adapter.md",
+      "entrypoints": ["/review", "/prd"],
+      "stages": ["review", "define", "deliver", "validate"],
+      "triggers": [
+        "项目或模块关系需要用架构、数据流或领域图建立共同理解",
+        "PRD 的流程、状态、时序、ER、泳道或失败出口需要可核验表达"
+      ],
+      "anti_triggers": [
+        "来源不足以确认节点、边、方向、条件、职责或基数",
+        "表格或文字已经更清楚，或任务只要求装饰图"
+      ],
+      "required_inputs": ["读者与决策问题", "冻结的节点、边、状态和未知项", "来源定位、工具六字段、用途与许可"],
+      "outputs": ["HTML、SVG/PNG、manifest 与事实映射", "双视口、离线和可访问性证据", "限制、保真账本与降级"],
+      "evidence_contract": "逐节点、逐边核验方向、条件、状态、职责和基数；未知保持未知，重绘不得删除失败、取消或回退语义。",
+      "tool_categories": ["项目与文档读取", "语义图解生成", "浏览器验证"],
+      "fallback": "diagram-design 不可调用或身份不明时使用本地 HTML/SVG、Mermaid 或文字；不声称已调用。",
+      "references": ["references/visual-delivery.md", "references/capability-routing.md"],
+      "eval_ids": {"stable": [103, 104, 106], "challenge": ["CH-35", "CH-36", "CH-37", "CH-38", "CH-39"], "trigger": []},
+      "owner": "MyP-M-A maintainers",
+      "introduced_in": "0.40.0"
     }
   ]
 }

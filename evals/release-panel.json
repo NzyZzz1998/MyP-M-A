@@ -1,56 +1,73 @@
 {
   "schema_version": 2,
-  "name": "MyP-M-A working-tree-v0.39 发布面板",
+  "name": "MyP-M-A working-tree-v0.40 发布面板",
   "purpose": "固定核心、合同差量与相邻控制项；超过面板上限时显式升级为受影响入口全量回归。",
-  "baseline_ref": "v0.38-frozen-snapshot-9c1f9708",
-  "candidate_ref": "working-tree-v0.39",
+  "baseline_ref": "v0.38.0",
+  "candidate_ref": "working-tree-v0.40",
   "mode": "release-panel",
   "max_cases": 26,
   "changed_files": [
+    "capabilities/registry.json",
+    "capabilities/visualization/decision-chart-adapter.md",
+    "capabilities/visualization/decision-diagram-adapter.md",
     "references/acceptance.md",
     "references/capability-routing.md",
     "references/chart-delivery.md",
-    "references/data-analysis.md",
     "references/idea.md",
     "references/prd.md",
-    "references/prompt.md",
     "references/review.md",
     "references/tooling.md",
+    "references/visual-delivery.md",
     "SKILL.md",
-    "templates/prd-template.md"
+    "templates/visual-fidelity-ledger-template.md",
+    "templates/visual-manifest-template.json"
   ],
   "contract_selection_mode": "explicit-audited",
   "affected_contracts": [
-    "acceptance-item-summary-consistency",
     "capability-decision-chart-route",
-    "capability-minimal-route",
-    "fact-anchor-terminal-scan",
-    "idea-ratio-semantic-preservation",
-    "kpi-data-contract",
-    "prd-ui-state-semantics",
-    "review-relation-evidence-state",
-    "tooling-capability-state"
+    "tooling-visual-six-field-probe",
+    "visual-chart-value-fidelity",
+    "visual-delivery-route",
+    "visual-diagram-state-fidelity",
+    "visual-fact-map",
+    "visual-formal-package",
+    "visual-redraw-fidelity"
   ],
   "affected_routes": [
     "/acceptance",
     "/idea",
     "/prd",
-    "/prompt",
     "/review"
   ],
   "unmapped_files": [],
   "no_behavior_change": [
     {
       "source_file": "SKILL.md",
-      "reason": "兼容 v0.38 历史自测：当该自测只选择 v0.38 合同时，SKILL.md 的旧版本摘要不形成独立行为差量；v0.39 面板已显式选择 fact-anchor-terminal-scan。"
+      "reason": "仅更新版本与按需视觉导航；默认加载为 0，行为由 v0.40 视觉合同和 103～106、CH-35～39 覆盖。"
+    },
+    {
+      "source_file": "references/review.md",
+      "reason": "只增加 visual-delivery 条件路由接缝；关系保真由 visual-fact-map 的 stable 103 与 CH-35 覆盖。"
+    },
+    {
+      "source_file": "references/idea.md",
+      "reason": "只增加冻结数值的条件路由接缝；数值保真与混合路由由 stable 105 和 CH-37 覆盖。"
+    },
+    {
+      "source_file": "references/prd.md",
+      "reason": "只增加正式图解条件路由接缝；状态与重绘合同由 stable 104、106 和 CH-39 覆盖。"
+    },
+    {
+      "source_file": "references/acceptance.md",
+      "reason": "只增加视觉验收轨道接缝；正式交付缺口由 CH-38 覆盖。"
     },
     {
       "source_file": "references/prompt.md",
-      "reason": "本文件只镜像 fact-anchor-terminal-scan 的交接终检；行为由 stable 98 与 CH-30 覆盖，不形成第二个独立合同。"
+      "reason": "沿用历史交接终检，无 v0.40 行为改动。"
     },
     {
       "source_file": "templates/prd-template.md",
-      "reason": "模板只镜像 prd-ui-state-semantics 的当前值、已保存值和默认值字段，不形成独立运行时合同。"
+      "reason": "沿用历史 PRD 模板，无 v0.40 行为改动。"
     }
   ],
   "upgrade_reason": null,
@@ -132,99 +149,91 @@
     "delta": [
       {
         "suite": "stable",
-        "id": 97,
-        "category": "delta",
-        "route": "/idea",
-        "contract_id": "idea-ratio-semantic-preservation",
-        "reason": "contract-delta:idea-ratio-semantic-preservation"
-      },
-      {
-        "suite": "stable",
-        "id": 98,
-        "category": "delta",
-        "route": "/review",
-        "contract_id": "fact-anchor-terminal-scan",
-        "reason": "contract-delta:fact-anchor-terminal-scan"
-      },
-      {
-        "suite": "stable",
-        "id": 99,
-        "category": "delta",
-        "route": "/review",
-        "contract_id": "review-relation-evidence-state",
-        "reason": "contract-delta:review-relation-evidence-state"
-      },
-      {
-        "suite": "stable",
-        "id": 100,
-        "category": "delta",
-        "route": "/prd",
-        "contract_id": "prd-ui-state-semantics",
-        "reason": "contract-delta:prd-ui-state-semantics"
-      },
-      {
-        "suite": "stable",
-        "id": 101,
-        "category": "delta",
-        "route": "/acceptance",
-        "contract_id": "acceptance-item-summary-consistency",
-        "reason": "contract-delta:acceptance-item-summary-consistency"
-      },
-      {
-        "suite": "stable",
         "id": 102,
         "category": "delta",
-        "route": "/idea",
+        "route": "/review",
         "contract_id": "capability-decision-chart-route",
         "reason": "contract-delta:capability-decision-chart-route"
       },
       {
-        "suite": "challenge",
-        "id": "CH-29",
-        "category": "delta",
-        "route": "/idea",
-        "contract_id": "idea-ratio-semantic-preservation",
-        "reason": "contract-delta:idea-ratio-semantic-preservation"
-      },
-      {
-        "suite": "challenge",
-        "id": "CH-30",
+        "suite": "stable",
+        "id": 103,
         "category": "delta",
         "route": "/review",
-        "contract_id": "fact-anchor-terminal-scan",
-        "reason": "contract-delta:fact-anchor-terminal-scan"
+        "contract_id": "visual-fact-map",
+        "reason": "contract-delta:visual-fact-map"
       },
       {
-        "suite": "challenge",
-        "id": "CH-31",
-        "category": "delta",
-        "route": "/review",
-        "contract_id": "review-relation-evidence-state",
-        "reason": "contract-delta:review-relation-evidence-state"
-      },
-      {
-        "suite": "challenge",
-        "id": "CH-32",
+        "suite": "stable",
+        "id": 104,
         "category": "delta",
         "route": "/prd",
-        "contract_id": "prd-ui-state-semantics",
-        "reason": "contract-delta:prd-ui-state-semantics"
+        "contract_id": "visual-diagram-state-fidelity",
+        "reason": "contract-delta:visual-diagram-state-fidelity"
       },
       {
-        "suite": "challenge",
-        "id": "CH-33",
+        "suite": "stable",
+        "id": 105,
         "category": "delta",
-        "route": "/acceptance",
-        "contract_id": "acceptance-item-summary-consistency",
-        "reason": "contract-delta:acceptance-item-summary-consistency"
+        "route": "/review",
+        "contract_id": "visual-chart-value-fidelity",
+        "reason": "contract-delta:visual-chart-value-fidelity"
+      },
+      {
+        "suite": "stable",
+        "id": 106,
+        "category": "delta",
+        "route": "/prd",
+        "contract_id": "visual-redraw-fidelity",
+        "reason": "contract-delta:visual-redraw-fidelity"
       },
       {
         "suite": "challenge",
         "id": "CH-34",
         "category": "delta",
-        "route": "/idea",
+        "route": "/acceptance",
         "contract_id": "capability-decision-chart-route",
         "reason": "contract-delta:capability-decision-chart-route"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-35",
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "visual-fact-map",
+        "reason": "contract-delta:visual-fact-map"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-36",
+        "category": "delta",
+        "route": "/prd",
+        "contract_id": "tooling-visual-six-field-probe",
+        "reason": "contract-delta:tooling-visual-six-field-probe"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-37",
+        "category": "delta",
+        "route": "/review",
+        "contract_id": "visual-delivery-route",
+        "reason": "contract-delta:visual-delivery-route"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-38",
+        "category": "delta",
+        "route": "/acceptance",
+        "contract_id": "visual-formal-package",
+        "reason": "contract-delta:visual-formal-package"
+      },
+      {
+        "suite": "challenge",
+        "id": "CH-39",
+        "category": "delta",
+        "route": "/prd",
+        "contract_id": "visual-redraw-fidelity",
+        "reason": "contract-delta:visual-redraw-fidelity"
       }
     ],
     "controls": [
@@ -259,14 +268,6 @@
         "route": "/acceptance",
         "contract_id": "acceptance-artifact-evidence-freshness",
         "reason": "adjacent-control:/acceptance:acceptance-artifact-evidence-freshness"
-      },
-      {
-        "suite": "stable",
-        "id": 95,
-        "category": "control",
-        "route": "/prompt",
-        "contract_id": "enterprise-adapter-readonly",
-        "reason": "adjacent-control:/prompt:enterprise-adapter-readonly"
       }
     ]
   },
@@ -345,99 +346,91 @@
     },
     {
       "suite": "stable",
-      "id": 97,
-      "category": "delta",
-      "route": "/idea",
-      "contract_id": "idea-ratio-semantic-preservation",
-      "reason": "contract-delta:idea-ratio-semantic-preservation"
-    },
-    {
-      "suite": "stable",
-      "id": 98,
-      "category": "delta",
-      "route": "/review",
-      "contract_id": "fact-anchor-terminal-scan",
-      "reason": "contract-delta:fact-anchor-terminal-scan"
-    },
-    {
-      "suite": "stable",
-      "id": 99,
-      "category": "delta",
-      "route": "/review",
-      "contract_id": "review-relation-evidence-state",
-      "reason": "contract-delta:review-relation-evidence-state"
-    },
-    {
-      "suite": "stable",
-      "id": 100,
-      "category": "delta",
-      "route": "/prd",
-      "contract_id": "prd-ui-state-semantics",
-      "reason": "contract-delta:prd-ui-state-semantics"
-    },
-    {
-      "suite": "stable",
-      "id": 101,
-      "category": "delta",
-      "route": "/acceptance",
-      "contract_id": "acceptance-item-summary-consistency",
-      "reason": "contract-delta:acceptance-item-summary-consistency"
-    },
-    {
-      "suite": "stable",
       "id": 102,
       "category": "delta",
-      "route": "/idea",
+      "route": "/review",
       "contract_id": "capability-decision-chart-route",
       "reason": "contract-delta:capability-decision-chart-route"
     },
     {
-      "suite": "challenge",
-      "id": "CH-29",
-      "category": "delta",
-      "route": "/idea",
-      "contract_id": "idea-ratio-semantic-preservation",
-      "reason": "contract-delta:idea-ratio-semantic-preservation"
-    },
-    {
-      "suite": "challenge",
-      "id": "CH-30",
+      "suite": "stable",
+      "id": 103,
       "category": "delta",
       "route": "/review",
-      "contract_id": "fact-anchor-terminal-scan",
-      "reason": "contract-delta:fact-anchor-terminal-scan"
+      "contract_id": "visual-fact-map",
+      "reason": "contract-delta:visual-fact-map"
     },
     {
-      "suite": "challenge",
-      "id": "CH-31",
-      "category": "delta",
-      "route": "/review",
-      "contract_id": "review-relation-evidence-state",
-      "reason": "contract-delta:review-relation-evidence-state"
-    },
-    {
-      "suite": "challenge",
-      "id": "CH-32",
+      "suite": "stable",
+      "id": 104,
       "category": "delta",
       "route": "/prd",
-      "contract_id": "prd-ui-state-semantics",
-      "reason": "contract-delta:prd-ui-state-semantics"
+      "contract_id": "visual-diagram-state-fidelity",
+      "reason": "contract-delta:visual-diagram-state-fidelity"
     },
     {
-      "suite": "challenge",
-      "id": "CH-33",
+      "suite": "stable",
+      "id": 105,
       "category": "delta",
-      "route": "/acceptance",
-      "contract_id": "acceptance-item-summary-consistency",
-      "reason": "contract-delta:acceptance-item-summary-consistency"
+      "route": "/review",
+      "contract_id": "visual-chart-value-fidelity",
+      "reason": "contract-delta:visual-chart-value-fidelity"
+    },
+    {
+      "suite": "stable",
+      "id": 106,
+      "category": "delta",
+      "route": "/prd",
+      "contract_id": "visual-redraw-fidelity",
+      "reason": "contract-delta:visual-redraw-fidelity"
     },
     {
       "suite": "challenge",
       "id": "CH-34",
       "category": "delta",
-      "route": "/idea",
+      "route": "/acceptance",
       "contract_id": "capability-decision-chart-route",
       "reason": "contract-delta:capability-decision-chart-route"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-35",
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "visual-fact-map",
+      "reason": "contract-delta:visual-fact-map"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-36",
+      "category": "delta",
+      "route": "/prd",
+      "contract_id": "tooling-visual-six-field-probe",
+      "reason": "contract-delta:tooling-visual-six-field-probe"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-37",
+      "category": "delta",
+      "route": "/review",
+      "contract_id": "visual-delivery-route",
+      "reason": "contract-delta:visual-delivery-route"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-38",
+      "category": "delta",
+      "route": "/acceptance",
+      "contract_id": "visual-formal-package",
+      "reason": "contract-delta:visual-formal-package"
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-39",
+      "category": "delta",
+      "route": "/prd",
+      "contract_id": "visual-redraw-fidelity",
+      "reason": "contract-delta:visual-redraw-fidelity"
     },
     {
       "suite": "stable",
@@ -470,14 +463,6 @@
       "route": "/acceptance",
       "contract_id": "acceptance-artifact-evidence-freshness",
       "reason": "adjacent-control:/acceptance:acceptance-artifact-evidence-freshness"
-    },
-    {
-      "suite": "stable",
-      "id": 95,
-      "category": "control",
-      "route": "/prompt",
-      "contract_id": "enterprise-adapter-readonly",
-      "reason": "adjacent-control:/prompt:enterprise-adapter-readonly"
     }
   ]
 }

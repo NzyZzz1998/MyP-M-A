@@ -1,7 +1,7 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "evals": [
     {
       "id": 1,
@@ -1757,6 +1757,71 @@
         "要求 HTML、manifest、桌面和窄屏浏览器验证",
         "要求逐值核对数值、单位、标签和聚合",
         "不可用时降级为表格且不声称图表已生成"
+      ]
+    },
+    {
+      "id": 103,
+      "name": "review_builds_evidence_mapped_semantic_architecture",
+      "prompt": "/review 根据附件为项目建立可核验架构图交付合同。",
+      "expected_output": "应走语义图解通路，只画已确认的 SKILL、reference、能力注册、validator 和合同关系；diagram-design 缓存存在但当前不可调用，不得写成已使用。未知关系保持待确认，并要求 HTML、SVG/PNG、manifest、事实映射与双视口/离线验证。",
+      "files": ["evals/files/v040-review-architecture.md", "evals/files/v040-tool-state.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "选择语义图解而不是数值图表",
+        "只画附件已确认节点和关系",
+        "diagram-design 记录为已安装但当前不可调用且未调用成功",
+        "未知调用关系保持待确认并给核验动作",
+        "要求 HTML、SVG/PNG、manifest 和事实映射",
+        "要求桌面、窄屏、离线和可访问性验证",
+        "不自动发布或上传产物"
+      ]
+    },
+    {
+      "id": 104,
+      "name": "prd_preserves_async_state_edges_in_diagram",
+      "prompt": "/prd 根据附件定义异步导出状态图及正式视觉交付门禁。",
+      "expected_output": "应走语义图解通路，完整保留 draft/queued/running/succeeded/failed/cancelled、显式重试和 available/expired 分层；不得补造 queued 可取消。交付需有逐边映射、HTML、SVG/PNG、manifest、双视口和离线证据。",
+      "files": ["evals/files/v040-prd-workflow.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "状态图保留成功、失败、取消和显式重试",
+        "没有补造 queued 可取消",
+        "任务终态与文件 available/expired 分层",
+        "每条状态边映射到附件来源",
+        "要求 HTML、SVG/PNG、manifest 和双视口验证",
+        "失败或映射不一致时停止正式交付"
+      ]
+    },
+    {
+      "id": 105,
+      "name": "review_preserves_frozen_values_in_decision_chart",
+      "prompt": "/review 根据附件判断并定义一张入口上下文预算图表的正式交付。",
+      "expected_output": "应走决策图表通路，五入口 minimum/formal 数值、单位和来源逐值保持，不生成统一总分；记录 SHA-256、字段映射、HTML、SVG/PNG、manifest、双视口、离线和表格降级。",
+      "files": ["evals/files/v040-frozen-chart.csv"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "选择决策图表并说明要回答的问题",
+        "五入口 minimum/formal 数值逐值保留",
+        "没有把入口预算合成统一总分",
+        "要求来源 SHA-256、字段和单位映射",
+        "要求 HTML、SVG/PNG、manifest 与双视口离线验证",
+        "保留原 CSV 或表格降级"
+      ]
+    },
+    {
+      "id": 106,
+      "name": "prd_redraw_requires_semantic_fidelity_ledger",
+      "prompt": "/prd 将附件 Mermaid 状态图重绘为正式图解，并定义保真验收。",
+      "expected_output": "应逐节点、逐边保留失败、取消、重试和过期语义，生成保真账本；任何审美调整不得删除或改向。要求源哈希、HTML、SVG/PNG、manifest、双视口与离线验证。",
+      "files": ["evals/files/v040-mermaid-source.mmd"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "选择语义图解重绘通路",
+        "保留全部节点、边和方向",
+        "保留失败、取消、重试和过期路径",
+        "要求逐项保真账本和来源 SHA-256",
+        "要求 HTML、SVG/PNG、manifest 与双视口离线验证",
+        "发现语义差异时停止正式交付"
       ]
     }
   ]

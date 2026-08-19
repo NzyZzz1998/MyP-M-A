@@ -1,18 +1,34 @@
 {
   "schema_version": 1,
-  "candidate": "working-tree-v0.39",
+  "candidate": "working-tree-v0.40",
   "entries": [
     {
       "source_file": "SKILL.md",
-      "reason": "兼容 v0.38 历史自测：当该自测只选择 v0.38 合同时，SKILL.md 的旧版本摘要不形成独立行为差量；v0.39 面板已显式选择 fact-anchor-terminal-scan。"
+      "reason": "仅更新版本与按需视觉导航；默认加载为 0，行为由 v0.40 视觉合同和 103～106、CH-35～39 覆盖。"
+    },
+    {
+      "source_file": "references/review.md",
+      "reason": "只增加 visual-delivery 条件路由接缝；关系保真由 visual-fact-map 的 stable 103 与 CH-35 覆盖。"
+    },
+    {
+      "source_file": "references/idea.md",
+      "reason": "只增加冻结数值的条件路由接缝；数值保真与混合路由由 stable 105 和 CH-37 覆盖。"
+    },
+    {
+      "source_file": "references/prd.md",
+      "reason": "只增加正式图解条件路由接缝；状态与重绘合同由 stable 104、106 和 CH-39 覆盖。"
+    },
+    {
+      "source_file": "references/acceptance.md",
+      "reason": "只增加视觉验收轨道接缝；正式交付缺口由 CH-38 覆盖。"
     },
     {
       "source_file": "references/prompt.md",
-      "reason": "本文件只镜像 fact-anchor-terminal-scan 的交接终检；行为由 stable 98 与 CH-30 覆盖，不形成第二个独立合同。"
+      "reason": "沿用历史交接终检，无 v0.40 行为改动。"
     },
     {
       "source_file": "templates/prd-template.md",
-      "reason": "模板只镜像 prd-ui-state-semantics 的当前值、已保存值和默认值字段，不形成独立运行时合同。"
+      "reason": "沿用历史 PRD 模板，无 v0.40 行为改动。"
     }
   ]
 }

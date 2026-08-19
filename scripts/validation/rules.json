@@ -36,6 +36,7 @@
     "scripts/test-v037-fact-fidelity.ps1",
     "scripts/test-v038-evidence-action-adapters.ps1",
     "scripts/test-v039-reliable-delivery.ps1",
+    "scripts/test-v040-visual-delivery.ps1",
     "scripts/validation/validate-capabilities.ps1",
     "scripts/validation/validate-external-benchmark.ps1",
     "scripts/validation/validate-public-cases.ps1"

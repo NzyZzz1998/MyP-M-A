@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-18T22:30:00+08:00",
+  "purpose": "v0.40 双通路可视化交付的稳定回退、开发起点、上下文预算与候选范围冻结",
+  "stable_fallback": {
+    "tag": "v0.38.0",
+    "tag_object": "466b929c061f90f15eb426a018627137c6865001",
+    "peeled_commit": "80e6abe382bf7259c3cf1437a24aa76a20978cc6",
+    "tracked_files": 180,
+    "runtime_git_blobs": {
+      "SKILL.md": "7ec1b246fc768f847081cfe7f041b03b033645cd",
+      "references/review.md": "a1aa3be1e30af81528aff5b54cb5bee11368ceab",
+      "references/idea.md": "8a4e274e8ace3b6fbe2194c1af752c9b66688654",
+      "references/prd.md": "f1b174f116bcd0deda0cdcacbf0c1b2c0a8baf00",
+      "references/acceptance.md": "cecd6be68461074b85bd6b0154ae843b9ba3abfa",
+      "references/prompt.md": "5f087dd400106c09d614aa6fe835c8ab9b2e19d1",
+      "references/tooling.md": "049aa7664c10e30fa5c007c4a73c81eb2412c3ef",
+      "references/capability-routing.md": "91485b722bcb91319032a99871fe3470d6602f97"
+    }
+  },
+  "development_start": {
+    "branch": "main",
+    "head": "1199d987a7c3d506405662882c57a045e8e674ca",
+    "runtime_version": "0.39.0",
+    "runtime_sha256_from_v039_gate": "5f9da7f7d27a717cc93b27491bcb584f688cca70aa915b993b60a1e78bbe60a7",
+    "v039_status": "candidate-promotion-terminated",
+    "v039_tag": "v0.39.0-candidate"
+  },
+  "context_budget_before_runtime_changes": {
+    "skill_chars": 5698,
+    "skill_limit": 5700,
+    "routes": {
+      "/review": { "minimum": 8999, "formal": 10424 },
+      "/idea": { "minimum": 10277, "formal": 11603 },
+      "/prd": { "minimum": 13144, "formal": 15501 },
+      "/acceptance": { "minimum": 17091, "formal": 18731 },
+      "/prompt": { "minimum": 12677, "formal": 14242 }
+    }
+  },
+  "diagram_design_observation": {
+    "cache_installed": true,
+    "current_session_skill_exposed": false,
+    "call_succeeded": false,
+    "package_version": "2.5.1",
+    "skill_metadata_version": "2.4",
+    "commit": "9ec2497b85388ae6b31bd09c33ee11a71defcbca",
+    "license": "MIT",
+    "license_sha256": "895bfb578a43936a49792ccfea515b0cf1f0f10ac9046186bc267ffc3be480e5",
+    "skill_sha256": "8fec597910d14d07df1e156153334bf26841fd1d5f2c10ef8910f006f334c6f9",
+    "note": "缓存与身份已本地读取；当前会话未暴露 diagram-design skill，不能记为可调用或调用成功。"
+  },
+  "candidate_scope": [
+    "SKILL.md",
+    "README.md",
+    "CHANGELOG.md",
+    "references/visual-delivery.md",
+    "references/chart-delivery.md",
+    "references/capability-routing.md",
+    "references/tooling.md",
+    "references/review.md",
+    "references/idea.md",
+    "references/prd.md",
+    "references/acceptance.md",
+    "capabilities/visualization/decision-chart-adapter.md",
+    "capabilities/visualization/decision-diagram-adapter.md",
+    "capabilities/registry.json",
+    "templates/visual-manifest-template.json",
+    "templates/visual-fidelity-ledger-template.md",
+    "evals/evals.json",
+    "evals/challenge-evals.json",
+    "evals/contract-registry.json",
+    "evals/eval-lifecycle.json",
+    "evals/release-panel.json",
+    "evals/files/v040-*",
+    "scripts/test-v040-visual-delivery.ps1",
+    "scripts/validation/rules.json",
+    "notes/v0.39-*",
+    "notes/v0.40-*",
+    "notes/dev_plan_v0.39.md",
+    "notes/dev_log_v0.39.md",
+    "notes/progress_v0.39.md",
+    "notes/dev_plan_v0.40.md",
+    "notes/dev_log_v0.40.md",
+    "notes/progress_v0.40.md",
+    "notes/evaluation-history.md",
+    "notes/mypm-roadmap.md",
+    "notes/skill-improvement-backlog.md"
+  ],
+  "approved_scope_additions": [
+    {
+      "path": "evals/release-panel-waivers.json",
+      "approved_at": "2026-08-18T23:10:00+08:00",
+      "reason": "发布面板候选身份由 working-tree-v0.39 切换为 working-tree-v0.40，必须同步显式 waiver 与覆盖理由；不新增运行时能力。"
+    },
+    {
+      "path": "scripts/validate-skill.ps1",
+      "approved_at": "2026-08-18T23:12:00+08:00",
+      "reason": "将 v0.40 专用自测接入 Strict 校验入口；不改变五入口运行时行为。"
+    }
+  ],
+  "scope_exclusions": [
+    "新增用户入口",
+    "修复或扩写 v0.39 的统计与异步后端运行时规则",
+    "外部服务写入",
+    "数据库或生产配置",
+    "提交、推送、tag 或 Release"
+  ]
+}

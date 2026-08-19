@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "_contract": "contract:visual-formal-package",
+  "artifact_id": "VIS-001",
+  "status": "draft",
+  "route": "/review",
+  "visual_type": "semantic-diagram",
+  "semantic_pattern": "architecture",
+  "decision_question": "待填写",
+  "audience": "待填写",
+  "source": {
+    "objects": [
+      {
+        "path_or_id": "待填写",
+        "version": "待填写",
+        "locator": "待填写",
+        "sha256": "待填写"
+      }
+    ],
+    "read_at": "待填写"
+  },
+  "tool_probe": {
+    "name": "待探测",
+    "installed": null,
+    "callable": null,
+    "call_succeeded": null,
+    "version": null,
+    "commit": null,
+    "license": null,
+    "probed_at": null,
+    "evidence": null
+  },
+  "fact_map": {
+    "mode": "semantic",
+    "facts": [
+      {
+        "fact_id": "F-001",
+        "source_locator": "待填写",
+        "visual_element": "node-or-edge-id",
+        "element_type": "node",
+        "evidence_state": "confirmed",
+        "value_or_relation": "待填写"
+      }
+    ],
+    "assumptions": [],
+    "unknowns": []
+  },
+  "files": {
+    "html": "待填写.html",
+    "svg": "待填写.svg",
+    "png": "待填写.png",
+    "desktop_screenshot": "待填写-desktop.png",
+    "narrow_screenshot": "待填写-narrow.png",
+    "fidelity_ledger": null,
+    "sha256": {
+      "html": "待填写",
+      "svg": "待填写",
+      "png": "待填写",
+      "desktop_screenshot": "待填写",
+      "narrow_screenshot": "待填写",
+      "fidelity_ledger": null
+    }
+  },
+  "browser_verification": {
+    "desktop": {"viewport": "1440x900", "overflow": false, "overlap": false, "text_readable": true},
+    "narrow": {"viewport": "390x844", "overflow": false, "overlap": false, "text_readable": true},
+    "console_errors": 0,
+    "page_errors": 0,
+    "resource_errors": 0,
+    "offline_core_visible": true
+  },
+  "accessibility": {
+    "alt_text": "待填写",
+    "color_is_only_signal": false,
+    "static_fallback": true
+  },
+  "external_resources": [],
+  "limitations": [],
+  "fallback": "待填写"
+}

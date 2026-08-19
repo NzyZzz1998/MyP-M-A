@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> Queued: confirm
+    Queued --> Running: worker_claim
+    Running --> Succeeded: complete
+    Running --> Failed: error_or_timeout
+    Running --> Cancelled: user_cancel
+    Failed --> Queued: explicit_retry
+    Succeeded --> Available: file_ready
+    Available --> Expired: retention_elapsed

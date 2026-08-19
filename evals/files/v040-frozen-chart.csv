@@ -1,0 +1,6 @@
+route,minimum_chars,formal_chars,source
+/review,8999,10424,v0.40-baseline.json
+/idea,10277,11603,v0.40-baseline.json
+/prd,13144,15501,v0.40-baseline.json
+/acceptance,17091,18731,v0.40-baseline.json
+/prompt,12677,14242,v0.40-baseline.json

@@ -2,6 +2,8 @@
 
 本文件是 `/review`、`/idea`、`/prd` 与发布后 `/acceptance` 的可选能力包。只有输入涉及目标市场、细分用户、定位、替代方案、竞争策略、定价、商业模式、GTM、渠道或增长时读取。它帮助做选择，不新增入口，也不把框架清单当作战略。
 
+未分群的总体证据只能支持总体结论，不能改写成“每类用户都成立”；需要分群判断时先补分群字段与样本。
+
 <!-- contract:strategy-gtm-method-selection -->
 <!-- contract:strategy-gtm-evidence-boundary -->
 <!-- contract:strategy-gtm-choice-and-exclusion -->

@@ -3,6 +3,7 @@
 <!-- contract:tooling-code-review-scanner -->
 <!-- contract:artifact-brand-isolation -->
 <!-- contract:tooling-capability-state -->
+<!-- contract:tooling-visual-six-field-probe -->
 
 本文件定义 MyP-M-A 四个入口如何使用外部工具、插件和本地验证能力。工具不是为了让输出显得复杂，而是为了让产品判断、评审、PRD 和验收更有证据。
 
@@ -18,11 +19,11 @@
 - 涉及发布、验收、回滚、数据迁移、配置兼容时，工具检查优先于主观判断。
 - 先识别当前会话真实可用的工具、skill 和插件，不把文档中的能力名称当作已经安装。
 - 只读检查可以在用户给定范围内主动执行；发送消息、修改远端、发布、推送、打 tag、改生产数据、产生费用等外部写操作必须等待用户授权。
-- 产品页面方案、结构对比与原型交付由 MyP-M-A 当前阶段负责；外部 brainstorming 只能提供内部分析材料，不得把 `.superpowers` 等工具目录作为正式交付路径。面向最终用户的 HTML 原型、操作说明、报告页面和其他可视化产物使用当前项目品牌；MyP-M-A 自身的评测页面使用 MyP-M-A。除非用户明确要求做能力归因或集成对比，不在页面标题、导航、徽标、按钮或说明文案中展示 Superpowers 等外部 skill、插件或执行框架名称。真实调用记录保留在证据附录或内部元数据中，不污染产品界面；评测原始回答不得为隐藏品牌而改写。
+- 产品页面、原型和可视化交付使用当前项目品牌；MyP-M-A 评测页使用 MyP-M-A。外部 brainstorming/skill 只作内部材料，不把 `.superpowers` 等目录或品牌写进正式产物；真实调用记在证据附录或内部元数据，不改写评测原文。
 
 ## 能力探测与降级
 
-工具能力必须区分三层事实：清单中出现只表示“已安装/已知”；当前会话暴露可调用接口才表示“可调用”；只有针对本轮对象的最小探测成功，才能写“可用”并引用直接证据。最终状态统一为：
+工具能力分开记录 `installed / callable / call_succeeded / version / commit / license`。清单出现只表示已知或已安装；当前会话暴露接口才可调用；本轮最小探测成功才可写调用成功。缺字段写未知，不互相推导。最终状态统一为：
 
 | 状态 | 判定 | 后续动作 |
 | --- | --- | --- |
@@ -61,7 +62,7 @@
 | Web 搜索 | 查竞品、市场信号、公开文档、同类产品做法 | `/idea`、必要时 `/prd` |
 | 文档/PDF/图片/表格工具 | 读取 PRD、截图反馈、用户访谈、数据表、验收记录 | `/idea`、`/review`、`/prd`、`/acceptance` |
 | 数据库/数据分析工具 | 读取 schema、样本数据、字段分布、指标口径、漏斗和错误率 | `/idea`、`/prd`、必要时 `/acceptance` |
-| 图表/报告 Skill | 把已验证数据表达为 HTML 图表；先探测 installed/callable/succeeded、来源 commit、许可证用途和外部资源 | `/idea`、`/review`、`/acceptance` 按需 |
+| 图表/图解 Skill | 把已验证事实表达为图表或语义图解；探测六字段与外部资源 | 四入口按需 |
 | UI/UX / frontend-design 类 skill | 组件规范、高保真原型、视觉精修、页面结构和交互状态 | `/prd`、`/review` |
 | Lark/飞书工具 | 读取或写入协作文档、需求池、任务、会议纪要、表格、发布说明 | 四个入口均可按用户环境使用 |
 | Vercel/Netlify/部署工具 | 检查部署、Preview、环境变量、发布状态、回滚 | `/acceptance`，必要时 `/review` |
@@ -70,7 +71,7 @@
 
 企业协作或外部数据取证不绑定具体插件。需要跨系统对齐对象或读取产品指标时，按需读取 `references/enterprise-adapters.md`：先生成只读证据信封，再把事实带回当前入口。插件已安装不代表对象可读；读取成功也不授权评论、建任务、改文档、推送或更新仪表盘。
 
-图表交付按需读取 `references/chart-delivery.md`。Lieflat Charts 仅是可选实现：仓库存在不等于已安装，已安装不等于当前可调用，调用成功也不等于数据保真或许可适用。其 PolyForm Noncommercial 许可不覆盖未获单独授权的商业用途；不满足时降级为表格、Mermaid 或已有可商用能力，且不得复制外部模板进 MyP-M-A。
+正式出图读 `references/visual-delivery.md`，数值图再读 `chart-delivery.md`。diagram-design 最近缓存身份为 `2.5.5` / commit `29917724f832f0dff2faf4ec583c6c603bed11ba` / MIT，但 skill frontmatter 仍为 `2.4`；每轮必须重探实际缓存、当前可调用性与调用结果。Lieflat 为 PolyForm Noncommercial；商业任务无单独授权时禁用并降级，不复制模板。
 
 ## 四个入口的工具策略
 

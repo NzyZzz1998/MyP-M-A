@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1080" viewBox="0 0 720 1080" role="img" aria-labelledby="title desc">
+  <title id="title">MyP-M-A 产品闭环移动版</title>
+  <desc id="desc">项目材料经过 Review、Idea、PRD、开发承接和 Acceptance，Prompt 在任意阶段压缩下一步交接。</desc>
+
+  <rect width="720" height="1080" rx="20" fill="#F7F2E8"/>
+  <rect x="1" y="1" width="718" height="1078" rx="19" fill="none" stroke="#D9D0C0" stroke-width="2"/>
+
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+    <text x="44" y="60" fill="#17231F" font-size="32" font-weight="750">从输入到发布判断</text>
+    <text x="44" y="96" fill="#6C746F" font-size="20">每一步只回答当前阶段的问题。</text>
+
+    <line x1="80" y1="148" x2="80" y2="776" stroke="#7C8C85" stroke-width="4"/>
+
+    <g transform="translate(44 124)">
+      <circle cx="36" cy="36" r="32" fill="#EEE7D9" stroke="#C9BEAA" stroke-width="2"/>
+      <text x="28" y="44" fill="#8A6B3B" font-size="24" font-weight="700">0</text>
+      <text x="92" y="28" fill="#17231F" font-size="24" font-weight="700">项目与材料</text>
+      <text x="92" y="60" fill="#5D6762" font-size="20">路径 · 反馈 · PRD · 截图 · 日志 · 产物</text>
+    </g>
+
+    <g transform="translate(44 248)">
+      <circle cx="36" cy="36" r="32" fill="#E6F3EE" stroke="#1F7D61" stroke-width="2"/>
+      <text x="28" y="44" fill="#1F7D61" font-size="24" font-weight="700">1</text>
+      <text x="92" y="28" fill="#1F7D61" font-size="20" font-weight="700">/review</text>
+      <text x="92" y="60" fill="#17231F" font-size="24" font-weight="700">建立地图，定位问题与影响</text>
+    </g>
+
+    <g transform="translate(44 372)">
+      <circle cx="36" cy="36" r="32" fill="#FFF0D6" stroke="#D89432" stroke-width="2"/>
+      <text x="28" y="44" fill="#B76A18" font-size="24" font-weight="700">2</text>
+      <text x="92" y="28" fill="#B76A18" font-size="20" font-weight="700">/idea</text>
+      <text x="92" y="60" fill="#17231F" font-size="24" font-weight="700">判断真假、价值与时机</text>
+    </g>
+
+    <g transform="translate(44 496)">
+      <circle cx="36" cy="36" r="32" fill="#E6F3EE" stroke="#1F7D61" stroke-width="2"/>
+      <text x="28" y="44" fill="#1F7D61" font-size="24" font-weight="700">3</text>
+      <text x="92" y="28" fill="#1F7D61" font-size="20" font-weight="700">/prd</text>
+      <text x="92" y="60" fill="#17231F" font-size="24" font-weight="700">锁定范围、状态、原型与验收</text>
+    </g>
+
+    <g transform="translate(44 620)">
+      <circle cx="36" cy="36" r="32" fill="#14221F" stroke="#14221F" stroke-width="2"/>
+      <text x="28" y="44" fill="#F7F2E8" font-size="24" font-weight="700">4</text>
+      <text x="92" y="28" fill="#1F7D61" font-size="20" font-weight="700">HANDOFF</text>
+      <text x="92" y="60" fill="#17231F" font-size="24" font-weight="700">计划、进度与开发日志</text>
+    </g>
+
+    <g transform="translate(44 744)">
+      <circle cx="36" cy="36" r="32" fill="#14221F" stroke="#D89432" stroke-width="2"/>
+      <text x="28" y="44" fill="#F7F2E8" font-size="24" font-weight="700">5</text>
+      <text x="92" y="28" fill="#B76A18" font-size="20" font-weight="700">/acceptance</text>
+      <text x="92" y="60" fill="#17231F" font-size="24" font-weight="700">用真实产物决定能否发布</text>
+    </g>
+
+    <rect x="44" y="868" width="632" height="72" rx="8" fill="#FFF8EC" stroke="#D89432"/>
+    <text x="64" y="900" fill="#B76A18" font-size="21" font-weight="700">/prompt</text>
+    <text x="64" y="928" fill="#5D6762" font-size="20">压缩下一步交接，不重做已确认事实</text>
+
+    <line x1="44" y1="984" x2="676" y2="984" stroke="#C9BEAA" stroke-width="2"/>
+    <text x="44" y="1026" fill="#8A6B3B" font-size="16" font-weight="700" letter-spacing="1">EVIDENCE RAIL</text>
+    <text x="220" y="1028" fill="#17231F" font-size="20" font-weight="700">事实源 → ID → 实施 → 证据 → 结论</text>
+  </g>
+</svg>

@@ -2,7 +2,7 @@
 
 ## 追踪信息
 
-- 当前状态：实现完成，独立验收未通过，保持 Candidate
+- 当前状态：实现完成、独立验收未通过，Candidate 晋升已终止
 - 目标版本：`0.39.0`
 - 上游来源：`notes/v0.39-reliable-delivery-prd.md`
 - 下游承接：`notes/progress_v0.39.md`、独立 `/acceptance`

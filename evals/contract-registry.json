@@ -680,6 +680,76 @@
       "challenge_evals": ["CH-34"],
       "trigger_evals": [],
       "release_core": false
+    },
+    {
+      "contract_id": "visual-delivery-route",
+      "source_file": "references/capability-routing.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
+      "risk": "critical",
+      "stable_evals": [],
+      "challenge_evals": ["CH-37"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "visual-fact-map",
+      "source_file": "references/visual-delivery.md",
+      "routes": ["/review", "/prd"],
+      "risk": "critical",
+      "stable_evals": [103],
+      "challenge_evals": ["CH-35"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "visual-diagram-state-fidelity",
+      "source_file": "references/visual-delivery.md",
+      "routes": ["/prd"],
+      "risk": "critical",
+      "stable_evals": [104],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "visual-chart-value-fidelity",
+      "source_file": "references/chart-delivery.md",
+      "routes": ["/idea", "/review", "/acceptance"],
+      "risk": "critical",
+      "stable_evals": [105],
+      "challenge_evals": [],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "tooling-visual-six-field-probe",
+      "source_file": "references/tooling.md",
+      "routes": ["/review", "/idea", "/prd", "/acceptance"],
+      "risk": "critical",
+      "stable_evals": [],
+      "challenge_evals": ["CH-36"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "visual-formal-package",
+      "source_file": "templates/visual-manifest-template.json",
+      "routes": ["/review", "/prd", "/acceptance"],
+      "risk": "critical",
+      "stable_evals": [],
+      "challenge_evals": ["CH-38"],
+      "trigger_evals": [],
+      "release_core": false
+    },
+    {
+      "contract_id": "visual-redraw-fidelity",
+      "source_file": "templates/visual-fidelity-ledger-template.md",
+      "routes": ["/review", "/prd", "/acceptance"],
+      "risk": "critical",
+      "stable_evals": [106],
+      "challenge_evals": ["CH-39"],
+      "trigger_evals": [],
+      "release_core": false
     }
   ]
 }

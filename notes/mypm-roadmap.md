@@ -12,14 +12,14 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.39 已完成实现、图表 pilot 和多轮定向复验；Candidate 记录提交 `05cab0e` 已同步远端，但最新 EB-03/08 多样本门禁仍出现 3 项关键违规，正确性、证据纪律和完整性均未稳定关闭。v0.38 只读快照继续作为稳定回退。
-<!-- project-status: version=0.39.0; state=candidate -->
+当前阶段判断：v0.40 的 4 个 P1、route 漂移、行为合同、M5、动态复验和最终独立验收均已关闭；当前为 Stable（本地待提交），v0.38.0 继续作为远端回退。
+<!-- project-status: version=0.40.0; state=stable-local-pending -->
 
-当前目录口径：稳定集 `待评测 / 803`，挑战集 `待评测 / 290`；局部定向结果不得改写为全量通过。
+当前目录口径：稳定集 `未全量重跑 / 832`，挑战集 `未全量重跑 / 327`；局部定向结果不得改写为全量通过。
 
 ### R2.29 v0.39 事实终检、可靠交付与决策图表 pilot
 
-状态：Candidate；机械门禁与图表 pilot 通过，最新多样本行为门禁中的正确性、证据纪律和完整性均未达到 Stable 条件
+状态：Candidate 晋升已终止；机械门禁与图表 pilot 通过，但最新多样本行为门禁中的正确性、证据纪律和完整性未达到 Stable 条件
 
 - 事实源：`notes/v0.39-reliable-delivery-prd.md`、`notes/dev_plan_v0.39.md`、`notes/progress_v0.39.md`、`notes/evaluation-history.md`。
 - 首轮失败事实保留；事实优先修复后，受影响任务 12/12 有效，EB-01 和 EB-04 的关键事实错误均未复现。
@@ -27,20 +27,22 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - Lieflat 图表 pilot 的逐值、双视口、离线和浏览器检查通过；非商业许可和上游 validator 风险使其保持可选 pilot。
 - 当前候选已以 SHA-256 `5f9da7f7d27a717cc93b27491bcb584f688cca70aa915b993b60a1e78bbe60a7` 重新冻结；EB-03/08 各 3 次复验为 6/6 有效，但出现 3 项关键违规，不能晋升 Stable。
 - Candidate 记录提交 `05cab0e` 与 tag `v0.39.0-candidate` 已同步远端，仅用于保持版本历史连续；未创建 Release。
-- 停止继续追分和堆叠局部规则。只有维护者书面终止该 Candidate，或批准一次有限结构性重设计并通过门禁后，才进入 v0.40 运行时实现。
+- 已停止继续追分和堆叠局部规则；该 Candidate 不再申请 Stable，也不被 v0.40 吸收为稳定基线。
 
 ### R2.30 v0.40 双通路可视化交付
 
-状态：Planned；必须在 v0.39 晋升 Stable，或书面终止 Candidate 并锁定回退版本后启动
+状态：Stable（本地待提交）；M0～M6、行为门禁、真实复用和修复后独立验收通过
 
-- 事实源：`notes/v0.40-visual-delivery-plan.md`。
+- 事实源：`notes/v0.40-visual-delivery-plan.md`、`notes/v0.40-visual-delivery-prd.md`、`notes/dev_plan_v0.40.md`、`notes/progress_v0.40.md`。
 - 保留“决策图表”和“语义图解”两条独立路由，前者服务冻结数值，后者服务节点、关系、状态、顺序和职责。
-- 计划引入 MIT 许可的 diagram-design 作为可选实现；本地缓存版本为 `2.5.1`、commit 为 `9ec2497b85388ae6b31bd09c33ee11a71defcbca`，当前会话可调用性仍待验证。
+- diagram-design 保持 MIT 许可的可选实现；当前缓存包为 `2.5.5`、skill metadata 为 `2.4`、commit 为 `29917724f832f0dff2faf4ec583c6c603bed11ba`，当前会话可调用性仍按探针记录。
 - Lieflat Charts 保持非商业许可约束下的可选 pilot，不再承担唯一图表实现。
 - 正式交付要求源 HTML、SVG/PNG、manifest、事实映射、双视口、离线、可访问性和重绘保真验证。
 - 不新增入口，不形成外部工具硬依赖，不以视觉质量替代正确性、证据和完整性。
+- 首轮同题行为为 `52/66 -> 63/66`、候选 5 胜 2 负 2 平；修复后稳定组 `29/29`，挑战整组 `36/37`，唯一失效 CH-37 定向 `7/7`，EB-05/12 `8/8`。
+- 最终独立复验确认选择性继承、M5、回退和机械门禁闭合，阻塞项 0；完整稳定集与挑战集未重跑。
 
-## 当前稳定版本（已同步远端）
+## 远端稳定回退版本
 
 ### R2.28 v0.38 证据行动与企业只读适配
 
