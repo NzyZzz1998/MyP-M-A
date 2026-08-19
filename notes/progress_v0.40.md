@@ -2,7 +2,7 @@
 
 ## 状态总览
 
-- 目标版本：`0.40.0 Stable（main 已同步，tag 待审核）`
+- 目标版本：`0.40.0 Stable（main 与 tag 已同步）`
 - 当前阶段：M0～M6、修复后独立验收、提交与远端同步完成；等待 tag 审核
 - 来源 PRD：`notes/v0.40-visual-delivery-prd.md`
 - 实施计划：`notes/dev_plan_v0.40.md`

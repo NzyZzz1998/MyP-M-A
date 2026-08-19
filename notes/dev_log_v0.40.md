@@ -4,7 +4,7 @@
 
 ## 基本信息
 
-- 版本：`0.40.0 Stable（main 已同步，tag 待审核）`
+- 版本：`0.40.0 Stable（main 与 tag 已同步）`
 - PRD：`notes/v0.40-visual-delivery-prd.md`
 - dev plan：`notes/dev_plan_v0.40.md`
 - progress：`notes/progress_v0.40.md`

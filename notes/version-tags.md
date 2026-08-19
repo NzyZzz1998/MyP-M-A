@@ -27,11 +27,12 @@
 | `v0.35.0` | `c8af239` | Stable 快照 | README 治理后的最终快照 |
 | `v0.36.0` | `83e619c` | Stable 快照 | 远端状态提交 |
 | `v0.37.0-archive` | `dd9cdc7` | 归档候选 | 未独立发布，随后被 v0.38 吸收 |
-| `v0.38.0` | `80e6abe` | Stable 快照 | 当前稳定回退版本 |
+| `v0.38.0` | `80e6abe` | Stable 快照 | 已验证历史回退版本 |
 | `v0.39.0-candidate` | `67ca5f1` | Candidate | 只保存候选历史，不表示 Stable 或 Release |
+| `v0.40.0` | `3bdae56` | Stable 快照 | README 最终审定后的远端版本 tag |
 
 ## 边界
 
-- v0.40 只有规划文档，没有运行时版本，不创建 tag。
+- `v0.40.0` annotated tag 已同步远端；GitHub Release 尚未创建。
 - 本索引不补造不存在的 v0.1～v0.14，也不把 v0.21 写成独立源码快照。
 - 已推送 tag 不移动、不覆盖；后续 tag、Release 与仓库发布继续分别授权。
