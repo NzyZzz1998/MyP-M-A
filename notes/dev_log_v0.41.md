@@ -37,4 +37,4 @@
 - B-01～B-05 全部关闭：release-panel route 与题面一致，当前运行时以 45 文件 SHA-256 manifest 锁定，三项题面变化完整披露，预算负例与真实目标通过，v0.40 tag 与 v0.41 开发起点分离。
 - PowerShell 7 与 Windows PowerShell 5.1 Strict 均通过，`warnings=0`；v0.38、v0.40、v0.41 兼容自测和 `git diff --check` 通过。
 - 第二轮独立只读验收结论为通过，Stable 阻塞项 0；完整稳定集、挑战集和跨模型未重跑的限制保留。
-- 状态晋升为 v0.41 Stable（本地待提交）。
+- 状态晋升为 v0.41 Stable；实现提交为 `5e74373`，随后单独同步本地提交状态。推送、tag 与 Release 未执行。

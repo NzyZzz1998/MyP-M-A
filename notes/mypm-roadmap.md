@@ -12,14 +12,14 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.41 已完成交付模式、职责边界、双模板、跨入口继承、评测治理和两轮独立验收，当前为 Stable（本地待提交）。v0.40.0 保持稳定回退。
-<!-- project-status: version=0.41.0; state=stable-local-pending -->
+当前阶段判断：v0.41 已完成交付模式、职责边界、双模板、跨入口继承、评测治理和两轮独立验收，当前为 Stable（本地已提交）。v0.40.0 保持稳定回退。
+<!-- project-status: version=0.41.0; state=local-committed -->
 
 当前目录口径：稳定集 `未全量重跑 / 883`，挑战集 `未全量重跑 / 376`；局部定向结果不得改写为全量通过。
 
 ### R2.31 v0.41 团队协作边界与自适应交付
 
-状态：Stable（本地待提交）；运行时、模板、合同、用例、双 PowerShell Strict、上下文预算、定向行为 A/B 和第二轮独立验收均已完成
+状态：Stable（本地已提交）；实现提交 `5e74373`，运行时、模板、合同、用例、双 PowerShell Strict、上下文预算、定向行为 A/B 和第二轮独立验收均已完成
 
 - 事实源：`notes/v0.41-team-boundary-prd.md`、`notes/dev_plan_v0.41.md`、`notes/progress_v0.41.md`、`notes/v0.41-evidence-impact.md`。
 - 不新增入口；以 `delivery_mode` 在团队协作型与 Vibe Coding 全流程型之间解析交付深度。
