@@ -125,7 +125,8 @@
       "route": "/prd",
       "minimum_files": [
         "SKILL.md",
-        "references/prd.md"
+        "references/prd.md",
+        "references/work-mode-boundary.md"
       ],
       "formal_files": [
         "templates/prd-template.md"

@@ -184,7 +184,8 @@ $capabilities = Read-Utf8 'capabilities/registry.json' | ConvertFrom-Json
 $releasePanel = Read-Utf8 'evals/release-panel.json' | ConvertFrom-Json
 $template = Read-Utf8 'templates/visual-manifest-template.json' | ConvertFrom-Json
 
-Assert-True $skill.Contains('version: "0.40.0"') 'SKILL.md version must be 0.40.0'
+$currentVersion = [regex]::Match($skill, 'version:\s*"([^"]+)"').Groups[1].Value
+Assert-True ($currentVersion -in @('0.40.0', '0.41.0')) 'v0.40 historical self-test supports current versions 0.40.0 and 0.41.0'
 foreach ($contract in @('visual-delivery-route', 'visual-fact-map', 'visual-formal-package', 'visual-redraw-fidelity')) {
     Assert-True $visual.Contains("contract:$contract") "Visual reference is missing contract: $contract"
 }
@@ -203,13 +204,15 @@ foreach ($path in @('references/visual-delivery.md', 'references/chart-delivery.
 }
 
 $budget = & (Join-Path $root 'scripts/measure-context-budget.ps1') | ConvertFrom-Json
-foreach ($route in @($budget.routes)) {
-    $frozen = $baseline.context_budget_before_runtime_changes.routes.PSObject.Properties[$route.route].Value
-    Assert-True ([int]$route.minimum.normalized_chars -le [int]$frozen.minimum) "Minimum context grew for $($route.route)"
-    Assert-True ([int]$route.formal.normalized_chars -le [int]$frozen.formal) "Formal context grew for $($route.route)"
+if ($currentVersion -eq '0.40.0') {
+    foreach ($route in @($budget.routes)) {
+        $frozen = $baseline.context_budget_before_runtime_changes.routes.PSObject.Properties[$route.route].Value
+        Assert-True ([int]$route.minimum.normalized_chars -le [int]$frozen.minimum) "Minimum context grew for $($route.route)"
+        Assert-True ([int]$route.formal.normalized_chars -le [int]$frozen.formal) "Formal context grew for $($route.route)"
+    }
+    $normalizedSkill = (Read-Utf8 'SKILL.md') -replace "`r`n?", "`n"
+    Assert-True ($normalizedSkill.Length -le [int]$baseline.context_budget_before_runtime_changes.skill_limit) 'SKILL.md exceeds frozen limit'
 }
-$normalizedSkill = (Read-Utf8 'SKILL.md') -replace "`r`n?", "`n"
-Assert-True ($normalizedSkill.Length -le [int]$baseline.context_budget_before_runtime_changes.skill_limit) 'SKILL.md exceeds frozen limit'
 
 $diagramProbe = $baseline.diagram_design_observation
 Assert-True ([bool]$diagramProbe.cache_installed -and -not [bool]$diagramProbe.current_session_skill_exposed -and -not [bool]$diagramProbe.call_succeeded) 'Frozen M0 diagram-design observation changed'
@@ -337,4 +340,4 @@ foreach ($path in @($ManifestPath)) {
     if ($manifestErrors.Count -gt 0) { throw "Visual manifest failed: $resolvedManifest`n$($manifestErrors -join "`n")" }
 }
 
-Write-Host 'v0.40 visual-delivery self-test passed: routes=2 stable=4 challenge=5 capabilities=2 default-load=0 mechanical=1 negative=8 budget-growth=0'
+Write-Host "v0.40 visual-delivery self-test passed: current=$currentVersion routes=2 stable=4 challenge=5 capabilities=2 default-load=0 mechanical=1 negative=8"

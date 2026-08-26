@@ -104,11 +104,17 @@ function Get-ContractEvalEntries {
     param($Contract, [string]$ReasonPrefix)
 
     $entries = [System.Collections.Generic.List[object]]::new()
-    $route = if (@($Contract.routes).Count -gt 0) { [string]$Contract.routes[0] } else { '' }
+    $fallbackRoute = if (@($Contract.routes).Count -gt 0) { [string]$Contract.routes[0] } else { '' }
     foreach ($id in @($Contract.stable_evals)) {
+        $eval = @($stable.evals | Where-Object { [string]$_.id -eq [string]$id })
+        $match = if ($eval.Count -eq 1) { [regex]::Match([string]$eval[0].prompt, '^/(review|idea|prd|acceptance|prompt)\b') } else { $null }
+        $route = if ($null -ne $match -and $match.Success) { $match.Value } else { $fallbackRoute }
         $entries.Add((New-SelectionEntry -Suite 'stable' -Id $id -Category 'delta' -Route $route -ContractId ([string]$Contract.contract_id) -Reason "$ReasonPrefix$($Contract.contract_id)"))
     }
     foreach ($id in @($Contract.challenge_evals)) {
+        $eval = @($challenge.evals | Where-Object { [string]$_.id -eq [string]$id })
+        $match = if ($eval.Count -eq 1) { [regex]::Match([string]$eval[0].prompt, '^/(review|idea|prd|acceptance|prompt)\b') } else { $null }
+        $route = if ($null -ne $match -and $match.Success) { $match.Value } else { $fallbackRoute }
         $entries.Add((New-SelectionEntry -Suite 'challenge' -Id $id -Category 'delta' -Route $route -ContractId ([string]$Contract.contract_id) -Reason "$ReasonPrefix$($Contract.contract_id)"))
     }
     return @($entries)
@@ -276,7 +282,6 @@ if (-not $hasDynamicInput) {
         foreach ($contract in $controlContracts) {
             foreach ($candidate in @(Get-SortedSelection -Entries @(Get-ContractEvalEntries -Contract $contract -ReasonPrefix "adjacent-control:$route`:"))) {
                 $candidate.category = 'control'
-                $candidate.route = $route
                 if (Add-UniqueSelection -Target $controlEntries -Seen $seen -Entry $candidate) {
                     $added = $true
                     break

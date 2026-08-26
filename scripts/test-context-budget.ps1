@@ -56,7 +56,7 @@ try {
       "profiles": {"extended": {"files": ["references/profile.md"]}},
       "baseline": {
         "minimum": {"normalized_chars": 7, "utf8_bytes": 11},
-        "formal": {"normalized_chars": 8, "utf8_bytes": 12},
+        "formal": {"normalized_chars": 9, "utf8_bytes": 13},
         "profiles": {"extended": {"normalized_chars": 9, "utf8_bytes": 13}}
       },
       "target": {
@@ -87,6 +87,9 @@ try {
     if ($firstData.routes[0].minimum.normalized_chars -ne 7 -or $firstData.routes[0].formal.normalized_chars -ne 8) {
         throw 'Context budget fixture totals are incorrect.'
     }
+    if ([string]$firstData.routes[0].formal.comparison.status -ne 'target_not_met') {
+        throw 'Formal reduction below its target must be reported as target_not_met.'
+    }
     & $measureScript -RootPath $tempRoot -ManifestFile $manifestPath -OutputPath $first -Format Json
     if (-not (Test-Path -LiteralPath $first -PathType Leaf)) {
         throw 'Atomic overwrite did not preserve the output file.'
@@ -107,7 +110,7 @@ try {
     Assert-Throws -Name 'unknown route' -Action { & $measureScript -RootPath $tempRoot -ManifestFile $manifestPath -Route '/missing' | Out-Null }
     Assert-Throws -Name 'unknown baseline' -Action { & $measureScript -RootPath $tempRoot -ManifestFile $manifestPath -BaselineVersion 'other' | Out-Null }
 
-    Write-Host 'Context budget self-test passed: cases=6'
+    Write-Host 'Context budget self-test passed: cases=7'
 } finally {
     if (Test-Path -LiteralPath $tempRoot) {
         Remove-Item -LiteralPath $tempRoot -Recurse -Force

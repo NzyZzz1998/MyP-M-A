@@ -140,7 +140,7 @@ function New-Comparison {
         $status = 'baseline'
     } elseif ($charPercent -gt $MaxIncreasePercent) {
         $status = 'increase_exceeded'
-    } elseif ($null -ne $ReductionTargetPercent -and $reductionPercent -lt $ReductionTargetPercent.Value) {
+    } elseif ($null -ne $ReductionTargetPercent -and $reductionPercent -lt [double]$ReductionTargetPercent) {
         $status = 'target_not_met'
     } elseif ($null -ne $ReductionTargetPercent) {
         $status = 'target_met'

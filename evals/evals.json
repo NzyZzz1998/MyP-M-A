@@ -1,7 +1,7 @@
 {
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "evals": [
     {
       "id": 1,
@@ -1822,6 +1822,129 @@
         "要求逐项保真账本和来源 SHA-256",
         "要求 HTML、SVG/PNG、manifest 与双视口离线验证",
         "发现语义差异时停止正式交付"
+      ]
+    },
+    {
+      "id": 107,
+      "name": "prd_company_context_defaults_to_team_pm",
+      "prompt": "/prd 我在公司负责客服工单产品，设计、研发和测试都有独立负责人。请基于已确认的批量关闭需求写正式产品文档；技术方案由研发评审，本轮不要写代码或实施计划。",
+      "expected_output": "应解析为团队协作型，完整定义用户、范围、业务流程、权限、失败反馈、影响与验收，同时把物理接口、表结构、测试实现留给对应角色，不自动生成开发承接。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "明确写交付模式为团队协作型",
+        "覆盖用户、范围、主流程、异常、权限和验收",
+        "按设计、研发、测试等协作面说明影响",
+        "没有补造物理 API、表结构、SQL、代码文件或测试命令",
+        "没有自动生成 dev plan、progress 或开发任务"
+      ]
+    },
+    {
+      "id": 108,
+      "name": "prd_explicit_vibe_mode_retains_engineering_depth",
+      "prompt": "/prd delivery_mode=vibe_coding。这是我的个人项目，需求确认后仍由你继续实现、测试和打包。为异步诊断导出写完整 PRD：用户从设置页发起导出、查看进度并可在运行中取消；已确认状态为 pending/running/succeeded/failed。",
+      "expected_output": "应解析为 Vibe Coding 全流程型，保留给定状态与取消语义，完成产品合同后扩展逻辑 API、数据、失败、日志、原型/表达物和开发承接门禁，但不把未确认物理名称写成事实。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "明确写交付模式为 Vibe Coding 全流程型",
+        "原样保留 pending/running/succeeded/failed 和运行中可取消",
+        "包含逻辑 API、数据/状态、失败和验证接缝",
+        "UI 存在时保留高保真原型门禁",
+        "完整 PRD 确认后允许进入开发承接",
+        "没有编造未提供的物理表名、代码文件或供应商"
+      ]
+    },
+    {
+      "id": 109,
+      "name": "prd_ambiguous_request_uses_safe_team_default",
+      "prompt": "/prd 帮我写一份会员到期提醒的产品需求文档，后续谁来开发还没确定。",
+      "expected_output": "任务没有工程所有权线索，应默认团队协作型并允许用户显式切换；先完成产品语义和关键问题，不因可能存在后端而自动展开工程实现。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "默认解析为团队协作型",
+        "说明用户可以显式切换交付模式",
+        "聚焦用户、触发、业务规则、渠道、失败和验收",
+        "没有因后续需要开发而自动进入 Vibe Coding",
+        "没有自动生成工程实施计划"
+      ]
+    },
+    {
+      "id": 110,
+      "name": "prd_team_mode_assigns_high_fidelity_to_design_role",
+      "prompt": "/prd delivery_mode=team_pm。公司设置中心新增通知偏好页，已有专职设计师负责最终视觉稿。请输出产品 PRD 和设计承接要求。",
+      "expected_output": "应完整定义信息层级、交互流程、状态、文案与设计验收，把最终高保真稿标为设计交付依赖；不得强制产品经理本轮生成 HTML，也不得省略产品状态与出口。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "明确写团队协作型",
+        "覆盖正常、空、错、禁用、加载和保存/取消/关闭",
+        "提供设计任务单或设计承接清单",
+        "最终高保真原型标为设计角色交付依赖",
+        "没有把未生成 HTML 判为产品 PRD 不完整",
+        "产品流程和验收标准仍然完整"
+      ]
+    },
+    {
+      "id": 111,
+      "name": "acceptance_team_mode_coordinates_real_evidence",
+      "prompt": "/acceptance delivery_mode=team_pm。研发给了 API 测试报告，测试给了回归记录，设计给了页面截图。请做产品验收判断；我没有授权你改代码、跑迁移或发布。",
+      "expected_output": "应继承团队协作型，读取并区分各角色真实证据，给产品验收和缺口；没有证据时待验证，不代写或执行构建、迁移、CI、部署或发布。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /acceptance",
+        "明确写团队协作型并给四态结论",
+        "按研发、测试、设计证据分别核验而非仅看声明",
+        "缺证项目保持待验证或部分通过",
+        "没有修改代码、运行迁移、触发 CI 或发布",
+        "发布动作仍单独等待授权"
+      ]
+    },
+    {
+      "id": 112,
+      "name": "prompt_preserves_team_delivery_mode",
+      "prompt": "/prompt 上游 PRD 已明确 delivery_mode=team_pm，下一步交给设计和研发分别评审。帮我生成短提示词，不要把它改成 Agent 直接开发。",
+      "expected_output": "应只生成提示词，继承 team_pm，并把设计/研发评审作为下一步；不生成代码实施、dev plan、测试脚本或发布任务。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prompt",
+        "声明本轮只生成提示词且未执行项目操作",
+        "代码块中原样保留 delivery_mode=team_pm",
+        "下一步是设计和研发评审",
+        "没有静默升级为代码实现或开发承接",
+        "保留范围、验证、停止和汇报"
+      ]
+    },
+    {
+      "id": 113,
+      "name": "prd_team_mode_preserves_fixed_business_facts",
+      "prompt": "/prd delivery_mode=team_pm。已确认：单个租户每天最多导出 3 次；仅管理员可导出；任务状态为 queued/running/succeeded/failed；结果保留 7 天。请写团队评审版 PRD。",
+      "expected_output": "应在团队模板中原样保留次数、角色、四个状态和 7 天保留期；可以把物理实现交给研发，但不能因精简或职责分层删除承重事实。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "保留每租户每天最多 3 次",
+        "保留仅管理员可导出",
+        "保留 queued/running/succeeded/failed",
+        "保留结果 7 天",
+        "团队协作分层没有删除业务异常和验收",
+        "物理实现未知项交由研发确认而非补造"
+      ]
+    },
+    {
+      "id": 114,
+      "name": "review_team_mode_routes_code_findings_to_engineering",
+      "prompt": "/review delivery_mode=team_pm。请评审当前企业后台项目，重点帮助产品团队理解核心路径和风险；没有要求你直接重构代码。",
+      "expected_output": "应建立产品与模块职责地图；技术问题以证据化风险、责任角色和核验动作交给工程评审，不直接给代码删除或架构替换方案。",
+      "files": ["evals/files/web-saas-overview.md"],
+      "expectations": [
+        "输出为中文，首行入口判断为 /review",
+        "明确写团队协作型",
+        "先建立产品、流程和模块职责地图",
+        "技术发现包含证据状态和最小核验",
+        "技术方案交给研发确认",
+        "没有未经请求直接重构、删代码或指定框架"
       ]
     }
   ]

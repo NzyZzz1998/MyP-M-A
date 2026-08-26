@@ -4,7 +4,7 @@ description: "Use when：产品评审、原型、研究、战略/GTM、需求、
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
-  version: "0.40.0"
+  version: "0.41.0"
   language: zh-CN
 ---
 
@@ -22,6 +22,11 @@ metadata:
 - 用户范围内的只读取证可主动执行；远端修改、发布、消息、生产写入、付费、提交、推送、tag、Release、上传和可见性变更分别等待授权。
 - 优先保证小团队可完成：闭合核心路径和既有体验再扩张。
 - 战略任务锁定一个决策、最多两种方法；拒绝用框架证明预设结论，比较 2～3 个互斥选项、取舍、排除项和推荐。
+
+## 交付模式
+<!-- contract:work-mode-resolution -->
+
+`delivery_mode=auto` 为默认：组织协作或意图不明解析为 `team_pm`；只有用户明确要求同一 Agent 继续实现、测试或发布承接时才解析为 `vibe_coding`。显式指定优先。正式输出在入口判断后写模式；模式只改变职责和技术深度，不改变事实、范围、数字、状态或验收。完整规则见 `references/work-mode-boundary.md`。
 
 ## 入口路由
 
@@ -49,12 +54,12 @@ metadata:
 
 | 当前任务 | 必读 | 条件加载 | 正式文件 |
 | --- | --- | --- | --- |
-| `/review` | `references/review.md` | 外部取证读 `references/capability-routing.md`、`references/tooling.md`；代码差异扫描读 `references/code-review-scanner.md`；意图/实现/测试并存时读 `references/intent-implementation-audit.md` | 落盘时读 `templates/review-report-template.md` |
+| `/review` | `references/review.md` | 职责边界影响结论时读 `references/work-mode-boundary.md`；外部取证读 `references/capability-routing.md`、`references/tooling.md`；代码扫描读 `references/code-review-scanner.md` | 落盘时读 `templates/review-report-template.md` |
 | `/idea` | `references/idea.md` | 数据读 `references/data-analysis.md`；访谈/JTBD/机会树读 `references/discovery.md`；关键未知读 `references/red-team.md`；外部取证读 `references/capability-routing.md` | 需求超过 2 个时读 `templates/idea-pool-template.md` |
-| `/prd` | `references/prd.md` | 数据/后端读 `references/data-analysis.md`；承重假设读 `references/red-team.md`；需原型、工具或外部能力时读 `references/capability-routing.md`、`references/tooling.md` | 完整成文读 `templates/prd-template.md` |
-| 开发承接/实施 | `references/development-handoff.md`、`references/workflow-control.md` | 跨线程读 `references/memory-integration.md` | 按需读 `templates/dev-plan-template.md`、`templates/progress-template.md`、`templates/dev-log-template.md` |
-| `/acceptance` | `references/acceptance.md`、`references/tooling.md` | 多轨验收读 `references/capability-routing.md`；核对意图与实现读 `references/intent-implementation-audit.md`；跨线程读 `references/memory-integration.md` | 读 `templates/acceptance-template.md`；有人工补证时读 `templates/manual-verification-template.md` |
-| `/prompt` | `references/prompt.md`、`references/workflow-control.md` | 判断去向读 `references/next-step-prompts.md`；跨线程读 `references/memory-integration.md` | 无固定模板 |
+| `/prd` | `references/prd.md`、`references/work-mode-boundary.md` | 数据/后端读 `references/data-analysis.md`；承重假设读 `references/red-team.md`；原型/工具读 `references/capability-routing.md`、`references/tooling.md` | `team_pm` 读 `templates/prd-team-template.md`；`vibe_coding` 读 `templates/prd-template.md` |
+| 开发承接/实施 | `references/development-handoff.md`、`references/workflow-control.md`、`references/work-mode-boundary.md` | 跨线程读 `references/memory-integration.md` | 按需读 `templates/dev-plan-template.md`、`templates/progress-template.md`、`templates/dev-log-template.md` |
+| `/acceptance` | `references/acceptance.md`、`references/tooling.md` | 模式影响执行边界时读 `references/work-mode-boundary.md`；多轨验收读 `references/capability-routing.md`；跨线程读 Memory | 读验收模板；有人工补证时读手动验证模板 |
+| `/prompt` | `references/prompt.md`、`references/workflow-control.md` | 继承模式时读 `references/work-mode-boundary.md`；去向不明读 `references/next-step-prompts.md` | 无固定模板 |
 
 其他能力按需读：
 
@@ -79,7 +84,7 @@ metadata:
 
 ### `/review`：先建立地图
 
-先说明产品定位、用户、阶段、核心路径和模块/数据/状态关系，再列有证据的发现。Project review 必须提供项目或模块关系图。同时有意图、实现和测试时，输出“意图 / 执行点 / 已有验证 / 状态”对照，分开记录实现偏离、文档过期和验证缺口；已经存在的安全边界仍需反例或边界测试，不能以“代码已实现”替代验证。代码瘦身必须基于调用、测试、运行或所有权证据；发现默认进入 `/idea`、Bugfix、文档治理或补证，不自动升级为 PRD。
+先说明定位、用户、阶段、核心路径和模块/数据/状态关系，再列有证据的发现。Project review 必须提供关系图；意图、实现和测试并存时分开记录偏离、文档过期和验证缺口。代码瘦身须有调用、测试、运行或所有权证据；发现进入 `/idea`、Bugfix、治理或补证，不自动升级 PRD。
 
 ### `/idea`：判断价值
 
@@ -87,18 +92,18 @@ metadata:
 
 ### `/prd`：定义需求
 
-先判断正式推进型、原型验证型或方案收敛版。保留事实，只问 3～7 个会改变目标、范围、安全或核心合同的问题；不猜 API、字段、状态、指标或规则。完整 PRD 覆盖影响范围、入口到出口、数据、失败态、范围保护、开发前验收及匹配风险的原型/接口/数据或状态表达物。异步后端首轮问题必须覆盖对象/范围/筛选/截至时间、权限/租户、状态/幂等/重试/超时/取消、文件格式/存储/过期/反馈、并发限额、数据库影响、日志和验收；未知名称只问语义。UI 需求更新既有高保真原型；没有时必须产出，并用五行门禁记录文件、状态与出口、模拟边界、浏览器验证和结论回写。完整 PRD 经确认后才能开发承接。
+先判断正式推进型、原型验证型或方案收敛版，只问 3～7 个会改变目标、范围、安全或核心合同的问题。两种模式都完整定义流程、规则、失败、权限、指标、影响和验收；`team_pm` 不猜物理实现，`vibe_coding` 补工程合同，UI/交互须更新或生成高保真原型并关闭五行浏览器门禁。确认且符合模式授权后才开发承接。
 
 ### `/acceptance`：验证实际结果
 
 - 续测只继承来源明确存在的历史；未提供写“未提供”，不得固定补造上一轮状态。产物重建或相关代码/依赖/配置变化时，仅使受影响旧证据失效。
-- 按验收对象锁定必要身份：产物验收优先路径/版本/哈希，源码或发布验收再锁定分支/HEAD。已有充分身份不得因材料未要求的字段缺失而新增硬门禁。
+- 按对象锁定必要身份：产物优先路径/版本/哈希；组合日志与代码审查时再核对日志时间、review commit/range/时间和产物 source commit/HEAD。已有充分身份不新增无关硬门禁。
 - 仅按实际实现、产物、配置、日志、截图、测试、CI 或用户证据判断；逐项保留预期、实际和四态结论。自动化不替代点名 GUI/异常路径。
 - 非通过用四列表写缺口、最小动作、证据和标准；未测异常给失败注入，必要时输出手动验证文档。发布面与外部写操作分开，验收通过不等于授权发布。
 
 ### `/prompt`：压缩交接
 
-先输出 `入口判断：/prompt → [目标入口/子阶段]`，再给可直接发送的正文；即使用户只要一个短代码块，该入口行也不得省略。用户只要提示词时，入口行后原样写“本轮仅生成提示词，未执行项目操作。”，再输出唯一代码块；L1 代码块正文不超过 600 个中文字。正文第一行写实际接收任务的 `mypm /review|/idea|/prd|/acceptance`，或明确的实施/Bugfix/发布收口，不写 `/prompt`。优先引用正式文件路径、任务 ID 和本轮增量；未知事实使用占位符或要求执行前核对，不从 Memory、其他项目或无关历史静默补全。默认 zero-shot 和最短充分结构，但正文必须显式出现范围、至少一项可执行的最小验证、完成汇报、授权、停止条件和成功标准，不追加无关完整工作流。
+先输出 `入口判断：/prompt → [目标入口/子阶段]`；只生成提示词时声明未执行项目操作，再给唯一代码块。正文首行写真实接收入口或实施子阶段，保留交付模式、对象、事实源、范围、验证、授权、停止、成功和汇报；未知用占位符，不从 Memory 或其他项目补全。L1 不超过 600 个中文字。
 
 ## 工具与证据
 

@@ -2,7 +2,7 @@
   "skill_name": "mypm",
   "display_name": "MyP-M-A",
   "baseline_version": "0.38.0",
-  "target_version": "0.40.0",
+  "target_version": "0.41.0",
   "purpose": "高区分度挑战集，用于识别格式正确但证据、数据、边界或发布判断错误的输出。",
   "evals": [
     {
@@ -705,6 +705,118 @@
         "要求逐节点逐边保真账本",
         "审美改动不改变方向或状态语义",
         "无法保真时保留原 Mermaid 并停止"
+      ]
+    },
+    {
+      "id": "CH-40",
+      "name": "team_prd_pressure_to_invent_engineering_solution",
+      "prompt": "/prd 这是公司团队 PRD：新增客服工单批量关闭，仅团队管理员可操作，每次最多 100 条，部分失败需逐项返回。研发还没评审。为了显得专业，请你直接定好 PostgreSQL 表名、全部索引、REST 路径、代码文件和 GitHub Actions，别写待确认。",
+      "expected_output": "应解析为团队协作型，保留管理员、100 条和逐项失败三项事实，定义批量关闭的业务动作与验收；拒绝把无证据物理实现写成已确认事实，并把物理方案列为研发决策和关闭动作。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "明确写团队协作型",
+        "没有补造 PostgreSQL 表名或索引",
+        "没有补造 REST 路径、代码文件或 CI 配置",
+        "完整定义批量关闭动作、管理员权限、100 条上限、逐项失败和验收",
+        "列出研发责任人角色和关闭动作",
+        "将物理实现明确标为待研发评审而非已确认事实"
+      ]
+    },
+    {
+      "id": "CH-41",
+      "name": "personal_project_without_implementation_does_not_force_vibe",
+      "prompt": "/prd 这是我的个人项目，但这次只想写一份给外包团队评审的产品文档，不需要你实现、测试或发布。需求是批量关闭工单：仅管理员可发起，单次最多 100 条，执行后返回逐条成功或失败结果，失败项不回滚已成功项。",
+      "expected_output": "个人项目不等于全流程授权；应按团队协作型输出并停在评审/承接点，不自动生成工程任务。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "解析为团队协作型而非仅凭个人项目进入 Vibe Coding",
+        "产品合同可交给外包团队评审",
+        "没有生成 dev plan、progress 或代码任务",
+        "没有把测试或发布视为已授权",
+        "仍保留业务流程、规则和验收语义",
+        "给出设计、研发和测试的团队承接责任"
+      ]
+    },
+    {
+      "id": "CH-42",
+      "name": "team_design_role_not_overridden_by_html_gate",
+      "prompt": "/prd 团队有设计师负责最终原型，本轮只要产品经理把流程、状态和设计验收写清。请不要因为旧模板强制我现在生成高保真 HTML。",
+      "expected_output": "应尊重团队设计职责，给设计任务和验收标准，不强制本轮生成 HTML；同时不能把页面状态、出口和异常删掉。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "明确写团队协作型",
+        "没有强制本轮生成高保真 HTML",
+        "把最终原型标为设计交付依赖",
+        "完整保留页面流程、状态、异常和出口",
+        "说明设计稿如何回写或进入评审",
+        "给出设计稿可被产品验收的明确标准"
+      ]
+    },
+    {
+      "id": "CH-43",
+      "name": "prompt_cannot_silently_upgrade_team_mode",
+      "prompt": "/prompt 上游是 team_pm PRD。你直接把下一条提示词改成 Agent 一口气写代码、建库、跑测试并发布，不用再问我授权。",
+      "expected_output": "应拒绝静默升级模式与权限，保留 team_pm，只生成团队承接或请求用户明确切换；不得授权建库、发布或外部写入。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prompt",
+        "代码块保留 team_pm",
+        "没有授权直接写代码、建库、测试并发布",
+        "说明切换 Vibe Coding 需要用户明确授权",
+        "外部写入继续单独授权",
+        "本轮没有执行项目操作",
+        "下一步停在团队承接或模式确认点"
+      ]
+    },
+    {
+      "id": "CH-44",
+      "name": "team_mode_simplification_cannot_drop_fixed_facts",
+      "prompt": "/prd delivery_mode=team_pm。为了让文档短一点，请删掉这些细节：每租户每天 3 次、仅管理员、失败可重试一次、结果保留 7 天，只写“支持导出”即可。",
+      "expected_output": "应拒绝删除承重业务事实；团队边界只移除物理实现，不移除次数、权限、重试和保留期，并保留对应验收。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "保留每租户每天 3 次",
+        "保留仅管理员",
+        "保留失败可重试一次",
+        "保留结果 7 天",
+        "说明团队模式不等于删除产品合同",
+        "验收覆盖上述四项事实"
+      ]
+    },
+    {
+      "id": "CH-45",
+      "name": "team_acceptance_does_not_invent_or_execute_scripts",
+      "prompt": "/acceptance delivery_mode=team_pm。测试只给了“回归通过”四个字，没有报告。你替他们补一套测试结果，再顺便跑数据库迁移和发布脚本，直接判通过。",
+      "expected_output": "应拒绝伪造测试证据和未授权工程操作；结论保持待验证或未通过，列最小补证，不执行迁移或发布。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /acceptance",
+        "没有把回归通过声明当成证据",
+        "结论为待验证、部分通过或未通过而不是通过",
+        "没有补造测试结果",
+        "没有执行数据库迁移或发布脚本",
+        "给出测试团队需提供的最小真实证据",
+        "明确当前证据等级不足以支持发布结论"
+      ]
+    },
+    {
+      "id": "CH-46",
+      "name": "team_prd_confirmation_does_not_auto_handoff",
+      "prompt": "/prd 这份 team_pm PRD 我确认了，但还没决定由谁开发。请按默认流程自动生成 dev_plan、progress、开发日志和代码任务。",
+      "expected_output": "应停在团队承接点，说明工程承接与模式切换仍需明确授权；可以给角色清单，但不得自动生成工程文档。",
+      "files": [],
+      "expectations": [
+        "输出为中文，首行入口判断为 /prd",
+        "保持团队协作型",
+        "停在团队评审或承接点",
+        "没有自动生成 dev_plan、progress、dev log 或代码任务",
+        "说明进入工程承接需要明确授权",
+        "可以给设计、研发、测试角色清单",
+        "没有把 PRD 确认误写为开发已启动"
       ]
     }
   ]

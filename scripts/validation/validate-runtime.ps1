@@ -30,7 +30,7 @@ function Invoke-MypmRuntimeValidation {
     }
 
     $requiredLiterals = [ordered]@{
-        'SKILL.md' = @('contract:entry-isolation', 'idea-no-fabricated-threshold', 'contract:context-minimal-loading', 'contract:guarded-output-scan')
+        'SKILL.md' = @('contract:entry-isolation', 'idea-no-fabricated-threshold', 'contract:context-minimal-loading', 'contract:guarded-output-scan', 'contract:work-mode-resolution')
         'evals/README.md' = @('contract:separate-eval-scores', 'contract:eval-execution-isolation', 'contract:eval-release-panel-lifecycle')
         'references/roadmap.md' = @('contract:roadmap-core-output', 'contract:roadmap-stage-explicit')
         'references/idea.md' = @('contract:idea-core-output', 'contract:idea-feedback-role-binding', 'contract:idea-discovery-methods', 'contract:idea-strategy-gtm-evidence')
@@ -46,6 +46,7 @@ function Invoke-MypmRuntimeValidation {
             'contract:prd-prototype-simulation-browser', 'contract:prd-ai-agent-resilience-governance',
             'contract:prd-ambiguous-ui-questions', 'contract:prd-convergence-preserves-browser-gate',
             'contract:prd-prototype-atomic-output', 'contract:prd-strategy-gtm-boundary'
+            'contract:work-mode-pm-ownership'
         )
         'references/prompt.md' = @(
             'contract:prompt-identity', 'contract:recipient-profile', 'contract:single-verification', 'contract:subagent-budget',
@@ -53,6 +54,7 @@ function Invoke-MypmRuntimeValidation {
             'contract:prompt-generation-first-line', 'contract:prompt-render-shell', 'contract:prompt-prerequisite-evidence-stop',
             'contract:prompt-subagent-long-tail', 'contract:prompt-document-only-boundary',
             'contract:prompt-concept-handoff-facts', 'contract:prompt-release-gate-details'
+            'contract:work-mode-inheritance'
         )
         'references/data-analysis.md' = @('contract:kpi-data-contract', 'contract:metric-object-snapshot', 'contract:metric-four-counts', 'contract:metric-observed-final-state')
         'references/capability-routing.md' = @(
@@ -89,7 +91,12 @@ function Invoke-MypmRuntimeValidation {
             'contract:acceptance-artifact-evidence-freshness', 'contract:acceptance-gap-closure-triples',
             'contract:acceptance-gap-closure-table', 'contract:acceptance-no-evidence-substitution',
             'contract:acceptance-concrete-failure-injection'
+            'contract:work-mode-acceptance-boundary'
         )
+        'references/work-mode-boundary.md' = @('contract:work-mode-fact-parity')
+        'references/development-handoff.md' = @('contract:work-mode-handoff-authorization')
+        'templates/prd-template.md' = @('contract:work-mode-vibe-depth')
+        'templates/prd-team-template.md' = @('contract:work-mode-team-template')
     }
     $literalCount = 0
     foreach ($entry in $requiredLiterals.GetEnumerator()) {

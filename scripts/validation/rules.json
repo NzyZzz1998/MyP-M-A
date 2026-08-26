@@ -6,7 +6,7 @@
   "required_loading_routes": {
     "review": ["references/review.md", "references/code-review-scanner.md"],
     "idea": ["references/idea.md"],
-    "prd": ["references/prd.md"],
+    "prd": ["references/prd.md", "references/work-mode-boundary.md"],
     "acceptance": ["references/acceptance.md", "references/tooling.md"],
     "prompt": ["references/prompt.md", "references/workflow-control.md"]
   },
@@ -37,6 +37,7 @@
     "scripts/test-v038-evidence-action-adapters.ps1",
     "scripts/test-v039-reliable-delivery.ps1",
     "scripts/test-v040-visual-delivery.ps1",
+    "scripts/test-v041-work-mode-boundary.ps1",
     "scripts/validation/validate-capabilities.ps1",
     "scripts/validation/validate-external-benchmark.ps1",
     "scripts/validation/validate-public-cases.ps1"
@@ -46,6 +47,7 @@
     "memory_evidence": ["unavailable", "not-found", "memory-only", "verified-source"],
     "prompt": ["/prompt", "next", "continue", "bugfix", "acceptance", "release", "handoff", "commit", "push", "tag", "Release"],
     "prompt_compression": ["L1", "L2", "L3", "300-600", "500-900", "800-1500"],
-    "official_prompt_guidance": ["zero-shot", "preserve-first", "trim-first", "tool-orchestration", "retry-limit", "stop-condition"]
+    "official_prompt_guidance": ["zero-shot", "preserve-first", "trim-first", "tool-orchestration", "retry-limit", "stop-condition"],
+    "delivery_mode": ["delivery_mode", "team_pm", "vibe_coding"]
   }
 }
