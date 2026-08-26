@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string[]]$ManifestPath = @()
 )
 
@@ -228,11 +228,13 @@ foreach ($id in @('CH-35', 'CH-36', 'CH-37', 'CH-38', 'CH-39')) {
 }
 
 foreach ($item in @($releasePanel.selection_groups.delta)) {
-    $eval = if ([string]$item.suite -eq 'stable') {
-        @($stable.evals | Where-Object { [string]$_.id -eq [string]$item.id })
-    } else {
-        @($challenge.evals | Where-Object { [string]$_.id -eq [string]$item.id })
-    }
+    $eval = @(
+        if ([string]$item.suite -eq 'stable') {
+            $stable.evals | Where-Object { [string]$_.id -eq [string]$item.id }
+        } else {
+            $challenge.evals | Where-Object { [string]$_.id -eq [string]$item.id }
+        }
+    )
     Assert-True ($eval.Count -eq 1) "Release panel eval must exist once: $($item.suite)/$($item.id)"
     $firstLine = ([string]$eval[0].prompt -split "`n")[0]
     Assert-True ($firstLine -match '^/(review|idea|prd|acceptance|prompt)\b') "Release panel prompt has no explicit route: $($item.id)"

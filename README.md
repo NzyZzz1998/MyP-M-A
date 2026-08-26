@@ -69,6 +69,20 @@ Claude Code 的个人与项目级目录来自其[官方 Agent Skills 说明](htt
 
 `/prompt` 是辅助入口，不改变四个产品阶段。没有显式命令时，MyP-M-A 会根据目标和已有产物自动路由。
 
+## 五个能力演示
+
+想先看它实际会怎样判断，可以从这组完全合成的演示用例开始：
+
+| 用例 | 能看到什么 |
+| --- | --- |
+| [项目评审](examples/showcase/01-review-project-map.md) | 先建立项目地图，再区分实现偏离、文档过期和验证缺口 |
+| [想法验证](examples/showcase/02-idea-value-test.md) | 锁定统计口径，证明问题但不替预设的 AI 方案找理由 |
+| [正式 PRD](examples/showcase/03-prd-async-export.md) | 将异步导出展开为权限、状态、数据库、失败链路和开发前验收 |
+| [发布验收](examples/showcase/04-acceptance-release-gate.md) | 自动测试全绿时仍依据真实冲突阻止错误发布 |
+| [提示词交接](examples/showcase/05-prompt-handoff.md) | 在保留事实、验证和授权边界的前提下压缩下一轮任务 |
+
+[查看完整演示目录](examples/showcase/README.md)。这些内容用于说明预期工作方式，不替代模型评测或真实项目证据。
+
 ## 它交付的是阶段成果
 
 ### Review 先建立共同理解
