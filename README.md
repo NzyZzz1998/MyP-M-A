@@ -172,8 +172,8 @@ Basic Memory 支持 `auto`、`suggest`、`off` 三种模式。默认仅在已知
 
 ## 质量与验证边界
 
-当前版本：`v0.41.0 Stable`。运行时、评测治理和 README 已本地提交，待同步 `main`。README 内容及静态检查完成，浏览器视觉复查仍待验证。`v0.40.0` 保持稳定回退；本轮不创建 tag 或 Release。
-<!-- project-status: version=0.41.0; state=local-committed -->
+当前版本：`v0.41.0 Stable`，运行时、评测治理和 README 已同步远端 `main`。README 内容及静态检查完成，浏览器视觉复查仍待验证。`v0.40.0` 保持稳定回退；本轮未创建 tag 或 Release。
+<!-- project-status: version=0.41.0; state=remote-synced -->
 
 **已验证的是本版职责边界和受影响路径，不是所有模型、所有场景全面领先。** 完整稳定集、完整挑战集与跨模型面板未重跑；评测治理自测也不计入模型得分。
 

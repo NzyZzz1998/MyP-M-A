@@ -1,6 +1,6 @@
 # MyP-M-A v0.41 进度
 
-- 当前状态：Stable；运行时、评测治理与 README 已本地提交，待同步 main；README 视觉复查仍待验证
+- 当前状态：Stable；运行时、评测治理与 README 已同步远端 main，收口提交 `414c114`；README 视觉复查仍待验证
 - PRD：`notes/v0.41-team-boundary-prd.md`
 - Dev plan：`notes/dev_plan_v0.41.md`
 - Dev log：`notes/dev_log_v0.41.md`
@@ -32,4 +32,4 @@
 
 ## 当前阻塞
 
-运行时的既有验收不变，评测治理 R1～R5 已全部关闭，工具阻塞项为 0。README 内容与静态检查通过；浏览器安全策略阻止本轮预览截图，视觉复查仍待验证，不计通过。详见[治理增量验收](v0.41-governance-acceptance.md)。维护者已授权精修 README 并推送当前私有仓库，待执行远端同步；tag、Release 和仓库公开不在授权范围内。
+运行时的既有验收不变，评测治理 R1～R5 已全部关闭，工具阻塞项为 0。README 内容与静态检查通过；浏览器安全策略阻止本轮预览截图，视觉复查仍待验证，不计通过。详见[治理增量验收](v0.41-governance-acceptance.md)。已按维护者授权同步当前私有仓库；未创建 tag 或 Release，未修改可见性。
