@@ -12,14 +12,14 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：v0.41 已完成交付模式、职责边界、双模板、跨入口继承、运行时独立验收与评测治理独立复核；实现、治理与 README 已同步远端 main。README 视觉复查保留待验证，不影响既有 Stable 运行时结论。v0.40.0 保持稳定回退，本轮未创建 tag 或 Release。
+当前阶段判断：v0.41 已完成交付模式、职责边界、双模板、跨入口继承、运行时独立验收与评测治理独立复核；实现、治理、README 与 v0.41.0 tag 已同步远端。README 视觉复查保留待验证，不影响既有 Stable 运行时结论。v0.40.0 保持稳定回退，未创建 GitHub Release。
 <!-- project-status: version=0.41.0; state=remote-synced -->
 
 当前目录口径：稳定集 `未全量重跑 / 883`，挑战集 `未全量重跑 / 376`；局部定向结果不得改写为全量通过。
 
 ### R2.31 v0.41 团队协作边界与自适应交付
 
-状态：Stable；运行时实现提交 `5e74373`，治理与 README 收口提交 `414c114` 已同步远端 main；评测治理 R1～R5 已关闭，双引擎静态校验通过，README 视觉复查仍待验证
+状态：Stable；运行时实现提交 `5e74373`，治理与 README 收口提交 `414c114` 已同步远端 main，tag `v0.41.0` 固定在 `1272717`；评测治理 R1～R5 已关闭，双引擎静态校验通过，README 视觉复查仍待验证
 
 - 事实源：`notes/v0.41-team-boundary-prd.md`、`notes/dev_plan_v0.41.md`、`notes/progress_v0.41.md`、`notes/v0.41-evidence-impact.md`。
 - 不新增入口；以 `delivery_mode` 在团队协作型与 Vibe Coding 全流程型之间解析交付深度。

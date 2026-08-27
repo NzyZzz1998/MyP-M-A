@@ -82,3 +82,10 @@
 - 收口提交 `414c114` 已推送，远端 main 从 `4858d77` 前进至该提交，包含此前三个本地提交；未重写历史或 force push。
 - README、CHANGELOG、路线图、backlog、进度与验收记录同步为 `remote-synced`；状态变更单独提交，不混入运行时调整。
 - 本轮未创建 tag 或 Release，仓库保持私有；README 浏览器视觉仍待验证，完整稳定集、挑战集和跨模型面板未重跑。
+
+## 2026-08-27 版本标签补齐
+
+- 维护者新增授权补齐缺少的版本标签。审计确认原有 26 个 annotated tag 本地与远端一致，仅当前 v0.41 缺标签。
+- 新建并推送 `v0.41.0`，tag object 为 `9e49e4f94c4b5277fb08b536be09d5a6f6f71e24`，peeled commit 为 `127271783b0ca76f7ccd68abe6aaa07cafb9b217`。
+- v0.21 的 record、v0.37 的 archive 与 v0.39 的 candidate 保持历史语义；没有补造 v0.1～v0.14 快照，没有移动、覆盖或重新签发已有标签。
+- 同步版本索引和当前状态文档；不修改运行时、历史评测结果或视觉待验证结论，不创建 GitHub Release，不改变仓库可见性。

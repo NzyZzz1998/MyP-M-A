@@ -30,9 +30,12 @@
 | `v0.38.0` | `80e6abe` | Stable 快照 | 已验证历史回退版本 |
 | `v0.39.0-candidate` | `67ca5f1` | Candidate | 只保存候选历史，不表示 Stable 或 Release |
 | `v0.40.0` | `3bdae56` | Stable 快照 | README 最终审定后的远端版本 tag |
+| `v0.41.0` | `1272717` | Stable 快照 | 团队职责边界、评测治理与 README 收口后的已同步快照 |
 
 ## 边界
 
-- `v0.40.0` annotated tag 已同步远端；GitHub Release 尚未创建。
+- 可验证的 v0.15～v0.41 版本现有 27 个 annotated tag，本地与远端一致；v0.21、v0.37、v0.39 保留记录、归档、候选后缀，不将其改写为独立 Stable 发布。
+- `v0.41.0` 固定在 `127271783b0ca76f7ccd68abe6aaa07cafb9b217`；后续标签状态文档提交不移动该快照，tag 不必始终指向 main 的最新提交。
+- `v0.41.0` 已同步远端；GitHub Release 尚未创建，仓库可见性不变。
 - 本索引不补造不存在的 v0.1～v0.14，也不把 v0.21 写成独立源码快照。
 - 已推送 tag 不移动、不覆盖；后续 tag、Release 与仓库发布继续分别授权。
