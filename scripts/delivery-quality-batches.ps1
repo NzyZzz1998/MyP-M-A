@@ -105,12 +105,23 @@ function Get-ExecutionDuration {
     return $null
 }
 
+function Assert-QualitySourceRuns {
+    param([string]$WorkspacePath)
+    & (Join-Path $PSScriptRoot 'regression-workspace.ps1') -Action Validate -Workspace $WorkspacePath -AllowIncomplete | Out-Host
+    $validation = Read-JsonFile -Path (Join-Path $WorkspacePath 'validation-report.json')
+    if (@($validation.runs).Count -eq 0 -or @($validation.runs | Where-Object { -not $_.valid_return }).Count -gt 0) {
+        throw 'Quality source contains invalid or incomplete runs; inspect validation-report.json before grading.'
+    }
+    return $validation
+}
+
 function Invoke-Prepare {
     $context = Resolve-Context
     $workspacePath = $context.workspace
     $iteration = $context.iteration
     $rubric = $context.rubric
     $outputPath = $context.output
+    $null = Assert-QualitySourceRuns -WorkspacePath $workspacePath
     if (Test-Path -LiteralPath $outputPath) {
         if (-not $Overwrite) { throw "Quality batch directory already exists; use -Overwrite: $outputPath" }
         Remove-Item -LiteralPath $outputPath -Recurse -Force
@@ -264,6 +275,7 @@ function Invoke-Apply {
     $workspacePath = $context.workspace
     $rubric = $context.rubric
     $outputPath = $context.output
+    $validation = Assert-QualitySourceRuns -WorkspacePath $workspacePath
     $manifest = Read-JsonFile -Path (Join-Path $outputPath 'manifest.json')
     $mapping = Read-JsonFile -Path (Join-Path $outputPath '_private\mapping.json')
     $mappingById = @{}
@@ -392,7 +404,11 @@ function Invoke-Apply {
             actionability = $dimensionSummary['actionability']
             response_chars = [ordered]@{ baseline_average = $baselineAverageChars; candidate_average = $candidateAverageChars; candidate_change_ratio = $charRatio }
             duration_ms = [ordered]@{ state = if ($baselineDurations.Count -gt 0) { 'available' } else { 'unavailable' }; paired_samples = $baselineDurations.Count; baseline_median = $baselineMedianDuration; candidate_median = $candidateMedianDuration; candidate_change_ratio = $durationRatio }
-            valid_return_rate = [ordered]@{ baseline = 1.0; candidate = 1.0; baseline_count = $pairCount; candidate_count = $pairCount; expected = $pairCount }
+            valid_return_rate = [ordered]@{
+                baseline = 1.0; candidate = 1.0; baseline_count = $pairCount; candidate_count = $pairCount; expected = $pairCount
+                execution_evidence = @($validation.summary | Select-Object configuration, execution_confirmed_runs, legacy_status_unknown_runs)
+                scope = 'frozen-quality-sample-only'
+            }
         }
         cost_boundary = [ordered]@{
             blocking = [bool]$rubric.cost_boundary.blocking

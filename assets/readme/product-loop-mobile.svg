@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="1510" viewBox="0 0 720 1510" role="img" aria-labelledby="title desc">
-  <title id="title">MyP-M-A 面向 Vibe Coding 的五阶段产品闭环移动版</title>
-  <desc id="desc">五个同构阶段依次为 Review、Idea、PRD、开发承接和 Acceptance。绿色表示工作阶段，橙色表示决策门；Prompt 跨阶段工作，验收产生的新证据返回 Review，深绿色证据轨道贯穿全流程。</desc>
+  <title id="title">MyP-M-A 面向团队协作与 Vibe Coding 的五阶段产品闭环移动版</title>
+  <desc id="desc">五个同构阶段依次为 Review、Idea、PRD、开发承接和 Acceptance。绿色表示工作阶段，橙色表示决策门；Prompt 跨阶段工作，验收产生的新证据返回 Review，深绿色证据轨道贯穿全流程。两种交付模式共享同一事实源。</desc>
 
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
@@ -16,7 +16,7 @@
 
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
     <text x="40" y="54" fill="#17231F" font-size="33" font-weight="750">从输入到发布判断</text>
-    <text x="40" y="88" fill="#68736E" font-size="20">五个阶段，共享一套清晰的交付结构。</text>
+    <text x="40" y="88" fill="#68736E" font-size="20">五个阶段共享事实源，模式只改变交付深度。</text>
 
     <g transform="translate(40 108)">
       <circle cx="7" cy="8" r="6" fill="#2A8468"/>

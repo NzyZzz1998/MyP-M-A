@@ -10,14 +10,19 @@
     [string]$NoBehaviorChangeFile,
     [int]$MaxCases = 26,
     [string]$SnapshotPath,
+    [string]$RootPath,
     [Parameter(Mandatory = $true)]
     [string]$OutputPath
 )
 
 $ErrorActionPreference = 'Stop'
-$root = Split-Path -Parent $PSScriptRoot
+$root = if ($RootPath) { [System.IO.Path]::GetFullPath($RootPath) } else { Split-Path -Parent $PSScriptRoot }
 $utf8 = [System.Text.UTF8Encoding]::new($false)
 $routeOrder = @('/review', '/idea', '/prd', '/acceptance', '/prompt')
+. (Join-Path $PSScriptRoot 'evaluation-state.ps1')
+$legacyState = -not (Test-Path -LiteralPath (Join-Path $root 'evals\evaluation-policy.json'))
+$stateMap = Get-MypmEvaluationStateMap -Root $root -AllowLegacy:$legacyState
+if ($MaxCases -lt 1) { throw 'MaxCases must be positive' }
 
 function Resolve-RepoFile {
     param(
@@ -73,10 +78,11 @@ function New-SelectionEntry {
         [string]$Category,
         [string]$Route,
         [string]$ContractId,
-        [string]$Reason
+        [string]$Reason,
+        [string]$ScenarioGroupId = ''
     )
 
-    return [ordered]@{
+    $entry = [ordered]@{
         suite = $Suite
         id = Convert-EvalId -Suite $Suite -Id $Id
         category = $Category
@@ -84,6 +90,8 @@ function New-SelectionEntry {
         contract_id = $ContractId
         reason = $Reason
     }
+    if ($ScenarioGroupId) { $entry.scenario_group_id = $ScenarioGroupId }
+    return $entry
 }
 
 function Add-UniqueSelection {
@@ -94,10 +102,18 @@ function Add-UniqueSelection {
     )
 
     $key = Get-SelectionKey -Entry $Entry
+    if (-not (Test-SelectableCase -Key $key)) { return $false }
     if ($Seen.ContainsKey($key)) { return $false }
     $Seen[$key] = $true
     $Target.Add($Entry)
     return $true
+}
+
+function Test-SelectableCase {
+    param([string]$Key)
+    if ($stateMap.Count -eq 0 -and $legacyState) { return $true }
+    if (-not $stateMap.ContainsKey($Key)) { throw "Evaluation case has no persistent lifecycle state: $Key" }
+    return [string]$stateMap[$Key].state -notin @('archived', 'retired')
 }
 
 function Get-ContractEvalEntries {
@@ -160,6 +176,13 @@ $stable = Read-JsonFile -Path 'evals\evals.json'
 $challenge = Read-JsonFile -Path 'evals\challenge-evals.json'
 $core = Read-JsonFile -Path $CoreFile
 $registry = Read-JsonFile -Path $ContractRegistryFile
+$lifecycle = Read-JsonFile -Path 'evals\eval-lifecycle.json'
+foreach ($entry in @($core.selection)) {
+    $coreKey = Get-SelectionKey -Entry $entry
+    if (-not (Test-SelectableCase -Key $coreKey) -or ($stateMap.Count -gt 0 -and [string]$stateMap[$coreKey].state -ne 'core')) {
+        throw "Fixed core must remain an active core lifecycle case: $coreKey"
+    }
+}
 $contracts = @($registry.contracts)
 $contractById = @{}
 foreach ($contract in $contracts) {
@@ -308,6 +331,13 @@ if (-not $hasDynamicInput) {
         foreach ($contract in $routeContracts) {
             foreach ($entry in @(Get-ContractEvalEntries -Contract $contract -ReasonPrefix 'affected-route-full-regression:')) { $fullCandidates.Add($entry) }
         }
+        foreach ($group in @($lifecycle.scenario_groups | Where-Object { [string]$_.status -eq 'active' -and [string]$_.route -in $affectedRoutes })) {
+            foreach ($suite in @('stable', 'challenge')) {
+                foreach ($id in @($group.("${suite}_evals"))) {
+                    $fullCandidates.Add((New-SelectionEntry -Suite $suite -Id $id -Category 'scenario' -Route ([string]$group.route) -ContractId '' -ScenarioGroupId ([string]$group.group_id) -Reason "affected-route-scenario:$($group.group_id)"))
+                }
+            }
+        }
         foreach ($entry in @(Get-SortedSelection -Entries @($fullCandidates))) { [void](Add-UniqueSelection -Target $fullEntries -Seen $seen -Entry $entry) }
         $selection = @($fullEntries)
         $controlEntries = [System.Collections.Generic.List[object]]::new()
@@ -345,6 +375,7 @@ $seenCases = @{}
 $selected = [System.Collections.Generic.List[object]]::new()
 foreach ($entry in @($snapshot.selection)) {
     $key = Get-SelectionKey -Entry $entry
+    if (-not (Test-SelectableCase -Key $key)) { throw "Frozen panel contains an inactive lifecycle case: $key" }
     if ($seenCases.ContainsKey($key)) { throw "Duplicate release-panel entry: $key" }
     $seenCases[$key] = $true
     $source = switch ([string]$entry.suite) {

@@ -123,7 +123,15 @@ try {
         if (-not $viewer.Contains($requiredText)) { throw "viewer is missing quality text: $requiredText" }
     }
     if ($viewer -match 'Superpowers|Prime Radiant') { throw 'viewer contains foreign brand text' }
-    Write-Host 'Delivery quality pipeline test passed.'
+    $failedRun = [string]$mapping.items[0].candidate_directory
+    $evidencePath = Join-Path $failedRun 'execution.json'
+    Write-JsonFile -Path $evidencePath -Value ([ordered]@{ status = 'execution_failed'; duration_ms = 900001; attempts = 3 })
+    foreach ($actionName in @('Prepare', 'Apply')) {
+        $rejected = $false
+        try { & $qualityScript -Action $actionName -Workspace $workspace -Overwrite } catch { $rejected = $_.Exception.Message -match 'invalid or incomplete runs' }
+        Assert-Equal -Actual $rejected -Expected $true -Message "quality $actionName must reject failed residual output"
+    }
+    Write-Host 'Delivery quality pipeline test passed: failed source runs rejected before prepare and apply.'
 } finally {
     if (Test-Path -LiteralPath $tempRoot) {
         $resolvedTemp = (Resolve-Path -LiteralPath $tempRoot).Path

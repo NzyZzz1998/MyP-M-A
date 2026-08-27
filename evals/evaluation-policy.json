@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "skill_version": "0.41.0",
+  "purpose": "统一 MyP-M-A 评测资产的职责、生命周期、执行层级、超时重试和评分边界；保留历史证据，不以固定删减数量为目标。",
+  "inventory_purpose": "派生评测资产账本；题面和断言保留在各自的源文件中。",
+  "implementation_boundary": {
+    "implemented": "持久生命周期登记、资产生成与源哈希、逐项投影校验、面板选择与场景补全，以及回答有效性检查。",
+    "manual_protocol": "T0～T5 选择、模型调度、SLA、重试与评分仍由运行任务按协议执行；本文件不是自动调度器。",
+    "adoption": "新执行任务采用本协议，不追溯改判已验收版本；运行时、题面和断言均未变的治理增量只执行 T0。"
+  },
+  "source_of_truth": {
+    "behavior_cases": [
+      "evals/evals.json",
+      "evals/challenge-evals.json"
+    ],
+    "trigger_cases": "evals/trigger-evals.json",
+    "contract_ownership": "evals/contract-registry.json",
+    "scenario_ownership": "evals/eval-lifecycle.json",
+    "lifecycle_states": "evals/eval-state-registry.json",
+    "fixed_core": "evals/release-panel-core.json",
+    "current_impact_panel": "evals/release-panel.json",
+    "derived_inventory": "evals/eval-inventory.json",
+    "long_term_results": "notes/evaluation-history.md"
+  },
+  "route_taxonomy": {
+    "entry_routes": [
+      "/review",
+      "/idea",
+      "/prd",
+      "/acceptance",
+      "/prompt"
+    ],
+    "internal_routes": [
+      "memory",
+      "handoff",
+      "cross-route"
+    ],
+    "negative_route": "outside-mypm",
+    "unknown_allowed": false
+  },
+  "trigger_route_overrides": [
+    {
+      "id": 7,
+      "query_sha256": "7e4151cf487e40084214c765df9615adb2304bda7ce8e32700db5bb0492f01f8",
+      "route": "handoff",
+      "reason": "该固定题面明确要求把 PRD 承接为开发计划和进度；其他未知正向题不得继承此分类。"
+    }
+  ],
+  "principles": [
+    "历史用例可以保留，但保留不等于每轮都执行。",
+    "正确性、证据纪律和完整性属于不可补偿门禁。",
+    "稳定集、挑战集、触发集、质量面板和外部对标分别汇报。",
+    "发布面板按合同影响选择，不用新增用例数量证明版本质量。",
+    "缺失回答保留为执行可靠性事实，不伪装成能力失败或有效回答。",
+    "归档保留原因、决策证据与最后有效版本；退役还需明确替代关系，均不物理抹除证据。"
+  ],
+  "risk_levels": [
+    {
+      "id": "critical",
+      "definition": "失败可能改写事实、越过授权、误判高风险需求或错误批准发布。"
+    },
+    {
+      "id": "high",
+      "definition": "失败会破坏主要入口、核心交付或跨阶段继承。"
+    },
+    {
+      "id": "medium",
+      "definition": "失败主要降低清晰度、可执行性或非核心场景质量。"
+    },
+    {
+      "id": "low",
+      "definition": "失败主要影响展示、成本或非承重格式，不改变产品判断。"
+    },
+    {
+      "id": "scenario",
+      "definition": "复合场景由入口级场景组负责，风险不从单一合同推导。"
+    }
+  ],
+  "lifecycle_states": [
+    {
+      "id": "core",
+      "meaning": "长期核心门禁，每次行为候选都进入固定核心面板。"
+    },
+    {
+      "id": "active",
+      "meaning": "当前有效覆盖，按合同、入口或发布条件选择执行。"
+    },
+    {
+      "id": "canary",
+      "meaning": "待观察用例，不等同于当前面板差量；连续两个稳定版本后必须人工决定晋升、合并或归档。"
+    },
+    {
+      "id": "archived",
+      "meaning": "保留历史题面和结果，默认不进入执行面板，可按回退调查重新激活。"
+    },
+    {
+      "id": "retired",
+      "meaning": "已由明确 successor 替代；保留原因和历史证据，不再参与选择。"
+    }
+  ],
+  "execution_tiers": [
+    {
+      "id": "T0",
+      "name": "静态与治理门禁",
+      "model_required": false,
+      "when": "每次修改",
+      "contents": "Schema、合同/场景归属、清单新鲜度、链接、UTF-8、上下文预算和确定性自测。"
+    },
+    {
+      "id": "T1",
+      "name": "核心与触发冒烟",
+      "model_required": true,
+      "when": "入口描述、常驻合同或行为文件变化",
+      "contents": "固定核心发布面板；触发集只在 description、宿主配置或触发题面变化时执行。"
+    },
+    {
+      "id": "T2",
+      "name": "合同影响面板",
+      "model_required": true,
+      "when": "每个行为候选版本",
+      "contents": "固定核心、本版合同差量和相邻控制；超过默认上限时升级受影响入口回归。"
+    },
+    {
+      "id": "T3",
+      "name": "受影响入口回归",
+      "model_required": true,
+      "when": "入口核心、共享合同或面板超限",
+      "contents": "只运行受影响入口的 active/core/canary 行为用例。"
+    },
+    {
+      "id": "T4",
+      "name": "完整活跃组合",
+      "model_required": true,
+      "when": "需要全量证明的行为 Stable 候选、重大回退调查或实际覆盖发生变化的生命周期重构",
+      "contents": "稳定集与挑战集分别运行和汇报；archived/retired 默认排除。"
+    },
+    {
+      "id": "T5",
+      "name": "里程碑对标",
+      "model_required": true,
+      "when": "关键节点版本或明确研究任务",
+      "contents": "七维交付质量、跨模型面板和外部 PM Skill 对标；不作为每版默认门禁。"
+    }
+  ],
+  "execution_profiles": {
+    "canonical": {
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "medium",
+      "runs_per_case": 1,
+      "purpose": "贴近主要真实使用环境的默认行为基线。"
+    },
+    "standard_sla_seconds": 300,
+    "long_form_sla_seconds": 600,
+    "long_form_applies_to": [
+      "正式 PRD",
+      "深度 Review",
+      "复杂 Acceptance",
+      "题面显式标记 long_form"
+    ],
+    "max_attempts": 3,
+    "final_attempt_policy": "wait_for_result",
+    "final_attempt_timeout_seconds": null,
+    "retry_policy": "前两次按题面使用 300/600 秒 SLA；第三次不因耗时自动终止，继续等待有效结果。只有明确的执行器错误或用户停止才记录未完成，不生成空白答案，也不自动追加第四次。SLA 超时与重试成本单独记录，不能抵扣正确性。",
+    "max_concurrency": 3,
+    "max_cases_per_agent": 5,
+    "targeted_max": "只用于失败、明显差异、评分不稳定或裁决，不做默认全量回归。",
+    "cross_model": "只有入口路由、共享合同、宿主兼容性或里程碑判断变化时才运行代表性跨模型面板。"
+  },
+  "scoring_policy": {
+    "hard_gates": [
+      "正确性",
+      "证据纪律",
+      "完整性",
+      "事实保真"
+    ],
+    "quality_gates": [
+      "决策清晰度",
+      "可执行性",
+      "有效返回率"
+    ],
+    "observations": [
+      "重复度",
+      "字符数",
+      "完成时长",
+      "重试率"
+    ],
+    "aggregation": "不生成统一质量总分；A/B 只比较共同有效样本，同时单列双方有效返回率和 SLA。"
+  },
+  "selection_policy": {
+    "default_panel_limit": 26,
+    "fixed_core_source": "evals/release-panel-core.json",
+    "impact_source": "evals/contract-registry.json",
+    "scenario_source": "evals/eval-lifecycle.json",
+    "overflow_action": "升级受影响入口回归，不静默截断 critical 合同。",
+    "full_run_condition": "入口常驻合同变化、多个入口同时受影响、行为 Stable 候选要求全量证明、历史证据失效或生命周期重构改变实际覆盖。仅治理工具变化且运行时、题面、断言、覆盖未变时，按 adoption 的 T0 豁免执行。"
+  },
+  "lifecycle_policy": {
+    "implementation_mode": "persistent_registry",
+    "supported_states": ["core", "active", "canary", "archived", "retired"],
+    "current_boundary": "逐题状态及转换决策保存在 eval-state-registry.json，与当前面板角色独立。生成器不自动晋升；归档/退役校验决策、最后有效版本和替代关系，选择器默认排除。连续两个稳定版本后的复核由维护者发起，不声称已自动计数提醒。",
+    "new_behavior_case": "先进入 canary，并声明主合同或唯一场景组。",
+    "canary_review": "连续两个稳定版本后人工决定晋升 active/core、与现有用例合并或归档。",
+    "archive_gate": "存在等价或更强覆盖、历史独特失败信号已迁移、入口/模式/风险/附件边界仍被覆盖。",
+    "retire_gate": "必须填写 successor、原因和最后有效版本。",
+    "reactivation": "archived 可经新决策重新激活；retired 不直接复活，应核查 successor，必要时登记新的替代用例。",
+    "count_target": "不设置强制删减数量；以覆盖清晰、选择可解释和运行成本可控为目标。"
+  }
+}

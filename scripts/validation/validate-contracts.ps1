@@ -1,4 +1,5 @@
 . (Join-Path $PSScriptRoot 'common.ps1')
+. (Join-Path (Split-Path -Parent $PSScriptRoot) 'evaluation-state.ps1')
 
 function Invoke-MypmContractsValidation {
     param([Parameter(Mandatory = $true)][string]$Root)
@@ -79,7 +80,7 @@ function Invoke-MypmContractsValidation {
         if ($lifecycleGroupIds.ContainsKey($groupId)) {
             Add-MypmValidationError -Result $result -Message "Duplicate eval lifecycle group: $groupId"
         } else {
-            $lifecycleGroupIds[$groupId] = $true
+            $lifecycleGroupIds[$groupId] = $group
         }
         if ([string]$group.route -notin $allowedLifecycleRoutes) { Add-MypmValidationError -Result $result -Message "Eval lifecycle group $groupId has unsupported route: $($group.route)" }
         if ([string]$group.status -ne 'active') { Add-MypmValidationError -Result $result -Message "Current eval lifecycle group must be active: $groupId" }
@@ -136,8 +137,46 @@ function Invoke-MypmContractsValidation {
         if (-not $byId.ContainsKey([string]$contractId)) { Add-MypmValidationError -Result $result -Message "Release panel references unknown affected contract: $contractId" }
     }
     if (@($panel.unmapped_files).Count -gt 0) { Add-MypmValidationError -Result $result -Message "Release panel contains unmapped behavior files: $(@($panel.unmapped_files) -join ', ')" }
+    $scenarioStates = @{}
+    $legacyStates = -not (Test-Path -LiteralPath (Join-Path $root 'evals\evaluation-policy.json'))
+    if (@($panel.selection | Where-Object { $_.category -eq 'scenario' -or $_.scenario_group_id }).Count -gt 0) {
+        try { $scenarioStates = Get-MypmEvaluationStateMap -Root $root -AllowLegacy:$legacyStates }
+        catch { Add-MypmValidationError -Result $result -Message "Release panel lifecycle state invalid: $($_.Exception.Message)" }
+    }
     foreach ($entry in @($panel.selection)) {
+        $suite = [string]$entry.suite
+        $key = "$($suite):$($entry.id)"
+        if ($suite -notin @('stable', 'challenge')) {
+            Add-MypmValidationError -Result $result -Message "Release panel entry has unsupported suite: $key"
+            continue
+        }
         $contractId = [string]$entry.contract_id
+        $groupId = [string]$entry.scenario_group_id
+        if ([string]$entry.category -eq 'scenario' -or -not [string]::IsNullOrWhiteSpace($groupId)) {
+            if ([string]$entry.category -ne 'scenario' -or -not [string]::IsNullOrWhiteSpace($contractId)) {
+                Add-MypmValidationError -Result $result -Message "Release panel scenario has conflicting ownership: $key"
+            }
+            if (-not $lifecycleGroupIds.ContainsKey($groupId)) {
+                Add-MypmValidationError -Result $result -Message "Release panel scenario references unknown group: $groupId"
+                continue
+            }
+            $group = $lifecycleGroupIds[$groupId]
+            if ([string]$group.status -ne 'active' -or [string]$entry.route -ne [string]$group.route) {
+                Add-MypmValidationError -Result $result -Message "Release panel scenario route or group state mismatch: $key"
+            }
+            $mapped = @($group.("${suite}_evals") | ForEach-Object { [string]$_ })
+            if ([string]$entry.id -notin $mapped) {
+                Add-MypmValidationError -Result $result -Message "Release panel case is not mapped by scenario group $groupId`: $key"
+            }
+            if ($scenarioStates.ContainsKey($key)) {
+                if ([string]$scenarioStates[$key].state -in @('archived', 'retired')) {
+                    Add-MypmValidationError -Result $result -Message "Release panel scenario has inactive lifecycle state: $key"
+                }
+            } elseif (-not $legacyStates) {
+                Add-MypmValidationError -Result $result -Message "Release panel scenario has no persistent lifecycle state: $key"
+            }
+            continue
+        }
         if (-not $byId.ContainsKey($contractId)) {
             Add-MypmValidationError -Result $result -Message "Release panel entry references unknown contract: $contractId"
             continue

@@ -140,8 +140,40 @@ try {
     Assert-Equal -Actual ([int]$report.paired_summary.baseline_passed) -Expected 3 -Message 'baseline paired score'
     Assert-Equal -Actual ([int]$report.paired_summary.candidate_passed) -Expected 3 -Message 'candidate paired score'
     Assert-Equal -Actual ([int]$report.paired_summary.total) -Expected 4 -Message 'paired denominator'
+    Assert-Equal -Actual (@($report.runs | Where-Object { $_.execution_status -eq 'unknown' -and $_.valid_return_basis -eq 'legacy-artifacts-status-unknown' }).Count) -Expected 4 -Message 'legacy status must remain unknown'
 
-    Write-Host 'Evaluation pipeline test passed.'
+    $runPaths = @($iteration.eval_directories | ForEach-Object {
+        $directoryName = $_
+        foreach ($configuration in @('baseline', 'candidate')) { Join-Path $workspace "$directoryName\$configuration\run-1" }
+    })
+    [System.IO.File]::WriteAllText((Join-Path $runPaths[0] 'response.md'), " `n`t", $utf8)
+    Write-JsonFile -Path (Join-Path $runPaths[1] 'execution.json') -Value ([ordered]@{ status = 'execution_failed'; duration_ms = 900001; attempts = 3; stopping_reason = 'fixture error' })
+    Write-JsonFile -Path (Join-Path $runPaths[2] 'execution.json') -Value ([ordered]@{ status = 'cancelled'; duration_ms = 1; attempts = 1 })
+    [System.IO.File]::WriteAllText((Join-Path $runPaths[3] 'execution.json'), '{invalid-json', $utf8)
+    & $regressionScript -Action Validate -Workspace $workspace -AllowIncomplete
+    $invalidReport = Get-Content -LiteralPath (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal -Actual ([int]$invalidReport.paired_summary.complete_pairs) -Expected 0 -Message 'invalid residual files must not form complete pairs'
+    Assert-Equal -Actual (@($invalidReport.runs | Where-Object valid_return).Count) -Expected 0 -Message 'empty, failed, cancelled and malformed runs must not count as valid'
+    Assert-Equal -Actual ([string]$invalidReport.runs[1].execution_status) -Expected 'execution_failed' -Message 'failed status must be retained'
+    Assert-Equal -Actual ([int]$invalidReport.runs[1].execution_attempts) -Expected 3 -Message 'attempt count must be retained'
+    Assert-Equal -Actual ([double]$invalidReport.runs[1].duration_ms) -Expected 900001 -Message 'failed execution time must be retained'
+
+    foreach ($path in $runPaths) {
+        [System.IO.File]::WriteAllText((Join-Path $path 'response.md'), "completed fixture`n", $utf8)
+        Write-JsonFile -Path (Join-Path $path 'execution.json') -Value ([ordered]@{ status = 'succeeded'; duration_ms = 900001; attempts = 3 })
+    }
+    & $regressionScript -Action Validate -Workspace $workspace
+    $longReport = Get-Content -LiteralPath (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal -Actual ([int]$longReport.paired_summary.complete_pairs) -Expected 2 -Message 'late third-attempt answers must be valid'
+    Assert-Equal -Actual ([int]$longReport.paired_summary.candidate_passed) -Expected 3 -Message 'execution success must not overwrite failed quality assertions'
+    Assert-Equal -Actual (@($longReport.runs | Where-Object { $_.valid_return_basis -eq 'execution-confirmed' }).Count) -Expected 4 -Message 'explicit execution completion must be distinguished'
+
+    Write-JsonFile -Path (Join-Path $runPaths[0] 'execution.json') -Value ([ordered]@{ status = 'running'; duration_ms = 1200; attempts = 1 })
+    & $regressionScript -Action Validate -Workspace $workspace -AllowIncomplete
+    $pendingReport = Get-Content -LiteralPath (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal -Actual ([bool]$pendingReport.runs[0].valid_return) -Expected $false -Message 'in-progress execution must not be inferred complete from residual output'
+
+    Write-Host 'Evaluation pipeline test passed: legacy compatibility, empty/failed/cancelled/malformed/pending rejection, late third-attempt completion and quality separation.'
 } finally {
     if (Test-Path -LiteralPath $tempRoot) {
         $resolvedTemp = (Resolve-Path -LiteralPath $tempRoot).Path

@@ -1,0 +1,2147 @@
+{
+  "schema_version": 1,
+  "recorded_in_version": "0.41.0",
+  "decisions": [
+    {
+      "id": "v041-initial-registration",
+      "reason": "首次持久登记现有评测状态；版本表示治理登记时间，不推测题目的历史创建时间。固定核心与本版观察项沿用已确认面板，其余现有题登记为活跃覆盖。",
+      "evidence": "notes/v0.41-evaluation-governance.md"
+    }
+  ],
+  "records": [
+    {
+      "suite": "stable",
+      "id": 1,
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 2,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 3,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 4,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 14,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 5,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 6,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 7,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 8,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 9,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 10,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 11,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 12,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 13,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 15,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 16,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 17,
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 18,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 19,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 20,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 21,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 22,
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 23,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 24,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 25,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 26,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 27,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 28,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 29,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 30,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 31,
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 32,
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 33,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 34,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 35,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 36,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 37,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 38,
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 39,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 40,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 41,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 42,
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 43,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 44,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 45,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 46,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 47,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 48,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 49,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 50,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 51,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 52,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 53,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 54,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 55,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 56,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 57,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 58,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 59,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 60,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 61,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 62,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 63,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 64,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 65,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 66,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 67,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 68,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 69,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 70,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 71,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 72,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 73,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 74,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 75,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 76,
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 77,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 78,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 79,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 80,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 81,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 82,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 83,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 84,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 85,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 86,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 87,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 88,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 89,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 90,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 91,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 92,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 93,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 94,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 95,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 96,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 97,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 98,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 99,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 100,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 101,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 102,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 103,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 104,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 105,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 106,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 107,
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 108,
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 109,
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 110,
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 111,
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 112,
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 113,
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "stable",
+      "id": 114,
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-01",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-02",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-03",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-04",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-05",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-06",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-07",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-08",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-09",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-10",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-11",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-12",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-13",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-14",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-15",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-16",
+      "history": [
+        {
+          "state": "core",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-17",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-18",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-19",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-20",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-21",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-22",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-23",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-24",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-25",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-26",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-27",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-28",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-29",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-30",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-31",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-32",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-33",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-34",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-35",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-36",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-37",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-38",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-39",
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-40",
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-41",
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-42",
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-43",
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-44",
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-45",
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "challenge",
+      "id": "CH-46",
+      "history": [
+        {
+          "state": "canary",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 1,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 2,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 3,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 4,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 5,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 6,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 7,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 8,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 9,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 10,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 11,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 12,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 13,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 14,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 15,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 16,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 17,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 18,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 19,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 20,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 21,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 22,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 23,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 24,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 25,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 26,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 27,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 28,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 29,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 30,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 31,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 32,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 33,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    },
+    {
+      "suite": "trigger",
+      "id": 34,
+      "history": [
+        {
+          "state": "active",
+          "version": "0.41.0",
+          "decision_id": "v041-initial-registration"
+        }
+      ]
+    }
+  ]
+}

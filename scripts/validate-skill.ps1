@@ -13,6 +13,7 @@ $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'validation\validate-capabilities.ps1')
 . (Join-Path $PSScriptRoot 'validation\validate-external-benchmark.ps1')
 . (Join-Path $PSScriptRoot 'validation\validate-public-cases.ps1')
+. (Join-Path $PSScriptRoot 'validation\validate-evaluation-portfolio.ps1')
 
 $results = [ordered]@{
     core = Invoke-MypmCoreValidation -Root $root
@@ -23,6 +24,7 @@ $results = [ordered]@{
     capabilities = Invoke-MypmCapabilitiesValidation -Root $root
     external_benchmark = Invoke-MypmExternalBenchmarkValidation -Root $root
     public_cases = Invoke-MypmPublicCasesValidation -Root $root
+    evaluation_portfolio = Invoke-MypmEvaluationPortfolioValidation -Root $root
 }
 $errors = [System.Collections.Generic.List[string]]::new()
 $warnings = [System.Collections.Generic.List[string]]::new()
@@ -40,7 +42,8 @@ if ($Strict) {
         'test-v037-fact-fidelity.ps1',
         'test-v038-evidence-action-adapters.ps1',
         'test-v040-visual-delivery.ps1',
-        'test-v041-work-mode-boundary.ps1'
+        'test-v041-work-mode-boundary.ps1',
+        'test-evaluation-portfolio.ps1'
     )) {
         try {
             & (Join-Path $PSScriptRoot $test) | Out-Host
@@ -66,6 +69,7 @@ $docs = $results.docs.Metrics
 $capabilities = $results.capabilities.Metrics
 $externalBenchmark = $results.external_benchmark.Metrics
 $publicCases = $results.public_cases.Metrics
+$portfolio = $results.evaluation_portfolio.Metrics
 Write-Host (
     'MyP-M-A static validation passed: ' +
     "version=$($core.version) " +
@@ -75,6 +79,7 @@ Write-Host (
     "capabilities=$($capabilities.capabilities) " +
     "benchmark_tasks=$($externalBenchmark.tasks) behavior_candidates=$($externalBenchmark.behavior_candidates) " +
     "public_cases=$($publicCases.manifests) withdrawn_cases=$($publicCases.withdrawn) " +
+    "portfolio_cases=$($portfolio.cases) portfolio_core=$($portfolio.core) portfolio_canary=$($portfolio.canary) " +
     "files=$($docs.files) modules=$($results.Count) warnings=$($warnings.Count)"
 )
 exit 0

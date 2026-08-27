@@ -1,57 +1,76 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
-  <title id="title">MyP-M-A 证据驱动的中文产品工作流</title>
-  <desc id="desc">MyP-M-A 从项目评审、价值判断、需求定义、开发承接到真实验收，保持事实、范围和证据连续。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="460" viewBox="0 0 1200 460" role="img" aria-labelledby="title desc">
+  <title id="title">MyP-M-A 面向团队协作与 Vibe Coding 的中文产品工作流</title>
+  <desc id="desc">MyP-M-A 让团队协作型和 Vibe Coding 型交付共享同一份产品事实、范围、状态、指标和验收合同。</desc>
 
-  <rect width="1200" height="420" rx="24" fill="#0B1412"/>
-  <rect x="1" y="1" width="1198" height="418" rx="23" fill="none" stroke="#2A3B36" stroke-width="2"/>
+  <rect width="1200" height="460" rx="20" fill="#0B1412"/>
+  <rect x="1" y="1" width="1198" height="458" rx="19" fill="none" stroke="#2A3B36" stroke-width="2"/>
 
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
-    <text x="60" y="66" fill="#F0B35B" font-size="18" font-weight="700" letter-spacing="1">VIBE CODING · 证据驱动产品工作流</text>
-    <text x="60" y="154" fill="#F6F2E8" font-size="68" font-weight="750">MyP-M-A</text>
-    <text x="60" y="204" fill="#D4DED9" font-size="26">从项目地图到发布判断</text>
-    <text x="60" y="240" fill="#D4DED9" font-size="26">让事实、范围与交付证据保持连续</text>
+    <text x="56" y="58" fill="#F0B35B" font-size="17" font-weight="700">TEAM WORK · VIBE CODING · 中文优先</text>
+    <text x="56" y="142" fill="#F6F2E8" font-size="68" font-weight="750">MyP-M-A</text>
+    <text x="56" y="190" fill="#D4DED9" font-size="27" font-weight="650">把产品判断变成可追溯的交付链</text>
+    <text x="56" y="232" fill="#9FB2AA" font-size="20">先判断阶段，再连接 Review、Idea、PRD 与 Acceptance</text>
+    <text x="56" y="264" fill="#9FB2AA" font-size="20">不编造事实，不越过职责，不用计划冒充结果</text>
 
-    <g transform="translate(60 292)">
-      <rect width="176" height="42" rx="6" fill="#17382F" stroke="#39BC91"/>
-      <circle cx="22" cy="21" r="5" fill="#39BC91"/>
-      <text x="38" y="28" fill="#EAF7F1" font-size="18" font-weight="700">v0.40.0 Stable</text>
+    <g transform="translate(56 302)">
+      <rect width="184" height="44" rx="6" fill="#17382F" stroke="#39BC91"/>
+      <circle cx="22" cy="22" r="5" fill="#39BC91"/>
+      <text x="38" y="29" fill="#EAF7F1" font-size="18" font-weight="700">v0.41.0 Stable</text>
     </g>
-    <text x="60" y="374" fill="#A8BBB3" font-size="18">106 稳定用例 · 39 挑战用例 · 34 触发用例</text>
 
-    <line x1="636" y1="44" x2="636" y2="376" stroke="#2A3B36" stroke-width="2"/>
+    <g transform="translate(56 370)">
+      <rect width="150" height="52" rx="6" fill="#111F1B" stroke="#2A3B36"/>
+      <text x="16" y="23" fill="#F6F2E8" font-size="20" font-weight="750">114</text>
+      <text x="58" y="23" fill="#A8BBB3" font-size="15">稳定用例</text>
+      <text x="16" y="42" fill="#71877E" font-size="13">基础行为合同</text>
+    </g>
+    <g transform="translate(218 370)">
+      <rect width="150" height="52" rx="6" fill="#111F1B" stroke="#2A3B36"/>
+      <text x="16" y="23" fill="#F6F2E8" font-size="20" font-weight="750">46</text>
+      <text x="50" y="23" fill="#A8BBB3" font-size="15">挑战用例</text>
+      <text x="16" y="42" fill="#71877E" font-size="13">冲突与边界</text>
+    </g>
+    <g transform="translate(380 370)">
+      <rect width="150" height="52" rx="6" fill="#111F1B" stroke="#2A3B36"/>
+      <text x="16" y="23" fill="#F6F2E8" font-size="20" font-weight="750">34</text>
+      <text x="50" y="23" fill="#A8BBB3" font-size="15">触发用例</text>
+      <text x="16" y="42" fill="#71877E" font-size="13">入口路由识别</text>
+    </g>
 
-    <g transform="translate(688 50)">
-      <text x="0" y="0" fill="#A8BBB3" font-size="16" font-weight="700" letter-spacing="2">产品闭环</text>
+    <line x1="620" y1="38" x2="620" y2="422" stroke="#2A3B36" stroke-width="2"/>
 
-      <line x1="18" y1="52" x2="18" y2="286" stroke="#355048" stroke-width="3"/>
-      <path d="M18 286 V316 H388" fill="none" stroke="#F0B35B" stroke-width="3"/>
+    <g transform="translate(662 46)">
+      <text x="0" y="18" fill="#A8BBB3" font-size="16" font-weight="700">同一份产品事实，两种交付深度</text>
 
-      <g transform="translate(0 34)">
-        <circle cx="18" cy="18" r="18" fill="#17382F" stroke="#39BC91" stroke-width="2"/>
-        <text x="50" y="15" fill="#39BC91" font-size="20" font-weight="700">理解</text>
-        <text x="50" y="42" fill="#D4DED9" font-size="18">建立产品与工程地图</text>
+      <g transform="translate(0 46)">
+        <rect width="480" height="98" rx="8" fill="#132721" stroke="#39BC91" stroke-width="2"/>
+        <text x="20" y="30" fill="#75D4B4" font-size="14" font-weight="700">SHARED PRODUCT CONTRACT</text>
+        <text x="20" y="60" fill="#F6F2E8" font-size="22" font-weight="750">共享产品合同</text>
+        <text x="20" y="84" fill="#A8BBB3" font-size="16">事实 · 范围 · 状态 · 指标 · 验收</text>
       </g>
-      <g transform="translate(0 108)">
-        <circle cx="18" cy="18" r="18" fill="#2F2A1D" stroke="#F0B35B" stroke-width="2"/>
-        <text x="50" y="15" fill="#F0B35B" font-size="20" font-weight="700">判断</text>
-        <text x="50" y="42" fill="#D4DED9" font-size="18">验证问题、价值与时机</text>
-      </g>
-      <g transform="translate(0 182)">
-        <circle cx="18" cy="18" r="18" fill="#17382F" stroke="#39BC91" stroke-width="2"/>
-        <text x="50" y="15" fill="#39BC91" font-size="20" font-weight="700">定义</text>
-        <text x="50" y="42" fill="#D4DED9" font-size="18">锁定范围、状态与验收</text>
-      </g>
-      <g transform="translate(0 256)">
-        <circle cx="18" cy="18" r="18" fill="#2F2A1D" stroke="#F0B35B" stroke-width="2"/>
-        <text x="50" y="15" fill="#F0B35B" font-size="20" font-weight="700">验证</text>
-        <text x="50" y="42" fill="#D4DED9" font-size="18">用真实产物决定能否发布</text>
+
+      <path d="M240 144 V170 M112 170 H368 M112 170 V186 M368 170 V186" fill="none" stroke="#526A61" stroke-width="2"/>
+
+      <g transform="translate(0 186)">
+        <rect width="226" height="130" rx="8" fill="#111F1B" stroke="#39BC91"/>
+        <rect x="16" y="16" width="74" height="28" rx="4" fill="#17382F"/>
+        <text x="53" y="36" text-anchor="middle" fill="#75D4B4" font-size="14" font-weight="700">team_pm</text>
+        <text x="16" y="72" fill="#F6F2E8" font-size="20" font-weight="750">团队协作型</text>
+        <text x="16" y="99" fill="#A8BBB3" font-size="16">产品定义 → 团队承接</text>
+        <text x="16" y="121" fill="#71877E" font-size="14">默认 · 不猜物理实现</text>
       </g>
 
-      <text x="0" y="352" fill="#F6F2E8" font-size="18" font-weight="700">事实源</text>
-      <text x="82" y="352" fill="#A8BBB3" font-size="18">→</text>
-      <text x="116" y="352" fill="#F6F2E8" font-size="18" font-weight="700">阶段交付</text>
-      <text x="220" y="352" fill="#A8BBB3" font-size="18">→</text>
-      <text x="254" y="352" fill="#F6F2E8" font-size="18" font-weight="700">证据闭环</text>
+      <g transform="translate(254 186)">
+        <rect width="226" height="130" rx="8" fill="#211C13" stroke="#F0B35B"/>
+        <rect x="16" y="16" width="104" height="28" rx="4" fill="#352A18"/>
+        <text x="68" y="36" text-anchor="middle" fill="#F0B35B" font-size="14" font-weight="700">vibe_coding</text>
+        <text x="16" y="72" fill="#F6F2E8" font-size="20" font-weight="750">全流程型</text>
+        <text x="16" y="99" fill="#D8C7AA" font-size="16">产品定义 → 实现验证</text>
+        <text x="16" y="121" fill="#9F8C6D" font-size="14">显式授权 · 继续落地</text>
+      </g>
+
+      <rect x="0" y="338" width="480" height="42" rx="6" fill="#0F1B18" stroke="#2A3B36"/>
+      <text x="240" y="365" text-anchor="middle" fill="#D4DED9" font-size="16" font-weight="650">模式改变职责深度，不改变已经确认的事实</text>
     </g>
   </g>
 </svg>

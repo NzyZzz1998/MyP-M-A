@@ -234,6 +234,8 @@ function Invoke-Validate {
         $configurationTotals[$configuration.name] = [ordered]@{
             expected_runs = 0
             complete_runs = 0
+            execution_confirmed_runs = 0
+            legacy_status_unknown_runs = 0
             missing_runs = 0
             invalid_runs = 0
             passed = 0
@@ -265,12 +267,21 @@ function Invoke-Validate {
                 $responseChars = 0
                 $durationMs = $null
                 $durationState = 'unavailable'
+                $executionStatus = 'unknown'
+                $executionAttempts = $null
+                $stoppingReason = $null
+                $returnBasis = 'legacy-artifacts-status-unknown'
 
                 if (-not (Test-Path -LiteralPath $responsePath -PathType Leaf)) {
                     $state = 'missing'
                     $issues.Add('response.md is missing')
                 } else {
-                    $responseChars = [System.IO.File]::ReadAllText($responsePath, [System.Text.Encoding]::UTF8).Length
+                    $responseText = [System.IO.File]::ReadAllText($responsePath, [System.Text.Encoding]::UTF8)
+                    $responseChars = $responseText.Length
+                    if ([string]::IsNullOrWhiteSpace($responseText)) {
+                        $state = 'invalid'
+                        $issues.Add('response.md is empty or whitespace-only')
+                    }
                 }
                 if (-not (Test-Path -LiteralPath $gradingPath -PathType Leaf)) {
                     $state = 'missing'
@@ -280,15 +291,31 @@ function Invoke-Validate {
                 if (Test-Path -LiteralPath $executionPath -PathType Leaf) {
                     try {
                         $execution = [System.IO.File]::ReadAllText($executionPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
-                        if ($null -ne $execution.duration_ms -and [double]$execution.duration_ms -ge 0) {
-                            $durationMs = [Math]::Round([double]$execution.duration_ms, 1)
+                        if ($null -eq $execution -or $execution -is [array] -or $execution -isnot [pscustomobject]) { throw 'execution.json must contain an object' }
+                        $executionAttempts = $execution.attempts
+                        $stoppingReason = $execution.stopping_reason
+                        if ($null -ne $execution.PSObject.Properties['status']) {
+                            $executionStatus = [string]$execution.status
+                            if ($executionStatus -in @('succeeded', 'completed', 'complete', 'success', 'ok')) {
+                                $returnBasis = 'execution-confirmed'
+                            } else {
+                                $state = 'invalid'
+                                $issues.Add("execution.json does not record successful completion: $executionStatus")
+                            }
+                        }
+                        $parsedDuration = 0.0
+                        if ($null -ne $execution.duration_ms -and [double]::TryParse([string]$execution.duration_ms, [System.Globalization.NumberStyles]::Float, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$parsedDuration) -and $parsedDuration -ge 0 -and -not [double]::IsInfinity($parsedDuration) -and -not [double]::IsNaN($parsedDuration)) {
+                            $durationMs = [Math]::Round($parsedDuration, 1)
                             $durationState = 'available'
                         } else {
                             $durationState = 'invalid'
                             $executionIssues.Add('execution.json duration_ms must be a non-negative number')
                         }
                     } catch {
+                        $state = 'invalid'
+                        $executionStatus = 'invalid-metadata'
                         $durationState = 'invalid'
+                        $issues.Add('execution.json is invalid; completion cannot be inferred from residual files')
                         $executionIssues.Add("execution.json cannot be parsed: $($_.Exception.Message)")
                     }
                 }
@@ -332,6 +359,7 @@ function Invoke-Validate {
 
                 if ($state -eq 'complete') {
                     $totals.complete_runs++
+                    if ($returnBasis -eq 'execution-confirmed') { $totals.execution_confirmed_runs++ } else { $totals.legacy_status_unknown_runs++ }
                     $totals.passed += $passed
                     $totals.total += $total
                     $totals.response_chars += $responseChars
@@ -354,6 +382,10 @@ function Invoke-Validate {
                     total = $total
                     response_chars = $responseChars
                     valid_return = ($state -eq 'complete')
+                    valid_return_basis = if ($state -eq 'complete') { $returnBasis } else { 'not-valid' }
+                    execution_status = $executionStatus
+                    execution_attempts = $executionAttempts
+                    stopping_reason = $stoppingReason
                     duration_ms = $durationMs
                     duration_state = $durationState
                     issues = @($issues)
@@ -376,6 +408,8 @@ function Invoke-Validate {
             configuration = [string]$configuration.name
             expected_runs = $totals.expected_runs
             complete_runs = $totals.complete_runs
+            execution_confirmed_runs = $totals.execution_confirmed_runs
+            legacy_status_unknown_runs = $totals.legacy_status_unknown_runs
             missing_runs = $totals.missing_runs
             invalid_runs = $totals.invalid_runs
             passed = $totals.passed
@@ -465,6 +499,7 @@ function Invoke-Validate {
     $lines.Add('# 轻量回归汇总')
     $lines.Add('')
     $lines.Add('本文只报告结构、运行完整性与聚合分数，不能替代正式评测页面和人工复核。')
+    $lines.Add('空白回答、失败或未完成的执行记录不计有效返回。旧记录缺少执行状态时只按非空回答与有效评分兼容，不推断执行成功；超时成本不改变回答有效性或质量分数。')
     $lines.Add('')
     $lines.Add('| 配置 | 有效返回 | 有效率 | 缺失 | 无效 | 通过 | 总计 | 通过率 | 平均字符 | 时长样本 | 中位时长(ms) |')
     $lines.Add('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |')
@@ -474,6 +509,10 @@ function Invoke-Validate {
         $validRate = if ($null -eq $row.valid_return_rate) { 'n/a' } else { '{0:P1}' -f $row.valid_return_rate }
         $duration = if ($null -eq $row.median_duration_ms) { 'unavailable' } else { [string]$row.median_duration_ms }
         $lines.Add("| $($row.configuration) | $($row.complete_runs)/$($row.expected_runs) | $validRate | $($row.missing_runs) | $($row.invalid_runs) | $($row.passed) | $($row.total) | $rate | $chars | $($row.duration_samples) | $duration |")
+    }
+    $lines.Add('')
+    foreach ($row in $summaryRows) {
+        $lines.Add("- $($row.configuration)：执行成功有明确记录 $($row.execution_confirmed_runs) 份；历史状态未知、按材料兼容 $($row.legacy_status_unknown_runs) 份。")
     }
     $lines.Add('')
     $lines.Add('## 共同有效样本')
