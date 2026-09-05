@@ -48,6 +48,16 @@ function Invoke-MypmContractsValidation {
                 Add-MypmValidationError -Result $result -Message "Contract anchor not found in $($contract.source_file): contract:$id"
             }
         }
+        # Related files participate in impact selection without duplicating ownership.
+        foreach ($relative in @($contract.related_source_files)) {
+            if ([string]::IsNullOrWhiteSpace([string]$relative)) { continue }
+            $related = Resolve-MypmPath -Root $root -RelativePath ([string]$relative)
+            if (-not (Test-MypmPathInsideRoot -Root $root -Path $related)) {
+                Add-MypmValidationError -Result $result -Message "Contract $id related source escapes skill root: $relative"
+            } elseif (-not (Test-Path -LiteralPath $related -PathType Leaf)) {
+                Add-MypmValidationError -Result $result -Message "Contract $id related source file not found: $relative"
+            }
+        }
         foreach ($evalId in @($contract.stable_evals)) {
             if ([string]$evalId -notin $stableIds) { Add-MypmValidationError -Result $result -Message "Contract $id references missing stable eval: $evalId" }
             $contractStableIds[[string]$evalId] = $true

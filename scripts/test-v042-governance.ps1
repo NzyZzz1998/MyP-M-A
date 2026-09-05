@@ -1,0 +1,166 @@
+﻿$ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'validation/validate-docs.ps1')
+$root = Split-Path -Parent $PSScriptRoot
+$temp = Join-Path ([IO.Path]::GetTempPath()) ('mypm-v042-' + [Guid]::NewGuid().ToString('N'))
+$utf8 = [Text.UTF8Encoding]::new($false)
+function Assert-Observation {
+    param([bool]$Valid, [string]$Label, [string]$ExpectedError, [int]$ExpectedWarnings = -1)
+    $result = New-MypmValidationResult
+    Invoke-MypmLatestObservationValidation -Root $temp -Result $result
+    if (($result.Errors.Count -eq 0) -ne $Valid) { throw "$Label : $($result.Errors -join '; ')" }
+    if ($ExpectedError -and ($result.Errors -join '; ') -notmatch $ExpectedError) { throw "$Label : missing expected error $ExpectedError" }
+    if ($ExpectedWarnings -ge 0 -and $result.Warnings.Count -ne $ExpectedWarnings) { throw "$Label : unexpected warning count $($result.Warnings.Count)" }
+    Write-Host "PASS: $Label"
+}
+try {
+    # Text guards check instruction/template consistency, not model behavior.
+    foreach ($guard in @(
+        @{ path = 'references/acceptance.md'; tokens = @(
+            '已解析的交付模式', '题内已点名的负责人原样承接',
+            '每行在通过标准中引用既有要求的 ID 或来源',
+            '新增建议另列，确认前不进入必关缺口或发布前置',
+            '把既有行为展开为可观察检查不需要另设确认门禁',
+            '负向验证只证明合同禁止的动作未发生',
+            '只有本轮需补证的要求包含异常路径时',
+            '**严重但待核实风险**', '**已证实阻塞**'
+        ) },
+        @{ path = 'templates/acceptance-template.md'; tokens = @(
+            '交付模式：team_pm / vibe_coding', '预期标准及来源 ID / 原文',
+            '不通过处理及负责人', '新增建议另列', '点名确认人及待确认状态'
+        ) },
+        @{ path = 'templates/manual-verification-template.md'; tokens = @(
+            '交付模式：继承验收文档', '来源验收 ID / 要求原文',
+            '验证人 / 决策负责人', '必须满足：引用来源标准，仅展开等价观察',
+            '不适用的日志、配置、文件检查略去', '新增建议单列待确认'
+        ) }
+    )) {
+        $text = Get-Content -LiteralPath (Join-Path $root $guard.path) -Raw -Encoding UTF8
+        foreach ($token in $guard.tokens) {
+            if (-not $text.Contains($token)) { throw "Acceptance text guard missing in $($guard.path): $token" }
+        }
+        Write-Host "PASS: acceptance instruction/template text guard $($guard.path)"
+    }
+    $gatePanel = Get-Content -LiteralPath (Join-Path $root 'evals/v042-gate-boundary-evals.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $gateNames = @('v042_proactive_gate_suggestion', 'v042_evidenced_omitted_gate_blocks', 'v042_credible_risk_pending_verification')
+    if (@($gatePanel.evals).Count -ne 3 -or @($gatePanel.evals.id | Sort-Object -Unique).Count -ne 3 -or
+        @($gatePanel.evals.name | Sort-Object -Unique).Count -ne 3) { throw 'Gate boundary panel identity/count mismatch' }
+    foreach ($case in $gatePanel.evals) {
+        if ($case.name -notin $gateNames -or @($case.expectations).Count -lt 6 -or @($case.expectations).Count -gt 8 -or
+            @($case.files).Count -ne 0 -or $case.prompt -notmatch 'delivery_mode=team_pm' -or $case.prompt -notmatch 'memory_mode=off' -or
+            [string]::IsNullOrWhiteSpace($case.expected_output)) { throw "Invalid gate boundary fixture: $($case.name)" }
+    }
+    Write-Host 'PASS: three gate-boundary fixtures structurally valid; no model behavior tested.'
+    New-Item -ItemType Directory -Path (Join-Path $temp 'evals'), (Join-Path $temp 'notes') -Force | Out-Null
+    foreach ($file in @('evals/latest-observation.json', 'README.md', 'notes/mypm-roadmap.md', 'notes/evaluation-history.md')) {
+        Copy-Item -LiteralPath (Join-Path $root $file) -Destination (Join-Path $temp $file)
+    }
+    Assert-Observation $true 'current observation'
+    $record = Get-Content (Join-Path $temp 'evals/latest-observation.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $recordPath = Join-Path $temp 'evals/latest-observation.json'
+    $originalRecord = [IO.File]::ReadAllText($recordPath, [Text.Encoding]::UTF8)
+    $record.snapshot_head = '0' * 40
+    [IO.File]::WriteAllText($recordPath, ($record | ConvertTo-Json -Depth 20), $utf8)
+    Assert-Observation $false 'snapshot_head rejects forty zeros' 'snapshot_head'
+    [IO.File]::WriteAllText($recordPath, $originalRecord, $utf8)
+    $record = $originalRecord | ConvertFrom-Json
+    foreach ($field in @('source', 'source_sha256', 'snapshot_head')) {
+        foreach ($kind in @('missing', 'null', 'empty', 'whitespace', 'number', 'array')) {
+            $changed = $originalRecord | ConvertFrom-Json
+            switch ($kind) {
+                'missing' { $changed.PSObject.Properties.Remove($field) }
+                'null' { $changed.$field = $null }
+                'empty' { $changed.$field = '' }
+                'whitespace' { $changed.$field = '   ' }
+                'number' { $changed.$field = 42 }
+                'array' { $changed.$field = @($record.$field) }
+            }
+            [IO.File]::WriteAllText($recordPath, ($changed | ConvertTo-Json -Depth 20), $utf8)
+            Assert-Observation $false "$field rejects $kind" $field
+        }
+    }
+    foreach ($head in @('abc123', ('g' * 40), ($record.snapshot_head + "`n"), ('a' * 40))) {
+        $changed = $originalRecord | ConvertFrom-Json
+        $changed.snapshot_head = $head
+        [IO.File]::WriteAllText($recordPath, ($changed | ConvertTo-Json -Depth 20), $utf8)
+        Assert-Observation $false 'malformed or unrelated snapshot_head' 'snapshot_head'
+    }
+    foreach ($hash in @('bad', ('0' * 64), ('a' * 64))) {
+        $changed = $originalRecord | ConvertFrom-Json
+        $changed.source_sha256 = $hash
+        [IO.File]::WriteAllText($recordPath, ($changed | ConvertTo-Json -Depth 20), $utf8)
+        Assert-Observation $false 'malformed or unrelated source hash' 'identity'
+    }
+    [IO.File]::WriteAllText($recordPath, $originalRecord, $utf8)
+    $historyPath = Join-Path $temp 'notes/evaluation-history.md'
+    $history = [IO.File]::ReadAllText($historyPath, [Text.Encoding]::UTF8)
+    [IO.File]::WriteAllText($historyPath, $history.Replace($record.snapshot_head, ('b' * 40)), $utf8)
+    Assert-Observation $false 'selected historical HEAD drift' 'historical snapshot identity'
+    [IO.File]::WriteAllText($historyPath, $history, $utf8)
+
+    # Isolated external fixtures never alter the real evidence directory.
+    $evidence = Join-Path $temp 'external-evidence'
+    New-Item -ItemType Directory -Path $evidence | Out-Null
+    $changed = $originalRecord | ConvertFrom-Json
+    $changed.source = Join-Path $evidence 'benchmark.json'
+    [IO.File]::WriteAllText($recordPath, ($changed | ConvertTo-Json -Depth 20), $utf8)
+    Assert-Observation $true 'offline historical identity remains valid without git or external evidence' '' 0
+    $offlineResult = New-MypmValidationResult
+    Invoke-MypmLatestObservationValidation -Root $temp -Result $offlineResult
+    if ($offlineResult.Errors.Count -gt 0 -or $offlineResult.Warnings.Count -gt 0) { throw 'Offline optional evidence would fail the Strict warning-to-error policy' }
+    if ($offlineResult.Metrics.observation_source_bytes -ne 'unavailable' -or $offlineResult.Metrics.observation_external_identity -ne 'unavailable') { throw 'Offline verification limits must remain observable' }
+    $changed.snapshot_head = 'a' * 40
+    [IO.File]::WriteAllText($recordPath, ($changed | ConvertTo-Json -Depth 20), $utf8)
+    Assert-Observation $false 'offline mismatch still rejected' 'historical snapshot identity'
+    $changed.snapshot_head = $record.snapshot_head.ToUpperInvariant()
+    [IO.File]::WriteAllText($recordPath, ($changed | ConvertTo-Json -Depth 20), $utf8)
+    $manifestPath = Join-Path $evidence 'run-manifest.json'
+    [IO.File]::WriteAllText($manifestPath, (@{ head = $record.snapshot_head } | ConvertTo-Json), $utf8)
+    Assert-Observation $true 'matching external historical HEAD accepts hex case' '' 0
+    foreach ($manifest in @(@{ head = ('c' * 40) }, @{}, @{ head = @($record.snapshot_head) })) {
+        [IO.File]::WriteAllText($manifestPath, ($manifest | ConvertTo-Json), $utf8)
+        Assert-Observation $false 'conflicting or missing external manifest HEAD' 'run-manifest head'
+    }
+    [IO.File]::WriteAllText($manifestPath, '{invalid', $utf8)
+    Assert-Observation $false 'malformed external manifest'
+    [IO.File]::WriteAllText($manifestPath, (@{ head = $record.snapshot_head } | ConvertTo-Json), $utf8)
+    [IO.File]::WriteAllText($changed.source, '{}', $utf8)
+    Assert-Observation $false 'available conflicting benchmark is not skipped' 'Source benchmark hash mismatch'
+    if (Test-Path -LiteralPath $record.source -PathType Leaf) {
+        Copy-Item -LiteralPath $record.source -Destination $changed.source -Force
+        Assert-Observation $true 'copied source bytes and historical manifest match' '' 0
+    } else {
+        Write-Host 'SKIP: real source bytes unavailable; synthetic and local identity fixtures still ran.'
+    }
+    [IO.File]::WriteAllText($recordPath, $originalRecord, $utf8)
+    if (Test-Path -LiteralPath $record.source) {
+        if ((Get-FileHash -LiteralPath $record.source -Algorithm SHA256).Hash -ne $record.source_sha256) { throw 'Source benchmark hash mismatch' }
+        $benchmark = Get-Content -LiteralPath $record.source -Raw -Encoding UTF8 | ConvertFrom-Json
+        $scores = @(foreach ($suite in @('stable', 'challenge')) {
+            foreach ($model in @('luna', 'terra', 'sol')) { "$($benchmark.suites.$suite.$model.passed)/$($benchmark.suites.$suite.$model.total)" }
+        })
+        if (($scores -join ',') -ne ($record.scores -join ',')) { throw 'Source benchmark score mismatch' }
+    }
+    foreach ($case in @(
+        @{ path = 'README.md'; old = '822/883'; new = '823/883' },
+        @{ path = 'README.md'; old = '93.09%'; new = '100.00%' },
+        @{ path = 'README.md'; old = $record.documents[0].required_patterns[6]; new = 'independent correctness' },
+        @{ path = 'notes/mypm-roadmap.md'; old = $record.documents[1].required_patterns[3]; new = 'measured case latency' },
+        @{ path = 'notes/evaluation-history.md'; old = $record.documents[2].required_patterns[6]; new = $record.documents[2].required_patterns[6].Replace('480', '160') }
+    )) {
+        $path = Join-Path $temp $case.path
+        $original = [IO.File]::ReadAllText($path, [Text.Encoding]::UTF8)
+        [IO.File]::WriteAllText($path, $original.Replace($case.old, $case.new), $utf8)
+        Assert-Observation $false "conflicting current record $($case.old)"
+        [IO.File]::WriteAllText($path, $original, $utf8)
+    }
+    [IO.File]::AppendAllText((Join-Path $temp 'notes/evaluation-history.md'), "`n## Older fixture`n822/883 was not an independent correctness score.`n", $utf8)
+    Assert-Observation $true 'older archive remains outside selected section'
+    Remove-Item -LiteralPath (Join-Path $temp 'evals/latest-observation.json')
+    Assert-Observation $true 'optional record preserves legacy self-test semantics'
+    Write-Host 'v0.42 governance fixtures passed; no model execution.'
+} finally {
+    $resolved = [IO.Path]::GetFullPath($temp)
+    $parent = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd('\') + '\'
+    if (-not $resolved.StartsWith($parent, [StringComparison]::OrdinalIgnoreCase)) { throw 'Unsafe fixture cleanup path' }
+    if (Test-Path -LiteralPath $resolved) { Remove-Item -LiteralPath $resolved -Recurse -Force }
+}

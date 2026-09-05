@@ -31,7 +31,8 @@ $challenge = Read-Utf8 'evals/challenge-evals.json' | ConvertFrom-Json
 $contracts = Read-Utf8 'evals/contract-registry.json' | ConvertFrom-Json
 $panel = Read-Utf8 'evals/release-panel.json' | ConvertFrom-Json
 
-Assert-True $skill.Contains('version: "0.41.0"') 'SKILL.md version must be 0.41.0'
+$currentVersion = [regex]::Match($skill, '(?m)^\s+version:\s+"([^"]+)"').Groups[1].Value
+Assert-True ($currentVersion -in @('0.41.0', '0.42.0')) 'v0.41 historical self-test supports versions 0.41.0 and 0.42.0'
 Assert-True ($skill.Contains('delivery_mode=auto') -and $skill.Contains('team_pm') -and $skill.Contains('vibe_coding')) 'Mode router is incomplete'
 Assert-True ($skill.Contains('组织协作或意图不明解析为 `team_pm`')) 'Ambiguous mode must default to team_pm'
 

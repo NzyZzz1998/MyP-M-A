@@ -25,7 +25,9 @@
     [string]$CandidateLabel = '候选版本',
     [string]$BaselineModel = '',
     [string]$CandidateModel = '',
-    [switch]$AllowIncomplete
+    [switch]$AllowIncomplete,
+    [ValidateSet('legacy', 'per-case-utc-v1')]
+    [string]$TimingProtocol = 'legacy'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -202,6 +204,7 @@ function Invoke-Prepare {
             [ordered]@{ name = 'candidate'; label = $CandidateLabel; model = $CandidateModel; source = $candidate; snapshot = '_snapshots/candidate' }
         )
         execution_protocol = [ordered]@{
+            timing_protocol = $TimingProtocol
             reasoning_effort = $ReasoningEffort
             sla_seconds = $SlaSeconds
             max_concurrency = $MaxConcurrency
@@ -227,6 +230,8 @@ function Invoke-Validate {
     }
 
     $manifest = [System.IO.File]::ReadAllText($manifestPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+    $strictTiming = $manifest.execution_protocol.timing_protocol -eq 'per-case-utc-v1'
+    if ($manifest.execution_protocol.timing_protocol -and $manifest.execution_protocol.timing_protocol -notin @('legacy', 'per-case-utc-v1')) { throw 'Unknown timing protocol' }
     $records = [System.Collections.Generic.List[object]]::new()
     $recordIndex = @{}
     $configurationTotals = @{}
@@ -267,6 +272,9 @@ function Invoke-Validate {
                 $responseChars = 0
                 $durationMs = $null
                 $durationState = 'unavailable'
+                $durationBasis = 'legacy-unspecified'
+                $startedAt = $null
+                $endedAt = $null
                 $executionStatus = 'unknown'
                 $executionAttempts = $null
                 $stoppingReason = $null
@@ -290,10 +298,14 @@ function Invoke-Validate {
 
                 if (Test-Path -LiteralPath $executionPath -PathType Leaf) {
                     try {
-                        $execution = [System.IO.File]::ReadAllText($executionPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+                        $executionText = [System.IO.File]::ReadAllText($executionPath, [System.Text.Encoding]::UTF8)
+                        $execution = $executionText | ConvertFrom-Json
                         if ($null -eq $execution -or $execution -is [array] -or $execution -isnot [pscustomobject]) { throw 'execution.json must contain an object' }
                         $executionAttempts = $execution.attempts
                         $stoppingReason = $execution.stopping_reason
+                        if ($execution.duration_basis) { $durationBasis = [string]$execution.duration_basis }
+                        $startedAt = $execution.started_at_utc
+                        $endedAt = $execution.ended_at_utc
                         if ($null -ne $execution.PSObject.Properties['status']) {
                             $executionStatus = [string]$execution.status
                             if ($executionStatus -in @('succeeded', 'completed', 'complete', 'success', 'ok')) {
@@ -311,13 +323,41 @@ function Invoke-Validate {
                             $durationState = 'invalid'
                             $executionIssues.Add('execution.json duration_ms must be a non-negative number')
                         }
+                        # Timestamp-bearing records opt into strict checks even in an old workspace.
+                        if ($strictTiming -or $startedAt -or $endedAt -or $durationBasis -eq 'per-case-wall-clock') {
+                            if ($durationBasis -ne 'per-case-wall-clock') { throw 'Case timestamps require per-case-wall-clock basis; batch allocation is not case timing' }
+                            # PS7 may coerce dates during JSON parsing; check the original UTC suffix too.
+                            foreach ($field in @('started_at_utc', 'ended_at_utc')) {
+                                if ($executionText -notmatch ('"' + $field + '"\s*:\s*"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,7})?(Z|\+00:00)"')) { throw 'Case timestamps must explicitly use UTC' }
+                            }
+                            $times = @()
+                            foreach ($value in @($startedAt, $endedAt)) {
+                                $parsed = [DateTimeOffset]::MinValue
+                                if ($value -is [datetime]) { $value = $value.ToUniversalTime().ToString('o') }
+                                if ([string]$value -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,7})?(Z|\+00:00)$' -or
+                                    -not [DateTimeOffset]::TryParse([string]$value, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$parsed)) { throw 'Case timing requires valid UTC started_at_utc and ended_at_utc' }
+                                $times += $parsed
+                            }
+                            $elapsed = ($times[1] - $times[0]).TotalMilliseconds
+                            if ($elapsed -lt 0 -or $durationState -ne 'available' -or [Math]::Abs($elapsed - $parsedDuration) -gt 1) { throw 'Case timestamp/duration mismatch (tolerance 1 ms)' }
+                            if ($returnBasis -ne 'execution-confirmed' -or [string]::IsNullOrWhiteSpace([string]$stoppingReason) -or
+                                $stoppingReason -notin @('completed', 'succeeded', 'valid-result') -or
+                                [string]$executionAttempts -notmatch '^[1-3]$') { throw 'Case completion requires successful status, attempts 1..3 and completed/succeeded/valid-result stopping_reason' }
+                        } elseif ($durationBasis -notin @('legacy-unspecified', 'batch-wall-clock-equal-allocation')) {
+                            throw 'Unknown duration_basis'
+                        }
                     } catch {
                         $state = 'invalid'
-                        $executionStatus = 'invalid-metadata'
+                        if ($executionStatus -eq 'unknown') { $executionStatus = 'invalid-metadata' }
                         $durationState = 'invalid'
                         $issues.Add('execution.json is invalid; completion cannot be inferred from residual files')
                         $executionIssues.Add("execution.json cannot be parsed: $($_.Exception.Message)")
                     }
+                }
+
+                if ($strictTiming -and -not (Test-Path -LiteralPath $executionPath -PathType Leaf)) {
+                    $state = 'invalid'
+                    $issues.Add('Per-case protocol requires execution.json')
                 }
 
                 if ($state -eq 'complete') {
@@ -387,6 +427,9 @@ function Invoke-Validate {
                     execution_attempts = $executionAttempts
                     stopping_reason = $stoppingReason
                     duration_ms = $durationMs
+                    duration_basis = $durationBasis
+                    started_at_utc = $startedAt
+                    ended_at_utc = $endedAt
                     duration_state = $durationState
                     issues = @($issues)
                     execution_issues = @($executionIssues)
@@ -403,7 +446,15 @@ function Invoke-Validate {
         $passRate = if ($totals.total -gt 0) { [Math]::Round($totals.passed / $totals.total, 4) } else { $null }
         $averageChars = if ($totals.complete_runs -gt 0) { [Math]::Round($totals.response_chars / $totals.complete_runs, 1) } else { $null }
         $validReturnRate = if ($totals.expected_runs -gt 0) { [Math]::Round($totals.complete_runs / $totals.expected_runs, 4) } else { $null }
-        $medianDuration = Get-Median -Values @($totals.duration_values)
+        $durationGroups = @($records | Where-Object { $_.configuration -eq $configuration.name -and $_.state -eq 'complete' -and $_.duration_state -eq 'available' } | Group-Object -Property { $_.duration_basis } | ForEach-Object {
+            [ordered]@{
+                duration_basis = $_.Name
+                duration_samples = $_.Count
+                median_duration_ms = Get-Median -Values @($_.Group | ForEach-Object { $_.duration_ms })
+            }
+        })
+        $durationComparable = $durationGroups.Count -eq 1 -and $durationGroups[0].duration_basis -in @('per-case-wall-clock', 'batch-wall-clock-equal-allocation')
+        $medianDuration = if ($durationComparable) { $durationGroups[0].median_duration_ms } else { $null }
         $summaryRows.Add([ordered]@{
             configuration = [string]$configuration.name
             expected_runs = $totals.expected_runs
@@ -418,6 +469,9 @@ function Invoke-Validate {
             average_response_chars = $averageChars
             valid_return_rate = $validReturnRate
             duration_samples = $totals.duration_values.Count
+            duration_bases = @($durationGroups | ForEach-Object { $_.duration_basis })
+            duration_by_basis = @($durationGroups)
+            duration_comparable = $durationComparable
             median_duration_ms = $medianDuration
         })
     }
@@ -439,11 +493,14 @@ function Invoke-Validate {
         baseline_average_response_chars = $null
         candidate_average_response_chars = $null
         duration_complete_pairs = 0
+        duration_bases = @()
+        duration_by_basis = @()
+        duration_comparable = $false
         baseline_median_duration_ms = $null
         candidate_median_duration_ms = $null
     }
-    $baselineDurationValues = [System.Collections.Generic.List[double]]::new()
-    $candidateDurationValues = [System.Collections.Generic.List[double]]::new()
+    $durationPairs = [System.Collections.Generic.List[object]]::new()
+    $pairedDurationBases = [System.Collections.Generic.List[string]]::new()
     foreach ($directoryName in @($manifest.eval_directories)) {
         $metadataPath = Join-Path $workspacePath "$($manifest.grader_directory)\$directoryName.json"
         $metadata = [System.IO.File]::ReadAllText($metadataPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
@@ -462,10 +519,16 @@ function Invoke-Validate {
             $paired.total += [int]$baselineRecord.total
             $paired.baseline_response_chars += [int]$baselineRecord.response_chars
             $paired.candidate_response_chars += [int]$candidateRecord.response_chars
-            if ($baselineRecord.duration_state -eq 'available' -and $candidateRecord.duration_state -eq 'available') {
+            foreach ($timingRecord in @($baselineRecord, $candidateRecord)) {
+                if ($timingRecord.duration_state -eq 'available') { $pairedDurationBases.Add([string]$timingRecord.duration_basis) }
+            }
+            if ($baselineRecord.duration_state -eq 'available' -and $candidateRecord.duration_state -eq 'available' -and $baselineRecord.duration_basis -eq $candidateRecord.duration_basis) {
                 $paired.duration_complete_pairs++
-                $baselineDurationValues.Add([double]$baselineRecord.duration_ms)
-                $candidateDurationValues.Add([double]$candidateRecord.duration_ms)
+                $durationPairs.Add([pscustomobject]@{
+                    duration_basis = $baselineRecord.duration_basis
+                    baseline_duration_ms = $baselineRecord.duration_ms
+                    candidate_duration_ms = $candidateRecord.duration_ms
+                })
             }
             if ([int]$baselineRecord.passed -gt [int]$candidateRecord.passed) {
                 $paired.baseline_wins++
@@ -480,14 +543,29 @@ function Invoke-Validate {
     $paired.candidate_pass_rate = if ($paired.total -gt 0) { [Math]::Round($paired.candidate_passed / $paired.total, 4) } else { $null }
     $paired.baseline_average_response_chars = if ($paired.complete_pairs -gt 0) { [Math]::Round($paired.baseline_response_chars / $paired.complete_pairs, 1) } else { $null }
     $paired.candidate_average_response_chars = if ($paired.complete_pairs -gt 0) { [Math]::Round($paired.candidate_response_chars / $paired.complete_pairs, 1) } else { $null }
-    $paired.baseline_median_duration_ms = Get-Median -Values @($baselineDurationValues)
-    $paired.candidate_median_duration_ms = Get-Median -Values @($candidateDurationValues)
+    $paired.duration_bases = @($pairedDurationBases | Sort-Object -Unique)
+    $paired.duration_by_basis = @($durationPairs | Group-Object duration_basis | ForEach-Object {
+        [ordered]@{
+            duration_basis = $_.Name
+            duration_complete_pairs = $_.Count
+            duration_comparable = $_.Name -in @('per-case-wall-clock', 'batch-wall-clock-equal-allocation')
+            baseline_median_duration_ms = Get-Median -Values @($_.Group | ForEach-Object { $_.baseline_duration_ms })
+            candidate_median_duration_ms = Get-Median -Values @($_.Group | ForEach-Object { $_.candidate_duration_ms })
+        }
+    })
+    # Pair-local agreement does not establish a shared basis across the cohort.
+    $paired.duration_comparable = $paired.duration_bases.Count -eq 1 -and $paired.duration_by_basis.Count -eq 1 -and $paired.duration_by_basis[0].duration_comparable
+    if ($paired.duration_comparable) {
+        $paired.baseline_median_duration_ms = $paired.duration_by_basis[0].baseline_median_duration_ms
+        $paired.candidate_median_duration_ms = $paired.duration_by_basis[0].candidate_median_duration_ms
+    }
 
     $report = [ordered]@{
         schema_version = 2
         validated_at_utc = [DateTime]::UtcNow.ToString('o')
         workspace = $workspacePath
         allow_incomplete = [bool]$AllowIncomplete
+        duration_bases = @($records | ForEach-Object { $_.duration_basis } | Sort-Object -Unique)
         summary = @($summaryRows)
         paired_summary = $paired
         runs = @($records)
@@ -497,6 +575,8 @@ function Invoke-Validate {
 
     $lines = [System.Collections.Generic.List[string]]::new()
     $lines.Add('# 轻量回归汇总')
+    $lines.Add('时长保留原口径：batch-wall-clock-equal-allocation 是批次均摊，不是逐题实测；legacy-unspecified 表示未知。不同口径不作速度比较。')
+    $lines.Add("时长口径：$($report.duration_bases -join ', ')")
     $lines.Add('')
     $lines.Add('本文只报告结构、运行完整性与聚合分数，不能替代正式评测页面和人工复核。')
     $lines.Add('空白回答、失败或未完成的执行记录不计有效返回。旧记录缺少执行状态时只按非空回答与有效评分兼容，不推断执行成功；超时成本不改变回答有效性或质量分数。')
@@ -525,7 +605,25 @@ function Invoke-Validate {
     $lines.Add("- 平均字符：baseline $($paired.baseline_average_response_chars)，candidate $($paired.candidate_average_response_chars)")
     $baselineDuration = if ($null -eq $paired.baseline_median_duration_ms) { 'unavailable' } else { [string]$paired.baseline_median_duration_ms }
     $candidateDuration = if ($null -eq $paired.candidate_median_duration_ms) { 'unavailable' } else { [string]$paired.candidate_median_duration_ms }
-    $lines.Add("- 配对中位时长：baseline $baselineDuration ms，candidate $candidateDuration ms；可比较 $($paired.duration_complete_pairs) 对")
+    $lines.Add("- 配对中位时长：baseline $baselineDuration ms，candidate $candidateDuration ms；同口径配对 $($paired.duration_complete_pairs) 对；全局可比较：$($paired.duration_comparable)")
+    $lines.Add('')
+    $lines.Add('## 按计时口径统计')
+    $lines.Add('')
+    $lines.Add('各组独立统计，不跨口径比较；legacy-unspecified 仅保留历史描述统计，不作速度比较。')
+    $lines.Add('')
+    $lines.Add('| 配置 | 口径 | 时长样本 | 中位时长(ms) |')
+    $lines.Add('| --- | --- | ---: | ---: |')
+    foreach ($row in $summaryRows) {
+        foreach ($group in $row.duration_by_basis) {
+            $lines.Add("| $($row.configuration) | $($group.duration_basis) | $($group.duration_samples) | $($group.median_duration_ms) |")
+        }
+    }
+    $lines.Add('')
+    $lines.Add('| 配对口径 | 同口径配对 | baseline 中位时长(ms) | candidate 中位时长(ms) | 组内可比较 |')
+    $lines.Add('| --- | ---: | ---: | ---: | --- |')
+    foreach ($group in $paired.duration_by_basis) {
+        $lines.Add("| $($group.duration_basis) | $($group.duration_complete_pairs) | $($group.baseline_median_duration_ms) | $($group.candidate_median_duration_ms) | $($group.duration_comparable) |")
+    }
     [System.IO.File]::WriteAllLines((Join-Path $workspacePath 'benchmark-lite.md'), $lines, $utf8)
 
     $problemCount = @($records | Where-Object { $_.state -ne 'complete' }).Count

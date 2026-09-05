@@ -1,10 +1,77 @@
 . (Join-Path $PSScriptRoot 'common.ps1')
 
+function Invoke-MypmLatestObservationValidation {
+    param([string]$Root, $Result)
+    $path = Join-Path $Root 'evals/latest-observation.json'
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return }
+    try {
+        $observation = [IO.File]::ReadAllText($path, [Text.Encoding]::UTF8) | ConvertFrom-Json
+        foreach ($field in @('source', 'source_sha256', 'snapshot_head')) {
+            $value = $observation.$field
+            if ($value -isnot [string] -or [string]::IsNullOrWhiteSpace($value)) { throw "Missing or invalid observation identity field: $field" }
+        }
+        if ($observation.snapshot_head -cnotmatch '\A[A-Fa-f0-9]{40}\z' -or $observation.snapshot_head -eq ('0' * 40)) {
+            throw 'Invalid snapshot_head'
+        }
+        if ($observation.schema_version -ne 1 -or $observation.metric -ne 'assertion-pass-rate' -or
+            $observation.duration_basis -ne 'batch-wall-clock-equal-allocation' -or
+            $observation.source_sha256 -cnotmatch '\A[A-Fa-f0-9]{64}\z' -or
+            $observation.source_sha256 -eq ('0' * 64) -or
+            @($observation.documents).Count -ne 3 -or
+            @($observation.documents.path | Sort-Object -Unique).Count -ne 3) { throw 'Invalid observation identity or metric boundary' }
+        foreach ($document in $observation.documents) {
+            if ($document.path -notin @('README.md', 'notes/mypm-roadmap.md', 'notes/evaluation-history.md')) { throw 'Unsupported observation document' }
+            $text = [IO.File]::ReadAllText((Join-Path $Root $document.path), [Text.Encoding]::UTF8)
+            $section = [regex]::Match($text, [string]$document.section_pattern)
+            if (-not $section.Success) { throw "Missing observation section: $($document.path)" }
+            if ($document.path -eq 'notes/evaluation-history.md') {
+                # Bind to the selected historical record, not the current Candidate checkout.
+                $heads = @([regex]::Matches($section.Value, 'HEAD\s+`([^`]+)`'))
+                if ($heads.Count -ne 1 -or $heads[0].Groups[1].Value -ine $observation.snapshot_head) {
+                    throw 'snapshot_head does not match selected historical snapshot identity'
+                }
+                $hashes = @([regex]::Matches($section.Value, '`benchmark\.json` SHA-256\s*[:\uFF1A]\s*`([^`]+)`'))
+                if ($hashes.Count -ne 1 -or $hashes[0].Groups[1].Value -ine $observation.source_sha256) {
+                    throw 'source_sha256 does not match selected historical benchmark identity'
+                }
+            }
+            foreach ($pattern in @($document.required_patterns)) {
+                if (-not [regex]::IsMatch($section.Value, [string]$pattern)) { throw "Observation mismatch in $($document.path): $pattern" }
+            }
+            # Only the selected observation, never the entire historical archive.
+            $scores = @([regex]::Matches($section.Value, '\b\d+/(?:883|376)\b') | ForEach-Object { $_.Value })
+            if (($scores -join ',') -ne ($observation.scores -join ',')) { throw "Conflicting observation scores in $($document.path)" }
+        }
+        # External evidence is optional; an available but conflicting file is not a skip.
+        $source = $observation.source
+        $Result.Metrics['observation_source_bytes'] = 'unavailable'
+        $Result.Metrics['observation_external_identity'] = 'unavailable'
+        if (-not [IO.Path]::IsPathRooted($source)) { $source = Join-Path $Root $source }
+        if (Test-Path -LiteralPath $source -PathType Leaf) {
+            if ((Get-FileHash -LiteralPath $source -Algorithm SHA256 -ErrorAction Stop).Hash -ine $observation.source_sha256) {
+                throw 'Source benchmark hash mismatch'
+            }
+            $Result.Metrics['observation_source_bytes'] = 'verified'
+        }
+        $manifestPath = Join-Path (Split-Path -Parent $source) 'run-manifest.json'
+        if (Test-Path -LiteralPath $manifestPath -PathType Leaf) {
+            $manifest = [IO.File]::ReadAllText($manifestPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+            if ($manifest.head -isnot [string] -or $manifest.head -ine $observation.snapshot_head) {
+                throw 'snapshot_head does not match external run-manifest head'
+            }
+            $Result.Metrics['observation_external_identity'] = 'verified'
+        }
+    } catch {
+        Add-MypmValidationError -Result $Result -Message "Latest observation: $($_.Exception.Message)"
+    }
+}
+
 function Invoke-MypmDocsValidation {
     param([Parameter(Mandatory = $true)][string]$Root)
 
     $result = New-MypmValidationResult
     $root = [System.IO.Path]::GetFullPath($Root)
+    Invoke-MypmLatestObservationValidation -Root $root -Result $result
     $extensions = @('.md', '.json', '.yaml', '.ps1', '.csv', '.sql', '.log')
     $markers = @([char]0xFFFD, [char]0x951B, [char]0x9286, [char]0x9235, [char]0x99A3, [char]0x95C1)
     $files = @(Get-ChildItem -LiteralPath $root -Recurse -File | Where-Object { $_.Extension -in $extensions })

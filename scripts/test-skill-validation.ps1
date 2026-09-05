@@ -63,6 +63,7 @@ try {
     }
     New-Item -ItemType Directory -Path (Join-Path $base 'notes') -Force | Out-Null
     Copy-Item -LiteralPath (Join-Path $root 'notes\mypm-roadmap.md') -Destination (Join-Path $base 'notes\mypm-roadmap.md')
+    Copy-Item -LiteralPath (Join-Path $root 'notes\evaluation-history.md') -Destination (Join-Path $base 'notes\evaluation-history.md')
     Copy-Item -LiteralPath (Join-Path $root 'notes\v0.36-capability-ecosystem-prd.md') -Destination (Join-Path $base 'notes\v0.36-capability-ecosystem-prd.md')
 
     $positiveErrors = @(Get-ValidationErrors -FixtureRoot $base)
@@ -122,6 +123,21 @@ try {
     Assert-FailsWith -FixtureRoot $case -Pattern 'Eval lifecycle ownership missing: stable:2' -Name 'missing eval lifecycle ownership'
 
     $builder = Join-Path $root 'scripts\build-eval-panel.ps1'
+    $relatedOutput = Join-Path $tempRoot 'related-source-evals.json'
+    $relatedSnapshot = Join-Path $tempRoot 'related-source-panel.json'
+    & $builder -ChangedFiles @('references/workflow-control.md') -OutputPath $relatedOutput -SnapshotPath $relatedSnapshot | Out-Null
+    $relatedPanel = Get-Content -Raw -Encoding UTF8 $relatedSnapshot | ConvertFrom-Json
+    $expectedRelatedContracts = @('acceptance-core-output', 'prompt-prerequisite-evidence-stop', 'single-verification', 'work-mode-handoff-authorization') | Sort-Object
+    Assert-True -Condition ((@($relatedPanel.affected_contracts | Sort-Object) -join ',') -eq ($expectedRelatedContracts -join ',')) -Message 'Related source contract coverage differs from evidence, verification and authorization ownership'
+
+    $case = New-FixtureCase -Base $base -Name 'related-source-escape'
+    $path = Join-Path $case 'evals\contract-registry.json'
+    $json = Get-Content -Raw -Encoding UTF8 $path | ConvertFrom-Json
+    $contract = $json.contracts | Where-Object contract_id -eq 'work-mode-handoff-authorization'
+    $contract | Add-Member -NotePropertyName related_source_files -NotePropertyValue @('../outside.md') -Force
+    Write-JsonFile -Value $json -Path $path
+    Assert-FailsWith -FixtureRoot $case -Pattern 'related source escapes skill root' -Name 'related source escapes root'
+
     $replayOutput1 = Join-Path $tempRoot 'replay-1-evals.json'
     $replaySnapshot1 = Join-Path $tempRoot 'replay-1-panel.json'
     $replayOutput2 = Join-Path $tempRoot 'replay-2-evals.json'
@@ -185,7 +201,7 @@ try {
     Assert-True -Condition ([string]$upgrade.mode -eq 'affected-route-full-regression') -Message 'Panel limit did not upgrade to affected-route full regression'
     Assert-True -Condition (@($upgrade.selection).Count -gt 3) -Message 'Full-regression upgrade silently truncated critical contracts'
 
-    Write-Host 'Skill validation fixtures passed: positive=1 negative=8 builder=replay/determinism/unknown/duplicate/unmapped/waiver/upgrade.'
+    Write-Host 'Skill validation fixtures passed: positive=1 negative=9 builder=related-source/replay/determinism/unknown/duplicate/unmapped/waiver/upgrade.'
 } finally {
     if (Test-Path -LiteralPath $tempRoot) {
         $resolved = (Resolve-Path -LiteralPath $tempRoot).Path

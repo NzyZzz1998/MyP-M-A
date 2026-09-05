@@ -43,6 +43,7 @@ if ($Strict) {
         'test-v038-evidence-action-adapters.ps1',
         'test-v040-visual-delivery.ps1',
         'test-v041-work-mode-boundary.ps1',
+        'test-v042-governance.ps1',
         'test-evaluation-portfolio.ps1'
     )) {
         try {
@@ -70,6 +71,9 @@ $capabilities = $results.capabilities.Metrics
 $externalBenchmark = $results.external_benchmark.Metrics
 $publicCases = $results.public_cases.Metrics
 $portfolio = $results.evaluation_portfolio.Metrics
+if ($docs.Contains('observation_source_bytes')) {
+    Write-Host "Latest observation evidence: source_bytes=$($docs.observation_source_bytes) external_identity=$($docs.observation_external_identity); unavailable means local historical identity only, not external verification."
+}
 Write-Host (
     'MyP-M-A static validation passed: ' +
     "version=$($core.version) " +

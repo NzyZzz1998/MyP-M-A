@@ -141,6 +141,8 @@ try {
     Assert-Equal -Actual ([int]$report.paired_summary.candidate_passed) -Expected 3 -Message 'candidate paired score'
     Assert-Equal -Actual ([int]$report.paired_summary.total) -Expected 4 -Message 'paired denominator'
     Assert-Equal -Actual (@($report.runs | Where-Object { $_.execution_status -eq 'unknown' -and $_.valid_return_basis -eq 'legacy-artifacts-status-unknown' }).Count) -Expected 4 -Message 'legacy status must remain unknown'
+    Assert-Equal $report.paired_summary.baseline_median_duration_ms $null 'missing timing has no median'
+    Assert-Equal @($report.summary[0].duration_by_basis).Count 0 'missing timing has no groups'
 
     $runPaths = @($iteration.eval_directories | ForEach-Object {
         $directoryName = $_
@@ -173,7 +175,161 @@ try {
     $pendingReport = Get-Content -LiteralPath (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     Assert-Equal -Actual ([bool]$pendingReport.runs[0].valid_return) -Expected $false -Message 'in-progress execution must not be inferred complete from residual output'
 
-    Write-Host 'Evaluation pipeline test passed: legacy compatibility, empty/failed/cancelled/malformed/pending rejection, late third-attempt completion and quality separation.'
+    $timed = [ordered]@{
+        status = 'succeeded'; attempts = 3; stopping_reason = 'completed'
+        duration_basis = 'per-case-wall-clock'; duration_ms = 900001
+        started_at_utc = '2026-09-03T00:00:00.000Z'; ended_at_utc = '2026-09-03T00:15:00.001Z'
+    }
+    $iteration.execution_protocol | Add-Member -NotePropertyName timing_protocol -NotePropertyValue 'per-case-utc-v1' -Force
+    Write-JsonFile -Path (Join-Path $workspace 'iteration.json') -Value $iteration
+    foreach ($path in $runPaths) { Write-JsonFile -Path (Join-Path $path 'execution.json') -Value $timed }
+    & $regressionScript -Action Validate -Workspace $workspace
+    $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal $report.paired_summary.complete_pairs 2 'UTC late third result'
+    Assert-Equal $report.paired_summary.candidate_passed 3 'valid low score retained under UTC protocol'
+    Assert-Equal $report.runs[1].execution_attempts 3 'validation must not add a retry'
+    $firstAttempt = $timed | ConvertTo-Json | ConvertFrom-Json
+    $firstAttempt.attempts = 1
+    Write-JsonFile -Path (Join-Path $runPaths[1] 'execution.json') -Value $firstAttempt
+    & $regressionScript -Action Validate -Workspace $workspace
+    $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal $report.runs[1].execution_attempts 1 'valid low-scoring first attempt is not retried'
+    Assert-Equal $report.runs[1].passed 1 'low score remains unchanged'
+    # Queue-state records must survive reporting without becoming valid answers.
+    foreach ($queueState in @(
+        @{ name = 'third-still-waiting'; status = 'running'; attempts = 3; reason = 'awaiting-result' },
+        @{ name = 'optional-fallback'; status = 'cancelled'; attempts = 1; reason = 'optional-fallback' },
+        @{ name = 'third-user-stop'; status = 'cancelled'; attempts = 3; reason = 'user-stop' },
+        @{ name = 'third-executor-error'; status = 'execution_failed'; attempts = 3; reason = 'executor-error' }
+    )) {
+        $pending = $timed | ConvertTo-Json | ConvertFrom-Json
+        $pending.status = $queueState.status
+        $pending.attempts = $queueState.attempts
+        $pending.stopping_reason = $queueState.reason
+        Write-JsonFile -Path (Join-Path $runPaths[0] 'execution.json') -Value $pending
+        $answerHash = (Get-FileHash -LiteralPath (Join-Path $runPaths[1] 'response.md')).Hash
+        & $regressionScript -Action Validate -Workspace $workspace -AllowIncomplete
+        $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+        Assert-Equal $report.runs[0].valid_return $false "$($queueState.name) not a valid answer"
+        Assert-Equal $report.runs[0].execution_status $queueState.status "$($queueState.name) status retained"
+        Assert-Equal $report.runs[0].execution_attempts $queueState.attempts "$($queueState.name) attempts retained"
+        Assert-Equal $report.runs[0].stopping_reason $queueState.reason "$($queueState.name) reason retained"
+        Assert-Equal $report.runs[0].duration_ms 900001 "$($queueState.name) elapsed retained"
+        Assert-Equal $report.runs[1].valid_return $true 'independent valid low score remains scoreable'
+        Assert-Equal $report.runs[1].execution_attempts 1 'reporting cannot schedule a retry'
+        Assert-Equal $report.runs[1].passed 1 'independent low quality remains unchanged'
+        Assert-Equal (Get-FileHash -LiteralPath (Join-Path $runPaths[1] 'response.md')).Hash $answerHash 'reporting cannot replace the answer'
+    }
+    Remove-Item -LiteralPath (Join-Path $runPaths[0] 'execution.json')
+    & $regressionScript -Action Validate -Workspace $workspace -AllowIncomplete
+    $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal $report.runs[0].valid_return $false 'new protocol rejects missing execution metadata'
+
+    foreach ($mutation in @(
+        @{ field = 'duration_ms'; value = 900100 },
+        @{ field = 'duration_basis'; value = 'batch-wall-clock-equal-allocation' },
+        @{ field = 'duration_basis'; value = $null },
+        @{ field = 'started_at_utc'; value = $null },
+        @{ field = 'ended_at_utc'; value = '2026-09-02T00:00:00Z' },
+        @{ field = 'ended_at_utc'; value = 'not-a-date' },
+        @{ field = 'ended_at_utc'; value = '2026-09-03T08:15:00.001+08:00' },
+        @{ field = 'status'; value = $null },
+        @{ field = 'status'; value = 'running' },
+        @{ field = 'stopping_reason'; value = 'cancelled' },
+        @{ field = 'stopping_reason'; value = $null },
+        @{ field = 'attempts'; value = 4 }
+    )) {
+        $bad = $timed | ConvertTo-Json | ConvertFrom-Json
+        $bad.($mutation.field) = $mutation.value
+        Write-JsonFile -Path (Join-Path $runPaths[0] 'execution.json') -Value $bad
+        & $regressionScript -Action Validate -Workspace $workspace -AllowIncomplete
+        $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+        Assert-Equal $report.runs[0].valid_return $false "reject timing mutation $($mutation.field)"
+    }
+    $iteration.execution_protocol.timing_protocol = 'legacy'
+    Write-JsonFile -Path (Join-Path $workspace 'iteration.json') -Value $iteration
+    Write-JsonFile -Path (Join-Path $runPaths[0] 'execution.json') -Value ([ordered]@{
+        status = 'succeeded'; duration_ms = 900001; duration_basis = 'batch-wall-clock-equal-allocation'
+    })
+    & $regressionScript -Action Validate -Workspace $workspace
+    $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal $report.runs[0].valid_return $true 'older batch record compatibility'
+    Assert-Equal $report.runs[0].duration_basis 'batch-wall-clock-equal-allocation' 'batch label preserved'
+    Assert-Equal $report.runs[0].started_at_utc $null 'historical timestamps not fabricated'
+    # Each pair is internally consistent; only cross-pair aggregation mixes bases.
+    foreach ($bases in @(
+        @('per-case-wall-clock', 'batch-wall-clock-equal-allocation'),
+        @('per-case-wall-clock', 'per-case-wall-clock'),
+        @('batch-wall-clock-equal-allocation', 'batch-wall-clock-equal-allocation'),
+        @('legacy-unspecified', 'legacy-unspecified'),
+        @('per-case-wall-clock', 'legacy-unspecified')
+    )) {
+        $durations = @(100, 200, 10000, 5000)
+        for ($index = 0; $index -lt $runPaths.Count; $index++) {
+            $basis = $bases[[int][Math]::Floor($index / 2)]
+            $execution = [ordered]@{ status = 'succeeded'; duration_ms = $durations[$index]; attempts = 1; stopping_reason = 'completed' }
+            if ($basis -ne 'legacy-unspecified') { $execution.duration_basis = $basis }
+            if ($basis -eq 'per-case-wall-clock') {
+                $execution.started_at_utc = '2026-09-03T00:00:00.000Z'
+                $execution.ended_at_utc = ([datetime]::Parse('2026-09-03T00:00:00Z').ToUniversalTime()).AddMilliseconds($durations[$index]).ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'")
+            }
+            Write-JsonFile -Path (Join-Path $runPaths[$index] 'execution.json') -Value $execution
+        }
+        & $regressionScript -Action Validate -Workspace $workspace
+        $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+        $comparable = $bases[0] -eq $bases[1] -and $bases[0] -ne 'legacy-unspecified'
+        $expectedBaseline = if ($comparable) { 5050 } else { $null }
+        $expectedCandidate = if ($comparable) { 2600 } else { $null }
+        Write-Host "Timing fixture $($bases -join '/'): baseline=$($report.paired_summary.baseline_median_duration_ms) candidate=$($report.paired_summary.candidate_median_duration_ms)"
+        Assert-Equal $report.paired_summary.baseline_median_duration_ms $expectedBaseline 'cross-pair baseline median gate'
+        Assert-Equal $report.paired_summary.candidate_median_duration_ms $expectedCandidate 'cross-pair candidate median gate'
+        Assert-Equal $report.summary[0].median_duration_ms $expectedBaseline 'ordinary baseline median gate'
+        Assert-Equal $report.summary[1].median_duration_ms $expectedCandidate 'ordinary candidate median gate'
+        Assert-Equal $report.paired_summary.duration_comparable $comparable 'global comparison flag'
+        Assert-Equal $report.paired_summary.complete_pairs 2 'timing basis must not change valid returns'
+        Assert-Equal $report.paired_summary.candidate_passed 3 'timing basis must not change quality'
+        Assert-Equal $report.paired_summary.duration_complete_pairs 2 'retain same-basis pair sample count'
+        $groupCount = @($bases | Sort-Object -Unique).Count
+        Assert-Equal @($report.paired_summary.duration_by_basis).Count $groupCount 'paired basis groups'
+        Assert-Equal @($report.summary[0].duration_by_basis).Count $groupCount 'ordinary basis groups'
+        foreach ($row in @($report.summary)) {
+            Assert-Equal $row.duration_samples 2 'retain ordinary duration count'
+            Assert-Equal $row.duration_comparable $comparable 'ordinary comparison flag'
+        }
+        if ($groupCount -eq 2) {
+            $caseGroup = @($report.paired_summary.duration_by_basis | Where-Object duration_basis -eq 'per-case-wall-clock')[0]
+            Assert-Equal $caseGroup.baseline_median_duration_ms 100 'per-case baseline retained'
+            Assert-Equal $caseGroup.candidate_median_duration_ms 200 'per-case candidate retained'
+            Assert-Equal $caseGroup.duration_complete_pairs 1 'per-case pair count'
+            $otherPairGroup = @($report.paired_summary.duration_by_basis | Where-Object duration_basis -ne 'per-case-wall-clock')[0]
+            Assert-Equal $otherPairGroup.baseline_median_duration_ms 10000 'other-basis paired baseline retained'
+            Assert-Equal $otherPairGroup.candidate_median_duration_ms 5000 'other-basis paired candidate retained'
+            Assert-Equal $otherPairGroup.duration_comparable ($bases[1] -ne 'legacy-unspecified') 'unknown group cannot compare speed'
+            $otherGroup = @($report.summary[0].duration_by_basis | Where-Object duration_basis -ne 'per-case-wall-clock')[0]
+            Assert-Equal $otherGroup.median_duration_ms 10000 'other-basis ordinary median retained'
+        }
+        $benchmark = Get-Content (Join-Path $workspace 'benchmark-lite.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+        Assert-Equal $benchmark.paired_summary.baseline_median_duration_ms $expectedBaseline 'benchmark JSON median gate'
+        $markdown = Get-Content (Join-Path $workspace 'benchmark-lite.md') -Raw -Encoding UTF8
+        if (-not $comparable -and $markdown -notmatch 'baseline unavailable ms.+candidate unavailable ms') { throw 'Markdown leaked mixed/unknown global medians' }
+    }
+    # A mismatched pair must not be pooled with the remaining known-basis pair.
+    foreach ($index in @(0, 1, 2)) { Write-JsonFile -Path (Join-Path $runPaths[$index] 'execution.json') -Value $timed }
+    & $regressionScript -Action Validate -Workspace $workspace
+    $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal $report.paired_summary.duration_complete_pairs 1 'mismatched pair excluded from timing pairs'
+    Assert-Equal $report.paired_summary.baseline_median_duration_ms $null 'mismatched basis blocks global comparison'
+    Assert-Equal $report.paired_summary.duration_by_basis[0].baseline_median_duration_ms 900001 'remaining group retained'
+    Write-JsonFile -Path (Join-Path $runPaths[3] 'execution.json') -Value ([ordered]@{
+        status = 'execution_failed'; duration_ms = 5000; duration_basis = 'batch-wall-clock-equal-allocation'
+    })
+    & $regressionScript -Action Validate -Workspace $workspace -AllowIncomplete
+    $report = Get-Content (Join-Path $workspace 'validation-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-Equal $report.summary[1].duration_samples 1 'invalid return excluded from ordinary timing samples'
+    Assert-Equal @($report.summary[1].duration_by_basis).Count 1 'invalid return excluded from timing groups'
+    Assert-Equal $report.summary[1].median_duration_ms 900001 'invalid batch does not contaminate valid case median'
+    Assert-Equal $report.paired_summary.baseline_median_duration_ms 900001 'incomplete pair excluded from comparison cohort'
+    Write-Host 'Evaluation pipeline test passed: queue-state preservation, basis grouping/global median gates, legacy/batch compatibility, UTC timing rejection, late third result and quality separation (fixtures only).'
 } finally {
     if (Test-Path -LiteralPath $tempRoot) {
         $resolvedTemp = (Resolve-Path -LiteralPath $tempRoot).Path

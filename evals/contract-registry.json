@@ -234,6 +234,7 @@
     {
       "contract_id": "acceptance-core-output",
       "source_file": "references/acceptance.md",
+      "related_source_files": ["references/workflow-control.md"],
       "routes": ["/acceptance"],
       "risk": "critical",
       "stable_evals": [36, 76],
@@ -324,6 +325,7 @@
     {
       "contract_id": "prompt-prerequisite-evidence-stop",
       "source_file": "references/prompt.md",
+      "related_source_files": ["references/workflow-control.md"],
       "routes": ["/prompt"],
       "risk": "critical",
       "stable_evals": [56],
@@ -394,6 +396,7 @@
     {
       "contract_id": "single-verification",
       "source_file": "references/prompt.md",
+      "related_source_files": ["references/workflow-control.md"],
       "routes": ["/prompt"],
       "risk": "high",
       "stable_evals": [66],
@@ -784,6 +787,7 @@
     {
       "contract_id": "work-mode-handoff-authorization",
       "source_file": "references/development-handoff.md",
+      "related_source_files": ["references/workflow-control.md"],
       "routes": ["/prd", "/prompt"],
       "risk": "critical",
       "stable_evals": [],

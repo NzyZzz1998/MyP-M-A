@@ -242,7 +242,11 @@ if (-not $hasDynamicInput) {
     $unmappedFiles = [System.Collections.Generic.List[string]]::new()
     foreach ($path in $changedFilesFinal) {
         if (-not (Test-BehaviorPath -Path $path)) { continue }
-        $matches = @($contracts | Where-Object { (Normalize-RelativePath -Path ([string]$_.source_file)) -eq $path })
+        $matches = @($contracts | Where-Object {
+            $sources = @($_.source_file) + @($_.related_source_files)
+            $normalized = @($sources | Where-Object { $_ } | ForEach-Object { Normalize-RelativePath -Path ([string]$_) })
+            $path -in $normalized
+        })
         if ($matches.Count -eq 0) {
             if (-not (Test-Waiver -Waivers $waivers -SourceFile $path -ContractId '')) {
                 $unmappedFiles.Add($path)

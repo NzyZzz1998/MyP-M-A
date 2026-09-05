@@ -32,7 +32,7 @@ function Copy-PortfolioFixture {
     Copy-Item -LiteralPath (Join-Path $root 'notes\v0.41-evaluation-governance.md') -Destination $notes
     if ($IncludeContracts) {
         $registry = Read-FixtureJson (Join-Path $root 'evals\contract-registry.json')
-        $paths = @('agents/openai.yaml', 'evals/trigger-baseline.json') + @($registry.contracts.source_file | Select-Object -Unique)
+        $paths = @('agents/openai.yaml', 'evals/trigger-baseline.json') + @($registry.contracts.source_file | Select-Object -Unique) + @($registry.contracts.related_source_files | ForEach-Object { $_ } | Where-Object { $_ } | Select-Object -Unique)
         foreach ($relative in $paths) {
             $destinationFile = Join-Path $Destination $relative
             New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destinationFile) | Out-Null

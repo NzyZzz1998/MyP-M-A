@@ -38,6 +38,7 @@
     "scripts/test-v039-reliable-delivery.ps1",
     "scripts/test-v040-visual-delivery.ps1",
     "scripts/test-v041-work-mode-boundary.ps1",
+    "scripts/test-v042-governance.ps1",
     "scripts/validation/validate-capabilities.ps1",
     "scripts/validation/validate-external-benchmark.ps1",
     "scripts/validation/validate-public-cases.ps1"

@@ -185,7 +185,7 @@ $releasePanel = Read-Utf8 'evals/release-panel.json' | ConvertFrom-Json
 $template = Read-Utf8 'templates/visual-manifest-template.json' | ConvertFrom-Json
 
 $currentVersion = [regex]::Match($skill, 'version:\s*"([^"]+)"').Groups[1].Value
-Assert-True ($currentVersion -in @('0.40.0', '0.41.0')) 'v0.40 historical self-test supports current versions 0.40.0 and 0.41.0'
+Assert-True ($currentVersion -in @('0.40.0', '0.41.0', '0.42.0')) 'v0.40 historical self-test supports current versions 0.40.0, 0.41.0 and 0.42.0'
 foreach ($contract in @('visual-delivery-route', 'visual-fact-map', 'visual-formal-package', 'visual-redraw-fidelity')) {
     Assert-True $visual.Contains("contract:$contract") "Visual reference is missing contract: $contract"
 }

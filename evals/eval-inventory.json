@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "generator_version": 1,
-  "skill_version": "0.41.0",
+  "skill_version": "0.42.0",
   "purpose": "派生评测资产账本；题面和断言保留在各自的源文件中。",
   "generated_from": [
     {
       "path": "evals/evals.json",
-      "sha256": "0f33d9ea3d604dee580f44c15113faa5781d350465beb227ff9ba47e3f948f74"
+      "sha256": "3a0c4235fb75988f90591eeae9235440636b7a71a7e686088192f0a5a77fb581"
     },
     {
       "path": "evals/challenge-evals.json",
-      "sha256": "8f7827de8ea2930a3482699ad0d611c71904d14c1ba6522a2387dc12ab0db07b"
+      "sha256": "944785a8ce4920786ed895bb1702f608287870862b801ce48be76049a884f169"
     },
     {
       "path": "evals/trigger-evals.json",
@@ -18,7 +18,7 @@
     },
     {
       "path": "evals/contract-registry.json",
-      "sha256": "659e6bbfa77f84c806c8413413d37c0f6de6811f7001907b9e380239b1745d8a"
+      "sha256": "db76b2f9784051017aa67f9202778ba8ab493e161eb38d48e774bce267806f41"
     },
     {
       "path": "evals/eval-lifecycle.json",
@@ -38,7 +38,7 @@
     },
     {
       "path": "evals/evaluation-policy.json",
-      "sha256": "23bf05944e02cf091fdd791f85053f1a516614ff1b6c2d3239567141b4f65a06"
+      "sha256": "b66d2eaf476e484ff94b7e7f8020b711f3d7668e995b9c69e6c101ed37ea5966"
     }
   ],
   "summary": {
