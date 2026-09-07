@@ -58,7 +58,7 @@ git clone https://github.com/NzyZzz1998/MyP-M-A.git "$HOME\.claude\skills\mypm"
 
 仓库访问需具备相应权限。已经安装时，在现有目录更新，不要覆盖本地修改或再装同名副本。
 
-上面的命令默认获取远端 `main`，当前为 `v0.42.0 Stable`，`test` 已同步相同版本。`v0.41.0` 保留为固定回退版本；历史快照见[版本标签索引](notes/version-tags.md)。安装时以实际分支、tag 与文件版本为准。
+上面的命令默认获取远端 `main`，当前为 `v0.42.0 Stable`，`test` 已同步相同版本。固定版本可选择 `v0.42.0` tag，`v0.41.0` 保留为回退版本；历史快照见[版本标签索引](notes/version-tags.md)。安装时以实际分支、tag 与文件版本为准。
 
 <details>
 <summary><strong>个人级、项目级与自定义目录</strong></summary>

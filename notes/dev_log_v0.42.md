@@ -1,5 +1,11 @@
 # v0.42 开发日志
 
+## 2026-09-07：v0.42.0 Tag 发布记录
+
+- 状态提交 `15d65a90c047ac7858e0df72eed3aac57108abad` 已同步远端 `test` / `main`。该提交包含完整 Stable 决定、四模型 medium 全量结果、使用推荐与 B-01 已知缺陷，PS7 Strict 及最终文档/差异检查通过，warnings=0。
+- 新建并推送 annotated tag `v0.42.0`，固定在上述状态提交；tag 对象 `1c5b035ebda747dec13e12d0ffc03ca34510c853` 与远端读回一致。Tag 注释明确 B-01 是 accepted risk、NOT fixed，保留原 R7 独立技术失败；没有创建 GitHub Release。
+- 本批仅回写标签索引、README 安装说明、CHANGELOG 和 Stable 决定中的实际分发结果。后续状态文档提交不移动版本 tag，最终分支 HEAD 与 tag 不必相同；运行时与评测字节保持一致。
+
 ## 2026-09-07：Stable 收口提交与双分支同步
 
 - 维护者明确要求推送 `test` / `main` 并打 tag，同时提醒保留已知缺陷。README 将 B-01 拆成实体误合并、关键关系遗漏和图文不一致三个具体反例，给出来源复核办法；CHANGELOG 同步说明，仍为已接受风险、尚未修复。
