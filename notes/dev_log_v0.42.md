@@ -1,5 +1,13 @@
 # v0.42 开发日志
 
+## 2026-09-07：Stable 收口提交与双分支同步
+
+- 维护者明确要求推送 `test` / `main` 并打 tag，同时提醒保留已知缺陷。README 将 B-01 拆成实体误合并、关键关系遗漏和图文不一致三个具体反例，给出来源复核办法；CHANGELOG 同步说明，仍为已接受风险、尚未修复。
+- 复核完整差异与未跟踪文件，本版 28 个文件以 `79646a1658ab603076f37b3b4f33a241faf55672` 提交：`feat(mypm): release v0.42 GPT-6 Astra adaptation`。无临时评测产物，分发收口未修改运行时或新增模型测试。
+- PowerShell 7 / Windows PowerShell 5.1 Strict 均通过，warnings=0；暂存差异检查及常见凭据模式扫描通过。静态验证不抵消 R7 的技术反证。
+- 本地 Git 推送已有提交对象到 `test`；GitHub 插件以 `force=false` 快进 `main`。插件与 Git 读回两分支均为 `79646a1`；一次 fetch TLS 握手失败经普通重试恢复，未关闭 TLS 校验。
+- 回写 README、roadmap、progress、backlog、适配记录、评测历史和 Stable 决定为 `remote-synced`。Tag 将在状态提交同步后创建；此处不预记 tag 成功，实际结果见后续日志与标签索引。不创建 Release。
+
 ## 2026-09-07：维护者确认 Stable 与模型推荐收口
 
 - 维护者在了解全量与 R7 审计后要求直接进入 Stable，随后补充“如果5.6sol作为主力，.42也没问题”。据此完成本地 Stable 状态与 README 收口，不继续追加运行时规则或模型测试。

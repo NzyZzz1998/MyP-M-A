@@ -58,7 +58,7 @@ git clone https://github.com/NzyZzz1998/MyP-M-A.git "$HOME\.claude\skills\mypm"
 
 仓库访问需具备相应权限。已经安装时，在现有目录更新，不要覆盖本地修改或再装同名副本。
 
-上面的命令默认获取远端 `main`，当前仍为 v0.41 系列，固定回退版本为 `v0.41.0`。本文描述的 `v0.42.0 Stable` 已在本地确认，当前 `test` 工作树的收口改动待提交与推送；远端 `test` 仍是之前的候选快照，尚无本版 Stable tag。安装时以实际分支、tag 与文件版本为准。
+上面的命令默认获取远端 `main`，当前为 `v0.42.0 Stable`，`test` 已同步相同版本。`v0.41.0` 保留为固定回退版本；历史快照见[版本标签索引](notes/version-tags.md)。安装时以实际分支、tag 与文件版本为准。
 
 <details>
 <summary><strong>个人级、项目级与自定义目录</strong></summary>
@@ -196,7 +196,7 @@ Basic Memory 支持 `auto`、`suggest`、`off` 三种模式。默认仅在已知
 
 ## 质量与验证边界
 
-**当前版本为 `v0.42.0 Stable`，本地待提交。** 四模型 medium 全量回归已经完成；维护者在了解 R7 遗留问题后确认晋升，推荐 Astra 与 Sol 主力用户使用。五个入口、两种交付模式及功能范围保持不变。
+**当前版本为 `v0.42.0 Stable`，`main` 与 `test` 已同步远端。** 四模型 medium 全量回归已经完成；维护者在了解 R7 遗留问题后确认晋升，推荐 Astra 与 Sol 主力用户使用。五个入口、两种交付模式及功能范围保持不变。
 
 **已知缺陷 B-01：已接受风险、尚未修复。** 复杂语义图在本次 Sol 多样本中出现以下反例；Stable 是维护者接受风险后的版本决定，不表示这些问题通过验收。
 
@@ -207,7 +207,7 @@ Basic Memory 支持 `auto`、`suggest`、`off` 三种模式。默认仅在已知
 | 图文含义不一致 | 摘要混用泛称 `reference` 与 `references/*.md` 文档集合 | 对照图、账本、摘要与降级文字，逐项核对同一对象和关系 |
 
 上述动作是使用时的风险缓解，不是已验证的修复。原独立验收未通过的结论与原分保留，关闭缺陷仍需绑定新快照的修复证据。详见[Stable 决定记录](notes/v0.42-stable-decision.md)与[适配验证记录](notes/v0.42-adaptation-verification.md)。
-<!-- project-status: version=0.42.0; state=stable-local-pending -->
+<!-- project-status: version=0.42.0; state=remote-synced -->
 
 **下表是 v0.42 同版本、四种 GPT 配置的单次全量观察，不是不同 Skill 的横评。** 稳定集与挑战集分别报告，不合并成统一质量总分；有效返回不等于正确回答，断言通过率也不等于独立正确性，原始评分与独立裁决分别保留。
 

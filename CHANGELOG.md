@@ -1,6 +1,6 @@
 # 更新记录
 
-## v0.42.0 Stable（GPT-6 Astra 专项优化，本地待提交） - 2026-09-07
+## v0.42.0 Stable（GPT-6 Astra 专项优化，main / test 已同步远端） - 2026-09-07
 
 - 功能范围不变，沿用五个入口与两种交付模式；本版主要针对 GPT-6 Astra 调整提示规则、事实保真和评测治理。Astra 或 GPT-5.6 Sol 作为主力可使用 v0.42；其他 GPT-5.6 主力配置优先保留 v0.41。
 - 维护者在读取全量与 R7 结论后确认晋升 Stable；B-01 记为已接受风险、尚未修复。原独立验收未通过与原分保留，具体决定见 [Stable 记录](notes/v0.42-stable-decision.md)。
@@ -12,7 +12,7 @@
 - R7 对 CH-37 使用 Astra medium 一份、Sol medium 三份做最终多样本门禁，`4/4` 首次有效，原分为 `10/10` 与 `9/10、9/10、10/10`。独立审计确认 Sol 主样本存在整体 Skill 与 `SKILL.md` 无依据合并，Sol 稳定性 B 全层遗漏合同注册表到稳定/挑战用例的映射，B-01 未关闭。
 - 已知缺陷 B-01 同时包括摘要混用 `reference` 与 `references/*.md` 集合的图文一致性问题；README 公开列出三类反例与来源复核办法，风险缓解不冒充修复，后续关闭需有新快照证据。
 - PowerShell 7 与 Windows PowerShell 5.1 Strict、上下文预算及 `git diff --check` 通过，warnings=0；静态与总体高通过率不能抵消关键事实反证。
-- v0.42 已本地晋升 Stable，收口改动仍在 `test` 工作树待提交；v0.41.0 保持可选稳定版本与回退基线。本次状态同步不表示已提交、推送、合并 main、打 tag 或创建 Release。
+- v0.42 Stable 收口提交 `79646a1` 已同步远端 `test` 与 `main`；v0.41.0 保持可选稳定版本与回退基线。Tag 的实际提交与分发状态独立记录于[版本标签索引](notes/version-tags.md)，未创建 GitHub Release。
 - R1～R6 的原题、原分、裁决与“当时未启动全量”的文字继续作为历史时点记录，不表示 2026-09-07 的当前状态。完整边界见[评测历史](notes/evaluation-history.md#v042-full-regression-20260906)和[适配验证记录](notes/v0.42-adaptation-verification.md)。
 
 ## v0.41.0 Stable（main 与 tag 已同步远端） - 2026-08-26
