@@ -130,6 +130,31 @@ function Get-VisualManifestErrors {
 
     $mode = [string]$Manifest.fact_map.mode
     if ($mode -eq 'numeric') {
+        foreach ($name in @('source_row_count', 'source_coverage', 'transformations')) {
+            if (-not (Has-Property $Manifest.fact_map $name)) { $errors.Add("numeric-map-missing:$name") }
+        }
+        if ((Has-Property $Manifest.fact_map 'source_row_count') -and [int]$Manifest.fact_map.source_row_count -lt 1) {
+            $errors.Add('numeric-source-row-count-invalid')
+        }
+        if ((Has-Property $Manifest.fact_map 'source_coverage') -and (Has-Property $Manifest.fact_map 'source_row_count')) {
+            $locators = @($Manifest.fact_map.source_coverage | ForEach-Object { [string]$_.source_locator } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Sort-Object -Unique)
+            if ($locators.Count -ne [int]$Manifest.fact_map.source_row_count) { $errors.Add('numeric-source-coverage-count-mismatch') }
+            foreach ($coverage in @($Manifest.fact_map.source_coverage)) {
+                foreach ($name in @('source_locator', 'disposition', 'reason')) {
+                    if (-not (Has-Property $coverage $name) -or [string]::IsNullOrWhiteSpace([string]$coverage.$name)) { $errors.Add("numeric-source-coverage-missing:$name") }
+                }
+                if ([string]$coverage.disposition -notin @('included', 'excluded')) { $errors.Add('numeric-source-coverage-invalid-disposition') }
+            }
+        }
+        if (Has-Property $Manifest.fact_map 'transformations') {
+            foreach ($transformation in @($Manifest.fact_map.transformations)) {
+                foreach ($name in @('transformation_id', 'kind', 'formula', 'source_locators', 'output_fact_id', 'transformed_row_count')) {
+                    if (-not (Has-Property $transformation $name)) { $errors.Add("numeric-transformation-missing:$name") }
+                }
+                if (@($transformation.source_locators).Count -lt 1) { $errors.Add('numeric-transformation-missing-source-locators') }
+                if ([int]$transformation.transformed_row_count -lt 1) { $errors.Add('numeric-transformation-row-count-invalid') }
+            }
+        }
         foreach ($fact in @($Manifest.fact_map.facts)) {
             foreach ($name in @('fact_id', 'source_locator', 'visual_element', 'source_value', 'rendered_value', 'unit')) {
                 if (-not (Has-Property $fact $name)) { $errors.Add("numeric-fact-missing:$name") }
@@ -193,6 +218,19 @@ Assert-True $chart.Contains('visual-chart-value-fidelity') 'Chart value fidelity
 Assert-True ($tooling.Contains('installed / callable / call_succeeded / version / commit / license')) 'Six-field probe contract is missing'
 Assert-True ($routing.Contains('references/visual-delivery.md')) 'Visual route is missing'
 Assert-True ($visual.Contains('不得折叠成 `A -> C`') -and $visual.Contains('停止输出替代图')) 'Semantic edge and redraw stop contracts are missing'
+Assert-True ($visual.Contains('每个可见节点也须有独立映射行') -and $visual.Contains('节点只出现在边的端点中，不等于')) 'Node and edge mapping closure is missing'
+Assert-True ($visual.Contains('图中节点集合 = 节点映射集合') -and $visual.Contains('不能只写“后续应拆图/保留表格”')) 'Visual delivery must use mechanical set checks and complete the requested artifact in the current turn'
+Assert-True ($skill.Contains('数值再读 `references/chart-delivery.md`') -and $skill.Contains('混合出图当轮交付两图并逐源行、节点、边核对')) 'Core routing must expose numeric and mixed visual completion'
+Assert-True ($visual.Contains('required_artifacts') -and $visual.Contains('source_row_count') -and $visual.Contains('转换后冻结数据集合') -and $visual.Contains('不得未声明抽样、遗漏或只读首行')) 'Mixed visual preflight must enumerate artifacts and preserve raw or transformed numeric lineage'
+Assert-True ($visual.Contains('图中 N-ID 集合 = 节点映射集合') -and $visual.Contains('图中 E-ID 集合 = 边映射集合') -and $visual.Contains('文件行或章节')) 'Mixed visual preflight must close node and edge locators mechanically'
+Assert-True ($visual.Contains('可选工具不可调用不构成阻塞') -and $visual.Contains('只有承重事实/来源本身缺失')) 'Unsafe layout refusal must not block a safe complete visual fallback'
+Assert-True ($visual.Contains('node_count / edge_count / mapped_node_count / mapped_edge_count') -and $visual.Contains('发送前回读定位')) 'Semantic locator checks must validate counts and referenced source text'
+Assert-True ($visual.Contains('A 调用 B，并读取 C') -and $visual.Contains('不能改成 `B -> C`') -and $visual.Contains('只有来源明确给出别名或同一性时才能合并')) 'Semantic mapping must preserve compound-clause subjects and forbid inferred entity merges'
+Assert-True ($visual.Contains('P-ID / 原文主语 / 关系 / 原文宾语 / locator') -and $visual.Contains('没有 P-ID 就不画边') -and $visual.Contains('同一性证据')) 'Semantic diagrams must be generated from an atomic proposition and entity-identity ledger'
+Assert-True ($visual.Contains('source_proposition_count') -and $visual.Contains('不得只为已画出的边补账本') -and $visual.Contains('来源 P-ID 集合 = included + excluded')) 'Semantic diagrams must close source-to-visual proposition coverage'
+Assert-True ($visual.Contains('图、账本、结论摘要和静态降级') -and $visual.Contains('逐边、逐段对照 P-ID')) 'Semantic facts must remain consistent across diagrams, ledgers, summaries and fallbacks'
+Assert-True ($chart.Contains('同一比例尺、可见量和反算值') -and $chart.Contains('标签正确不能抵消图形比例错误') -and $chart.Contains('ASCII/字符条')) 'Quantitative marks must pass a recomputable encoding check'
+Assert-True ((Has-Property $template.fact_map 'propositions') -and (Has-Property $template.fact_map 'encoding_checks') -and (Has-Property $template.fact_map 'source_proposition_count') -and (Has-Property $template.fact_map 'proposition_coverage')) 'Visual manifest template must expose proposition coverage and quantitative encoding checks'
 Assert-True ($strategy.Contains('未分群的总体证据只能支持总体结论')) 'Unsegmented evidence boundary is missing'
 Assert-True ($promptReference.Contains('不新增“重读全部证据”门禁') -and $acceptanceReference.Contains('不新增“重读全部证据”门禁')) 'Upstream acceptance inheritance contract is missing'
 Assert-True (@(Get-VisualManifestErrors $template).Count -eq 0) 'Visual manifest template must pass draft validation'
@@ -255,8 +293,26 @@ $goodNumeric = $template | ConvertTo-Json -Depth 30 | ConvertFrom-Json
 $goodNumeric.status = 'formal'
 $goodNumeric.tool_probe = [pscustomobject]@{name='none'; installed=$false; callable=$false; call_succeeded=$false; version=$null; commit=$null; license=$null; probed_at='2026-08-19T00:00:00Z'; evidence='No external tool used; local fixture only.'}
 $goodNumeric.fact_map.mode = 'numeric'
+$goodNumeric.fact_map.source_row_count = 1
+$goodNumeric.fact_map.source_coverage = @([pscustomobject]@{source_locator='data.csv:2'; disposition='included'; reason='direct chart input'})
+$goodNumeric.fact_map.transformations = @()
 $goodNumeric.fact_map.facts = @([pscustomobject]@{fact_id='N-1'; source_locator='data.csv:2'; visual_element='bar-review'; source_value='8999'; rendered_value='8999'; unit='chars'})
 Assert-True (@(Get-VisualManifestErrors $goodNumeric).Count -eq 0) 'Positive numeric fixture should pass'
+
+$goodAggregate = $goodNumeric | ConvertTo-Json -Depth 30 | ConvertFrom-Json
+$goodAggregate.fact_map.source_row_count = 3
+$goodAggregate.fact_map.source_coverage = @(
+    [pscustomobject]@{source_locator='data.csv:2'; disposition='included'; reason='sum input'},
+    [pscustomobject]@{source_locator='data.csv:3'; disposition='included'; reason='sum input'},
+    [pscustomobject]@{source_locator='data.csv:4'; disposition='included'; reason='sum input'}
+)
+$goodAggregate.fact_map.transformations = @([pscustomobject]@{transformation_id='T-1'; kind='aggregate'; formula='sum(value)'; source_locators=@('data.csv:2','data.csv:3','data.csv:4'); output_fact_id='N-1'; transformed_row_count=1})
+$goodAggregate.fact_map.facts = @([pscustomobject]@{fact_id='N-1'; source_locator='T-1'; visual_element='bar-total'; source_value='6'; rendered_value='6'; unit='items'})
+Assert-True (@(Get-VisualManifestErrors $goodAggregate).Count -eq 0) 'Declared aggregation with complete source lineage should pass'
+
+$badOmission = $goodAggregate | ConvertTo-Json -Depth 30 | ConvertFrom-Json
+$badOmission.fact_map.source_coverage = @($badOmission.fact_map.source_coverage | Select-Object -First 2)
+Assert-True ('numeric-source-coverage-count-mismatch' -in @(Get-VisualManifestErrors $badOmission)) 'Undeclared source-row omission should fail'
 
 $goodSemantic = $template | ConvertTo-Json -Depth 30 | ConvertFrom-Json
 $goodSemantic.status = 'formal'

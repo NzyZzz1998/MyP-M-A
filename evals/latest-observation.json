@@ -1,44 +1,44 @@
 {
   "schema_version": 1,
-  "source": "E:/codex/skill-evals/mypm-v041-full-luna-terra-sol-medium-20260903/benchmark.json",
-  "source_sha256": "E29A783DE2063ADE60B15EECCB93A70B321A67C992B4CCBA4992D11ADCA9E5B1",
-  "snapshot_head": "1d5022d95a19df2ad740e5b30c1c88a6e3adec71",
+  "source": "E:/codex/skill-evals/mypm-v042-full-astra-sol-terra-luna-medium-20260906/benchmark.json",
+  "source_sha256": "965236048B87B0E145F49109FA6DD2AD710ADB84A5BE7C13B7F0249A842F9BB9",
+  "snapshot_head": "377630d466e990a0120d145d1ed17444580f2658",
   "metric": "assertion-pass-rate",
-  "duration_basis": "batch-wall-clock-equal-allocation",
-  "scores": ["822/883", "816/883", "847/883", "365/376", "367/376", "374/376"],
+  "duration_basis": "per-case-wall-clock",
+  "models": ["astra", "sol", "terra", "luna"],
+  "scores": ["861/883", "859/883", "838/883", "815/883", "369/376", "372/376", "367/376", "364/376"],
   "documents": [
     {
       "path": "README.md",
-      "section_pattern": "(?s)### 三模型行为全量回归.*?(?=\\r?\\n### |\\z)",
+      "section_pattern": "(?s)### 四模型行为全量回归.*?(?=\\r?\\n### |\\z)",
       "required_patterns": [
-        "Luna medium.*Terra medium.*Sol medium",
-        "822/883`（93\\.09%）.*816/883`（92\\.41%）.*847/883`（95\\.92%）",
-        "365/376`（97\\.07%）.*367/376`（97\\.61%）.*374/376`（99\\.47%）",
-        "480/480", "断言通过率", "不是独立的正确性评分", "批次时间均摊，不能当作逐题实测"
+        "Astra medium.*Sol medium.*Terra medium.*Luna medium",
+        "861/883`（97\\.51%）.*859/883`（97\\.28%）.*838/883`（94\\.90%）.*815/883`（92\\.30%）",
+        "369/376`（98\\.14%）.*372/376`（98\\.94%）.*367/376`（97\\.61%）.*364/376`（96\\.81%）",
+        "640/640", "214/214", "断言通过率", "不是独立正确性评分", "逐题墙钟"
       ]
     },
     {
       "path": "notes/mypm-roadmap.md",
-      "section_pattern": "(?m)^最新全量观察（2026-09-03）[^\\r\\n]*",
+      "section_pattern": "(?m)^最新全量观察（2026-09-06）[^\\r\\n]*",
       "required_patterns": [
-        "稳定集 Luna `822/883`、Terra `816/883`、Sol `847/883`",
-        "挑战集 Luna `365/376`、Terra `367/376`、Sol `374/376`",
-        "断言通过率", "计时为批次均摊", "不宣称逐题速度或真实流程成功率"
+        "稳定集 Astra `861/883`、Sol `859/883`、Terra `838/883`、Luna `815/883`",
+        "挑战集 Astra `369/376`、Sol `372/376`、Terra `367/376`、Luna `364/376`",
+        "断言通过率", "不宣称纯模型速度或真实流程成功率"
       ]
     },
     {
       "path": "notes/evaluation-history.md",
-      "section_pattern": "(?s)<a id=\"v041-full-regression-20260903\"></a>.*?(?=\\r?\\n## v0\\.40|\\z)",
+      "section_pattern": "(?s)<a id=\"v042-full-regression-20260906\"></a>.*?(?=\\r?\\n<a id=\"v042-targeted-20260905\"></a>|\\z)",
       "required_patterns": [
-        "Luna medium \\| 822/883 \\| 93\\.09% \\| 114/114",
-        "Terra medium \\| 816/883 \\| 92\\.41% \\| 114/114",
-        "Sol medium \\| 847/883 \\| 95\\.92% \\| 114/114",
-        "Luna medium \\| 365/376 \\| 97\\.07% \\| 46/46",
-        "Terra medium \\| 367/376 \\| 97\\.61% \\| 46/46",
-        "Sol medium \\| 374/376 \\| 99\\.47% \\| 46/46",
-        "480 份有效回答、480 份逐模型评分", "160 个评分包",
-        "batch-wall-clock-equal-allocation", "不能将均摊值称为逐题实测完成时间",
-        "不能直接把通过率命名为独立正确性"
+        "稳定集：114 条 / 883 断言.*861/883.*859/883.*838/883.*815/883",
+        "挑战集：46 条 / 376 断言.*369/376.*372/376.*367/376.*364/376",
+        "Astra、Sol、Terra、Luna medium",
+        "214/214",
+        "per-case-wall-clock",
+        "不命名为独立正确性",
+        "640/640` 有效回答",
+        "逐题墙钟含工具、排队与观察"
       ]
     }
   ]

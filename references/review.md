@@ -68,4 +68,4 @@
 
 ## 输出
 
-落盘读 `templates/review-report-template.md`。完整 Project Review 保留证据、主图/逐边表、发现、`/idea` 候选和摘要；已交付完整文件时聊天只给主要结论、关键定位和文件链接，不重复整份报告。无文件则在聊天保留必要结构。发送前检查完整交付物的入口首行、Mermaid E-ID、逐边映射和独立 locator；禁“同上/汇总”，失败先重写。
+落盘读 `templates/review-report-template.md`。完整 Project Review 保留证据、主图、逐节点/逐边映射、发现、`/idea` 候选和摘要；已交付完整文件时聊天只给主要结论、关键定位和文件链接，不重复整份报告。无文件则在聊天保留必要结构。发送前检查完整交付物的入口首行、Mermaid N-ID/E-ID、节点/边集合相等及每项独立 locator；禁“同上/汇总”，失败先重写。

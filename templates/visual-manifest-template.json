@@ -32,13 +32,33 @@
   },
   "fact_map": {
     "mode": "semantic",
+    "source_row_count": null,
+    "source_proposition_count": null,
+    "source_coverage": [],
+    "proposition_coverage": [],
+    "transformations": [],
+    "propositions": [
+      {
+        "proposition_id": "P-001",
+        "subject": "待填写",
+        "relation": "待填写",
+        "object": "待填写",
+        "source_locator": "待填写",
+        "disposition": "included",
+        "reason": "待填写",
+        "identity_evidence": "待填写"
+      }
+    ],
+    "encoding_checks": [],
     "facts": [
       {
         "fact_id": "F-001",
+        "proposition_id": "P-001",
         "source_locator": "待填写",
         "visual_element": "node-or-edge-id",
         "element_type": "node",
         "evidence_state": "confirmed",
+        "identity_evidence": "待填写",
         "value_or_relation": "待填写"
       }
     ],

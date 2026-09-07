@@ -69,7 +69,7 @@ metadata:
 - 市场、定位、定价、GTM 或增长：`references/strategy-gtm.md`。
 - 用户故事：`references/user-stories.md`。
 - 深度判断：`references/judgment-framework.md`；用户明确要求深入时再读 `references/deep-review.md`，个人项目或 UI 取舍再读 `references/personal-preferences.md`。
-- 正式多阶段项目读 `references/traceability.md`；正式出图读 `references/visual-delivery.md`。
+- 多阶段项目读 `references/traceability.md`；正式出图读 `references/visual-delivery.md`，数值再读 `references/chart-delivery.md`；混合出图当轮交付两图并逐源行、节点、边核对。
 
 有 PRD、dev plan、progress、verification 或候选产物时，读 `references/workflow-control.md` 识别子阶段、门禁和可继承证据，不重复规划或重跑有效验收。
 

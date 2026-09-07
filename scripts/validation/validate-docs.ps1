@@ -13,10 +13,15 @@ function Invoke-MypmLatestObservationValidation {
         if ($observation.snapshot_head -cnotmatch '\A[A-Fa-f0-9]{40}\z' -or $observation.snapshot_head -eq ('0' * 40)) {
             throw 'Invalid snapshot_head'
         }
+        $models = @($observation.models)
+        $validModels = @($models | Where-Object { $_ -is [string] -and -not [string]::IsNullOrWhiteSpace($_) })
         if ($observation.schema_version -ne 1 -or $observation.metric -ne 'assertion-pass-rate' -or
-            $observation.duration_basis -ne 'batch-wall-clock-equal-allocation' -or
+            $observation.duration_basis -notin @('per-case-wall-clock', 'batch-wall-clock-equal-allocation') -or
             $observation.source_sha256 -cnotmatch '\A[A-Fa-f0-9]{64}\z' -or
             $observation.source_sha256 -eq ('0' * 64) -or
+            $models.Count -eq 0 -or $validModels.Count -ne $models.Count -or
+            @($models | Sort-Object -Unique).Count -ne $models.Count -or
+            @($observation.scores).Count -ne ($models.Count * 2) -or
             @($observation.documents).Count -ne 3 -or
             @($observation.documents.path | Sort-Object -Unique).Count -ne 3) { throw 'Invalid observation identity or metric boundary' }
         foreach ($document in $observation.documents) {

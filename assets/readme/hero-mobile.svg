@@ -14,7 +14,7 @@
     <g transform="translate(42 270)">
       <rect width="198" height="48" rx="6" fill="#17382F" stroke="#39BC91"/>
       <circle cx="24" cy="24" r="6" fill="#39BC91"/>
-      <text x="44" y="32" fill="#EAF7F1" font-size="21" font-weight="700">v0.41.0 Stable</text>
+      <text x="44" y="32" fill="#EAF7F1" font-size="21" font-weight="700">v0.42.0 Stable</text>
     </g>
     <text x="270" y="301" fill="#A8BBB3" font-size="19">114 稳定 · 46 挑战 · 34 触发</text>
 

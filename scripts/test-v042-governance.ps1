@@ -15,8 +15,15 @@ function Assert-Observation {
 try {
     # Text guards check instruction/template consistency, not model behavior.
     foreach ($guard in @(
+        @{ path = 'references/prd.md'; tokens = @(
+            '导出对象、筛选与数据截至时点', '并发/频率/容量限制及超限体验',
+            '不编造存储介质、表字段、队列或 worker 实现'
+        ) },
         @{ path = 'references/acceptance.md'; tokens = @(
             '已解析的交付模式', '题内已点名的负责人原样承接',
+            '候选产物身份 <-> source commit/等价构建身份',
+            '不清零已经绑定同一候选的独立局部证据',
+            '输出四项闭包清单并逐项标 `已提供 / 缺失 / 不适用`',
             '每行在通过标准中引用既有要求的 ID 或来源',
             '新增建议另列，确认前不进入必关缺口或发布前置',
             '把既有行为展开为可观察检查不需要另设确认门禁',
@@ -26,7 +33,8 @@ try {
         ) },
         @{ path = 'templates/acceptance-template.md'; tokens = @(
             '交付模式：team_pm / vibe_coding', '预期标准及来源 ID / 原文',
-            '不通过处理及负责人', '新增建议另列', '点名确认人及待确认状态'
+            '不通过处理及负责人', '新增建议另列', '点名确认人及待确认状态',
+            '组合证据闭包：候选产物 <-> source commit / 等价构建身份'
         ) },
         @{ path = 'templates/manual-verification-template.md'; tokens = @(
             '交付模式：继承验收文档', '来源验收 ID / 要求原文',
@@ -40,6 +48,12 @@ try {
         }
         Write-Host "PASS: acceptance instruction/template text guard $($guard.path)"
     }
+    $stablePanel = Get-Content -LiteralPath (Join-Path $root 'evals/evals.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $case61 = @($stablePanel.evals | Where-Object { [int]$_.id -eq 61 })[0]
+    $case81 = @($stablePanel.evals | Where-Object { [int]$_.id -eq 81 })[0]
+    if ([string]$case61.expected_output -notmatch '超限体验' -or [string]$case61.expected_output -notmatch '不应编造物理存储') { throw 'Stable 61 product-semantic async rubric drift' }
+    if ([string]$case81.expected_output -notmatch '不清零已绑定同一候选的独立局部证据' -or @($case81.expectations)[2] -notmatch '等价构建身份') { throw 'Stable 81 evidence-lineage rubric drift' }
+    Write-Host 'PASS: stable 61/81 contract-aligned rubric guards'
     $gatePanel = Get-Content -LiteralPath (Join-Path $root 'evals/v042-gate-boundary-evals.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     $gateNames = @('v042_proactive_gate_suggestion', 'v042_evidenced_omitted_gate_blocks', 'v042_credible_risk_pending_verification')
     if (@($gatePanel.evals).Count -ne 3 -or @($gatePanel.evals.id | Sort-Object -Unique).Count -ne 3 -or
@@ -77,6 +91,17 @@ try {
             [IO.File]::WriteAllText($recordPath, ($changed | ConvertTo-Json -Depth 20), $utf8)
             Assert-Observation $false "$field rejects $kind" $field
         }
+    }
+    foreach ($mutation in @('missing-models', 'duplicate-models', 'score-count', 'duration-basis')) {
+        $changed = $originalRecord | ConvertFrom-Json
+        switch ($mutation) {
+            'missing-models' { $changed.PSObject.Properties.Remove('models') }
+            'duplicate-models' { $changed.models = @($changed.models[0], $changed.models[0]) }
+            'score-count' { $changed.scores = @($changed.scores | Select-Object -First 2) }
+            'duration-basis' { $changed.duration_basis = 'model-latency' }
+        }
+        [IO.File]::WriteAllText($recordPath, ($changed | ConvertTo-Json -Depth 20), $utf8)
+        Assert-Observation $false "observation rejects $mutation" 'identity or metric boundary'
     }
     foreach ($head in @('abc123', ('g' * 40), ($record.snapshot_head + "`n"), ('a' * 40))) {
         $changed = $originalRecord | ConvertFrom-Json
@@ -136,16 +161,16 @@ try {
         if ((Get-FileHash -LiteralPath $record.source -Algorithm SHA256).Hash -ne $record.source_sha256) { throw 'Source benchmark hash mismatch' }
         $benchmark = Get-Content -LiteralPath $record.source -Raw -Encoding UTF8 | ConvertFrom-Json
         $scores = @(foreach ($suite in @('stable', 'challenge')) {
-            foreach ($model in @('luna', 'terra', 'sol')) { "$($benchmark.suites.$suite.$model.passed)/$($benchmark.suites.$suite.$model.total)" }
+            foreach ($model in @($record.models)) { "$($benchmark.suites.$suite.$model.passed)/$($benchmark.suites.$suite.$model.total)" }
         })
         if (($scores -join ',') -ne ($record.scores -join ',')) { throw 'Source benchmark score mismatch' }
     }
     foreach ($case in @(
-        @{ path = 'README.md'; old = '822/883'; new = '823/883' },
-        @{ path = 'README.md'; old = '93.09%'; new = '100.00%' },
+        @{ path = 'README.md'; old = '861/883'; new = '862/883' },
+        @{ path = 'README.md'; old = '97.51%'; new = '100.00%' },
         @{ path = 'README.md'; old = $record.documents[0].required_patterns[6]; new = 'independent correctness' },
         @{ path = 'notes/mypm-roadmap.md'; old = $record.documents[1].required_patterns[3]; new = 'measured case latency' },
-        @{ path = 'notes/evaluation-history.md'; old = $record.documents[2].required_patterns[6]; new = $record.documents[2].required_patterns[6].Replace('480', '160') }
+        @{ path = 'notes/evaluation-history.md'; old = $record.documents[2].required_patterns[6]; new = $record.documents[2].required_patterns[6].Replace('640', '160') }
     )) {
         $path = Join-Path $temp $case.path
         $original = [IO.File]::ReadAllText($path, [Text.Encoding]::UTF8)

@@ -79,6 +79,11 @@ foreach ($id in @('CH-40', 'CH-41', 'CH-42', 'CH-43', 'CH-44', 'CH-45', 'CH-46')
     Assert-True (@($contracts.contracts | Where-Object { @($_.challenge_evals | ForEach-Object { [string]$_ }) -contains $id }).Count -ge 1) "Challenge v0.41 eval must be contract mapped: $id"
 }
 
+$ch43 = @($challenge.evals | Where-Object { [string]$_.id -eq 'CH-43' })[0]
+Assert-True (-not ([string]$ch43.prompt -match '写代码|建库|跑测试|发布')) 'CH-43 must remain an ambiguous handoff and must not contain explicit implementation authorization'
+Assert-True ([string]$ch43.expected_output -match '没有明确要求实现、测试或发布承接') 'CH-43 must test silent mode escalation rather than contradict explicit authorization'
+Assert-True (@($ch43.expectations) -contains '代码块说明 team_pm 来自上游继承，且没有发生静默模式切换') 'CH-43 must grade behavior, not require a magic authorization phrase'
+
 $expectedRoutes = @{
     '107' = '/prd'; '108' = '/prd'; '109' = '/prd'; '110' = '/prd'
     '111' = '/acceptance'; '112' = '/prompt'; '113' = '/prd'; '114' = '/review'
