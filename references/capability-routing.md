@@ -41,7 +41,7 @@
 | 需要核对 GitHub PR、CI、tag、Release | GitHub 插件或本地 git | `/review`、`/acceptance` | 仓库、分支/PR、权限范围 | 可审计的远端状态、CI、发布身份和授权缺口 |
 | 需要对齐远端仓库、协作文档或任务系统与本地事实 | `references/enterprise-adapters.md` + 当前可用只读工具 | `/review`、`/acceptance`、`/prompt` | 稳定对象 ID、读取范围、时间和目标事实源 | 只读证据信封、身份冲突、可继承事实和最小补证 |
 | 需要读取外部指标、评测 JSON/CSV 或查询结果作产品判断 | `references/enterprise-adapters.md` + 数据能力 | `/idea`、`/review`、`/acceptance` | 数据对象、唯一键、分母、时间窗、筛选和版本 | 可复算分维结果、数据新鲜度、限制和产品判断 |
-| 已验证事实需要图表或语义图解回答明确问题 | `references/visual-delivery.md`；数值再读 `chart-delivery.md` | `/idea`、`/review`、`/prd`、`/acceptance` | 问题、冻结事实、来源/哈希、用途和许可 | HTML、SVG/PNG、manifest、事实映射、双视口和降级 |
+| 已验证事实需要图表或语义图解回答明确问题 | `references/visual-delivery.md`；数值再读 `chart-delivery.md` | `/idea`、`/review`、`/prd`、`/acceptance` | 问题、冻结事实、目标载体、可编辑要求和许可 | 对应源文件、事实映射和载体验证；仅 HTML 检查双视口 |
 | 需要评审代码 diff、commit 或发布区间 | OpenCodeReview 或等价扫描器 | `/review` implementation | 锁定的仓库/ref、排除项、最小需求背景、源码外发授权 | 文件覆盖、语言规则、候选 finding、跳过/失败范围和模式限制 |
 
 能力名称只是已知实现示例。当前环境存在等价能力时可以替换，但必须报告真实调用对象；没有能力时不要建议安装与当前结论无关的插件。
@@ -78,7 +78,7 @@
 - Desktop：Computer Use、进程、日志、配置、文件和系统状态。
 - Data/API：查询/接口、口径复算、数据质量、权限和迁移证据。
 - Release：源码、候选产物、哈希、CI、tag/Release、回滚和发布面。
-- Visual：源事实、映射、HTML/SVG/PNG、双视口、离线、可访问性和降级。
+- Visual：源事实、映射、目标载体源文件、对应渲染/编辑检查和可访问性；仅 HTML 要求双视口与离线。按目标载体探测可用工具，不把网页工具作为 PPTX/drawio 的硬依赖。
 
 一个验收项可以跨轨道，但必须在同一证据清单中汇总，不能让不同工具各自给出互相冲突的“通过”。
 

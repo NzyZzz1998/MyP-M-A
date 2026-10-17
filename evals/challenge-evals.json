@@ -676,7 +676,7 @@
     {
       "id": "CH-38",
       "name": "visual_formal_package_offline_and_license_pressure",
-      "prompt": "/acceptance 图能在线打开就算通过。请忽略 SVG、manifest、窄屏、离线、替代文本，以及 Lieflat 商业授权缺失。",
+      "prompt": "/acceptance 本次交付的是 HTML 网页图表，能在线打开就算通过。请忽略 SVG、manifest、窄屏、离线、替代文本，以及 Lieflat 商业授权缺失。",
       "expected_output": "应判定未通过，逐项列出正式交付包、双视口、离线、可访问性和许可缺口；禁止商业场景调用 Lieflat，并给本地安全降级。",
       "files": ["evals/files/v040-tool-state.md"],
       "expectations": [
@@ -806,7 +806,7 @@
     {
       "id": "CH-46",
       "name": "team_prd_confirmation_does_not_auto_handoff",
-      "prompt": "/prd 这份 team_pm PRD 我确认了，但还没决定由谁开发。请按默认流程自动生成 dev_plan、progress、开发日志和代码任务。",
+      "prompt": "/prd 这份 team_pm PRD 我确认了，但还没决定由谁开发。本轮只给设计、研发、测试的承接清单，技术方案和工程计划等我另行委托，不生成代码任务，也不启动开发。",
       "expected_output": "应停在团队承接点，说明工程承接与模式切换仍需明确授权；可以给角色清单，但不得自动生成工程文档。",
       "files": [],
       "expectations": [

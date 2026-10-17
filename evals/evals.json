@@ -434,7 +434,7 @@
         "至少定义三类可观察控件或交互状态，且其中包含错误、禁用或无变化等非默认状态",
         "原型对照验收包含一个窄屏视口、一个桌面视口和关键弹层或反馈状态",
         "开发前验收同时包含原型对照、保存或取消链路和既有体验回归",
-        "在高保真原型未更新且验收口径未补齐时，明确不能进入 dev_plan 或 progress"
+        "在高保真原型未更新且验收口径未补齐时，不得宣布相关 UI 正式实施条件齐备；不把这一依赖扩展成禁止独立评审草案"
       ]
     },
     {
@@ -1745,7 +1745,7 @@
     {
       "id": 102,
       "name": "review_routes_verified_data_to_optional_chart_delivery",
-      "prompt": "/review 根据附件判断是否适合生成图表，并给出可执行交付合同。",
+      "prompt": "/review 根据附件判断是否适合生成图表，并给出本地 HTML 网页的可执行交付合同。",
       "expected_output": "应先锁定决策问题、数据来源、字段和禁止合并规则，再探测 Lieflat 安装、来源 commit 与许可；仅在本地非商业用途成立时按需生成，并要求 HTML、manifest、双视口和逐值验证。不可用时保留原表格，不得声称已生成。",
       "files": ["evals/files/v039-chart-data.md"],
       "expectations": [
@@ -1762,7 +1762,7 @@
     {
       "id": 103,
       "name": "review_builds_evidence_mapped_semantic_architecture",
-      "prompt": "/review 根据附件为项目建立可核验架构图交付合同。",
+      "prompt": "/review 根据附件为项目建立可核验架构图交付合同，目标载体是本地 HTML 网页。",
       "expected_output": "应走语义图解通路，只画已确认的 SKILL、reference、能力注册、validator 和合同关系；diagram-design 缓存存在但当前不可调用，不得写成已使用。未知关系保持待确认，并要求 HTML、SVG/PNG、manifest、事实映射与双视口/离线验证。",
       "files": ["evals/files/v040-review-architecture.md", "evals/files/v040-tool-state.md"],
       "expectations": [
@@ -1779,7 +1779,7 @@
     {
       "id": 104,
       "name": "prd_preserves_async_state_edges_in_diagram",
-      "prompt": "/prd 根据附件定义异步导出状态图及正式视觉交付门禁。",
+      "prompt": "/prd 根据附件定义异步导出状态图及正式视觉交付门禁，目标载体是本地 HTML 网页。",
       "expected_output": "应走语义图解通路，完整保留 draft/queued/running/succeeded/failed/cancelled、显式重试和 available/expired 分层；不得补造 queued 可取消。交付需有逐边映射、HTML、SVG/PNG、manifest、双视口和离线证据。",
       "files": ["evals/files/v040-prd-workflow.md"],
       "expectations": [
@@ -1795,7 +1795,7 @@
     {
       "id": 105,
       "name": "review_preserves_frozen_values_in_decision_chart",
-      "prompt": "/review 根据附件判断并定义一张入口上下文预算图表的正式交付。",
+      "prompt": "/review 根据附件判断并定义一张入口上下文预算图表的正式交付，目标载体是本地 HTML 网页。",
       "expected_output": "应走决策图表通路，五入口 minimum/formal 数值、单位和来源逐值保持，不生成统一总分；记录 SHA-256、字段映射、HTML、SVG/PNG、manifest、双视口、离线和表格降级。",
       "files": ["evals/files/v040-frozen-chart.csv"],
       "expectations": [
@@ -1811,7 +1811,7 @@
     {
       "id": 106,
       "name": "prd_redraw_requires_semantic_fidelity_ledger",
-      "prompt": "/prd 将附件 Mermaid 状态图重绘为正式图解，并定义保真验收。",
+      "prompt": "/prd 将附件 Mermaid 状态图重绘为本地 HTML 网页中的正式图解，并定义保真验收。",
       "expected_output": "应逐节点、逐边保留失败、取消、重试和过期语义，生成保真账本；任何审美调整不得删除或改向。要求源哈希、HTML、SVG/PNG、manifest、双视口与离线验证。",
       "files": ["evals/files/v040-mermaid-source.mmd"],
       "expectations": [

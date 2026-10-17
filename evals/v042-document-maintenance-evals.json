@@ -1,0 +1,159 @@
+{
+  "skill_name": "mypm",
+  "display_name": "I-01/I-03/I-04 document maintenance pilot; not a release panel",
+  "version": "0.42.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "approved_incremental_field_edit",
+      "source_cases": [
+        "T-01"
+      ],
+      "issues": [
+        "I-01"
+      ],
+      "prompt": "/prd delivery_mode=team_pm。现有 docs/prd.md 已确认。请补实际时长＝完成时间－开始时间，展示单位小时，保留一位小数。只改这份现有 PRD 的字段和验收章节，其他规则不变，已授权本地修改。给可复算例子，不建副本。时间缺失的行为还没定义。memory_mode=off。",
+      "files": [
+        "docs/prd.md"
+      ],
+      "fixture_files": {
+        "docs/prd.md": "# 物流需求 v1.2\n\n## 已确认规则\n- 开始时间：仓库完成交接。\n- 完成时间：门店开始收货。\n- 财务为后续迭代，通知时间待确认。\n\n## 字段\n- 开始时间、完成时间：按已确认规则取值。\n\n## 验收\n- 核对开始时间与完成时间的业务事件。\n\n## 未变范围\n只记录物流时效，不新增评分或财务。\n"
+      },
+      "expectations": [
+        "实际修改并回读原 docs/prd.md 的字段和验收章节，不仅给建议或另建 PRD；其他章节及文件保持不变。",
+        "公式、小时单位及一位小数正确，给可独立复算的时间例子与期望结果。",
+        "不重问目标或方案，不做最小/推荐/扩展比较；继承既有开始/完成事件、财务后续及通知待定。",
+        "时间缺失保持待确认或明确建议，不当作0或假装已批准；不宣称业务实现已验收。"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "core_behavior_change_is_not_trivial",
+      "source_cases": [
+        "T-02"
+      ],
+      "issues": [
+        "I-01"
+      ],
+      "prompt": "/prd delivery_mode=team_pm。既有规则：评价提交后不可修改，新评价保留独立记录。现在想允许修改已提交评价，帮我看看怎么改。本轮只讨论，不改任何文件；没有决定谁能改、多久能改和是否保留历史。请给建议与必要问题，不要铺开整版 PRD。全部为合成题内资料，memory_mode=off。",
+      "files": [],
+      "expectations": [
+        "识别这是权限、历史保留及统计口径的行为变化，不仅当作字段或文案修订。",
+        "提出与修改身份/窗口、历史版本和统计采用版本有关的具体建议或必要问题；建议不冒充已确认决定。",
+        "保留现行规则作为当前事实，不将讨论标成已批准，不写文件或启动实现。",
+        "交付局部取舍和下一步，既不拒绝分析，也不扩成完整版本或重复整轮需求盘问。"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "partial_multi_artifact_sync",
+      "source_cases": [
+        "T-06"
+      ],
+      "issues": [
+        "I-03"
+      ],
+      "prompt": "/prd delivery_mode=team_pm。DEC-04 已批准把交期结束时间从“仓库完成交接”改为“门店开始收货”。同步 docs/方案.md、flow/收货.drawio 和 slides/汇报.pptx，只处理这次决定。工作目录前两份已提供且可读写，PPT 未提供且没有可访问副本；docs/历史.md 是归档，保持原样。请实际修改可完成项并逐份报告结果。本测试只验证文档/图源语义，渲染工具不在本轮可用范围，不得声称已视觉验证。memory_mode=off。",
+      "files": [
+        "docs/方案.md",
+        "flow/收货.drawio",
+        "docs/历史.md"
+      ],
+      "fixture_files": {
+        "docs/方案.md": "# 当前方案\n\n## 物流交期\nDEC-03：交期结束时间为仓库完成交接。\n通知时间待确认；财务为后续迭代。\n",
+        "docs/历史.md": "# 历史归档\nDEC-03：交期结束时间为仓库完成交接。\nA/B 均为当时备选，此处不追改。\n",
+        "flow/收货.drawio": "<mxfile><diagram id=\"receipt\" name=\"收货\"><mxGraphModel><root><mxCell id=\"0\"/><mxCell id=\"1\" parent=\"0\"/><mxCell id=\"warehouse\" value=\"仓库完成交接\" vertex=\"1\" parent=\"1\"><mxGeometry x=\"0\" y=\"0\" width=\"140\" height=\"50\" as=\"geometry\"/></mxCell><mxCell id=\"receipt\" value=\"门店开始收货\" vertex=\"1\" parent=\"1\"><mxGeometry x=\"220\" y=\"0\" width=\"140\" height=\"50\" as=\"geometry\"/></mxCell><mxCell id=\"end-note\" value=\"交期结束时间：仓库完成交接\" vertex=\"1\" parent=\"1\"><mxGeometry x=\"220\" y=\"80\" width=\"220\" height=\"50\" as=\"geometry\"/></mxCell><mxCell id=\"handover\" value=\"交接后收货\" edge=\"1\" source=\"warehouse\" target=\"receipt\" parent=\"1\"><mxGeometry relative=\"1\" as=\"geometry\"/></mxCell></root></mxGraphModel></diagram></mxfile>\n"
+      },
+      "expectations": [
+        "实际更新并回读方案和 drawio；方案当前结束事件与图中 end-note 均为门店开始收货。",
+        "保留仓库交接节点、收货节点、节点ID及连接方向/标签；不全文替换仓库事件或改写历史归档。",
+        "逐份报告方案已更新、图源已更新但视觉未验证、PPT 因缺文件未完成，不声称全部同步或虚构PPT。",
+        "将 DEC-04 与目标章节/节点及读回证据关联，沿用决定来源，不建立替代需求事实源。",
+        "通知时间仍待确认、财务仍后续；PPT缺失不阻断前两份可独立完成项。"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "single_file_scope_preserves_history",
+      "source_cases": [
+        "T-07"
+      ],
+      "issues": [
+        "I-01",
+        "I-03"
+      ],
+      "prompt": "/prd delivery_mode=team_pm。已批准把物流结束时间改为门店开始收货。本轮只改 docs/需求收敛.md 中这一规则，其他文件不改。docs/历史.md 保留旧规则，docs/原型说明.md 暂不改；评分统计口径待确认、财务为后续迭代保持。已授权本地修改，不再征求相同授权。memory_mode=off。",
+      "files": [
+        "docs/需求收敛.md",
+        "docs/历史.md",
+        "docs/原型说明.md"
+      ],
+      "fixture_files": {
+        "docs/需求收敛.md": "# 需求收敛\n物流结束时间：仓库完成交接。\n评分统计口径：待确认。\n财务：后续迭代。\n",
+        "docs/历史.md": "# 历史\n物流结束时间：仓库完成交接。\n",
+        "docs/原型说明.md": "# 原型说明\n物流结束时间：仓库完成交接。\n"
+      },
+      "expectations": [
+        "仅将 docs/需求收敛.md 的目标规则替换并回读，其他文件字节不变，不新增业务文档。",
+        "评分统计待确认与财务后续原样保留，不重新打开选型或提出无关方案。",
+        "没有因横向一致性而越权修改原型或历史；可提醒原型待同步，但不声称完成。",
+        "有实际写入结果，不把授权再变成一次确认阻塞，也不声称产品运行验收通过。"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "explain_ratio_without_field_catalog",
+      "source_cases": [
+        "T-08"
+      ],
+      "issues": [
+        "I-04"
+      ],
+      "prompt": "/prd delivery_mode=team_pm。只解释库存满足率怎么算，不要整套字段百科。演示数据：第一天需求2、满足1；第二天需求8、满足8。此题定义为满足量合计÷需求量合计，没有限时/不限时维度，物理表名未知。请讲清输入、计算及结果怎么用，仅文稿。memory_mode=off。",
+      "files": [],
+      "expectations": [
+        "正确解释输入和合计口径，两日合计9÷10＝90%，不是每日50%和100%的算术平均75%。",
+        "说明结果用于理解需求满足程度，保留演示性质，不当作生产表现或用它证明业务阈值。",
+        "不编造物理表名、权重、阈值、限时分类，不扩成完整字段目录或立项/工程方案。",
+        "提供可复算中文过程和必要理解边界；未提供空分母政策时可指出不能计算，不擅定业务默认。"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "field_check_uses_designated_source",
+      "source_cases": [
+        "W-05"
+      ],
+      "issues": [
+        "I-04"
+      ],
+      "prompt": "/prd delivery_mode=team_pm。只要字段核对表，不要业务介绍或模型讲解。以 PDF-v2 的题内原文摘录为准：页3 demand_qty 为需求件数，fulfilled_qty 为已满足件数，统计按业务日期；页4 未披露物理表名和空分母显示规则。旧草稿称 demand_qty 为订单数、比例为空时显示0、物理表 demand_daily。请列字段/口径、来源位置、差异或未知。PDF本体未提供，摘录就是本题依据，不访问真实文件，不写库。memory_mode=off。",
+      "files": [],
+      "expectations": [
+        "输出紧凑核对表，demand_qty/fulfilled_qty 均保留件数语义，统计按业务日期。",
+        "绑定 PDF-v2 页3/4摘录来源，不把旧草稿的订单数、空分母0或demand_daily当作权威事实。",
+        "未知表名和空分母规则保持待确认；差异仅作为需纠正或核验事项，不编造来源。",
+        "不扩成全套KPI合同、完整模型讲解或研发实现，也不声称实际打开PDF本体。"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "handoff_partial_sync_after_decision_change",
+      "source_cases": [
+        "T-10"
+      ],
+      "issues": [
+        "I-01",
+        "I-03"
+      ],
+      "prompt": "/prompt 请给下一轮的短交接提示词。delivery_mode=team_pm，项目为合成的收货方案，仅文稿授权。第一轮：A人工清点/B扫码累计均备选，财务后续、通知时间待确认。第二轮用户明确选择B，授权同步 docs/方案.md 和 flow/收货.drawio，历史 docs/历史.md 的A/B比较保留。第三轮真实执行摘要：只修改并回读 docs/方案.md 的收货章节，记录在 docs/变更记录.md 的DEC-05；flow/收货.drawio 尚未修改，因为上轮未执行这一步，不是文件缺失。请交接继续未完成项，不做本轮实际操作、不提交推送。所有路径/执行摘要是题内材料，不代表本机真实项目。memory_mode=off。",
+      "files": [],
+      "expectations": [
+        "提示词继承当前选择B，不重新让用户比较A/B，不将两套变成生产双模式。",
+        "保留主方案收货章节已修改并回读、证据位置DEC-05，以及流程图未执行/待同步，不压成全部完成或把原因改成缺文件。",
+        "授权只继续流程图对应修改及适用核验，不重做有效主方案、不改历史；财务后续、通知待定保留。",
+        "实际仅交付提示词不执行项目操作；包含核对结果和真实未完成项的要求，不宣称本轮已写文件。"
+      ]
+    }
+  ]
+}

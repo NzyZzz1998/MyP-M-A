@@ -64,6 +64,41 @@ try {
             [string]::IsNullOrWhiteSpace($case.expected_output)) { throw "Invalid gate boundary fixture: $($case.name)" }
     }
     Write-Host 'PASS: three gate-boundary fixtures structurally valid; no model behavior tested.'
+    # Maintenance fixtures supplement, but do not change, the release portfolio.
+    $documentPanel = Get-Content -LiteralPath (Join-Path $root 'evals/v042-document-maintenance-evals.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    if (@($documentPanel.evals).Count -ne 7 -or @($documentPanel.evals.id | Sort-Object -Unique).Count -ne 7 -or
+        @($documentPanel.evals.name | Sort-Object -Unique).Count -ne 7) { throw 'Document maintenance fixture identities must be unique' }
+    foreach ($case in $documentPanel.evals) {
+        if ([string]::IsNullOrWhiteSpace($case.prompt) -or @($case.expectations).Count -lt 4 -or
+            @($case.issues).Count -eq 0 -or @($case.issues | Where-Object { $_ -notin @('I-01','I-03','I-04') }).Count -gt 0) {
+            throw "Invalid document maintenance case: $($case.id)"
+        }
+        $fixtureNames = @()
+        if ($case.PSObject.Properties.Name -contains 'fixture_files') {
+            $fixtureNames = @($case.fixture_files.PSObject.Properties.Name)
+        }
+        if (@(Compare-Object @($case.files) $fixtureNames).Count -ne 0) { throw "Fixture/files mismatch: $($case.id)" }
+        foreach ($path in $fixtureNames) {
+            if ([IO.Path]::IsPathRooted($path) -or $path -match '(^|[/\\])\.\.([/\\]|$)|:' -or
+                [string]::IsNullOrWhiteSpace([string]$case.fixture_files.$path)) { throw "Unsafe or empty fixture: $path" }
+        }
+    }
+    $drawio = $documentPanel.evals[2].fixture_files.'flow/收货.drawio'
+    $xml = [xml]$drawio
+    if (@($xml.SelectNodes('//mxCell[@edge="1"]')).Count -ne 1 -or
+        @($xml.SelectNodes('//mxCell[@id="end-note"]')).Count -ne 1) { throw 'Partial-sync graph fixture lost edge or target node' }
+    foreach ($guard in @(
+        @{ path = 'references/prd.md'; tokens = @('直接增量修订', '用户要求完整重编', 'references/traceability.md', 'references/data-analysis.md') },
+        @{ path = 'references/traceability.md'; tokens = @('跨材料同步', '历史比较和归档保留原版本', '节点文本回读不等于图形已渲染') },
+        @{ path = 'references/prompt.md'; tokens = @('跨材料交接', '未同步项、原因及下一步') },
+        @{ path = 'references/data-analysis.md'; tokens = @('按输出用途选择深度', '不默认平均每日百分比', '正式完整数据合同仍覆盖必要异常和验收') }
+    )) {
+        $text = Get-Content -LiteralPath (Join-Path $root $guard.path) -Raw -Encoding UTF8
+        foreach ($token in $guard.tokens) {
+            if (-not $text.Contains($token)) { throw "Document maintenance routing guard missing: $($guard.path): $token" }
+        }
+    }
+    Write-Host 'PASS: seven document-maintenance fixtures, graph structure and routing guards; no model behavior tested.'
     New-Item -ItemType Directory -Path (Join-Path $temp 'evals'), (Join-Path $temp 'notes') -Force | Out-Null
     foreach ($file in @('evals/latest-observation.json', 'README.md', 'notes/mypm-roadmap.md', 'notes/evaluation-history.md')) {
         Copy-Item -LiteralPath (Join-Path $root $file) -Destination (Join-Path $temp $file)

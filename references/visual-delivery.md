@@ -65,20 +65,20 @@ installed | callable | call_succeeded | version | commit | license
 - 身份或许可证不明、用途不适用、调用失败时，降级为 Mermaid、本地 HTML/SVG、表格或文字；不得写“已使用”。
 - diagram-design 是 MIT 可选 pilot；缓存身份与当前可调用性必须每轮分开探测。Lieflat 的非商业许可边界见 `references/chart-delivery.md`。
 
-## 4. 正式交付包
+## 4. 按载体交付
 
-正式交付至少包含：
+先锁定用途、目标文件类型与可编辑范围；已有视觉方向直接延续，不因改载体重开方案。事实映射、来源、工具真值与保真规则共用，文件及验证按载体适用，不擅自增加用户未要求的网页或预览项目。
 
-1. 自包含、可编辑的 HTML 源；
-2. 可嵌入的 SVG，或在 SVG 不适用时提供 PNG；
-3. `visual-manifest.json`：来源、源文件与产物 SHA-256、工具真值、许可证、类型、尺寸、映射、假设、外部资源和降级；
-4. 桌面与窄屏截图及浏览器结果；
-5. 替代文本、非颜色唯一编码和静态回退；
-6. 重绘任务额外提供保真账本。
+| 载体 | 交付与验证 |
+| --- | --- |
+| HTML | 自包含可编辑 HTML、SVG/PNG、manifest、双视口截图、浏览器及离线结果、替代文本与静态回退 |
+| PPTX | 可编辑演示稿；核对文字/形状的编辑范围、页面顺序、渲染可读性和事实一致性；不要求 HTML 或窄屏 |
+| drawio | 可编辑源文件；核对节点、方向、条件、责任、异常和实际渲染；网页预览仅在另有要求时交付 |
+| SVG/PNG | 目标图像与事实映射；核对标签、单位、语义和实际渲染；要求可编辑时不能只交位图 |
 
-新建交付包时使用 `templates/visual-manifest-template.json`；重绘使用 `templates/visual-fidelity-ledger-template.md`。
+验证记录优先复用项目现有记录。使用 manifest 时采用 `templates/visual-manifest-template.json`：`delivery_format` 为 `html / pptx / drawio / svg / png`，旧文件缺省为 `html`；每个载体独立登记，不把混合交付压成一个通过状态。非 HTML 使用 `files.<格式>` 和 `files.render_evidence` 及各自 `sha256`；`artifact_verification` 记录布尔值 `readable`、`editable_required`、`editable` 与 `editability_scope`。PPTX/drawio 须可编辑；PNG 不能冒充可编辑源。非网页不填写浏览器结果。manifest 自检只检查记录与文件身份，不代替真实打开、渲染或编辑检查。
 
-缺少承重项时标“草稿/部分通过”，不能写“正式交付完成”。产物默认写入当前项目约定目录；发布、上传或远端写入仍单独授权。
+缺少承重验证时标“草稿/部分通过”，不能写“正式交付完成”；工具缺口如实保留，不能补造截图。重绘额外保留保真账本，可用 `templates/visual-fidelity-ledger-template.md`。产物默认进入项目约定目录，发布、上传及远端写入仍单独授权。
 
 ## 5. 语义图解规则
 
@@ -92,6 +92,8 @@ installed | callable | call_succeeded | version | commit | license
 
 ## 6. 浏览器与可访问性验证
 
+浏览器、双视口和离线要求仅适用于 HTML 交付；原生文件和静态图按上一节验证。非颜色唯一编码和可读标签适用于所有载体。
+
 - 至少验证一个桌面和一个窄屏视口：无裁切、重叠、横向溢出，文字和连线可读。
 - 控制台、页面和资源错误为 0；外部资源为 0，或明确来源、许可及离线行为。
 - 断网后仍能看到核心内容与静态回退；“页面能打开”不等于事实保真通过。
@@ -103,6 +105,6 @@ installed | callable | call_succeeded | version | commit | license
 - 图形制造不存在的精度、因果、完整性或统一总分；
 - 工具身份、许可、来源或调用状态无法证明；
 - 图比表格/文字更难核验，或只改善美观；
-- 无法完成事实映射、双视口、离线或静态回退检查。
+- 无法完成事实映射或该载体实际需要的渲染、编辑与可访问性检查；HTML 另含双视口、离线与静态回退。
 
 触发停止条件时保留原表达物和失败证据，回到当前入口补证；不得用视觉润色抵消正确性缺口。

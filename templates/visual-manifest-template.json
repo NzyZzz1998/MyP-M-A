@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "delivery_format": "html",
   "_contract": "contract:visual-formal-package",
   "artifact_id": "VIS-001",
   "status": "draft",

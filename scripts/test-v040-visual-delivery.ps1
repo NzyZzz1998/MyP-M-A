@@ -49,10 +49,19 @@ function Get-VisualManifestErrors {
         [string]$ManifestRoot = ''
     )
     $errors = [System.Collections.Generic.List[string]]::new()
-    foreach ($name in @('schema_version', 'artifact_id', 'status', 'route', 'visual_type', 'decision_question', 'source', 'tool_probe', 'fact_map', 'files', 'browser_verification', 'accessibility', 'external_resources', 'fallback')) {
+    foreach ($name in @('schema_version', 'artifact_id', 'status', 'route', 'visual_type', 'decision_question', 'source', 'tool_probe', 'fact_map', 'files', 'accessibility', 'external_resources', 'fallback')) {
         if (-not (Has-Property $Manifest $name)) { $errors.Add("missing:$name") }
     }
     if ($errors.Count -gt 0) { return @($errors) }
+
+    # Legacy manifests remain HTML; native deliverables opt in explicitly.
+    $format = if (Has-Property $Manifest 'delivery_format') { [string]$Manifest.delivery_format } else { 'html' }
+    if ($format -cnotin @('html', 'pptx', 'drawio', 'svg', 'png')) {
+        $errors.Add("unsupported-delivery-format:$format")
+        return @($errors)
+    }
+    $isWeb = $format -eq 'html'
+    $fileKeys = if ($isWeb) { @('html', 'svg', 'png', 'desktop_screenshot', 'narrow_screenshot', 'fidelity_ledger') } else { @($format, 'render_evidence', 'fidelity_ledger') }
 
     $tool = $Manifest.tool_probe
     foreach ($name in @('name', 'installed', 'callable', 'call_succeeded', 'version', 'commit', 'license', 'probed_at', 'evidence')) {
@@ -69,15 +78,32 @@ function Get-VisualManifestErrors {
         foreach ($name in @('installed', 'callable', 'call_succeeded')) {
             if ($null -eq $tool.$name) { $errors.Add("formal-tool-state-unknown:$name") }
         }
-        if ([string]::IsNullOrWhiteSpace([string]$Manifest.files.html)) { $errors.Add('formal-missing-html') }
-        if ([string]::IsNullOrWhiteSpace([string]$Manifest.files.svg) -and [string]::IsNullOrWhiteSpace([string]$Manifest.files.png)) { $errors.Add('formal-missing-svg-or-png') }
-        foreach ($name in @('desktop_screenshot', 'narrow_screenshot')) {
-            if ([string]::IsNullOrWhiteSpace([string]$Manifest.files.$name)) { $errors.Add("formal-missing:$name") }
+        if ($isWeb) {
+            if ([string]::IsNullOrWhiteSpace([string]$Manifest.files.html)) { $errors.Add('formal-missing-html') }
+            if ([string]::IsNullOrWhiteSpace([string]$Manifest.files.svg) -and [string]::IsNullOrWhiteSpace([string]$Manifest.files.png)) { $errors.Add('formal-missing-svg-or-png') }
+            foreach ($name in @('desktop_screenshot', 'narrow_screenshot')) {
+                if ([string]::IsNullOrWhiteSpace([string]$Manifest.files.$name)) { $errors.Add("formal-missing:$name") }
+            }
+        } else {
+            foreach ($name in @($format, 'render_evidence')) {
+                if ([string]::IsNullOrWhiteSpace([string]$Manifest.files.$name)) { $errors.Add("formal-missing:$name") }
+            }
+            if ([System.IO.Path]::GetExtension([string]$Manifest.files.$format) -ne ".$format") { $errors.Add('native-source-format-mismatch') }
+            $verification = $Manifest.artifact_verification
+            foreach ($name in @('readable', 'editable_required', 'editable')) {
+                if (-not (Has-Property $verification $name) -or $verification.$name -isnot [bool]) { $errors.Add("artifact-verification-invalid:$name") }
+            }
+            if ($verification.readable -ne $true) { $errors.Add('artifact-not-readable') }
+            if ($format -eq 'png' -and $verification.editable -eq $true) { $errors.Add('bitmap-claimed-as-editable-source') }
+            if ($format -in @('pptx', 'drawio') -or $verification.editable_required -eq $true) {
+                if ($verification.editable -ne $true -or $format -eq 'png') { $errors.Add('artifact-not-editable') }
+                if ([string]::IsNullOrWhiteSpace([string]$verification.editability_scope)) { $errors.Add('artifact-editability-scope-missing') }
+            }
         }
         if (-not (Has-Property $Manifest.files 'sha256')) {
             $errors.Add('formal-missing-file-sha256')
         } else {
-            foreach ($name in @('html', 'svg', 'png', 'desktop_screenshot', 'narrow_screenshot', 'fidelity_ledger')) {
+            foreach ($name in $fileKeys) {
                 $relativePath = [string]$Manifest.files.$name
                 if ([string]::IsNullOrWhiteSpace($relativePath)) { continue }
                 $expectedHash = [string]$Manifest.files.sha256.$name
@@ -97,30 +123,32 @@ function Get-VisualManifestErrors {
         }
     }
 
-    $browser = $Manifest.browser_verification
-    foreach ($name in @('desktop', 'narrow', 'console_errors', 'page_errors', 'resource_errors', 'offline_core_visible')) {
-        if (-not (Has-Property $browser $name)) { $errors.Add("browser-missing:$name") }
-    }
-    foreach ($name in @('desktop', 'narrow')) {
-        if (-not (Has-Property $browser $name)) { continue }
-        $viewport = $browser.$name
-        foreach ($field in @('viewport', 'overflow', 'overlap', 'text_readable')) {
-            if (-not (Has-Property $viewport $field)) { $errors.Add("browser-$name-missing:$field") }
+    if ($isWeb) {
+        $browser = $Manifest.browser_verification
+        foreach ($name in @('desktop', 'narrow', 'console_errors', 'page_errors', 'resource_errors', 'offline_core_visible')) {
+            if (-not (Has-Property $browser $name)) { $errors.Add("browser-missing:$name") }
         }
-        if ((Has-Property $viewport 'viewport') -and [string]$viewport.viewport -notmatch '^\d+x\d+$') { $errors.Add("browser-$name-invalid-viewport") }
-        if ((Has-Property $viewport 'overflow') -and [bool]$viewport.overflow) { $errors.Add("browser-$name-overflow") }
-        if ((Has-Property $viewport 'overlap') -and [bool]$viewport.overlap) { $errors.Add("browser-$name-overlap") }
-        if ((Has-Property $viewport 'text_readable') -and -not [bool]$viewport.text_readable) { $errors.Add("browser-$name-unreadable") }
+        foreach ($name in @('desktop', 'narrow')) {
+            if (-not (Has-Property $browser $name)) { continue }
+            $viewport = $browser.$name
+            foreach ($field in @('viewport', 'overflow', 'overlap', 'text_readable')) {
+                if (-not (Has-Property $viewport $field)) { $errors.Add("browser-$name-missing:$field") }
+            }
+            if ((Has-Property $viewport 'viewport') -and [string]$viewport.viewport -notmatch '^\d+x\d+$') { $errors.Add("browser-$name-invalid-viewport") }
+            if ((Has-Property $viewport 'overflow') -and [bool]$viewport.overflow) { $errors.Add("browser-$name-overflow") }
+            if ((Has-Property $viewport 'overlap') -and [bool]$viewport.overlap) { $errors.Add("browser-$name-overlap") }
+            if ((Has-Property $viewport 'text_readable') -and -not [bool]$viewport.text_readable) { $errors.Add("browser-$name-unreadable") }
+        }
+        if ((Has-Property $browser 'console_errors') -and [int]$browser.console_errors -ne 0) { $errors.Add('browser-console-errors') }
+        if ((Has-Property $browser 'page_errors') -and [int]$browser.page_errors -ne 0) { $errors.Add('browser-page-errors') }
+        if ((Has-Property $browser 'resource_errors') -and [int]$browser.resource_errors -ne 0) { $errors.Add('browser-resource-errors') }
+        if ((Has-Property $browser 'offline_core_visible') -and -not [bool]$browser.offline_core_visible) { $errors.Add('offline-core-hidden') }
     }
-    if ((Has-Property $browser 'console_errors') -and [int]$browser.console_errors -ne 0) { $errors.Add('browser-console-errors') }
-    if ((Has-Property $browser 'page_errors') -and [int]$browser.page_errors -ne 0) { $errors.Add('browser-page-errors') }
-    if ((Has-Property $browser 'resource_errors') -and [int]$browser.resource_errors -ne 0) { $errors.Add('browser-resource-errors') }
-    if ((Has-Property $browser 'offline_core_visible') -and -not [bool]$browser.offline_core_visible) { $errors.Add('offline-core-hidden') }
 
     $accessibility = $Manifest.accessibility
     if ([string]::IsNullOrWhiteSpace([string]$accessibility.alt_text)) { $errors.Add('accessibility-missing-alt') }
     if ([bool]$accessibility.color_is_only_signal) { $errors.Add('accessibility-color-only') }
-    if (-not [bool]$accessibility.static_fallback) { $errors.Add('accessibility-missing-static-fallback') }
+    if ($isWeb -and -not [bool]$accessibility.static_fallback) { $errors.Add('accessibility-missing-static-fallback') }
 
     foreach ($resource in @($Manifest.external_resources)) {
         foreach ($name in @('url', 'source', 'license', 'offline_behavior')) {
@@ -323,6 +351,56 @@ $goodSemantic.fact_map.facts = @(
 )
 Assert-True (@(Get-VisualManifestErrors $goodSemantic).Count -eq 0) 'Positive semantic fixture should pass'
 
+$legacy = $goodSemantic | ConvertTo-Json -Depth 30 | ConvertFrom-Json
+$legacy.PSObject.Properties.Remove('delivery_format')
+Assert-True (@(Get-VisualManifestErrors $legacy).Count -eq 0) 'Legacy HTML manifests without delivery_format must remain valid'
+$legacy.PSObject.Properties.Remove('browser_verification')
+Assert-True ('browser-missing:desktop' -in @(Get-VisualManifestErrors $legacy)) 'Legacy HTML must still require browser evidence'
+
+# These fixtures validate records and hashes, not the contents of real office/image files.
+$nativeFixtures = @{}
+foreach ($format in @('pptx', 'drawio', 'svg', 'png')) {
+    $native = $goodSemantic | ConvertTo-Json -Depth 30 | ConvertFrom-Json
+    $native.delivery_format = $format
+    $native.PSObject.Properties.Remove('browser_verification')
+    $native.accessibility.PSObject.Properties.Remove('static_fallback')
+    $native.files = [pscustomobject]@{
+        $format = "artifact.$format"
+        render_evidence = 'render.png'
+        sha256 = [pscustomobject]@{ $format = ('a' * 64); render_evidence = ('b' * 64) }
+    }
+    $native | Add-Member -NotePropertyName artifact_verification -NotePropertyValue ([pscustomobject]@{
+        readable = $true
+        editable_required = ($format -in @('pptx', 'drawio'))
+        editable = ($format -ne 'png')
+        editability_scope = 'Text and diagram elements; synthetic verification record only.'
+    })
+    Assert-True (@(Get-VisualManifestErrors $native).Count -eq 0) "Native $format must not require HTML/browser screenshots"
+    $nativeFixtures[$format] = $native
+}
+
+$nativeNegativeCases = @(
+    @{ base='pptx'; error='unsupported-delivery-format:pdf'; change={ param($m) $m.delivery_format = 'pdf' } },
+    @{ base='pptx'; error='native-source-format-mismatch'; change={ param($m) $m.files.pptx = 'artifact.html' } },
+    @{ base='pptx'; error='formal-missing:pptx'; change={ param($m) $m.files.pptx = '' } },
+    @{ base='drawio'; error='formal-missing:render_evidence'; change={ param($m) $m.files.render_evidence = '' } },
+    @{ base='pptx'; error='artifact-not-editable'; change={ param($m) $m.artifact_verification.editable = $false } },
+    @{ base='drawio'; error='artifact-not-editable'; change={ param($m) $m.artifact_verification.editable = $false } },
+    @{ base='svg'; error='artifact-not-readable'; change={ param($m) $m.artifact_verification.readable = $false } },
+    @{ base='pptx'; error='artifact-verification-invalid:readable'; change={ param($m) $m.artifact_verification.readable = 'true' } },
+    @{ base='pptx'; error='artifact-verification-invalid:editable'; change={ param($m) $m.PSObject.Properties.Remove('artifact_verification') } },
+    @{ base='png'; error='bitmap-claimed-as-editable-source'; change={ param($m) $m.artifact_verification.editable = $true } },
+    @{ base='png'; error='artifact-not-editable'; change={ param($m) $m.artifact_verification.editable_required = $true } },
+    @{ base='drawio'; error='artifact-editability-scope-missing'; change={ param($m) $m.artifact_verification.editability_scope = '' } },
+    @{ base='svg'; error='formal-missing-sha256:svg'; change={ param($m) $m.files.sha256.svg = '' } },
+    @{ base='drawio'; error='semantic-edge-missing-direction:S-2'; change={ param($m) $m.fact_map.facts[1].direction = '' } }
+)
+foreach ($case in $nativeNegativeCases) {
+    $badNative = $nativeFixtures[$case.base] | ConvertTo-Json -Depth 30 | ConvertFrom-Json
+    & $case.change $badNative
+    Assert-True ($case.error -in @(Get-VisualManifestErrors $badNative)) "Native regression must reject: $($case.error)"
+}
+
 $fixtureRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("mypm-v040-" + [guid]::NewGuid().ToString('N'))
 [System.IO.Directory]::CreateDirectory($fixtureRoot) | Out-Null
 try {
@@ -367,7 +445,25 @@ try {
     $badSource = $mechanical | ConvertTo-Json -Depth 30 | ConvertFrom-Json
     $badSource.source.objects[0].sha256 = ('f' * 64)
     Assert-True ('source-sha256-mismatch' -in @(Get-VisualManifestErrors -Manifest $badSource -ManifestRoot $fixtureRoot)) 'Source hash drift should fail'
+
+    foreach ($format in @('pptx', 'drawio', 'svg', 'png')) {
+        $native = $nativeFixtures[$format] | ConvertTo-Json -Depth 30 | ConvertFrom-Json
+        $native.source = $mechanical.source
+        foreach ($key in @($format, 'render_evidence')) {
+            $file = Join-Path $fixtureRoot ([string]$native.files.$key)
+            [System.IO.File]::WriteAllText($file, "fixture:$key", [System.Text.UTF8Encoding]::new($false))
+            $native.files.sha256.$key = Get-Sha256 -Path $file
+        }
+        Assert-True (@(Get-VisualManifestErrors -Manifest $native -ManifestRoot $fixtureRoot).Count -eq 0) "Native file identity must pass: $format"
+        $native.files.sha256.$format = ('0' * 64)
+        Assert-True ("formal-sha256-mismatch:$format" -in @(Get-VisualManifestErrors -Manifest $native -ManifestRoot $fixtureRoot)) "Native hash drift must fail: $format"
+        $native.files.$format = "../artifact.$format"
+        Assert-True ("formal-file-missing:$format" -in @(Get-VisualManifestErrors -Manifest $native -ManifestRoot $fixtureRoot)) "Native path escape must fail: $format"
+    }
 } finally {
+    $tempPrefix = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd([char[]]@('\', '/')) + [System.IO.Path]::DirectorySeparatorChar
+    $resolvedFixture = [System.IO.Path]::GetFullPath($fixtureRoot)
+    if (-not $resolvedFixture.StartsWith($tempPrefix, [System.StringComparison]::OrdinalIgnoreCase) -or [System.IO.Path]::GetFileName($resolvedFixture) -notmatch '^mypm-v040-[0-9a-f]{32}$') { throw 'Unsafe fixture cleanup path' }
     if (Test-Path -LiteralPath $fixtureRoot) { Remove-Item -LiteralPath $fixtureRoot -Recurse -Force }
 }
 
@@ -397,3 +493,4 @@ foreach ($path in @($ManifestPath)) {
 }
 
 Write-Host "v0.40 visual-delivery self-test passed: current=$currentVersion routes=2 stable=4 challenge=5 capabilities=2 default-load=0 mechanical=1 negative=8"
+Write-Host "Carrier checks passed: legacy-positive=1 legacy-negative=1 native-record-positive=4 native-record-negative=$($nativeNegativeCases.Count) native-file-positive=4 native-file-negative=8"

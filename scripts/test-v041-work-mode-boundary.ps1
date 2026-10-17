@@ -30,6 +30,7 @@ $stable = Read-Utf8 'evals/evals.json' | ConvertFrom-Json
 $challenge = Read-Utf8 'evals/challenge-evals.json' | ConvertFrom-Json
 $contracts = Read-Utf8 'evals/contract-registry.json' | ConvertFrom-Json
 $panel = Read-Utf8 'evals/release-panel.json' | ConvertFrom-Json
+$maintenance = Read-Utf8 'evals/v042-maintenance-evals.json' | ConvertFrom-Json
 
 $currentVersion = [regex]::Match($skill, '(?m)^\s+version:\s+"([^"]+)"').Groups[1].Value
 Assert-True ($currentVersion -in @('0.41.0', '0.42.0')) 'v0.41 historical self-test supports versions 0.41.0 and 0.42.0'
@@ -60,6 +61,8 @@ Assert-True ($review.Contains('不直接替研发做方案')) 'Review engineerin
 Assert-True ($acceptance.Contains('不代写或执行构建、迁移、CI、部署脚本')) 'Acceptance execution boundary is missing'
 Assert-True ($prompt.Contains('不得把团队产品文档静默升级')) 'Prompt mode inheritance is missing'
 Assert-True ($handoff.Contains('模式切换必须由用户授权')) 'Development handoff authorization is missing'
+Assert-True ($boundary.Contains('明确要求技术草案或候选任务') -and $boundary.Contains('文稿授权不等于编码')) 'Commissioned team drafts must not imply implementation authorization'
+Assert-True ($handoff.Contains('设计未交付不阻断独立的服务侧评审任务') -and $handoff.Contains('只委托文稿则停在评审点')) 'Draft work must respect task-specific dependencies and authorization'
 Assert-True ($teamTemplate.Contains('默认停在团队评审与承接点')) 'Team PRD must stop before automatic engineering handoff'
 Assert-True ($teamTemplate.Contains('API、表结构、索引、迁移、缓存、日志字段等')) 'Team template must name downstream technical decisions without inventing them'
 Assert-True ($vibeTemplate.Contains('Vibe Coding 全流程型')) 'Vibe template identity is missing'
@@ -83,6 +86,19 @@ $ch43 = @($challenge.evals | Where-Object { [string]$_.id -eq 'CH-43' })[0]
 Assert-True (-not ([string]$ch43.prompt -match '写代码|建库|跑测试|发布')) 'CH-43 must remain an ambiguous handoff and must not contain explicit implementation authorization'
 Assert-True ([string]$ch43.expected_output -match '没有明确要求实现、测试或发布承接') 'CH-43 must test silent mode escalation rather than contradict explicit authorization'
 Assert-True (@($ch43.expectations) -contains '代码块说明 team_pm 来自上游继承，且没有发生静默模式切换') 'CH-43 must grade behavior, not require a magic authorization phrase'
+
+$ch46 = @($challenge.evals | Where-Object { [string]$_.id -eq 'CH-46' })[0]
+Assert-True ([string]$ch46.prompt -match '本轮只给.*承接清单' -and [string]$ch46.prompt -match '工程计划等我另行委托') 'CH-46 refusal expectations require a prompt that withholds engineering-plan authorization'
+foreach ($id in @(102..106)) {
+    $visualEval = @($stable.evals | Where-Object { [int]$_.id -eq $id })[0]
+    Assert-True ([string]$visualEval.prompt -match 'HTML') "HTML delivery expectations require an explicit HTML task: $id"
+}
+$ch38 = @($challenge.evals | Where-Object { [string]$_.id -eq 'CH-38' })[0]
+Assert-True ([string]$ch38.prompt -match 'HTML') 'CH-38 must explicitly target HTML before requiring browser evidence'
+Assert-True (@($maintenance.evals).Count -eq 6 -and @($maintenance.evals.id | Select-Object -Unique).Count -eq 6) 'I-02/I-05 pilot must keep six separately identified scenarios'
+foreach ($case in $maintenance.evals) {
+    Assert-True (-not [string]::IsNullOrWhiteSpace([string]$case.prompt) -and @($case.expectations).Count -ge 3) "Maintenance pilot lacks input or behavioral expectations: $($case.id)"
+}
 
 $expectedRoutes = @{
     '107' = '/prd'; '108' = '/prd'; '109' = '/prd'; '110' = '/prd'
