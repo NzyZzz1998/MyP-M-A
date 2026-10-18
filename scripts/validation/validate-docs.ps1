@@ -25,7 +25,7 @@ function Invoke-MypmLatestObservationValidation {
             @($observation.documents).Count -ne 3 -or
             @($observation.documents.path | Sort-Object -Unique).Count -ne 3) { throw 'Invalid observation identity or metric boundary' }
         foreach ($document in $observation.documents) {
-            if ($document.path -notin @('README.md', 'notes/mypm-roadmap.md', 'notes/evaluation-history.md')) { throw 'Unsupported observation document' }
+            if ($document.path -notin @('README.md', 'notes/v0.42-stable-readme-archive.md', 'notes/mypm-roadmap.md', 'notes/evaluation-history.md')) { throw 'Unsupported observation document' }
             $text = [IO.File]::ReadAllText((Join-Path $Root $document.path), [Text.Encoding]::UTF8)
             $section = [regex]::Match($text, [string]$document.section_pattern)
             if (-not $section.Success) { throw "Missing observation section: $($document.path)" }

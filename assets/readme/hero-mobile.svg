@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="1000" viewBox="0 0 720 1000" role="img" aria-labelledby="title desc">
-  <title id="title">MyP-M-A 面向团队协作与 Vibe Coding 的中文产品工作流移动版</title>
+  <title id="title">MyP-M-A v0.43 Candidate 中文产品工作流移动版</title>
   <desc id="desc">MyP-M-A 让团队协作型和 Vibe Coding 型交付共享同一份产品事实、范围、状态、指标和验收合同。</desc>
 
   <rect width="720" height="1000" rx="20" fill="#0B1412"/>
@@ -12,9 +12,9 @@
     <text x="42" y="232" fill="#9FB2AA" font-size="21">先判断阶段，再连接产品定义与真实验收</text>
 
     <g transform="translate(42 270)">
-      <rect width="198" height="48" rx="6" fill="#17382F" stroke="#39BC91"/>
-      <circle cx="24" cy="24" r="6" fill="#39BC91"/>
-      <text x="44" y="32" fill="#EAF7F1" font-size="21" font-weight="700">v0.42.0 Stable</text>
+      <rect width="218" height="48" rx="6" fill="#352A18" stroke="#F0B35B"/>
+      <circle cx="24" cy="24" r="6" fill="#F0B35B"/>
+      <text x="44" y="32" fill="#F6F2E8" font-size="21" font-weight="700">v0.43 Candidate</text>
     </g>
     <text x="270" y="301" fill="#A8BBB3" font-size="19">114 稳定 · 46 挑战 · 34 触发</text>
 

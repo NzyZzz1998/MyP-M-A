@@ -103,7 +103,7 @@ try {
     Write-Host 'PASS: seven document-maintenance fixtures, graph structure and routing guards; no model behavior tested.'
     & (Join-Path $PSScriptRoot 'test-full-thread-maintenance.ps1')
     New-Item -ItemType Directory -Path (Join-Path $temp 'evals'), (Join-Path $temp 'notes') -Force | Out-Null
-    foreach ($file in @('evals/latest-observation.json', 'README.md', 'notes/mypm-roadmap.md', 'notes/evaluation-history.md')) {
+    foreach ($file in @('evals/latest-observation.json', 'README.md', 'notes/v0.42-stable-readme-archive.md', 'notes/mypm-roadmap.md', 'notes/evaluation-history.md')) {
         Copy-Item -LiteralPath (Join-Path $root $file) -Destination (Join-Path $temp $file)
     }
     Assert-Observation $true 'current observation'
@@ -204,9 +204,9 @@ try {
         if (($scores -join ',') -ne ($record.scores -join ',')) { throw 'Source benchmark score mismatch' }
     }
     foreach ($case in @(
-        @{ path = 'README.md'; old = '861/883'; new = '862/883' },
-        @{ path = 'README.md'; old = '97.51%'; new = '100.00%' },
-        @{ path = 'README.md'; old = $record.documents[0].required_patterns[6]; new = 'independent correctness' },
+        @{ path = $record.documents[0].path; old = '861/883'; new = '862/883' },
+        @{ path = $record.documents[0].path; old = '97.51%'; new = '100.00%' },
+        @{ path = $record.documents[0].path; old = $record.documents[0].required_patterns[6]; new = 'independent correctness' },
         @{ path = 'notes/mypm-roadmap.md'; old = $record.documents[1].required_patterns[3]; new = 'measured case latency' },
         @{ path = 'notes/evaluation-history.md'; old = $record.documents[2].required_patterns[6]; new = $record.documents[2].required_patterns[6].Replace('640', '160') }
     )) {

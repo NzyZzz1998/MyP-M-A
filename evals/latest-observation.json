@@ -9,7 +9,7 @@
   "scores": ["861/883", "859/883", "838/883", "815/883", "369/376", "372/376", "367/376", "364/376"],
   "documents": [
     {
-      "path": "README.md",
+      "path": "notes/v0.42-stable-readme-archive.md",
       "section_pattern": "(?s)### 四模型行为全量回归.*?(?=\\r?\\n### |\\z)",
       "required_patterns": [
         "Astra medium.*Sol medium.*Terra medium.*Luna medium",

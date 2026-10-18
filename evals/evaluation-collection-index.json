@@ -4,12 +4,12 @@
   "sources": [
     {
       "path": "evals/evals.json",
-      "sha256": "bc6c5adcae3fc80f1a1fcaa20bc5b4aebb00e6db15196fd318774f551bef4dc8",
+      "sha256": "99b812002c4ee1e5dcabb837bd7f853f11f70d6c08d81f1de59af3e988e51f72",
       "count": 114
     },
     {
       "path": "evals/challenge-evals.json",
-      "sha256": "52909741984abee342c3cadd53a6388ce769680f67697d8fcd7c437c3823ae0e",
+      "sha256": "018f5f991d9e2b15af201c86e8917254fe74cb83590cc1065f3214f3973f5dc6",
       "count": 46
     },
     {

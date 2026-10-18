@@ -1,5 +1,7 @@
 # 当前维护候选最终验收
 
+版本承接：维护者随后将本批增量命名为 v0.43.0 Candidate，见[身份与证据关联](v0.43-candidate-identity.md)。本文的回归身份、原分和技术判定保留；命名不等于新全量或 Stable 晋升。
+
 入口判断：/acceptance；子阶段：最终回归收口。交付模式：vibe_coding，仅限 MyP-M-A 自身。
 
 ## 当前状态
