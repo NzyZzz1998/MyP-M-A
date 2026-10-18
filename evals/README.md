@@ -42,7 +42,8 @@ v0.41 起，评测“资产目录”和“每轮执行面板”分开治理。�
 | 挑战集 | `challenge-evals.json` | 暴露证据冲突、边界和复杂决策缺口 | 与稳定集分开执行、评分和汇报 |
 | 触发集 | `trigger-evals.json` | 验证该不该进入 MyP-M-A 以及入口识别 | description、宿主配置或触发题面变化时运行 |
 | 固定核心 | `release-panel-core.json` | 五入口、数据、工具、Memory 和高风险证据的长期冒烟 | 每个行为候选进入 T1/T2 |
-| 当前差量 | `release-panel.json` | 固定核心、本版合同差量和相邻控制 | 只代表当前候选，不覆盖完整目录 |
+| 当前发布证据 | `current-release-evidence.json` | v0.43 的冻结身份、实际全量来源、继承限制与 Stable 决定 | 证据索引，不是调度器或新执行记录 |
+| 历史差量 | `release-panel.json` | v0.41 相对 v0.40 的固定核心、合同差量和相邻控制 | 保留原字节；不代表 v0.43 执行或覆盖 |
 | 外部对标 | `external-benchmark-contract.json` | 与其他 PM Skill 做同协议观察 | 只在里程碑版本或专项研究运行 |
 
 机器可读规则位于 `evaluation-policy.json`；逐题状态及决策位于 `eval-state-registry.json`；由九个事实源生成的统一账本位于 `eval-inventory.json`。账本不复制题面和断言，禁止手工维护：
@@ -109,12 +110,14 @@ T0～T5 是选择协议，不是自动执行器；`coverage / targeted-max` 是�
 
 ## 发布面板与执行生命周期
 
-`release-panel-core.json` 固定 9 条长期核心；`release-panel.json` 保存当前候选的核心、合同差量和相邻控制快照。动态面板默认目标为 26 条，超过目标时升级为受影响入口回归，不静默截断 critical 合同。v0.41 的 28 条快照用于保留 15 条工作模式差量和 4 条相邻控制，是当前版本证据，不把 28 改写成新的默认规模。两者都不复制题目或评分点，也不替代稳定集和挑战集完整回归。
+`release-panel-core.json` 固定 9 条长期核心；`release-panel.json` 保留 v0.41 相对 v0.40 的 28 条历史选择快照（9 核心、15 工作模式差量、4 相邻控制）。动态面板默认目标为 26 条，超过目标时升级为受影响入口回归，不静默截断 critical 合同；28 不是新的默认规模。两者都不复制题目或评分点，也不替代完整回归。
 
-只执行当前快照：
+v0.43 使用独立的 `current-release-evidence.json` 指向实际双模型全量和后续版本决定，没有另造差量面板，策略中的 current_impact_panel 为 null。派生账本的 current_delta / adjacent_control 仍以 v0.41 历史快照计算，表示选择角色，不表示本版已执行。现有生成器保留兼容行为：无参数时仍导出该历史选择，不会自动变为最新发布证据。
+
+仅导出历史选择（不执行评测）：
 
 ```powershell
-.\scripts\build-eval-panel.ps1 -OutputPath E:\codex\skill-evals\mypm-release-panel.json
+.\scripts\build-eval-panel.ps1 -PanelFile evals/release-panel.json -OutputPath E:\codex\skill-evals\mypm-v041-historical-panel.json
 ```
 
 按 Git 差异和显式合同生成候选快照：

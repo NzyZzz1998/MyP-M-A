@@ -1,54 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1000" viewBox="0 0 720 1000" role="img" aria-labelledby="title desc">
-  <title id="title">MyP-M-A v0.43 Candidate 中文产品工作流移动版</title>
-  <desc id="desc">MyP-M-A 让团队协作型和 Vibe Coding 型交付共享同一份产品事实、范围、状态、指标和验收合同。</desc>
-
-  <rect width="720" height="1000" rx="20" fill="#0B1412"/>
-  <rect x="1" y="1" width="718" height="998" rx="19" fill="none" stroke="#2A3B36" stroke-width="2"/>
-
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="560" viewBox="0 0 720 560" role="img" aria-labelledby="title desc">
+  <title id="title">MyP-M-A：完整 PRD、团队协作与 Vibe Coding</title>
+  <desc id="desc">从需求判断，到完整 PRD，再到开发承接与交付验收。团队协作交付产品定义；Vibe Coding 在确认后继续实现。正确性、证据与完整性优先。</desc>
+  <rect width="720" height="560" rx="16" fill="#0B1412"/>
+  <rect x="1" y="1" width="718" height="558" rx="15" fill="none" stroke="#2A3B36" stroke-width="2"/>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
-    <text x="42" y="58" fill="#F0B35B" font-size="18" font-weight="700">TEAM WORK · VIBE CODING · 中文优先</text>
-    <text x="42" y="140" fill="#F6F2E8" font-size="62" font-weight="750">MyP-M-A</text>
-    <text x="42" y="190" fill="#D4DED9" font-size="28" font-weight="650">把产品判断变成可追溯的交付链</text>
-    <text x="42" y="232" fill="#9FB2AA" font-size="21">先判断阶段，再连接产品定义与真实验收</text>
-
-    <g transform="translate(42 270)">
-      <rect width="218" height="48" rx="6" fill="#352A18" stroke="#F0B35B"/>
+    <text x="42" y="60" fill="#F0B35B" font-size="24" font-weight="700">中文产品经理 SKILL</text>
+    <text x="42" y="144" fill="#F6F2E8" font-size="72" font-weight="750">MyP-M-A</text>
+    <text x="42" y="204" fill="#D4DED9" font-size="34" font-weight="650">从需求判断，到完整 PRD</text>
+    <text x="42" y="248" fill="#D4DED9" font-size="30">再到开发承接与交付验收</text>
+    <g transform="translate(42 280)">
+      <rect width="222" height="48" rx="6" fill="#352A18" stroke="#F0B35B"/>
       <circle cx="24" cy="24" r="6" fill="#F0B35B"/>
-      <text x="44" y="32" fill="#F6F2E8" font-size="21" font-weight="700">v0.43 Candidate</text>
+      <text x="44" y="33" fill="#F6F2E8" font-size="25" font-weight="700">v0.43 Stable</text>
     </g>
-    <text x="270" y="301" fill="#A8BBB3" font-size="19">114 稳定 · 46 挑战 · 34 触发</text>
-
-    <line x1="42" y1="358" x2="678" y2="358" stroke="#2A3B36" stroke-width="2"/>
-    <text x="42" y="405" fill="#A8BBB3" font-size="19" font-weight="700">同一份产品事实，两种交付深度</text>
-
-    <g transform="translate(42 432)">
-      <rect width="636" height="112" rx="8" fill="#132721" stroke="#39BC91" stroke-width="2"/>
-      <text x="22" y="34" fill="#75D4B4" font-size="16" font-weight="700">SHARED PRODUCT CONTRACT</text>
-      <text x="22" y="70" fill="#F6F2E8" font-size="25" font-weight="750">共享产品合同</text>
-      <text x="22" y="98" fill="#A8BBB3" font-size="19">事实 · 范围 · 状态 · 指标 · 验收</text>
-    </g>
-
-    <path d="M360 544 V574" fill="none" stroke="#526A61" stroke-width="3"/>
-
-    <g transform="translate(42 574)">
-      <rect width="636" height="142" rx="8" fill="#111F1B" stroke="#39BC91"/>
-      <rect x="22" y="20" width="90" height="32" rx="4" fill="#17382F"/>
-      <text x="67" y="42" text-anchor="middle" fill="#75D4B4" font-size="16" font-weight="700">team_pm</text>
-      <text x="22" y="88" fill="#F6F2E8" font-size="25" font-weight="750">团队协作型</text>
-      <text x="218" y="88" fill="#A8BBB3" font-size="21">产品定义 → 设计 / 研发 / 测试承接</text>
-      <text x="22" y="120" fill="#71877E" font-size="18">默认模式：完整业务合同，不猜物理实现</text>
-    </g>
-
-    <g transform="translate(42 742)">
-      <rect width="636" height="142" rx="8" fill="#211C13" stroke="#F0B35B"/>
-      <rect x="22" y="20" width="124" height="32" rx="4" fill="#352A18"/>
-      <text x="84" y="42" text-anchor="middle" fill="#F0B35B" font-size="16" font-weight="700">vibe_coding</text>
-      <text x="22" y="88" fill="#F6F2E8" font-size="25" font-weight="750">全流程型</text>
-      <text x="190" y="88" fill="#D8C7AA" font-size="21">产品定义 → 原型 / 实现 / 验收</text>
-      <text x="22" y="120" fill="#9F8C6D" font-size="18">显式授权后，继续完成工程落地与验证</text>
-    </g>
-
-    <rect x="42" y="916" width="636" height="48" rx="6" fill="#0F1B18" stroke="#2A3B36"/>
-    <text x="360" y="947" text-anchor="middle" fill="#D4DED9" font-size="19" font-weight="650">模式改变职责深度，不改变已经确认的事实</text>
+    <line x1="42" y1="360" x2="678" y2="360" stroke="#2A3B36" stroke-width="2"/>
+    <text x="42" y="408" fill="#75D4B4" font-size="28" font-weight="650">团队协作：产品定义 → 团队承接</text>
+    <text x="42" y="454" fill="#F0B35B" font-size="28" font-weight="650">Vibe Coding：确认后继续实现</text>
+    <text x="42" y="516" fill="#A8BBB3" font-size="27">正确性 · 证据 · 完整性优先</text>
   </g>
 </svg>

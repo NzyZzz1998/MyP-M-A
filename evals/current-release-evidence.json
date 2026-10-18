@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "skill_version": "0.43.0",
+  "kind": "release-evidence-index",
+  "release_state": "local-committed",
+  "decision": "notes/v0.43-stable-decision.md",
+  "technical_verdict": "partial",
+  "known_risk_disposition": "accepted-not-fixed",
+  "known_risks": ["K-01", "K-02", "K-03", "K-04", "K-05/B-01"],
+  "known_risks_source": "notes/maintenance-closeout-20261018.md",
+  "candidate_identity": "notes/v0.43-candidate-identity.md",
+  "closure_base": {
+    "branch": "test",
+    "commit": "85b96d61785f9c1f00a9ce8dd2628953bf687040"
+  },
+  "behavior_evidence": {
+    "mode": "inherited-full-regression",
+    "run_id": "mypm-current-final-dual-medium-20261018",
+    "original_label": "v0.42 maintenance working tree before v0.43 naming",
+    "parent_commit": "deecc50b8865c26c73a2dff0ceaae8f66174c64f",
+    "runtime_snapshot_sha256": "8538fdb179a6be7f19a830120c185094e53d06df20918b80a5f09f3baea1e926",
+    "models": ["gpt-6.1-sol", "gpt-6-astra"],
+    "reasoning_effort": "medium",
+    "tasks_per_model": 245,
+    "valid_tasks": 490,
+    "reply_checkpoints": 496,
+    "closed_execution_and_grading_agents": 264,
+    "summaries": [
+      "notes/evaluation-history.md#current-final-dual-medium-20261018",
+      "notes/current-candidate-final-acceptance-20261018.md"
+    ],
+    "raw_evidence_availability": "maintainer-local-not-bundled",
+    "maintainer_local_root": "E:/codex/skill-evals/mypm-current-final-dual-medium-20261018",
+    "files": [
+      {"path": "summary.md", "sha256": "2276dc494af5bf267ab14ee443e57c335df25429b5cc3ff639a44562c8232127"},
+      {"path": "final-audit.json", "sha256": "34d12ff7863dec985a751aedced38159d63947278b1a9b72e75bbc092f38f82e"},
+      {"path": "final-assessment.json", "sha256": "0a49da41b2e0edc5b8ac48899fea95ef1a2c5c723fe02528c834b4cb25e58f69"},
+      {"path": "raw-findings.json", "sha256": "9b586fe7ccccba6ba7ae585718922cf0cb58f541d5b9536f281f7772410345be"}
+    ]
+  },
+  "inheritance_boundary": [
+    "Version naming and later provider-name wording changes were not separately model-tested; current files are not byte-identical to the frozen runtime.",
+    "This closure changes only release documentation and evaluation evidence pointers/derived metadata; it is not a new behavior run.",
+    "Original scores, failed/unverified assertions and partial technical verdict remain unchanged; no unified quality score.",
+    "The local Stable decision does not imply commit, push, main synchronization, tag or Release."
+  ],
+  "differential_panel": null,
+  "historical_selection_snapshot": {
+    "path": "evals/release-panel.json",
+    "candidate_ref": "working-tree-v0.41",
+    "baseline_ref": "v0.40.0",
+    "sha256": "5d3857cd3374dd5cdcbcd7c23e43a690f0ad7cf73a085222c5ab6f33bcae3d0c"
+  }
+}

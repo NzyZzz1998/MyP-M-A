@@ -1,8 +1,8 @@
 # MyP-M-A Skill 优化 Backlog
 
-## 2026-10-18 v0.43 Candidate 收口（仅 test）
+## 2026-10-19 v0.43 Stable 发布收口
 
-维护者接受已知问题并授权提交、推送 test，随后确认本批新增能力应命名为 v0.43 Candidate；本轮停止改规则和追加回归。技术判定仍为部分通过，不自动晋升 Stable。当前决定及同步以[收口记录](maintenance-closeout-20261018.md)为准，[版本身份](v0.43-candidate-identity.md)说明旧快照如何承接，原始失败不改为通过。
+维护者先接受已知问题并将 Candidate 推送 test，随后确认按同一风险清单晋升 v0.43 Stable。2026-10-19 授权提交、推送 main 与 v0.43.0 tag，当前发布中；本轮不改规则或追加回归，技术判定仍为部分通过，原始失败不改为通过。当前决定见[Stable 决定](v0.43-stable-decision.md)，[收口记录](maintenance-closeout-20261018.md)保留逐项遗留，[版本身份](v0.43-candidate-identity.md)说明旧快照承接边界。
 
 | 顺序 | 后续项 | 关闭依据 |
 | --- | --- | --- |

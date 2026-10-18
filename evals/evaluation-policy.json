@@ -18,7 +18,15 @@
     "scenario_ownership": "evals/eval-lifecycle.json",
     "lifecycle_states": "evals/eval-state-registry.json",
     "fixed_core": "evals/release-panel-core.json",
-    "current_impact_panel": "evals/release-panel.json",
+    "current_impact_panel": null,
+    "current_release_evidence": "evals/current-release-evidence.json",
+    "historical_impact_panel": {
+      "path": "evals/release-panel.json",
+      "candidate_ref": "working-tree-v0.41",
+      "baseline_ref": "v0.40.0",
+      "sha256": "5d3857cd3374dd5cdcbcd7c23e43a690f0ad7cf73a085222c5ab6f33bcae3d0c",
+      "boundary": "保留历史选择快照及现有生成器兼容性。账本 current_delta/adjacent_control 相对于该快照，不代表 v0.43 的执行或覆盖；本版使用双模型全量证据，不补造新差量面板。"
+    },
     "derived_inventory": "evals/eval-inventory.json",
     "long_term_results": "notes/evaluation-history.md"
   },
