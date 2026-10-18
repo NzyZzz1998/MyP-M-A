@@ -28,7 +28,7 @@
 - 需求/PRD、release notes、测试和已知限制中与本次 diff 直接相关的最小背景；
 - 排除项：生成文件、依赖、构建产物、二进制、证据目录、无关文档及敏感文件。
 
-没有锁定 ref 时不得把“当前工作区”“最近版本”自行替换为猜测范围。dirty 工作区必须说明是否纳入。需要 Matt/双审时按 `references/external-provider-routing.md` 选择提供者，再读 `references/matt-code-review-adapter.md`，不重复开启另一总控流程。
+没有锁定 ref 时不得把“当前工作区”“最近版本”自行替换为猜测范围。dirty 工作区必须说明是否纳入。需要 code-review 两轴适配/双审时按 `references/external-provider-routing.md` 选择提供者，再读 `references/matt-code-review-adapter.md`，不重复开启另一总控流程。
 
 ### 2. 探测 OCR 能力与数据边界
 
@@ -80,7 +80,7 @@ ocr review --from <base> --to <head> --audience agent --format json `
 
 ### 6. 统一输出，不复制两套报告
 
-默认对用户输出一张 MyP-M-A 主发现表，并在证据来源中注明 `OCR independent`、`OCR delegation`、Matt 轴、测试或文档。双审时分别保存原报告，再核证、去重并解释分歧，原报告不被主表覆盖。另附最小调用记录：
+默认对用户输出一张 MyP-M-A 主发现表，并在证据来源中注明 `OCR independent`、`OCR delegation`、code-review 轴、测试或文档。双审时分别保存原报告，再核证、去重并解释分歧，原报告不被主表覆盖。另附最小调用记录：
 
 | 能力/模式 | 评审范围 | reviewed/skipped/failed | 发现去重 | 限制/降级 |
 | --- | --- | --- | --- | --- |

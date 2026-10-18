@@ -1,10 +1,10 @@
-# 两个显式 Matt pilot 的适配
+# domain-modeling 与 to-questionnaire 显式试点适配
 
-前置选择、授权与调用身份见 `references/external-provider-routing.md`。保留显式调用，不安装重复副本、不改全局 allow_implicit_invocation，不强迫初始化 Matt tracker。旧 pilot 来源与入口哈希见 provider-registry；宿主当前未暴露原生 Skill 时，明确使用文件适配，不声称原生调用成功。
+前置选择、授权与调用身份见 `references/external-provider-routing.md`。保留显式调用，不安装重复副本、不改全局 allow_implicit_invocation，不强迫初始化上游 tracker。旧 pilot 来源与入口哈希见 provider-registry；宿主当前未暴露原生 Skill 时，明确使用文件适配，不声称原生调用成功。
 
 ## 领域建模
 
-触发示例：“用 Matt 领域 pilot 核对 PRD 的账户与客户术语，只给差量建议。”
+触发示例：“用 domain-modeling 试点适配核对 PRD 的账户与客户术语，只给差量建议。”
 
 1. 核对 `matt-domain-modeling-pilot/SKILL.md` 来源并读取正文；需写词汇/ADR 才读相应格式附件。传入实际项目路径、资料和已知问题，不扩大检索到其他项目。
 2. 沿用已有术语事实源。旧 pilot 的 CONTEXT.md 与新上游 GLOSSARY.md 都只是约定；已有 glossary、PRD 术语节或字典时映射到它，不新建第二份词汇库，不改名。仅一个来源获准维护，其余保留引用。
@@ -16,7 +16,7 @@
 
 ## 异步问卷
 
-触发示例：“用 Matt 问卷 pilot，给采购负责人准备供应商准入调研；受众、决策及输出路径如下……”
+触发示例：“用 to-questionnaire 试点适配，给采购负责人准备供应商准入调研；受众、决策及输出路径如下……”
 
 1. 核对 `matt-to-questionnaire-pilot/SKILL.md` 并读取正文。先复用当前材料中的收件角色、目的、已知答案和路径；这些已足够时直接写，不机械重复原版两轮采访。
 2. 每个问题对应一个尚缺信息及其决策用途；给填写位置、允许不确定/部分回答，分支细节放追问。沿用旧 pilot 的通常 12～20 主问题建议，不为凑下限扩写，也不削掉高风险必要问题。

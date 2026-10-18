@@ -1,12 +1,14 @@
 # 专项提供者路由合同
 
-只在选择 Matt pilot、代码扫描或重叠提供者时读取。主流程与正式事实源仍由 MyP-M-A 管理，不新增入口。清单是 `capabilities/provider-registry.json`；它和能力卡 registry 分开，不代表宿主安装状态。
+只在选择 domain-modeling / to-questionnaire 试点、代码扫描或重叠提供者时读取。主流程与正式事实源仍由 MyP-M-A 管理，不新增入口。清单是 `capabilities/provider-registry.json`；它和能力卡 registry 分开，不代表宿主安装状态。
+
+对用户用技能名，不用作者名代替能力。展示名与内部 ID 对应为 `domain-modeling` → `matt-domain-modeling-pilot`、`to-questionnaire` → `matt-to-questionnaire-pilot`、`code-review` → `matt-code-review-adapter`、`open-code-review-delegate` → `ocr-delegate`。调用和证据仍用原 ID；许可证、来源链接与历史记录保持原样。同名工具须核对登记来源，不能仅凭名称替换。
 
 ## 选择与权限
 
-1. 锁定问题、当前入口、delivery_mode、输入/产物及实际授权。普通 PRD、解释、交接沿用 MyP-M-A；TDD/debug 沿用项目已选提供者，不因本机有 Superpowers 或 Matt 就重复执行。
+1. 锁定问题、当前入口、delivery_mode、输入/产物及实际授权。普通 PRD、解释、交接沿用 MyP-M-A；TDD/debug 沿用项目已选提供者，不因本机另装同类技能就重复执行。
 2. 有多义业务术语时可推荐领域 pilot；需从一位知情者异步取得信息时可推荐问卷 pilot。没有用户选择只给建议，保持既有显式调用限制。一次明确选择在同对象同范围内有效，不重复确认已知答案。
-3. 只有明确代码评审意图才用代码层；默认本地 OCR delegate，缺失降级本地 Git/规则。用户点名 Matt 或双审才加载对应适配。禁止将 code-review 工具同名误当 Alibaba OCR。
+3. 只有明确代码评审意图才用代码层；默认本地 open-code-review-delegate，缺失降级本地 Git/规则。用户明确选择登记的 code-review 方法或双审才加载对应适配；既有选择不因展示名变化失效。禁止将宿主同名 code-review 工具误当登记适配器或 OpenCodeReview。
 4. 记录本次调用栈及已完成的“问题 + 对象快照 + 能力 + 提供者”。重复请求继承有效结果，递归进入同一 provider 时停止该分支。除明确双审外，一项问题只选一个同类提供者。
 5. 安装、全局升级、凭据配置、外部模型传输、远端写入、commit/push/发布分别授权。预算默认 0；嵌套调用继承同一预算和权限，不能由 research、grilling 或 codebase-design 绕开。获准 Agent 完成后关闭，不自动继承上游并发或生命周期。
 6. 缺输入/授权只停止受影响步骤；未授权不安装补齐，不无限重试，不把失败降级为成功。已单独授权的固定 Skill 缺项按 `references/provider-dependencies.md` 补装；不包括 CLI、凭据或全局升级。显式要求某 provider 的任务，替代结果必须标记“该 provider 未执行”，不能视为其完成。
@@ -32,9 +34,9 @@ Python 可用时，用 `scripts/provider_routing.py probe --skills-root <宿主�
 
 | 专项 | 必要输入 / 禁止触发 | 输出 / 降级 |
 | --- | --- | --- |
-| domain_modeling | 明确对象、既有术语及争议；不是读一遍词汇表就触发，不用于自动创造架构 | 带来源的术语差量、冲突与 ADR 候选；缺 pilot 时按本地 review 分析，注明未使用 Matt |
-| questionnaire | 收件角色、目标决策、已知事实；不重复访谈已知答案、不代发消息 | 可填写问卷及答案归属；缺 pilot 时用 discovery 输出本地草稿，不称 Matt 产物 |
-| code_review | 仓库、base、目标层、排除与最小规格；纯 PRD 不触发 | 快照、逐文件覆盖、原报告和核证；OCR 缺失保留 Git/Matt 结果但 OCR 待验证 |
+| domain_modeling | 明确对象、既有术语及争议；不是读一遍词汇表就触发，不用于自动创造架构 | 带来源的术语差量、冲突与 ADR 候选；缺 pilot 时按本地 review 分析，注明未使用 domain-modeling |
+| questionnaire | 收件角色、目标决策、已知事实；不重复访谈已知答案、不代发消息 | 可填写问卷及答案归属；缺 pilot 时用 discovery 输出本地草稿，不称 to-questionnaire 产物 |
+| code_review | 仓库、base、目标层、排除与最小规格；纯 PRD 不触发 | 快照、逐文件覆盖、原报告和核证；OCR 缺失保留 Git/code-review 结果但 open-code-review-delegate 待验证 |
 
 领域与问卷按 `references/matt-pilot-adapters.md`；代码按 `references/code-review-scanner.md` 与 `references/matt-code-review-adapter.md`。用户明确禁止执行项目操作的 `/prompt` 只生成交接，不启动任何适配。
 

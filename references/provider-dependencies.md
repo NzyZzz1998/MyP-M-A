@@ -12,15 +12,15 @@
 
 ## 本次登记范围
 
-| 依赖 | 补装策略 |
-| --- | --- |
-| matt-domain-modeling-pilot | 可选自动补装；固定 Matt commit、MIT、文件 SHA-256 与既有显式调用适配 |
-| matt-to-questionnaire-pilot | 同上；保留问卷 pilot 的既有授权与输出边界 |
-| matt-code-review-adapter | 本 Skill 内置方法，无需安装上游原生 Skill |
-| OCR CLI | 仅提示单独安装授权；不由此脚本下载 |
-| 浏览器、数据分析、Figma、图表等宿主能力 | 使用实际宿主插件管理；不伪装成同类 Markdown 包自动安装 |
+| 技能/依赖 | 内部 ID | 补装策略 |
+| --- | --- | --- |
+| domain-modeling | matt-domain-modeling-pilot | 可选自动补装；固定上游 commit、MIT、文件 SHA-256 与既有显式调用适配 |
+| to-questionnaire | matt-to-questionnaire-pilot | 同上；保留问卷 pilot 的既有授权与输出边界 |
+| code-review | matt-code-review-adapter | 本 Skill 内置方法，无需安装上游原生 Skill |
+| OCR CLI | 不由补装器管理 | 仅提示单独安装授权；不由此脚本下载 |
+| 浏览器、数据分析、Figma、图表等宿主能力 | 按宿主登记 | 使用实际宿主插件管理；不伪装成同类 Markdown 包自动安装 |
 
-来源白名单为 [dependency-lock](../capabilities/dependency-lock.json)，必须和 [provider registry](../capabilities/provider-registry.json) 的 commit/产物哈希一致。检索指对已登记清单与指定技能根做本地差集，不全网搜同名包、不扫描所有磁盘、不安装 Matt 全家桶。
+来源白名单为 [dependency-lock](../capabilities/dependency-lock.json)，必须和 [provider registry](../capabilities/provider-registry.json) 的 commit/产物哈希一致。检索指对已登记清单与指定技能根做本地差集，不全网搜同名包、不扫描所有磁盘、不安装整个上游技能集合。展示名不改变已有安装目录、命令 ID 或许可署名。
 
 ## 一次授权与命令
 

@@ -46,7 +46,7 @@
 - 桌面 GUI：Computer Use + 日志/配置 -> 用户手动验证文档 + 日志/配置 -> 待验证。
 - Web：浏览器/Playwright -> HTTP/日志/截图静态检查 -> 用户手动验证 -> 待验证。
 - GitHub：GitHub 插件 -> 本地 git 与用户提供的 CI/PR 证据 -> 待验证远端状态。
-- 代码评审：默认本地 OCR Delegation -> git diff + 语言检查器/定向测试 -> 待验证未覆盖范围。用户明确选择独立 OCR 且授权数据传输时才使用该模式；Matt 适配、去重与隔离要求见 `references/external-provider-routing.md`，不同时跑两套默认流程。
+- 代码评审：默认本地 open-code-review-delegate -> git diff + 语言检查器/定向测试 -> 待验证未覆盖范围。用户明确选择独立 OCR 且授权数据传输时才使用该模式；code-review 适配、去重与隔离要求见 `references/external-provider-routing.md`，不同时跑两套默认流程。
 - 数据库：只读数据库工具 -> schema/迁移/ORM/样本导出 -> 数据地图与待确认项。
 - 竞品：公开一手资料 -> 用户提供截图/文档 -> 明确标注经验推断。
 
