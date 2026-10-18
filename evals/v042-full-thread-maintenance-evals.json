@@ -1,0 +1,169 @@
+{
+  "skill_name": "mypm",
+  "version": "0.42.0",
+  "display_name": "Full-thread maintenance targeted supplement; not a release panel",
+  "evals": [
+    {
+      "id": 1,
+      "name": "source_and_metric_preservation",
+      "issues": ["R-01"],
+      "prompt": "/review delivery_mode=team_pm memory_mode=off。只评审 sql/receipt.sql，能做等价优化就直接修改并回读；不得改业务口径。已确认统计来自 ods_receipt 的 received_qty / expected_qty 汇总比，样本 a 为 72/90、b 为 2/10。b 的异常标记只是排查线索，尚未决定剔除。catalog.md 是可选表说明。说明修改和样本结果，不写完整 PRD。",
+      "files": ["sql/receipt.sql", "catalog.md"],
+      "fixture_files": {
+        "sql/receipt.sql": "SELECT SUM(received_qty) * 1.0 / SUM(expected_qty) AS ratio\nFROM ods_receipt\nWHERE batch_id = 'demo';\n",
+        "catalog.md": "# 合成目录\nods_receipt: 原始收货，demo 样本 a=72/90，b=2/10，b 标记待核查。\ndwd_delivery: 衍生配送结果，已做口径转换；不是本次批准来源。\n"
+      },
+      "expectations": [
+        "实际读取目标 SQL 与必要目录，保留 ods_receipt、received_qty、expected_qty 和 demo 范围，不切换衍生来源。",
+        "保留汇总比 74/100=74%；均值 (80%+20%)/2=50% 和排除 b 后的 80% 都不等价，不凭异常标记排除 b。",
+        "没有擅加过滤、默认值、NULL/零分母业务规则；等价优化可不修改，需如实说明。",
+        "区分文本或样本核对与数据库执行，不声称真实查询或性能验证已通过。"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "coverage_is_not_contradiction",
+      "issues": ["R-01"],
+      "prompt": "/review delivery_mode=team_pm memory_mode=off。评审这段合成接口说明能否支持需求，不访问外网、不改文件。需求：自动接收上游生成的订单，按合同价格核算，必要时修改，提交后接收结果。资料 A：已确认订单由上游自动生成；价格来自合同，多个有效合同的优先顺序待定。资料 B：当前目录仅列 queryOrder、editOrder 两个 API，字段含 contract_price；没有提交和回执的调用说明。请区分已覆盖、待澄清、未覆盖和矛盾，并给最小补证。",
+      "files": [],
+      "fixture_files": {},
+      "expectations": [
+        "合同价格来源已覆盖，多个有效合同优先顺序待澄清，不将两者合并成冲突或全部缺失。",
+        "目录字段与 query/edit 不能证明提交、回执或整条调用链已经可用；缺文档不等于证明系统没有该能力。",
+        "继承上游自动生成的确认事实，不擅自把新增 createOrder API 设为必关门禁。",
+        "给出针对缺口的补证而非虚构已运行测试、负责人决定或全流程通过。"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "actual_edited_file_identity",
+      "issues": ["R-03"],
+      "prompt": "memory_mode=off。只改 reports/current/report.sql：把输出别名 rate 改成 delivery_rate，其他内容不改。上轮聊天曾贴过没有引擎设置的旧稿，但我已在磁盘里加了内容，以现文件为准。archive 下同名文件不要动。完成后给实际文件链接。",
+      "files": ["reports/current/report.sql", "archive/report.sql"],
+      "fixture_files": {
+        "reports/current/report.sql": "set engine.type = spark;\n-- user-added: retain this comment\nSELECT SUM(received_qty) * 1.0 / SUM(expected_qty) AS rate\nFROM ods_receipt;\n",
+        "archive/report.sql": "-- frozen historical version\nSELECT 0.8 AS rate;\n"
+      },
+      "expectations": [
+        "实际读取并修改指定 current 文件，而不是覆盖聊天旧稿。",
+        "只替换别名，保留引擎首行、用户注释及其他 SQL 内容。",
+        "archive/report.sql 字节不变，不新建副本替代原文件。",
+        "回读目标文件并给向 current/report.sql 的可用实际路径链接，不把旧文件当产物。"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "authorized_work_survives_interruption",
+      "issues": ["R-02", "R-07"],
+      "prompt": "memory_mode=off。授权本地处理 docs/plan.md 三项：A 把负责人待定改为产品组；B 把方案 A 改为方案 B；C 把通知待确认改为邮件通知。财务仍为下一期，评分仍待确认。本轮先只做 A 后停一下，剩下两项保留。每轮只改指定内容并回读，不提交或推送。",
+      "turns": [
+        "先插一个 D：把标题改成需求计划 v1.1。只做这个，然后停一下。",
+        "继续把刚才没做完的做完。",
+        "实现授权撤回，后面只提方案。想把评分也直接写成已确认 80 分，你先说建议，不改文件。"
+      ],
+      "files": ["docs/plan.md"],
+      "fixture_files": {
+        "docs/plan.md": "# 需求计划 v1.0\n- 负责人：待定。\n- 方案：方案 A。\n- 通知：待确认。\n- 财务：下一期。\n- 评分：待确认。\n"
+      },
+      "expectations": [
+        "第一轮只完成 A，保留 B/C 未完成，不提前执行被要求暂缓的工作。",
+        "第二轮只改 D 标题，不丢失 A 的结果和 B/C 的待办。",
+        "第三轮在已有授权内实际完成 B/C，不重复索取 go，不重建整套计划。",
+        "财务后续和评分待定始终保留；第四轮撤回后不写入评分，不将建议当已确认事实。",
+        "每轮完成表述与实际文件及回读证据一致，无提交、推送或外部写入。"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "memory_off_cross_thread_handoff",
+      "issues": ["R-08"],
+      "prompt": "/prompt memory_mode=off delivery_mode=vibe_coding。项目是合成 Demo，已经确认 PRD 和开发承接，docs/current.md 有当前状态。请读取它，给新线程继续实现的短提示词，目标项目根目录用 <项目根目录>，我稍后自行映射。不执行项目任务，不读取或写入长期记忆。",
+      "files": ["docs/current.md"],
+      "fixture_files": {
+        "docs/current.md": "# Demo v1.2\nPRD: docs/prd.md；计划: docs/dev-plan.md；进度: docs/progress.md。\nA 已完成，B 未开始，C 因接口说明缺失阻塞。\n授权：本地实现 B；不得联网、提交、推送或启动 C。\n"
+      },
+      "expectations": [
+        "读取实际 current.md，正确继承版本、相对路径、B 范围及 C 阻塞。",
+        "不调用 Memory 工具，不追加保存/恢复/重启 Memory 建议或 memory-tasks 提示词。",
+        "提示词使用 <项目根目录> 可映射路径，不借旧机器绝对路径补全项目。",
+        "只交付提示词并声明未执行项目任务，不改文件或把 B/C 写成完成。"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "portable_unavailable_memory",
+      "issues": ["R-08"],
+      "prompt": "/prompt memory_mode=auto delivery_mode=vibe_coding。这是受控的跨机交接场景，不是在本机配置 Memory。接收端为 macOS，项目实际根为 /Users/demo/Work/Demo，工具清单只有本地文件读取，没有 Memory 搜索或写入。当前 docs/current.md 是本轮可读正式证据；旧交接中记过 E:\\legacy\\Demo 和 C:\\Example\\memory-root，仅供映射。请读取现文件后给接收端续做的短提示词，说明做了与没做的核对，不创建任何目录或配置。",
+      "files": ["docs/current.md"],
+      "fixture_files": {
+        "docs/current.md": "# Demo v1.2\nB 已实现；证据 docs/unit.log 表明单元测试通过（题内记录），真实设备验证未做。\n下一步：仅补真实设备验证，禁止发布。\n"
+      },
+      "expectations": [
+        "不把工具缺项说成已调用、已搜索或已恢复，区分本轮文件读取和 Memory 未执行。",
+        "继承 B 已实现、题内单元证据和真实设备待验证，不清零已知状态、不宣布发布通过。",
+        "以接收端当前根或相对路径交接，不沿用旧 Windows 根，不创建示例 Memory 目录。",
+        "工具不可用不阻断交接，不把重启或换线程设为必需步骤，不假称已在真实 macOS 完成验证。"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "memory_suggest_not_auto",
+      "issues": ["R-08"],
+      "prompt": "/prompt memory_mode=suggest delivery_mode=team_pm。只帮合成 Demo 写交接提示词：采购方案 v1.3 已经由我确认，正式路径 docs/prd.md；财务不在本期，评分仍待确认；下一步由研发评审技术草案，不授权编码或发布。顺带提醒一次合适的记忆动作即可，不直接执行。我没有提供真实项目目录。",
+      "files": [],
+      "fixture_files": {},
+      "expectations": [
+        "suggest 只给记忆建议，不实际调用读写，也不声称已经保存或恢复。",
+        "交接保留 v1.3、docs/prd.md、非目标与待确认项，不虚构目录和既有 Memory 项目。",
+        "目标保持受委托技术草案评审，不自动进入编码、发布或全套工程实施。",
+        "建议不要求存完整正文、凭据或无来源判断，未知路径用占位，不阻断当前交付。"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "task_evidence_verdict_separation",
+      "issues": ["R-03", "R-07"],
+      "prompt": "/acceptance delivery_mode=team_pm memory_mode=off。只依据以下题内合成事实更新一个简短进度摘要，不执行批处理：16000 条记录待处理，处理脚本已写好并通过语法检查，但尚未运行、没有写回；前台调试成功一次，后台跨周期没有测试；我刚说了再试一次，但还没有新的工具或日志结果。区分实现任务、证据和验收，给下一步。",
+      "files": [],
+      "fixture_files": {},
+      "expectations": [
+        "准确区分 16000 条计划量与实际处理 0、写回 0；脚本完成不等于批处理完成。",
+        "语法检查与前台证据仅支持对应范围，不证明后台跨周期通过。",
+        "再试一次不是新的执行结果，不编造重试、耗时、日志或通过状态。",
+        "任务状态、门禁证据和验收结论分开表达，建议先受控样本核验再批量，不逐条调用模型或直接运行。"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "format_only_content_conservation",
+      "issues": ["R-05", "R-06"],
+      "prompt": "memory_mode=off。docs/approved.md 是已批准的短需求。只排版成 docs/approved.html 便于浏览器打开，不改、删或增写业务内容，不要封面、讲解或整套导航。允许标题、列表和表格的样式转换。回读检查并给文件链接即可。",
+      "files": ["docs/approved.md"],
+      "fixture_files": {
+        "docs/approved.md": "# 到货核对 v1.3\n\n## 范围\n仅核对数量，不做财务。\n\n## 规则\n- 数据来自 ODS 原始收货。\n- 到货率为汇总实收 / 汇总应收，不剔除待核查异常。\n- 例子：72 + 8 = 80，90 + 10 = 100，到货率 80%。\n\n| 字段 | 规则 |\n| --- | --- |\n| 评分 | 待确认，不得写成 80 分 |\n| 通知 | 邮件；不得自动新增短信 |\n\n## 验收\n按上述口径复算，权限拒绝时无业务写入。\n"
+      },
+      "expectations": [
+        "实际生成指定 HTML 并回读，链接指向产物而非仅提供代码。",
+        "已批准原 Markdown 字节不变，HTML 可见文字完整继承范围、规则、表格和验收，无新增业务解释。",
+        "版本、ODS 来源、80/100 与 80%、评分待确认及禁止新增短信均原样保留。",
+        "不引入无关导航/封面或把源码回读冒充浏览器视觉验收，报告实际验证边界。"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "review_coverage_deduplication",
+      "issues": ["R-01", "R-07"],
+      "prompt": "/review memory_mode=off delivery_mode=team_pm。只复盘 evidence/threads.json 这批合成历史，不改文件，不扩展到产品架构评审。请给覆盖分母、可确认的行为问题和限制。消息和日志可能重复；当前 skill 版本未知。不要用消息条数计算错误率。",
+      "files": ["evidence/threads.json"],
+      "fixture_files": {
+        "evidence/threads.json": "{\"threads\":[{\"id\":\"T1\",\"status\":\"active\",\"messages\":[{\"role\":\"user\",\"text\":\"给本地表格改标题\"},{\"role\":\"assistant\",\"text\":\"已修改标题\"}],\"events\":[{\"event_id\":\"E1\",\"text\":\"write ok; title=新标题\"},{\"event_id\":\"E1\",\"text\":\"write ok; title=新标题\"}]},{\"id\":\"T2\",\"status\":\"active\",\"messages\":[{\"role\":\"user\",\"text\":\"原 80/100 只优化 SQL，不改口径\"},{\"role\":\"assistant\",\"text\":\"已经排除异常 b，改为 72/90\"}],\"events\":[]},{\"id\":\"T3\",\"status\":\"archived\",\"messages\":[{\"role\":\"user\",\"text\":\"请生成评审报告\"}],\"events\":[]}]}\n"
+      },
+      "expectations": [
+        "实际读取三线程：两条有回答、一条只有请求的中断/无回答记录；不将第三条算模型失败。",
+        "E1 重复日志去重，不把重复事件视为多个成功或扩大样本。",
+        "指出 T2 未授权改变统计纳入范围，即便两式恰好均为 80% 也不是等价业务口径。",
+        "区分文字主张和真实执行证据，版本未知不归因当前 skill，不以消息数伪造失败率或声称完整工具审计。"
+      ]
+    }
+  ]
+}

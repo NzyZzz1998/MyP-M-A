@@ -1,6 +1,6 @@
 # 外部能力路由
 
-本文件用于在四个入口中按证据问题调用已安装的 skill、插件和工具。它不是能力清单，也不要求每次调用外部能力；只有当前判断需要专门方法、且运行环境确认该能力可用时才加载。
+本文件用于四个产品阶段入口及 `/prompt` 的按需能力选择，不要求每次调用外部能力；只有当前判断需要专门方法、且运行环境确认该能力可用时才加载。
 <!-- contract:capability-minimal-route -->
 <!-- contract:capability-evidence-package -->
 <!-- contract:capability-acceptance-tracks -->
@@ -21,11 +21,15 @@
 5. 外部能力的输出是证据或分析材料，不自动成为产品结论。MyP-M-A 仍负责证据分级、范围判断、门禁和下一步。
 6. 能力不可用、输入不足或成本明显高于收益时，使用本地 reference 完成可支持部分，并把其余结论标为“待验证”。
 
+选择 Matt pilot、代码审查提供者或同类能力发生重叠时，按需读取 `references/external-provider-routing.md`：明确注册/安装/宿主暴露/适配就绪/调用/验证六类身份、显式选择和嵌套权限；普通任务不加载整套清单。
+
 ## 路由表
 
 | 当前问题 | 优先能力 | 适用入口 | 必要输入 | 要带回的结果 |
 | --- | --- | --- | --- | --- |
 | 需要设计访谈、归纳研究、表达 JTBD 或构建机会树 | 本地 `references/discovery.md` | `/idea`、`/review` | 决策问题、参与者/来源、原始记录、已知偏差 | 可追溯观察、矛盾证据、机会、关键未知和最小实验 |
+| 多义术语或领域边界需专项澄清 | 用户选择后 `matt-domain-modeling-pilot`；见 `references/matt-pilot-adapters.md` | `/review`、`/idea`、`/prd` | 项目事实源、已有术语、争议、写入授权 | 带来源的术语差量、冲突与 ADR 候选；不另建事实源 |
+| 需要给一位知情者一份可填写的异步问卷 | 用户选择后 `matt-to-questionnaire-pilot`；见 `references/matt-pilot-adapters.md` | `/review`、`/idea`、`/prd` | 收件角色、决策缺口、已知事实、输出目标 | 问卷与答案归属；生成不等于发送或批准 |
 | 不清楚业务问题、用户、决策或数据边界 | `data-analytics:gather-business-context` | `/idea`、`/review` | 目标、对象、已有材料 | 决策问题、已知事实、缺口和建议下一个分析能力 |
 | 需要建立数据表、字段、口径和关系地图 | `data-analytics:create-data-context` | `/idea`、`/prd` | schema、样例、字典或查询 | 粒度、主键、关系、时间、质量和可回答问题 |
 | 不确定数据能否支撑结论 | `data-analytics:analyze-data-quality` | `/idea`、`/acceptance` | 数据集、时间范围、来源 | 完整性、重复、异常、偏差、可信范围和修复动作 |
@@ -42,11 +46,11 @@
 | 需要对齐远端仓库、协作文档或任务系统与本地事实 | `references/enterprise-adapters.md` + 当前可用只读工具 | `/review`、`/acceptance`、`/prompt` | 稳定对象 ID、读取范围、时间和目标事实源 | 只读证据信封、身份冲突、可继承事实和最小补证 |
 | 需要读取外部指标、评测 JSON/CSV 或查询结果作产品判断 | `references/enterprise-adapters.md` + 数据能力 | `/idea`、`/review`、`/acceptance` | 数据对象、唯一键、分母、时间窗、筛选和版本 | 可复算分维结果、数据新鲜度、限制和产品判断 |
 | 已验证事实需要图表或语义图解回答明确问题 | `references/visual-delivery.md`；数值再读 `chart-delivery.md` | `/idea`、`/review`、`/prd`、`/acceptance` | 问题、冻结事实、目标载体、可编辑要求和许可 | 对应源文件、事实映射和载体验证；仅 HTML 检查双视口 |
-| 需要评审代码 diff、commit 或发布区间 | OpenCodeReview 或等价扫描器 | `/review` implementation | 锁定的仓库/ref、排除项、最小需求背景、源码外发授权 | 文件覆盖、语言规则、候选 finding、跳过/失败范围和模式限制 |
+| 需要评审代码 diff、commit 或发布区间 | 本地 OCR delegate；显式选择可用 Matt 两轴适配；详见代码扫描合同 | `/review` implementation | 仓库/ref、目标层、排除项、最小规格与对应授权 | 同快照覆盖、原报告、核证及独立性限制；缺 CLI 不冒称 OCR |
 
 能力名称只是已知实现示例。当前环境存在等价能力时可以替换，但必须报告真实调用对象；没有能力时不要建议安装与当前结论无关的插件。
 
-## 四个入口的最小编排
+## 产品阶段的最小编排
 
 ### `/idea`
 

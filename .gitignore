@@ -1,0 +1,8 @@
+.mypm.local.json
+.codex/hooks.json
+.codex/basic-memory.json
+__pycache__/
+*.pyc
+.mypm-dependencies.local.json
+.mypm-dependencies.state.json
+.mypm-dependencies.lock

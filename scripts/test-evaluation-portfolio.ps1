@@ -33,6 +33,8 @@ function Copy-PortfolioFixture {
     if ($IncludeContracts) {
         $registry = Read-FixtureJson (Join-Path $root 'evals\contract-registry.json')
         $paths = @('agents/openai.yaml', 'evals/trigger-baseline.json') + @($registry.contracts.source_file | Select-Object -Unique) + @($registry.contracts.related_source_files | ForEach-Object { $_ } | Where-Object { $_ } | Select-Object -Unique)
+        $triggerBaseline = Read-FixtureJson (Join-Path $root 'evals/trigger-baseline.json')
+        if ($triggerBaseline.schema_version -eq 2) { $paths += @($triggerBaseline.runs.answer_file) }
         foreach ($relative in $paths) {
             $destinationFile = Join-Path $Destination $relative
             New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destinationFile) | Out-Null

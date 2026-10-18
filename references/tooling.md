@@ -5,7 +5,7 @@
 <!-- contract:tooling-capability-state -->
 <!-- contract:tooling-visual-six-field-probe -->
 
-本文件定义 MyP-M-A 四个入口如何使用外部工具、插件和本地验证能力。工具不是为了让输出显得复杂，而是为了让产品判断、评审、PRD 和验收更有证据。
+本文件定义四个产品阶段入口与 `/prompt` 如何选择外部工具和本地验证能力。只生成交接提示词不执行项目操作。工具用于补证，不替代产品判断。
 
 当任务需要数据分析、原型、浏览器/桌面验证或远端发布等专门方法时，同时读取 `references/capability-routing.md`。本文件回答“工具怎样安全使用和降级”，能力路由回答“当前产品问题应该选择哪一种专门能力”，两者不要重复堆叠。
 
@@ -46,7 +46,7 @@
 - 桌面 GUI：Computer Use + 日志/配置 -> 用户手动验证文档 + 日志/配置 -> 待验证。
 - Web：浏览器/Playwright -> HTTP/日志/截图静态检查 -> 用户手动验证 -> 待验证。
 - GitHub：GitHub 插件 -> 本地 git 与用户提供的 CI/PR 证据 -> 待验证远端状态。
-- 代码评审：已授权的独立 OCR review -> 本地 OCR Delegation -> git diff + 语言检查器/定向测试 -> 待验证未覆盖范围。
+- 代码评审：默认本地 OCR Delegation -> git diff + 语言检查器/定向测试 -> 待验证未覆盖范围。用户明确选择独立 OCR 且授权数据传输时才使用该模式；Matt 适配、去重与隔离要求见 `references/external-provider-routing.md`，不同时跑两套默认流程。
 - 数据库：只读数据库工具 -> schema/迁移/ORM/样本导出 -> 数据地图与待确认项。
 - 竞品：公开一手资料 -> 用户提供截图/文档 -> 明确标注经验推断。
 
@@ -171,7 +171,7 @@
 
 ## 长期记忆工具策略
 
-Basic Memory 是事件驱动的长期知识库能力，不是聊天记录器。MyP-M-A 默认使用克制的 `auto` 模式：只在已知项目的新线程恢复，以及形成稳定阶段结论后更新；用户可改为 `suggest` 或 `off`。具体规则见 `references/memory-integration.md`。
+Basic Memory 是事件驱动的长期知识库能力，不是聊天记录器。MyP-M-A 默认 `off`，用户明确授权当前项目后才进入 `auto`：只在必要的新线程恢复，以及形成稳定阶段结论后更新；`suggest` 仅提醒。启用可能增加 Token，不把安装或过去默认值当作同意。具体规则见 `references/memory-integration.md`；可选本地日志单独授权，见 `references/local-memory-diagnostics.md`。
 
 常见用法：
 

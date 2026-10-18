@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "agent_id": "01a14e65-1b2f-7581-bd27-558f7551df0e",
+  "input_bundle_sha256": "f830075f5c68f2a7580001097a0b5b6af4cc606710e4ceecb801198990b490d4",
+  "original_answer_sha256": "87edffbf0712b6e412fcc1f241d0daa487dbdfccc0ee47f70d56ee7458ec1075",
+  "evidence_type": "description-only classification; no skill body loaded before predictions",
+  "predictions": [
+    {
+      "id": 1,
+      "should_trigger": true,
+      "reason": "需要判断版本需求价值和优先级，属于需求决策。"
+    },
+    {
+      "id": 2,
+      "should_trigger": true,
+      "reason": "明确使用 /idea，要求验证真实需求。"
+    },
+    {
+      "id": 3,
+      "should_trigger": true,
+      "reason": "要求产品定位、用户路径与版本机会评审。"
+    },
+    {
+      "id": 4,
+      "should_trigger": true,
+      "reason": "明确要求 PRD 产品评审及完整性检查。"
+    },
+    {
+      "id": 5,
+      "should_trigger": true,
+      "reason": "要求收敛范围并编写完整 PRD。"
+    },
+    {
+      "id": 6,
+      "should_trigger": true,
+      "reason": "要求依据标准验收并判断发布资格。"
+    },
+    {
+      "id": 7,
+      "should_trigger": true,
+      "reason": "从 PRD 生成开发承接和进度文档。"
+    },
+    {
+      "id": 8,
+      "should_trigger": true,
+      "reason": "需要产品经理判断体验根因和范围取舍。"
+    },
+    {
+      "id": 9,
+      "should_trigger": true,
+      "reason": "恢复产品决策与版本状态，属于项目交接。"
+    },
+    {
+      "id": 10,
+      "should_trigger": true,
+      "reason": "定义 AI 能力的需求、失败流程和验收标准。"
+    },
+    {
+      "id": 11,
+      "should_trigger": true,
+      "reason": "从访谈证据发现机会并决定需求池方向。"
+    },
+    {
+      "id": 12,
+      "should_trigger": true,
+      "reason": "明确 /prompt，生成项目验收交接提示词。"
+    },
+    {
+      "id": 13,
+      "should_trigger": true,
+      "reason": "要求生成版本下一步的项目执行提示词。"
+    },
+    {
+      "id": 14,
+      "should_trigger": true,
+      "reason": "指标校准服务于需求价值和版本决策。"
+    },
+    {
+      "id": 15,
+      "should_trigger": true,
+      "reason": "要求结合产物和风险做发布评审。"
+    },
+    {
+      "id": 16,
+      "should_trigger": false,
+      "reason": "仅做代码缺陷审查，不涉及产品评审。"
+    },
+    {
+      "id": 17,
+      "should_trigger": false,
+      "reason": "明确只修复代码和运行测试。"
+    },
+    {
+      "id": 18,
+      "should_trigger": false,
+      "reason": "仅执行查询与绘图，不涉及产品决策。"
+    },
+    {
+      "id": 19,
+      "should_trigger": false,
+      "reason": "已定稿需求的页面实现，不需产品评审。"
+    },
+    {
+      "id": 20,
+      "should_trigger": false,
+      "reason": "仅定位技术崩溃根因并修代码。"
+    },
+    {
+      "id": 21,
+      "should_trigger": false,
+      "reason": "明确技术实施任务，需求和验收已经确定。"
+    },
+    {
+      "id": 22,
+      "should_trigger": false,
+      "reason": "仅文档翻译，与产品工作阶段无关。"
+    },
+    {
+      "id": 23,
+      "should_trigger": false,
+      "reason": "只做逐字转写，明确不要产品判断。"
+    },
+    {
+      "id": 24,
+      "should_trigger": false,
+      "reason": "仅数据库技术风险与修复审查。"
+    },
+    {
+      "id": 25,
+      "should_trigger": false,
+      "reason": "仅复现并定位 bug，不是产品验收判断。"
+    },
+    {
+      "id": 26,
+      "should_trigger": false,
+      "reason": "签字设计的代码实现，明确不做产品判断。"
+    },
+    {
+      "id": 27,
+      "should_trigger": false,
+      "reason": "绘图提示词被描述明确排除。"
+    },
+    {
+      "id": 28,
+      "should_trigger": false,
+      "reason": "纯提示词工程被描述明确排除。"
+    },
+    {
+      "id": 29,
+      "should_trigger": false,
+      "reason": "已确认指标的数据库查询，无需需求判断。"
+    },
+    {
+      "id": 30,
+      "should_trigger": false,
+      "reason": "按批准计划直接实现，属于纯实现。"
+    },
+    {
+      "id": 31,
+      "should_trigger": false,
+      "reason": "按已批准设计进行 CSS 修复，属于纯实现。"
+    },
+    {
+      "id": 32,
+      "should_trigger": true,
+      "reason": "用户定位、定价和进入市场方式属于战略与 GTM。"
+    },
+    {
+      "id": 33,
+      "should_trigger": false,
+      "reason": "已批准产品决策的枚举和测试实现。"
+    },
+    {
+      "id": 34,
+      "should_trigger": true,
+      "reason": "比较产品结构并制作原型，属于产品方案与原型。"
+    }
+  ]
+}

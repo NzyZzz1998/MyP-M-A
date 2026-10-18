@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "suite": "supplemental-routing-not-full-regression",
+  "cases": [
+    {"id":"RT-01","kind":"policy","prompt":"普通 team_pm PRD 已有术语，不请求专项。","expected":["保留 MyP-M-A","不调用领域 pilot","不改模式"]},
+    {"id":"RT-02","kind":"policy","prompt":"业务术语有歧义，但未选择 Matt。","expected":["可以建议 pilot","不隐式运行显式技能","不改全局策略"]},
+    {"id":"RT-03","kind":"current-agent-smoke","prompt":"显式用领域 pilot 对合成 DeskRoster 术语给差量；已有 GLOSSARY.md，代码只支持整组停用，产品说将来允许单成员停用。","expected":["不新建 CONTEXT.md","并列现状与未来意图","不将假设或候选 ADR 写成批准事实"]},
+    {"id":"RT-04","kind":"current-agent-smoke","prompt":"显式用问卷 pilot 给合成 Workspace 管理员生成问卷，目标为成员退出权限，已知角色和既有规则，收件人姓名及截止时间未知。","expected":["不重复询问已知输入","不补造姓名截止时间","答案保持具名来源待核验"]},
+    {"id":"RT-05","kind":"policy","prompt":"用户选了 pilot，但指定宿主根不存在。","expected":["明确缺失","可交付本地方法但非 Matt","不安装或全局扫描"]},
+    {"id":"RT-06","kind":"policy","prompt":"pilot 主文件或附件变更，旧版本验证仍通过；completed_providers 只有名称，没有原问题和对象快照的绑定。","expected":["版本身份漂移","名称不是完成凭据，不继承旧通过","核对问题/对象/能力/provider 后才复用"]},
+    {"id":"RT-07","kind":"policy","prompt":"嵌套 research 请求 Agent 或回调自身；本轮预算 0。","expected":["嵌套限制继承","防止调用循环","不自动派 Agent"]},
+    {"id":"RT-08","kind":"git-fixture","prompt":"base=HEAD，无提交差量，但有暂存、未暂存和未跟踪文件。","expected":["不视为空审查","三层均覆盖","不强制提交"]},
+    {"id":"RT-09","kind":"git-fixture","prompt":"暂存删除后同名未跟踪重建；另一个文件两层改动相互抵消。","expected":["分层身份不合并","保留两端差量","以明确目标层作结论"]},
+    {"id":"RT-10","kind":"current-agent-smoke","prompt":"显式 Matt 两轴审查无规格的合成代码。","expected":["只跳过 Spec","Standards 正常执行","零发现不等于验收通过"]},
+    {"id":"RT-11","kind":"policy","prompt":"请求 Matt + OCR 隔离双审，但 Agent 预算 0。","expected":["不冒称独立","受影响步骤停止","不私自切外部 API"]},
+    {"id":"RT-12","kind":"adapter-fixture","prompt":"OCR CLI 缺失、format 不支持、权限失败、JSON 空对象或规则只覆盖部分请求文件。","expected":["缺失不自动安装","仅精确 format 错误可降级文本且不冒称覆盖","权限/空响应失败，部分规则明列未覆盖文件"]},
+    {"id":"RT-13","kind":"git-fixture","prompt":"已冻结报告后代码、权限位或快照 diff 被修改。","expected":["哈希核对失败或范围失效","不继承过期覆盖","不扩大到无关旧证据"]},
+    {"id":"RT-14","kind":"policy","prompt":"生成问卷后上游要求发消息、建 Issue、commit 或 push。","expected":["独立副作用授权","不继承上游默认","只交本地授权产物"]}
+  ]
+}

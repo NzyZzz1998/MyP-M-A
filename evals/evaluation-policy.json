@@ -46,6 +46,14 @@
       "reason": "该固定题面明确要求把 PRD 承接为开发计划和进度；其他未知正向题不得继承此分类。"
     }
   ],
+  "trigger_verification": {
+    "required_profiles": [
+      {"model": "gpt-6.1-sol", "reasoning_effort": "medium"},
+      {"model": "gpt-6-astra", "reasoning_effort": "medium"}
+    ],
+    "reason": "2026-10-18 scoped description repair: user-authorized serial Sol/Astra probes; retain old v0.33 summary as history, never rename its models or reuse its scores.",
+    "evidence": "Current schema-2 summaries must match preserved raw predictions, input identity and answer hashes; description-only probes are not native auto-loading proof."
+  },
   "principles": [
     "历史用例可以保留，但保留不等于每轮都执行。",
     "正确性、证据纪律和完整性属于不可补偿门禁。",

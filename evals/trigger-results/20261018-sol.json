@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "agent_id": "01a14e60-c310-74c3-93c2-99456d397ad3",
+  "input_bundle_sha256": "f830075f5c68f2a7580001097a0b5b6af4cc606710e4ceecb801198990b490d4",
+  "original_answer_sha256": "b211641424bf2b6a7ec4e04407434d2e8df8ca3dbd44f8c371bf15796593666b",
+  "evidence_type": "description-only classification; no skill body loaded before predictions",
+  "predictions": [
+    {
+      "id": 1,
+      "should_trigger": true,
+      "reason": "需要结合用户证据和成本做版本需求排序，属于机会与范围判断。"
+    },
+    {
+      "id": 2,
+      "should_trigger": true,
+      "reason": "明确使用 /idea，并要求验证插件市场的需求真实性。"
+    },
+    {
+      "id": 3,
+      "should_trigger": true,
+      "reason": "要求产品定位、用户路径和模块层面的项目评审。"
+    },
+    {
+      "id": 4,
+      "should_trigger": true,
+      "reason": "要求评审 PRD 的影响范围、数据和异常流程完整性。"
+    },
+    {
+      "id": 5,
+      "should_trigger": true,
+      "reason": "要求澄清范围并产出完整 PRD。"
+    },
+    {
+      "id": 6,
+      "should_trigger": true,
+      "reason": "要求依据产物和标准进行验收及发布判断。"
+    },
+    {
+      "id": 7,
+      "should_trigger": true,
+      "reason": "属于从 PRD 到开发计划及进度管理的开发承接。"
+    },
+    {
+      "id": 8,
+      "should_trigger": true,
+      "reason": "要求产品经理视角分析体验根因及本轮取舍，不是单纯视觉实现。"
+    },
+    {
+      "id": 9,
+      "should_trigger": true,
+      "reason": "需要恢复产品决策、版本状态与下一步，属于项目交接。"
+    },
+    {
+      "id": 10,
+      "should_trigger": true,
+      "reason": "要求定义 AI 能力的场景、失败流程、人工确认及验收，属于需求设计。"
+    },
+    {
+      "id": 11,
+      "should_trigger": true,
+      "reason": "要求把访谈与反馈转为机会判断和需求池决策。"
+    },
+    {
+      "id": 12,
+      "should_trigger": true,
+      "reason": "明确使用 /prompt，目标是基于项目状态生成定向复验交接提示词。"
+    },
+    {
+      "id": 13,
+      "should_trigger": true,
+      "reason": "提示词服务于进行中版本的下一步项目执行与交接，而非通用提示词工程。"
+    },
+    {
+      "id": 14,
+      "should_trigger": true,
+      "reason": "校准指标是为了判断需求是否进入版本，核心是证据驱动的产品决策。"
+    },
+    {
+      "id": 15,
+      "should_trigger": true,
+      "reason": "需要综合验收、许可证和安装器风险做发布门禁判断。"
+    },
+    {
+      "id": 16,
+      "should_trigger": false,
+      "reason": "明确要求针对空指针与竞态的代码审查，没有产品评审任务。"
+    },
+    {
+      "id": 17,
+      "should_trigger": false,
+      "reason": "仅修复已定位模块的保存 bug 并运行测试，明确不讨论范围。"
+    },
+    {
+      "id": 18,
+      "should_trigger": false,
+      "reason": "属于已定义统计的 SQL 执行与制图，不涉及产品判断。"
+    },
+    {
+      "id": 19,
+      "should_trigger": false,
+      "reason": "视觉交互已经定稿，只要求页面实现。"
+    },
+    {
+      "id": 20,
+      "should_trigger": false,
+      "reason": "目标是日志排障及代码修复，不是需求或验收决策。"
+    },
+    {
+      "id": 21,
+      "should_trigger": false,
+      "reason": "需求与验收明确，只要求 CI 配置实现及提交。"
+    },
+    {
+      "id": 22,
+      "should_trigger": false,
+      "reason": "仅为 API 文档翻译，没有产品工作要求。"
+    },
+    {
+      "id": 23,
+      "should_trigger": false,
+      "reason": "仅转写访谈，明确不做产品判断。"
+    },
+    {
+      "id": 24,
+      "should_trigger": false,
+      "reason": "仅评估数据库迁移技术风险及修复，不调整产品范围。"
+    },
+    {
+      "id": 25,
+      "should_trigger": false,
+      "reason": "打开产物用于崩溃复现和 bug 定位，并非产品验收。"
+    },
+    {
+      "id": 26,
+      "should_trigger": false,
+      "reason": "已批准设计的 token 与组件实现，不含产品判断。"
+    },
+    {
+      "id": 27,
+      "should_trigger": false,
+      "reason": "绘图提示词被描述明确排除。"
+    },
+    {
+      "id": 28,
+      "should_trigger": false,
+      "reason": "纯提示词工程优化被描述明确排除。"
+    },
+    {
+      "id": 29,
+      "should_trigger": false,
+      "reason": "指标已经确认，只要求数据库查询统计。"
+    },
+    {
+      "id": 30,
+      "should_trigger": false,
+      "reason": "PRD、设计与标准已批准，仅要求按计划实施。"
+    },
+    {
+      "id": 31,
+      "should_trigger": false,
+      "reason": "只做设计系统约束下的 CSS 修复，不涉及需求与交互决策。"
+    },
+    {
+      "id": 32,
+      "should_trigger": true,
+      "reason": "需要选择目标客群并收敛定位、定价假设及 GTM，属于产品战略。"
+    },
+    {
+      "id": 33,
+      "should_trigger": false,
+      "reason": "商业决策已经批准，只实现枚举并补测试。"
+    },
+    {
+      "id": 34,
+      "should_trigger": true,
+      "reason": "需要比较产品结构、做首页方案决策并产出原型。"
+    }
+  ]
+}

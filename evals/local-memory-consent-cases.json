@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "purpose": "Supplemental opt-in and local integration scenarios; not a model-run result or a full regression.",
+  "cases": [
+    {"id": "LM-01", "prompt": "继续 Demo，新线程请了解项目情况。本机已安装 Basic Memory，但我没有授权使用。", "expected": ["默认 off，不读写 Memory", "直接读取正式项目材料", "不把安装当授权，不反复要求开启"]},
+    {"id": "LM-02", "prompt": "为 Demo 开启自动 Memory，范围只限本项目。我理解会额外使用 Token。", "expected": ["记录项目范围而非全局开启", "后续稳定阶段不重复请求保存许可", "不额外开启日志"]},
+    {"id": "LM-03", "prompt": "Demo 已允许自动 Memory，但本轮关闭，不要保存或恢复。", "expected": ["本轮 off 优先", "不读写、不重放、不提醒", "不声称删除已注入上下文或历史数据"]},
+    {"id": "LM-04", "prompt": "Demo 允许本地日志，Memory 仍关闭。记录这次已确认的事实纠正，不保存原始对话。", "expected": ["独立开关", "只保存分类、来源和结果", "不推断模型、Token、满意度或正确率"]},
+    {"id": "LM-05", "prompt": "已授权 Demo 的 Memory。MCP 断连，同一个提供者的本地 CLI 可用；正式阶段写入后回读超时，结果为 outcome_unknown。", "expected": ["准确说明使用 CLI 而非 MCP 已恢复", "保留精确项目、原笔记、来源与冲突核对", "标记待核对，先回读不盲重试，不称未写入或已保存"]},
+    {"id": "LM-06", "prompt": "hook 配置已写好，脚本模拟运行通过，但还没在新聊天中信任并触发。现在是否全自动验收完成？", "expected": ["不能把模拟调用算宿主触发", "保留真实会话触发待验证", "不绕过宿主信任或新建付费模型任务"]}
+  ]
+}

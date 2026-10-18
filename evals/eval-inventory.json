@@ -6,11 +6,11 @@
   "generated_from": [
     {
       "path": "evals/evals.json",
-      "sha256": "bbb78296e14c2bf0bc0c55c2b6bf7942330662ddf7bd7ea69a4ca611203aa7d9"
+      "sha256": "bc6c5adcae3fc80f1a1fcaa20bc5b4aebb00e6db15196fd318774f551bef4dc8"
     },
     {
       "path": "evals/challenge-evals.json",
-      "sha256": "fdc64e9cf52a354999894a323c8636c00b3ad3cef6bc9d6aec2cb5a9039c9d63"
+      "sha256": "52909741984abee342c3cadd53a6388ce769680f67697d8fcd7c437c3823ae0e"
     },
     {
       "path": "evals/trigger-evals.json",
@@ -38,7 +38,7 @@
     },
     {
       "path": "evals/evaluation-policy.json",
-      "sha256": "b66d2eaf476e484ff94b7e7f8020b711f3d7668e995b9c69e6c101ed37ea5966"
+      "sha256": "e3bf8cc42bcb0edc2e0db15a4038b53a303d4b060c1351853248f9ab882dab89"
     }
   ],
   "summary": {

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "scope": "registered-opt-in-pilots-only",
+  "dependencies": [
+    {
+      "id": "matt-domain-modeling-pilot",
+      "folder": "matt-domain-modeling-pilot",
+      "repo": "mattpocock/skills",
+      "commit": "6acc160e4e0cd062dbbbd7a1b26ae92855edf07e",
+      "license": "MIT",
+      "files": {
+        "SKILL.md": {
+          "source": "skills/engineering/domain-modeling/SKILL.md",
+          "download_sha256": "152e2c97239affb12a60c5f4a7e74ab546a49ae169688c81f4e2ccc42dafa579",
+          "installed_sha256": "4df78bed39716aefb958045e2fea49ac00d81c42c8f7ac7f3519a84a86b2e4e4",
+          "adaptation": {
+            "body_marker": "# Domain Modeling\n",
+            "prefix": "---\nname: matt-domain-modeling-pilot\ndescription: Explicit pilot for sharpening domain terminology and proposing glossary or ADR changes; use only when the user names this pilot.\n---\n\n## Pilot guardrails\n\n- Run only after explicit user invocation.\n- Before changing `CONTEXT.md`, `CONTEXT-MAP.md`, or an ADR, show the target path and proposed fact or decision, then obtain confirmation.\n- Label invented edge cases as hypotheses. Do not resolve a code-versus-conversation conflict without evidence or user confirmation.\n- Keep countable or configurable facts anchored to their code source; otherwise record a pointer instead of copying values into the glossary.\n\n"
+          }
+        },
+        "LICENSE": {
+          "source": "LICENSE",
+          "download_sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "installed_sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "CONTEXT-FORMAT.md": {
+          "source": "skills/engineering/domain-modeling/CONTEXT-FORMAT.md",
+          "download_sha256": "b8cc318f2a4285b530e908b6bc43901c3c5cd11100362636bbc4216639bef597",
+          "installed_sha256": "b8cc318f2a4285b530e908b6bc43901c3c5cd11100362636bbc4216639bef597"
+        },
+        "ADR-FORMAT.md": {
+          "source": "skills/engineering/domain-modeling/ADR-FORMAT.md",
+          "download_sha256": "f1f36cd3f8d3b6474ddd5855da4e233bfc4ae1a1c5024909ccf11871819a41b2",
+          "installed_sha256": "f1f36cd3f8d3b6474ddd5855da4e233bfc4ae1a1c5024909ccf11871819a41b2"
+        }
+      },
+      "agent_policy": "interface:\n  display_name: \"Matt Domain Modeling Pilot\"\n  short_description: \"Explicit pilot for terminology and ADR work\"\npolicy:\n  allow_implicit_invocation: false\n"
+    },
+    {
+      "id": "matt-to-questionnaire-pilot",
+      "folder": "matt-to-questionnaire-pilot",
+      "repo": "mattpocock/skills",
+      "commit": "6acc160e4e0cd062dbbbd7a1b26ae92855edf07e",
+      "license": "MIT",
+      "files": {
+        "SKILL.md": {
+          "source": "skills/productivity/to-questionnaire/SKILL.md",
+          "download_sha256": "8e7f9ed8d7b2e66babf1a54aee9b94319bf38c32619cffe78819df6518ead5fc",
+          "installed_sha256": "99178cfc8f61984ea2120c392a2fea11f8f0959624148128749d9e0ca94d154a",
+          "adaptation": {
+            "body_marker": "Turn something the user can't answer alone",
+            "prefix": "---\nname: matt-to-questionnaire-pilot\ndescription: Explicit pilot for turning a decision you cannot fully answer into a questionnaire for one informed recipient; use only when the user names this pilot.\n---\n\n## Pilot guardrails\n\n- Run only after explicit user invocation.\n- Use an unambiguous output path from the request. Otherwise, explicit invocation to create a questionnaire authorizes a new `to-questionnaire-<slug>.md` in the current working directory; ask only when the directory is ambiguous or an existing file would be overwritten.\n- Treat returned answers as attributed input, not verified product facts, until the controlling workflow reviews them.\n- Default to a practical core pass for a busy recipient, usually 12-20 primary questions. Put conditional detail into follow-ups or compact response tables, and exceed that range only when the user requests an exhaustive questionnaire or the decision risk clearly requires it. Keep the stated effort consistent with the actual load.\n\n"
+          }
+        },
+        "LICENSE": {
+          "source": "LICENSE",
+          "download_sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "installed_sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        }
+      },
+      "agent_policy": "interface:\n  display_name: \"Matt Questionnaire Pilot\"\n  short_description: \"Explicit pilot for one-recipient questionnaires\"\npolicy:\n  allow_implicit_invocation: false\n"
+    }
+  ],
+  "manual_only": [
+    "ocr-delegate"
+  ],
+  "bundled": [
+    "matt-code-review-adapter"
+  ]
+}

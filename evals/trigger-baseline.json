@@ -1,43 +1,50 @@
 {
-  "schema_version": 1,
-  "baseline_version": "0.33.0",
-  "branch": "main",
-  "candidate_sha": "26e2e66491280470c1876d29544c826aa626d6d5",
-  "source_files_clean_against_candidate": true,
+  "schema_version": 2,
+  "baseline_version": "0.42.0",
+  "branch": "test",
+  "candidate_sha": "deecc50b8865c26c73a2dff0ceaae8f66174c64f",
+  "source_files_clean_against_candidate": false,
+  "candidate_kind": "maintenance dirty worktree; HEAD is parent, not tested snapshot",
+  "runtime_manifest_sha256": "69687347f47e9a80554fa8de45a376bbcb4eb287de4950d1a2c13efe0e4e9ade",
   "input_hashes": {
-    "skill_description_sha256": "cb93218e66e402248ce4085bcd8566f3f949d179a97d395eeaaf89ee03fe9109",
+    "skill_description_sha256": "085106dd4d389ba02f7d56c4238d987ef2938a5d369bdb9b0cce61f37f271f1d",
     "agents_openai_sha256": "c1dd22343a2298aa20c1f431e7850e7aa9b40549be1b52e045c796d9a2409c0e",
     "trigger_cases_sha256": "f703e177064ab2712c3a6f0c10abe0fb3db5fd304d04bf16174471cf10b0e201",
     "trigger_evals_file_sha256": "28fed86d4dbafc8c28718a6e443f46ae0c34ac60178b961ca9287e2c5081f425",
-    "input_bundle_sha256": "7d73bed4e0d3ba8f4663f8eeeb7320315bdf6d5bd103d7483aab5da3917acd25"
+    "input_bundle_sha256": "f830075f5c68f2a7580001097a0b5b6af4cc606710e4ceecb801198990b490d4"
   },
   "case_counts": {
+    "negative": 17,
     "total": 34,
-    "positive": 17,
-    "negative": 17
+    "positive": 17
   },
   "runs": [
     {
-      "model": "gpt-5.6-sol",
+      "model": "gpt-6.1-sol",
       "reasoning_effort": "medium",
       "valid_count": 34,
       "correct_count": 34,
       "incorrect_ids": [],
       "retry_count": 0,
-      "status": "passed"
+      "status": "passed",
+      "answer_file": "evals/trigger-results/20261018-sol.json",
+      "answer_sha256": "2fa0431f836c61c57a550273740c35024334a1e7c34daee469dfa7fac3527a3e"
     },
     {
-      "model": "gpt-5.6-terra",
+      "model": "gpt-6-astra",
       "reasoning_effort": "medium",
       "valid_count": 34,
       "correct_count": 34,
       "incorrect_ids": [],
       "retry_count": 0,
-      "status": "passed"
+      "status": "passed",
+      "answer_file": "evals/trigger-results/20261018-astra.json",
+      "answer_sha256": "6a53c2e9e0a52008212be49f408911abda6b0c6af92a346e7434df9611e1285d"
     }
   ],
-  "evaluated_at": "2026-08-10T21:39:21.4956861+08:00",
+  "evaluated_at": "2026-10-18T17:49:04.6436539+08:00",
   "status": "passed",
-  "raw_answers_retained": false,
-  "evidence_summary": "Sol medium 与 Terra medium 分别对同一份去标签输入独立分类；两次均返回 34 个有效布尔结果，与 17 条正例和 17 条反例逐项一致。"
+  "raw_answers_retained": true,
+  "previous_summary": "evals/history/trigger-baseline-v033.json",
+  "evidence_summary": "Two serial user-authorized medium actors. Classifications frozen before runtime loading. All original predictions retained; not a native host auto-loading test."
 }

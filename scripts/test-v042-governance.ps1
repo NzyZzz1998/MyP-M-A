@@ -13,6 +13,8 @@ function Assert-Observation {
     Write-Host "PASS: $Label"
 }
 try {
+    & (Join-Path $PSScriptRoot 'test-local-memory-governance.ps1')
+    & (Join-Path $PSScriptRoot 'test-provider-routing.ps1')
     # Text guards check instruction/template consistency, not model behavior.
     foreach ($guard in @(
         @{ path = 'references/prd.md'; tokens = @(
@@ -99,6 +101,7 @@ try {
         }
     }
     Write-Host 'PASS: seven document-maintenance fixtures, graph structure and routing guards; no model behavior tested.'
+    & (Join-Path $PSScriptRoot 'test-full-thread-maintenance.ps1')
     New-Item -ItemType Directory -Path (Join-Path $temp 'evals'), (Join-Path $temp 'notes') -Force | Out-Null
     foreach ($file in @('evals/latest-observation.json', 'README.md', 'notes/mypm-roadmap.md', 'notes/evaluation-history.md')) {
         Copy-Item -LiteralPath (Join-Path $root $file) -Destination (Join-Path $temp $file)

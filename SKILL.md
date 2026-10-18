@@ -1,6 +1,6 @@
 ---
 name: mypm
-description: "Use when：产品评审、原型、研究、战略/GTM、需求、PRD、开发承接、验收、发布或提示词；入口 /review、/idea、/prd、/acceptance、/prompt。纯实现任务仅涉及产品范围或发布判断时触发。"
+description: "Use when：产品评审、机会/需求/PRD、原型、战略/GTM、开发承接、验收、发布或项目交接提示词。/review、/idea、/prd、/acceptance、/prompt；纯实现、提示词工程和绘图提示词不自动触发。"
 metadata:
   display_name: MyP-M-A
   full_name: My Product Manager Assistant
@@ -44,6 +44,8 @@ metadata:
 
 <!-- contract:entry-isolation; entry-leading-slash; idea-no-fabricated-threshold -->
 入口合同隔离。先读目标 reference，再执行对象、事实、证据、授权、停止和回写合同；多通路只选最接近当前决策的一条，结果会变化才追问。
+
+允许本地操作时查项目根 `.mypm.local.json`；存在则按 `references/local-memory-diagnostics.md` 执行入口/收尾；缺省关闭。
 
 ## 渐进加载
 <!-- contract:context-minimal-loading -->
@@ -107,21 +109,19 @@ metadata:
 
 ## 工具与证据
 
-先探测可调用能力并选最小工具；已安装不等于可用，调用成功不替代 MyP-M-A 的证据、范围和发布判断。状态与降级见 `references/tooling.md`、`references/capability-routing.md`。
+先探测再最小调用，安装非可用、调用非验收。允许本地操作且本 Skill 有 `.mypm-dependencies.local.json` 时，按 `references/provider-dependencies.md` 补装。
 
 ## 长期记忆
 
-Basic Memory 只做跨线程续接，不替代仓库事实源。明确项目使用 `memory_mode`：`auto`（默认）、`suggest` 或 `off`。
+项目记忆、Skill 诊断分开。`memory_mode` 默认 `off`，本项目明确授权才 `auto`；有 Token 成本，安装不是授权。
 
-- `auto`：仅在已知项目的新线程/上下文不足时恢复，在稳定阶段收尾时更新；同一线程不反复读写。
-- `suggest`：只建议，不直接读写。
-- `off`：本轮不调用，也不输出 Memory 建议。
+`auto`：新线程/上下文不足时恢复，稳定收尾更新，同线程不重复；`suggest`：只建议不读写；`off`：不调用、不建议。
 
-读写、冲突、新鲜度和降级见 `references/memory-integration.md`；无工具结果不得声称成功，冲突时以本轮仓库事实为准。
+详见 `references/memory-integration.md`；冲突以仓库为准，无结果不称成功。日志独立授权、默认关闭，不存对话全文。
 
-PRD/开发承接确认、实际验收和发布结论是稳定事件。记忆只保留方案/状态、非目标、正式路径、验收口径、限制和下一步；凭据、连接串、完整日志和临时输出不得写入。不可用时写“未写入”并继续收尾。
+只存稳定决策、状态、非目标、路径、验收口径、限制和下一步；禁存凭据、完整日志和临时输出。失败不阻塞主任务。
 
 ## 完成检查
 
 - 显式入口先把入口判断置于首个非空行；再核对子阶段、对象、交付物、证据、未验证项、范围/非目标、风险与取舍。
-- 正式文档引用上游 ID、版本和来源；检查中文、UTF-8、授权、停止、下一步和必要的 Memory 收尾。
+- 正式文档引用上游 ID、版本和来源；检查中文、UTF-8、授权、停止、下一步；已启用模块核对本地收尾回执，恢复不等于写回。

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "purpose": "Execution collection; supplements do not silently become formal release cases.",
+  "kinds": ["decision", "artifact", "file_task", "multi_turn", "policy_probe", "trigger_probe", "integration"],
+  "sources": [
+    {"key":"stable","path":"evals/evals.json","shape":"evals","tier":"formal","default_kind":"decision","overrides":{"106":"artifact"}},
+    {"key":"challenge","path":"evals/challenge-evals.json","shape":"evals","tier":"formal","default_kind":"decision","overrides":{"CH-37":"artifact","CH-39":"artifact"}},
+    {"key":"trigger","path":"evals/trigger-evals.json","shape":"array","tier":"trigger","default_kind":"trigger_probe","overrides":{}},
+    {"key":"targeted","path":"evals/v042-targeted-evals.json","shape":"evals","tier":"supplement","default_kind":"decision","overrides":{}},
+    {"key":"maintenance","path":"evals/v042-maintenance-evals.json","shape":"evals","tier":"supplement","default_kind":"decision","overrides":{}},
+    {"key":"gate","path":"evals/v042-gate-boundary-evals.json","shape":"evals","tier":"supplement","default_kind":"decision","overrides":{}},
+    {"key":"document","path":"evals/v042-document-maintenance-evals.json","shape":"evals","tier":"supplement","default_kind":"decision","overrides":{"1":"file_task","3":"file_task","4":"file_task"}},
+    {"key":"thread","path":"evals/v042-full-thread-maintenance-evals.json","shape":"evals","tier":"supplement","default_kind":"decision","overrides":{"1":"file_task","3":"file_task","4":"multi_turn","5":"file_task","6":"file_task","7":"file_task","9":"file_task","10":"file_task"}},
+    {"key":"memory","path":"evals/local-memory-consent-cases.json","shape":"cases","tier":"supplement","default_kind":"policy_probe","overrides":{}},
+    {"key":"routing","path":"evals/provider-routing-cases.json","shape":"cases","tier":"supplement","default_kind":"policy_probe","overrides":{"RT-03":"integration","RT-04":"integration","RT-08":"integration","RT-09":"integration","RT-10":"integration","RT-12":"integration","RT-13":"integration"}}
+  ],
+  "excluded_sources": [
+    {"path":"evals/external-benchmark.json","reason":"External product benchmark, not requested in this three-version internal regression."},
+    {"path":"evals/pilot-v0.34-m2.json","reason":"Historical panel selector, not an independent set of task prompts."}
+  ],
+  "evidence_contract": {
+    "decision":"Judge supplied facts and proposed actions; absent tools or fixtures never prove execution.",
+    "artifact":"Require actual files, semantic mappings and available render evidence; report unavailable visual coverage separately.",
+    "file_task":"Require per-run isolated project, preserved relative paths, before/after contents plus hashes and execution receipts. Tool-call arguments alone are not successful tool results. Missing execution or readback evidence is unverified, not an inferred pass/fail. Negative-operation claims need complete trace/coverage, not silence in prose.",
+    "multi_turn":"One case per agent; reveal only the current turn; controller captures every checkpoint before continuing.",
+    "policy_probe":"Evaluate policy choice only; do not claim provider invocation, no-side-effect proof or integration success from prose.",
+    "trigger_probe":"Description-only routing prediction; no SKILL body; not proof of native host auto-loading.",
+    "integration":"Use declared real or injected executable fixture and receipts; never score a prose substitute. Report separately from model quality."
+  },
+  "integration_evidence": {
+    "routing:RT-03":"notes/routing-integration-20261018.md",
+    "routing:RT-04":"notes/routing-integration-20261018.md",
+    "routing:RT-08":"scripts/test_review_snapshot.py",
+    "routing:RT-09":"scripts/test_review_snapshot.py",
+    "routing:RT-10":"notes/ocr-live-verification-20261018.md",
+    "routing:RT-12":"scripts/test_review_snapshot.py",
+    "routing:RT-13":"scripts/test_review_snapshot.py"
+  },
+  "comparison_policy": {
+    "versions":["v042","candidate1","candidate2"],
+    "models":["gpt-6.1-sol","gpt-6-astra"],
+    "reasoning_effort":"medium",
+    "historical_results":"immutable; new inputs are a new measurement, not a revision of old scores",
+    "reporting":"stable, challenge, trigger proxy, supplements and integration separately; no unified quality score",
+    "runtime":"frozen before this collection; evaluations never load the live repository or private Memory",
+    "duplicates":"report exact prompt-plus-fixture duplicates; no implicit dropping or score substitution",
+    "retries":"inherit evaluation-policy.json; no retry of valid low-scoring answers; third attempt waits without a time cutoff"
+  }
+}

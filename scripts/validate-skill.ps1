@@ -44,7 +44,10 @@ if ($Strict) {
         'test-v040-visual-delivery.ps1',
         'test-v041-work-mode-boundary.ps1',
         'test-v042-governance.ps1',
-        'test-evaluation-portfolio.ps1'
+        'test-evaluation-portfolio.ps1',
+        'test-evaluation-collection.ps1',
+        'test-trigger-evidence.ps1',
+        'test-post-regression-fixes.ps1'
     )) {
         try {
             & (Join-Path $PSScriptRoot $test) | Out-Host

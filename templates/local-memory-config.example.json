@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "project_id": "example-project",
+  "project_root": "<absolute-project-root>",
+  "data_root": "<private-data-root-outside-project>",
+  "memory": {
+    "mode": "off",
+    "consent": false,
+    "executable": "<installed-basic-memory-executable>",
+    "project_uuid": "<verified-basic-memory-project-uuid>",
+    "identifier": "<existing-exact-note-permalink>",
+    "max_recall_chars": 2000
+  },
+  "diagnostics": {
+    "mode": "off",
+    "consent": false
+  }
+}

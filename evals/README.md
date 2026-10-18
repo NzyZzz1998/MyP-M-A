@@ -7,6 +7,31 @@ MyP-M-A 使用两套互补评测，不混合计算总分。
 
 版本结果、证据边界和清理记录统一保存在 `notes/evaluation-history.md`。本目录只保留可重复执行的用例、附件和操作说明。
 
+## 定向修复与执行证据
+
+2026-10-18 后续修复保持 194 项正式资产和 252 项执行收集源，不加大全量题量。S47 保留原问题，改正其未提供 A3 定义却要求断定实施的评分口径；未知阶段应核对正式任务，不用编号猜授权。新结果绑定新断言，旧报告不重算。
+
+description 的“提示词”收窄为项目交接，纯提示词工程/绘图提示词不自动触发。34 条题面和标签不改。`trigger-baseline.json` schema 2 按 `evaluation-policy.json` 本轮授权模型核对，原 v0.33 摘要保留为历史；原始预测、输入身份和 SHA-256 必须与摘要一致，不能只填一个 passed。它仍是描述级分类探针，不是宿主自动加载的端到端证明。
+
+文件任务使用 `scripts/evaluation_collection.py prepare` 保存 `_controller/before/project` 原始正文，`checkpoint` 保存各回合实际产物。控制器仅对本轮隔离任务导出获准保留的调用和返回，用 `receipts --output <run> --turn 1 --trace <scoped-export.json>` 附到检查点；不扫描全局会话、不写入 Memory/诊断日志，不收集推理或私有系统上下文。正式项目资料须先核对授权与隐私，不把本工具当自动脱敏器。
+
+导出 JSON 格式如下，`call_id` 可用控制器分配的本次唯一 ID，但不得冒称宿主原生 ID：
+
+```json
+{
+  "schema_version": 1,
+  "uid": "thread:1",
+  "run_id": "<task.json 中的本次运行 ID>",
+  "input_sha256": "<task.json 中的输入哈希>",
+  "turn": 1,
+  "scope": "控制器实际捕获的本轮工具子集",
+  "calls": [{"call_id":"op-1","name":"exec_command","arguments":{"cmd":"<实际命令>"}}],
+  "results": [{"call_id":"op-1","payload":{"exit_code":0,"output":"<实际返回>"},"truncated":false}]
+}
+```
+
+逐调用记录 `result_available / missing_result / truncated_result`，保留原始错误与异步状态；收到结果不等于业务通过。`truncated=false` 只用于控制器确认无截断的返回，无法确认时用 true。调用/返回错配、重复 ID、对象错配或文件哈希变化会拒收。旧任务未保存的 before 正文标缺失，不从 after 反推。导入默认只是子集，不能证明没有其他操作；异步返回 session/job ID 需继续采集最终结果与必要回读，不能把“已启动”当“已完成”。采集不能替代独立语义评分，也不声称所有宿主原生轨迹已接通。
+
 ## 评测资产架构
 
 v0.41 起，评测“资产目录”和“每轮执行面板”分开治理。历史用例可以保留，但保留不等于每轮都执行；不设置强制删减数量。
@@ -40,6 +65,14 @@ v0.41 起，评测“资产目录”和“每轮执行面板”分开治理。�
 I-01 / I-03 / I-04 的维护面板为 `v042-document-maintenance-evals.json`：7 个专项场景覆盖增量修订、核心行为变更、跨材料部分同步、单文件授权、核心模型解释、指定来源字段核对和多轮交接。与前述维护试点相同，不计入 194 项正式资产，不自动晋升或触发全量。`fixture_files` 为隔离合成文件，执行前落盘；评分需同时检查实际文件差异与回读，内联文稿不能替代文件测试。未提供 PPT/原始 PDF 或渲染工具的项目明确未验证。
 
 复用 `v042-targeted-evals.json` 中正式完整 PRD（7）、已授权文稿续改（9）作相邻控制；9 的预期补明不重开方案及文稿/落盘区别，原断言保留。历史评测结果不回写，新结果只绑定本轮冻结题面及工作树。
+
+全线程复盘维护面板为 `v042-full-thread-maintenance-evals.json`：10 个合成场景，补测来源与口径、真实文件身份、任务中断/恢复/撤回、Memory 三模式与跨机降级、执行数量、格式转换和覆盖去重。第 4 例必须分四个真实回合执行，每回合保存文件检查点，不能一次模拟四轮。它同样不计入 194 项资产；不将文本守卫、模拟服务条件或旧用例继承算成本轮真实平台验证。来源与实施边界见 `notes/full-thread-maintenance-plan-20261017.md`。
+
+本地 Memory/日志试点另有 `local-memory-consent-cases.json` 六个合同场景，不计入 194 项资产，本轮未执行模型评分。2026-10-17 按用户决定将默认模式改为 off，stable 42/43 与 CH-11 补明项目授权前提；重建账本，不改写历史成绩。实现自测使用 `scripts/test_mypm_local.py`，授权与文本守卫使用 `scripts/test-local-memory-governance.ps1`，真实 CLI 及宿主触发分别记证据，详见 `notes/local-memory-diagnostics-pilot-20261017.md`。
+
+专项路由增量使用 `provider-routing-cases.json` 的 14 条 supplemental 场景，不并入 194 项资产或历史模型分数。`test-provider-routing.ps1` 只验证结构与反向变异；`test_provider_routing.py` 验证策略函数；`test_review_snapshot.py` 使用真实临时 Git 仓库及显式模拟的 OCR 响应。运行方式为 `python -B scripts/test_provider_routing.py -v`、`python -B scripts/test_review_snapshot.py -v`。当前 Agent 文件适配小样本与真实 OCR/隔离双审分开记录，详见 [三批增量](../notes/routing-integration-20261018.md)；未执行全量模型回归。
+
+后续 [OCR 真实补验](../notes/ocr-live-verification-20261018.md) 使用实际 v1.13.1 CLI，同宿主完成双方法报告；不是独立模型回归。实测发现 Windows GBK 管道损坏 Unicode，两个 JSON 输出点改用无损 ASCII 转义，各补一条先失败后通过的序列化用例。最终路由单测 27/27、快照与适配单测 33/33；这些工程测试不计作新增模型质量分。
 
 用例生命周期固定为 `core`、`active`、`canary`、`archived`、`retired`，不由当前面板角色推导。新行为用例先登记 `canary`；连续两个稳定版本后由维护者决定晋升、合并或归档。每次转换保留版本、原因与决策证据；归档/退役保留最后有效版本，退役另需有效 successor。归档可经新决策恢复，退役不能直接复活，不物理抹除历史证据。
 
@@ -202,6 +235,8 @@ Viewer 展示提示词、新旧回答、逐条断言、证据和修复前归档�
 
 ## OpenCodeReview 定向覆盖
 
+真实代码的本地双方法审查与固定依赖补装定向验证见 [2026-10-18 记录](../notes/real-code-dual-review-20261018.md)。`scripts/test_provider_dependencies.py` 是无网络合成单测，真实下载证据单列；它们不加入稳定/挑战模型成绩，也不意味着当前发现已修复。
+
 - 稳定用例 ID 82：私有桌面项目禁止源码外发、没有独立 OCR 模型时，验证 `/review` 会使用本地 Delegation，并明确它不是独立复核。
 - 挑战用例 CH-19：远程 OCR 已配置但未获得源码传输授权，且已有先入为主的漏洞猜测时，验证隐私门禁、盲评隔离和 MyP-M-A 证据闭环。
 - 两条用例只验证工作流合同；没有真实运行远程 OCR，也不把静态校验视为模型行为得分。
@@ -219,3 +254,9 @@ Viewer 展示提示词、新旧回答、逐条断言、证据和修复前归档�
 - 两条用例不要求普通产品任务加载 Strategy/GTM；只有市场、细分、定位、定价、商业模式、GTM、渠道或增长信号出现时才加载。
 
 完成复核后，应先将长期结论回写 `notes/evaluation-history.md`，再删除仓库外的回答、评分、快照和 viewer。生成型工作区不作为长期档案。
+
+## 本轮统一执行账本
+
+[评测标准化记录](../notes/evaluation-standardization-20261018.md)定义本轮三版本比较的纠偏和证据边界。正式 194 项与补充 58 项分别保留；[collection 配置](evaluation-collection.json)及派生 `evaluation-collection-index.json` 统一命名、来源哈希和执行类型，不将补充项悄悄加入正式发布分母。
+
+`python scripts/evaluation_collection.py build` 生成账本，`check` 检查新鲜度；`prepare --case thread:4 --output <仓库外新目录>` 保留附件目录并将后续轮次/评分标准放在 `_controller`，不能提供给执行者。文件和多轮场景不得再仅用旧文字准备器；policy/trigger probe 不等于真实集成或宿主自动触发。详见上述记录。

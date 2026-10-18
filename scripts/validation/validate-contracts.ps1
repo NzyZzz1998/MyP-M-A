@@ -1,6 +1,58 @@
 . (Join-Path $PSScriptRoot 'common.ps1')
 . (Join-Path (Split-Path -Parent $PSScriptRoot) 'evaluation-state.ps1')
 
+function Test-MypmTriggerEvidence {
+    param([string]$Root, $Baseline, $Trigger, $Result)
+    $policy = Read-MypmJson -Path (Join-Path $Root 'evals/evaluation-policy.json') -Result $Result -Label 'trigger policy'
+    $profiles = @($policy.trigger_verification.required_profiles)
+    $keys = @($profiles | ForEach-Object { "$($_.model):$($_.reasoning_effort)" })
+    if ($profiles.Count -eq 0 -or @($keys | Sort-Object -Unique).Count -ne $profiles.Count -or
+        @($Baseline.runs).Count -ne $profiles.Count -or $Baseline.status -ne 'passed') {
+        Add-MypmValidationError -Result $Result -Message 'Trigger evidence profile/count/status mismatch'
+        return
+    }
+    foreach ($profile in $profiles) {
+        $runs = @($Baseline.runs | Where-Object { $_.model -ceq $profile.model -and $_.reasoning_effort -ceq $profile.reasoning_effort })
+        if ([string]::IsNullOrWhiteSpace($profile.model) -or [string]::IsNullOrWhiteSpace($profile.reasoning_effort) -or $runs.Count -ne 1) {
+            Add-MypmValidationError -Result $Result -Message 'Trigger evidence missing or duplicate configured profile'
+            continue
+        }
+        $run = $runs[0]
+        if ($run.answer_file -cnotmatch '^evals/trigger-results/[A-Za-z0-9._-]+\.json$') {
+            Add-MypmValidationError -Result $Result -Message 'Trigger answer path outside evidence directory'
+            continue
+        }
+        $path = Join-Path $Root $run.answer_file
+        $answer = Read-MypmJson -Path $path -Result $Result -Label $run.answer_file
+        if ($null -eq $answer) { continue }
+        if ((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $run.answer_sha256 -or
+            $answer.input_bundle_sha256 -cne $Baseline.input_hashes.input_bundle_sha256 -or
+            $answer.model -cne $profile.model -or $answer.reasoning_effort -cne $profile.reasoning_effort) {
+            Add-MypmValidationError -Result $Result -Message 'Trigger raw answer identity/hash mismatch'
+            continue
+        }
+        $predictions = @($answer.predictions)
+        $seen = @{}
+        $correct = 0
+        $valid = 0
+        foreach ($prediction in $predictions) {
+            if (($prediction.id -isnot [int] -and $prediction.id -isnot [long]) -or $prediction.id -lt 1 -or $prediction.id -gt @($Trigger).Count -or
+                $seen.ContainsKey([string]$prediction.id) -or $prediction.should_trigger -isnot [bool] -or
+                [string]::IsNullOrWhiteSpace($prediction.reason)) {
+                Add-MypmValidationError -Result $Result -Message 'Trigger invalid or duplicate raw prediction'
+                continue
+            }
+            $seen[[string]$prediction.id] = $true
+            $valid++
+            if ($prediction.should_trigger -eq $Trigger[$prediction.id - 1].should_trigger) { $correct++ }
+        }
+        if ($predictions.Count -ne @($Trigger).Count -or $valid -ne @($Trigger).Count -or $correct -ne @($Trigger).Count -or
+            $run.valid_count -ne $valid -or $run.correct_count -ne $correct -or $run.status -ne 'passed' -or @($run.incorrect_ids).Count -ne 0) {
+            Add-MypmValidationError -Result $Result -Message 'Trigger evidence is not passing or summary disagrees with raw predictions'
+        }
+    }
+}
+
 function Invoke-MypmContractsValidation {
     param([Parameter(Mandatory = $true)][string]$Root)
 
@@ -225,12 +277,16 @@ function Invoke-MypmContractsValidation {
         }
     }
     if ([int]$baseline.case_counts.total -ne @($trigger).Count) { Add-MypmValidationError -Result $result -Message 'Stale trigger summary case count' }
+    if ([int]$baseline.schema_version -eq 2) {
+        Test-MypmTriggerEvidence -Root $root -Baseline $baseline -Trigger $trigger -Result $result
+    } elseif ([int]$baseline.schema_version -eq 1) {
     foreach ($model in @('gpt-5.6-sol', 'gpt-5.6-terra')) {
         $run = @($baseline.runs | Where-Object { [string]$_.model -eq $model })
         if ($run.Count -ne 1 -or [string]$run[0].status -ne 'passed' -or [int]$run[0].correct_count -ne @($trigger).Count) {
             Add-MypmValidationError -Result $result -Message "Trigger baseline is not fresh and passing for model: $model"
         }
     }
+    } else { Add-MypmValidationError -Result $result -Message 'Unsupported trigger baseline schema' }
 
     $result.Metrics['contracts'] = $contracts.Count
     $result.Metrics['critical'] = @($contracts | Where-Object risk -eq 'critical').Count

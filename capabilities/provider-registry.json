@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "scope": "optional-specialists-not-a-host-tool-registry",
+  "default_agent_budget": 0,
+  "providers": [
+    {
+      "id": "matt-domain-modeling-pilot",
+      "capability": "domain_modeling",
+      "kind": "installed-file-adapter",
+      "explicit_selection": true,
+      "entries": ["/review", "/idea", "/prd"],
+      "folder": "matt-domain-modeling-pilot",
+      "entry_sha256": "4df78bed39716aefb958045e2fea49ac00d81c42c8f7ac7f3519a84a86b2e4e4",
+      "required_files": ["SKILL.md", "CONTEXT-FORMAT.md", "ADR-FORMAT.md"],
+      "support_sha256": {
+        "CONTEXT-FORMAT.md": "b8cc318f2a4285b530e908b6bc43901c3c5cd11100362636bbc4216639bef597",
+        "ADR-FORMAT.md": "f1f36cd3f8d3b6474ddd5855da4e233bfc4ae1a1c5024909ccf11871819a41b2"
+      },
+      "adapter": "references/matt-pilot-adapters.md",
+      "upstream_commit": "6acc160e4e0cd062dbbbd7a1b26ae92855edf07e",
+      "license": "MIT",
+      "fallback": "mypm-native",
+      "effects_default": [],
+      "verification": "probe-per-invocation"
+    },
+    {
+      "id": "matt-to-questionnaire-pilot",
+      "capability": "questionnaire",
+      "kind": "installed-file-adapter",
+      "explicit_selection": true,
+      "entries": ["/review", "/idea", "/prd"],
+      "folder": "matt-to-questionnaire-pilot",
+      "entry_sha256": "99178cfc8f61984ea2120c392a2fea11f8f0959624148128749d9e0ca94d154a",
+      "required_files": ["SKILL.md"],
+      "adapter": "references/matt-pilot-adapters.md",
+      "upstream_commit": "6acc160e4e0cd062dbbbd7a1b26ae92855edf07e",
+      "license": "MIT",
+      "fallback": "mypm-native",
+      "effects_default": [],
+      "verification": "probe-per-invocation"
+    },
+    {
+      "id": "matt-code-review-adapter",
+      "capability": "code_review",
+      "kind": "bundled-method-adapter",
+      "explicit_selection": true,
+      "entries": ["/review"],
+      "adapter": "references/matt-code-review-adapter.md",
+      "upstream_commit": "49dd158d1076134a641b33efb035946536778336",
+      "license": "MIT-source-no-vendored-body",
+      "fallback": "mypm-native",
+      "effects_default": [],
+      "verification": "snapshot-and-report-required"
+    },
+    {
+      "id": "ocr-delegate",
+      "capability": "code_review",
+      "kind": "local-cli",
+      "explicit_selection": false,
+      "entries": ["/review"],
+      "commands": ["ocr", "opencodereview"],
+      "adapter": "references/code-review-scanner.md",
+      "upstream_commit": "8eb83340a487b1150af00701b94f01af97e4b4d6",
+      "license": "Apache-2.0",
+      "fallback": "mypm-native",
+      "effects_default": [],
+      "verification": "version-help-and-delegate-call-required"
+    }
+  ]
+}
