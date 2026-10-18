@@ -12,10 +12,10 @@ MyP-M-A 的目标不是做一个模板集合，而是做一个中文优先的个
 - 开发完成后的验收与发布收口：`/acceptance`
 - PRD 后的开发承接：`dev_plan_vx.x.md`、`progress_vx.x.md`、`dev_log_vx.x.md`
 
-当前阶段判断：**v0.43.0 Stable，本地发布提交阶段，待同步 main 与 v0.43.0 tag**。维护者已授权本次发布；原技术结论部分通过，已知问题未修复，不因状态变化重开迭代或回归。远端 test 保留 85b96d6，不在本次推送范围。见[Stable 决定](v0.43-stable-decision.md)及[版本身份](v0.43-candidate-identity.md)。
-<!-- project-status: version=0.43.0; state=local-committed -->
+当前阶段判断：**v0.43.0 Stable，已提交并同步远端 main 与 v0.43.0 tag，工作分支 main**。发布内容提交为 c0ab8cb，tag 固定其后的发布状态提交；原技术结论部分通过，已知问题未修复，不因状态变化重开迭代或回归。远端 test 保留 85b96d6，本次未推进。见[Stable 决定](v0.43-stable-decision.md)及[版本身份](v0.43-candidate-identity.md)。
+<!-- project-status: version=0.43.0; state=remote-synced -->
 
-稳定回退基线：v0.42.0 保留在既有 tag，本轮不移动旧标签；main 将推进至 v0.43.0。旧模型推荐、R7 结论和发布决定只属于原时点，见 [Stable 记录](v0.42-stable-decision.md)；不用于替代本版模型验证。
+稳定回退基线：v0.42.0 保留在既有 tag，本轮未移动旧标签；main 已推进至 v0.43.0。旧模型推荐、R7 结论和发布决定只属于原时点，见 [Stable 记录](v0.42-stable-decision.md)；不用于替代本版模型验证。
 
 维护候选收口历史（2026-10-18）：基于 test / `deecc50` 完成全线程维护、可选 Memory/日志、专项路由与缺项补装、真实代码双审修复和评测标准化。三版本双模型 1470 任务及 60 对质量比较保留；两轮修复后只对最终维护候选完成双模型 490 任务回归。实现提交 a4b9ac0、状态提交 f4656a0 已推送 test，随后由维护者明确命名 v0.43 Candidate。命名及技能名展示最终以 85b96d6 同步 test；当时 main/tag 未变，原评测身份不回写。2026-10-19 的发布执行另见当前状态，不改写该历史。下段四模型结果属于原 Stable 发布基线，不与本次混算。
 

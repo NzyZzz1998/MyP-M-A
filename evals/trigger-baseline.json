@@ -28,7 +28,8 @@
       "retry_count": 0,
       "status": "passed",
       "answer_file": "evals/trigger-results/20261018-sol.json",
-      "answer_sha256": "2fa0431f836c61c57a550273740c35024334a1e7c34daee469dfa7fac3527a3e"
+      "answer_sha256": "0eefa30de25daa1993c923139c11e91221829a791c50b3619b2edf54d555bd2e",
+      "pre_checkout_answer_sha256": "2fa0431f836c61c57a550273740c35024334a1e7c34daee469dfa7fac3527a3e"
     },
     {
       "model": "gpt-6-astra",
@@ -39,12 +40,19 @@
       "retry_count": 0,
       "status": "passed",
       "answer_file": "evals/trigger-results/20261018-astra.json",
-      "answer_sha256": "6a53c2e9e0a52008212be49f408911abda6b0c6af92a346e7434df9611e1285d"
+      "answer_sha256": "459702586797ce3211f95a2b5393f1e25dcf8c46c22620309522aa53daf2d18d",
+      "pre_checkout_answer_sha256": "6a53c2e9e0a52008212be49f408911abda6b0c6af92a346e7434df9611e1285d"
     }
   ],
   "evaluated_at": "2026-10-18T17:49:04.6436539+08:00",
   "status": "passed",
   "raw_answers_retained": true,
   "previous_summary": "evals/history/trigger-baseline-v033.json",
-  "evidence_summary": "Two serial user-authorized medium actors. Classifications frozen before runtime loading. All original predictions retained; not a native host auto-loading test."
+  "evidence_summary": "Two serial user-authorized medium actors. Classifications frozen before runtime loading. All original predictions retained; not a native host auto-loading test.",
+  "storage_normalization": {
+    "date": "2026-10-19",
+    "reason": "Git checkout applies the existing text=auto eol=lf policy. answer_sha256 now identifies the committed LF copy; pre_checkout_answer_sha256 preserves the original CRLF-body plus LF-final-newline bytes.",
+    "verification": "Both original byte hashes reproduced by reversing only that newline conversion; all 34 predictions per model match the hash-verified original model answers. No answer, score, model, input or evaluated_at changed; no model rerun.",
+    "record": "notes/v0.43-stable-decision.md"
+  }
 }

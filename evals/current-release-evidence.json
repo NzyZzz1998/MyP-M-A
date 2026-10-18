@@ -2,7 +2,18 @@
   "schema_version": 1,
   "skill_version": "0.43.0",
   "kind": "release-evidence-index",
-  "release_state": "local-committed",
+  "release_state": "remote-synced",
+  "publication": {
+    "date": "2026-10-19",
+    "branch": "main",
+    "release_content_commit": "c0ab8cbab3674dfe44749ee5d441cdcef03484b2",
+    "tag": "v0.43.0",
+    "tag_type": "annotated",
+    "tag_target": "final-publication-status-commit",
+    "test_commit_unchanged": "85b96d61785f9c1f00a9ce8dd2628953bf687040",
+    "github_release_created": false,
+    "regression_rerun": false
+  },
   "decision": "notes/v0.43-stable-decision.md",
   "technical_verdict": "partial",
   "known_risk_disposition": "accepted-not-fixed",
@@ -42,7 +53,7 @@
     "Version naming and later provider-name wording changes were not separately model-tested; current files are not byte-identical to the frozen runtime.",
     "This closure changes only release documentation and evaluation evidence pointers/derived metadata; it is not a new behavior run.",
     "Original scores, failed/unverified assertions and partial technical verdict remain unchanged; no unified quality score.",
-    "The local Stable decision does not imply commit, push, main synchronization, tag or Release."
+    "The Stable decision alone did not authorize publication; the later authorized main/tag publication is recorded separately and does not imply a GitHub Release."
   ],
   "differential_panel": null,
   "historical_selection_snapshot": {

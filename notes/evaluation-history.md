@@ -4,7 +4,7 @@
 
 ## v0.43 Stable 决定（2026-10-18，非新增评测）
 
-维护者确认接受已披露风险并晋升 v0.43 Stable；2026-10-19 已授权提交、推送 main 与 v0.43.0 tag，当前发布中，技术判定仍部分通过。继承下方最终双模型的原题、原答、原分和冻结身份，不重跑模型或工具回归。v0.41 release-panel 保持历史快照，本版证据入口改为[当前发布索引](../evals/current-release-evidence.json)。命名与提供者名称调整未另行动态测量的限制保留，详见[Stable 决定](v0.43-stable-decision.md)。
+维护者确认接受已披露风险并晋升 v0.43 Stable；2026-10-19 发布内容提交 c0ab8cb 及后续状态提交已同步 main，以 v0.43.0 tag 固定，技术判定仍部分通过。继承下方最终双模型的原题、原答、原分和冻结身份，不重跑模型或工具回归。v0.41 release-panel 保持历史快照，本版证据入口改为[当前发布索引](../evals/current-release-evidence.json)。命名与提供者名称调整未另行动态测量的限制保留，详见[Stable 决定](v0.43-stable-decision.md)。
 
 <a id="current-final-dual-medium-20261018"></a>
 ## 当前候选双模型最终验收（2026-10-18）

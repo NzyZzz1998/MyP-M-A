@@ -2,7 +2,7 @@
 
 ## 2026-10-19 v0.43 Stable 发布收口
 
-维护者先接受已知问题并将 Candidate 推送 test，随后确认按同一风险清单晋升 v0.43 Stable。2026-10-19 授权提交、推送 main 与 v0.43.0 tag，当前发布中；本轮不改规则或追加回归，技术判定仍为部分通过，原始失败不改为通过。当前决定见[Stable 决定](v0.43-stable-decision.md)，[收口记录](maintenance-closeout-20261018.md)保留逐项遗留，[版本身份](v0.43-candidate-identity.md)说明旧快照承接边界。
+维护者先接受已知问题并将 Candidate 推送 test，随后确认按同一风险清单晋升 v0.43 Stable。2026-10-19 已提交并同步 main 与 v0.43.0 tag；远端 test 和旧标签不变。本轮不改规则或追加回归，技术判定仍为部分通过，原始失败不改为通过。当前决定见[Stable 决定](v0.43-stable-decision.md)，[收口记录](maintenance-closeout-20261018.md)保留逐项遗留，[版本身份](v0.43-candidate-identity.md)说明旧快照承接边界。
 
 | 顺序 | 后续项 | 关闭依据 |
 | --- | --- | --- |
